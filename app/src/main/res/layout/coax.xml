@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/windowBackground"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:attr/windowBackground">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- The main content view -->
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                ads:adSize="SMART_BANNER"
+                ads:adUnitId="ca-app-pub-9759692679007522/5251738109" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip">
+
+                <!-- 同轴线结构图 -->
+
+                <ImageView
+                    android:id="@+id/coax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dip"
+                    android:layout_marginTop="10dip"
+                    android:contentDescription="@string/coax"
+                    android:src="@drawable/coax" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:background="@drawable/custom_bg"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Ana"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="?android:attr/textColorTertiary" />
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dip"
+                        android:background="?android:attr/listDivider" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/radioBtn1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+                        <!-- a: -->
+
+                        <TextView
+                            android:id="@+id/coax_text_a"
+                            android:layout_width="20dip"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/radioBtn1"
+                            android:text="@string/coax_text_a" />
+
+                        <!-- a输入框 -->
+
+                        <EditText
+                            android:id="@+id/coax_editText_a"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="100dip"
+                            android:layout_toRightOf="@+id/coax_text_a"
+                            android:inputType="numberDecimal">
+
+                            <!-- <requestFocus /> -->
+                        </EditText>
+
+                        <!-- a单位 -->
+
+                        <Spinner
+                            android:id="@+id/coax_spinner_a"
+                            android:layout_width="100dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/radioBtn2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+
+                        <!-- b: -->
+
+                        <TextView
+                            android:id="@+id/coax_text_b"
+                            android:layout_width="20dip"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/radioBtn2"
+                            android:text="@string/coax_text_b" />
+
+                        <!-- b输入框 -->
+
+                        <EditText
+                            android:id="@+id/coax_editText_b"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="100dip"
+                            android:layout_toRightOf="@+id/coax_text_b"
+                            android:inputType="numberDecimal">
+
+                            <!-- <requestFocus /> -->
+                        </EditText>
+
+                        <!-- b单位 -->
+
+                        <Spinner
+                            android:id="@+id/coax_spinner_b"
+                            android:layout_width="100dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/radioBtn3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+
+                        <!-- c: -->
+
+                        <TextView
+                            android:id="@+id/coax_text_c"
+                            android:layout_width="20dip"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/radioBtn3"
+                            android:text="@string/coax_text_c" />
+
+                        <!-- c输入框 -->
+
+                        <EditText
+                            android:id="@+id/coax_editText_c"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="100dip"
+                            android:layout_toRightOf="@+id/coax_text_c"
+                            android:inputType="numberDecimal">
+
+                            <!-- <requestFocus /> -->
+                        </EditText>
+
+                        <!-- c单位 -->
+
+                        <Spinner
+                            android:id="@+id/coax_spinner_c"
+                            android:layout_width="100dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/radioBtn4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true" />
+
+                        <!-- er: -->
+
+                        <TextView
+                            android:id="@+id/coax_text_er"
+                            android:layout_width="20dip"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/radioBtn4" />
+
+                        <!-- er输入框 -->
+
+                        <EditText
+                            android:id="@+id/coax_editText_er"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="100dip"
+                            android:layout_toRightOf="@+id/coax_text_er"
+                            android:inputType="numberDecimal"></EditText>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dip"
+                        android:background="?android:attr/listDivider" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip">
+
+                        <RadioButton
+                            android:id="@+id/radioBtn5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:visibility="invisible" />
+
+                        <!-- L: -->
+
+                        <TextView
+                            android:id="@+id/coax_text_L"
+                            android:layout_width="20dip"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/radioBtn5"
+                            android:text="@string/coax_text_L" />
+
+                        <!-- L输入框 -->
+
+                        <EditText
+                            android:id="@+id/coax_editText_L"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="100dip"
+                            android:layout_toRightOf="@+id/coax_text_L"
+                            android:inputType="numberDecimal">
+
+                            <!-- <requestFocus /> -->
+                        </EditText>
+
+                        <!-- L单位 -->
+
+                        <Spinner
+                            android:id="@+id/coax_spinner_L"
+                            android:layout_width="100dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <!-- bottom -->
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip">
+
+                        <Button
+                            android:id="@+id/coax_syn"
+                            android:layout_width="100dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="10dip"
+                            android:drawableTop="@drawable/syn"
+                            android:text="@string/Syn"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                        <Button
+                            android:id="@+id/coax_ana"
+                            android:layout_width="100dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginRight="10dip"
+                            android:drawableTop="@drawable/ana"
+                            android:text="@string/Ana"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Syn"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="?android:attr/textColorTertiary" />
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="2dip"
+                        android:background="?android:attr/listDivider" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!-- Z0: -->
+
+                        <TextView
+                            android:id="@+id/coax_text_Z0"
+                            android:layout_width="30dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="3dip" />
+
+                        <!-- Z0输入框 -->
+
+                        <EditText
+                            android:id="@+id/coax_editText_Z0"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="100dip"
+                            android:layout_toRightOf="@+id/coax_text_Z0"
+                            android:inputType="numberDecimal">
+
+                            <!-- <requestFocus /> -->
+                        </EditText>
+
+                        <!-- Z0单位 -->
+
+                        <Spinner
+                            android:id="@+id/coax_spinner_Z0"
+                            android:layout_width="100dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!-- E eff: -->
+
+                        <TextView
+                            android:id="@+id/coax_text_Eeff"
+                            android:layout_width="30dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="3dip" />
+
+                        <!-- E eff输入框 -->
+
+                        <EditText
+                            android:id="@+id/coax_editText_Eeff"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="100dip"
+                            android:layout_toRightOf="@+id/coax_text_Eeff"
+                            android:inputType="numberDecimal">
+
+                            <!-- <requestFocus /> -->
+                        </EditText>
+
+                        <!-- E eff单位 -->
+
+                        <Spinner
+                            android:id="@+id/coax_spinner_Eeff"
+                            android:layout_width="100dip"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Phy"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:attr/textColorTertiary" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:background="?android:attr/listDivider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- f: -->
+
+                    <TextView
+                        android:id="@+id/coax_text_freq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginRight="3dip"
+                        android:text="@string/Freq" />
+
+                    <!-- f输入框 -->
+
+                    <EditText
+                        android:id="@+id/coax_editText_Freq"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="110dip"
+                        android:layout_toRightOf="@+id/coax_text_freq"
+                        android:inputType="numberDecimal">
+
+                        <!-- <requestFocus /> -->
+                    </EditText>
+
+                    <!-- f单位 -->
+
+                    <Spinner
+                        android:id="@+id/coax_spinner_Freq"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dip" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip">
+
+                    <!-- T: -->
+
+                    <TextView
+                        android:id="@+id/coax_text_T"
+                        android:layout_width="20dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginRight="3dip"
+                        android:text="@string/coax_text_T" />
+
+                    <!-- T输入框 -->
+
+                    <EditText
+                        android:id="@+id/coax_editText_T"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="110dip"
+                        android:layout_toRightOf="@+id/coax_text_T"
+                        android:inputType="numberDecimal"></EditText>
+
+                    <!-- T单位 -->
+
+                    <Spinner
+                        android:id="@+id/coax_spinner_T"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dip" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

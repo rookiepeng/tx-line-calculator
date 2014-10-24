@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="White">#FFFFFFFF</color>
+    <color name="grayLight">#ffe2e2e2</color>
+    <color name="grayDark">#ffaaaaaa</color>
+    <color name="greenLightHolo">#ff99cc00</color>
+    <color name="greenDarkHolo">#ff669900</color>
+    <color name="blueLightHolo">#ff33b5e5</color>
+    <color name="blueDarkHolo">#ff0099cc</color>
+    <color name="redLightHolo">#ffff4444</color>
+    <color name="redDarkHolo">#ffcc0000</color>
+    <color name="purpleLightHolo">#ffaa66cc</color>
+    <color name="purpleDarkHolo">#dd9933cc</color>
+    <color name="orangeLightHolo">#ffffbb33</color>
+    <color name="orangeDarkHolo">#ffff8800</color>
+    <color name="blueBrightHolo">#ff00ddff</color>
+    <color name="grayTextLight">#ff888888</color>
+    <color name="blueSelect">#ff85d3ef</color>
+
+    <color name="blueDarkHoloTrans">#990099cc</color>
+    <color name="blueLightHoloTrans">#8033b5e5</color>
+
+    <color name="overlayBackground">#80808080</color>
+
+</resources>
