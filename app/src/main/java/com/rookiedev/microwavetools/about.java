@@ -2,10 +2,10 @@ package com.rookiedev.microwavetools;
 
 import android.os.Bundle;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class about extends ActionBarActivity {
+public class about extends AppCompatActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

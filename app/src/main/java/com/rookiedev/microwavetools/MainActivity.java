@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +24,7 @@ import com.rookiedev.microwavetools.fragments.CSLINFragment;
 import com.rookiedev.microwavetools.fragments.MLINFragment;
 import com.rookiedev.microwavetools.fragments.SLINFragment;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     public static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
     public static final String PREFS_POSITION = "POSITION";
     public static final String PREFS_ISFIRSTRUN = "ISFIRSTRUN";
@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                //toolbar,
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -207,17 +207,17 @@ public class MainActivity extends ActionBarActivity {
     public void onStop() {
         super.onStop();
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);
+                AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(PREFS_POSITION, String.valueOf(pos));
-        editor.commit();
+        editor.apply();
         // saveSharedPref();
     }
 
     private void readSharedPref() {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         pos = Integer.parseInt(prefs.getString(PREFS_POSITION, "0"));
     }
 
@@ -232,11 +232,11 @@ public class MainActivity extends ActionBarActivity {
 
     private boolean isFirstRun() {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);
+                AppCompatActivity.MODE_PRIVATE);
         if (prefs.getString(PREFS_ISFIRSTRUN, "true").equals("true")) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(PREFS_ISFIRSTRUN, "false");
-            editor.commit();
+            editor.apply();
             return true;
         } else {
             return false;

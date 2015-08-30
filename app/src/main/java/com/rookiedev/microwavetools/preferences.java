@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-public class preferences extends ActionBarActivity {
+public class preferences extends AppCompatActivity {
     private static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
     // accurate of the result
     // EditText dialogInput = new EditText(this);
@@ -156,7 +156,7 @@ public class preferences extends ActionBarActivity {
                                             DecimalLength = Integer.toString(temp);
                                             editor.putString("DecimalLength",
                                                     DecimalLength);
-                                            editor.commit();
+                                            editor.apply();
                                             datas[0] = DecimalLength;
                                             listView.setAdapter(new ListViewAdapter(
                                                     titles, texts, datas));
