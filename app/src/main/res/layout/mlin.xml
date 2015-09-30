@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 ads:adSize="SMART_BANNER"
-                ads:adUnitId="ca-app-pub-9759692679007522/8344805301" />
+                ads:adUnitId="ca-app-pub-6523245757541965/4597430937" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,9 +73,11 @@
                             android:id="@+id/mlin_text_W"
                             android:layout_width="20dip"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="3dip"
+                            android:layout_marginEnd="3dip"
                             android:text="@string/mlin_text_W" />
 
                         <!-- W输入框 -->
@@ -338,7 +340,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="110dip"
                         android:layout_toRightOf="@+id/mlin_text_er"
-                        android:inputType="numberDecimal"></EditText>
+                        android:inputType="numberDecimal"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -366,7 +368,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="110dip"
                         android:layout_toRightOf="@+id/mlin_text_H"
-                        android:inputType="numberDecimal"></EditText>
+                        android:inputType="numberDecimal"/>
 
                     <!-- H单位 -->
 
@@ -405,7 +407,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="110dip"
                         android:layout_toRightOf="@+id/mlin_text_T"
-                        android:inputType="numberDecimal"></EditText>
+                        android:inputType="numberDecimal"/>
                     <!-- T单位 -->
 
                     <Spinner

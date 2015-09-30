@@ -17,7 +17,9 @@ public class CPW {
     private double W, S, H, er, L, Z0, Eeff, f, T;
     private int flag;
 
-    public CPW(double width, double space, double height, double epsilon, double length, double impedance, double electricalLength, double frequency, double thick, int positionFlag) {
+    public CPW(double width, double space, double height, double epsilon, double length,
+               double impedance, double electricalLength, double frequency, double thick,
+               int positionFlag) {
         W = width;
         S = space;
         H = height;

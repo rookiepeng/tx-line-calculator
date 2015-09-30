@@ -10,7 +10,8 @@ public class COAX {
     private double a, b, c, er, L, Z0, Eeff, f, T;
     private int flag;
 
-    public COAX(double _a, double _b, double _c, double epsilon, double length, double impedance, double electricalLength, double frequency, double thick, int synFLag) {
+    public COAX(double _a, double _b, double _c, double epsilon, double length, double impedance,
+                double electricalLength, double frequency, double thick, int synFLag) {
         a = _a;
         b = _b;
         c = _c;

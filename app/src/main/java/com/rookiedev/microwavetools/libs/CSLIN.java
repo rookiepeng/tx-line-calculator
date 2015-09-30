@@ -15,7 +15,9 @@ public class CSLIN {
     private double W, S, L, Z0, k, Z0o, Z0e, Eeff, f, er, H, T;
     private boolean use_z0k;
 
-    public CSLIN(double width, double space, double length, double impedance, double waveNumber, double impedanceOdd, double impedanceEven, double electricalLength, double frequency, double epsilon, double height, double thick, boolean usez0k) {
+    public CSLIN(double width, double space, double length, double impedance, double waveNumber,
+                 double impedanceOdd, double impedanceEven, double electricalLength,
+                 double frequency, double epsilon, double height, double thick, boolean usez0k) {
         W = width;
         S = space;
         L = length;

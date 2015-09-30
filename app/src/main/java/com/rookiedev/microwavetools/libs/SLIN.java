@@ -19,7 +19,8 @@ public class SLIN {
     private double W, H, er, L, Z0, Eeff, f, T;
     private int flag;
 
-    public SLIN(double width, double height, double epsilon, double length, double impedance, double electricalLength, double frequency, double thick, int positionFlag) {
+    public SLIN(double width, double height, double epsilon, double length, double impedance,
+                double electricalLength, double frequency, double thick, int positionFlag) {
         W = width;
         H = height;
         er = epsilon;

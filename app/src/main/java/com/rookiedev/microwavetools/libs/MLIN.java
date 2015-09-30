@@ -4,12 +4,12 @@ package com.rookiedev.microwavetools.libs;
 public class MLIN {
     private static final double pi = Math.PI;
     private static final double c = 0.2997925; // speed of the light divided by 1e9
-    // private static final double n0 = 120 * pi;// impedance of free space
     private static final double n0 = 4 * pi * c * 100;
     private static final double e = Math.E;// base of the natural logarithm
     private double W, L, T, er, H, f, Eeff, Z0;
 
-    public MLIN(double width, double length, double impedance, double electricalLength, double frequency, double epsilon, double height, double thick) {
+    public MLIN(double width, double length, double impedance, double electricalLength,
+                double frequency, double epsilon, double height, double thick) {
         W = width;
         L = length;
         T = thick;
@@ -123,10 +123,6 @@ public class MLIN {
             return (er - (er - Er_eff(U)) / (1 + Pf));
         }
     }
-
-    //private double Mu_eff(double U, double mu) {
-    //    return 2 * mu / ((1 + mu) + (1 - mu) * Math.pow(1 + 10 / U, -0.5));
-    //}
 
     private double ZL_f(double W, double H, double T, double f) {
         double U = W / H;

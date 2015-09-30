@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 ads:adSize="SMART_BANNER"
-                ads:adUnitId="ca-app-pub-9759692679007522/2298271702" />
+                ads:adUnitId="ca-app-pub-6523245757541965/3120697731" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -526,7 +526,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="110dip"
                         android:layout_toRightOf="@+id/cslin_text_er"
-                        android:inputType="numberDecimal"></EditText>
+                        android:inputType="numberDecimal"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -554,7 +554,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="110dip"
                         android:layout_toRightOf="@+id/cslin_text_H"
-                        android:inputType="numberDecimal"></EditText>
+                        android:inputType="numberDecimal"/>
                     <!-- H单位 -->
 
                     <Spinner
@@ -592,7 +592,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="110dip"
                         android:layout_toRightOf="@+id/cslin_text_T"
-                        android:inputType="numberDecimal"></EditText>
+                        android:inputType="numberDecimal"/>
                     <!-- T单位 -->
 
                     <Spinner
