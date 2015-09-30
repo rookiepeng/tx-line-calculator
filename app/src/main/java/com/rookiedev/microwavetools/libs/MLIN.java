@@ -2,10 +2,8 @@ package com.rookiedev.microwavetools.libs;
 
 
 public class MLIN {
-    private static final double pi = Math.PI;
     private static final double c = 0.2997925; // speed of the light divided by 1e9
-    private static final double n0 = 4 * pi * c * 100;
-    private static final double e = Math.E;// base of the natural logarithm
+    private static final double n0 = 4 * Constant.Pi * c * 100;
     private double W, L, T, er, H, f, Eeff, Z0;
 
     public MLIN(double width, double length, double impedance, double electricalLength,
@@ -44,9 +42,9 @@ public class MLIN {
     // Quasi-static characteristic impedance ZL1
     private double ZL1(double U) {
 
-        double fu = 6 + (2 * pi - 6)
-                * Math.pow(e, -Math.pow(30.666 / U, 0.7528));
-        return (n0 / 2 / pi * Math.log(fu / U
+        double fu = 6 + (2 * Constant.Pi - 6)
+                * Math.pow(Constant.Exp, -Math.pow(30.666 / U, 0.7528));
+        return (n0 / 2 / Constant.Pi * Math.log(fu / U
                 + Math.sqrt(1 + Math.pow(2 / U, 2))));
         // return n0;
     }
@@ -74,8 +72,8 @@ public class MLIN {
         double t1 = Math.sqrt(6.517 * U);// ???
         double dW1 = T
                 / H
-                / pi
-                * Math.log(1 + 4 * e * H / T
+                / Constant.Pi
+                * Math.log(1 + 4 * Constant.Exp * H / T
                 / Math.pow(Math.cosh(t1) / Math.sinh(t1), 2));
         return (U + dW1);
     }
@@ -87,8 +85,8 @@ public class MLIN {
         double t1 = Math.sqrt(6.517 * U);// ???
         double dW1 = T
                 / H
-                / pi
-                * Math.log(1 + 4 * e * H / T
+                / Constant.Pi
+                * Math.log(1 + 4 * Constant.Exp * H / T
                 / Math.pow(Math.cosh(t1) / Math.sinh(t1), 2));
         double dWr = (1 + 1 / Math.cosh(Math.sqrt(er - 1))) * dW1 * 0.5;
         // double dWr = 1 / 2 * dW1
@@ -111,11 +109,11 @@ public class MLIN {
         double fn = H / 39.37007874 * f;
         double P1 = 0.27488
                 + (0.6315 + 0.525 / (Math.pow((1 + 0.0157 * fn), 20))) * U
-                - 0.065683 * Math.pow(e, -8.7513 * U);
-        double P2 = 0.33622 * (1 - Math.pow(e, -0.03442 * er));
-        double P3 = 0.0363 * Math.pow(e, -4.6 * U)
-                * (1 - Math.pow(e, -Math.pow(fn / 38.7, 4.97)));
-        double P4 = 1 + 2.751 * (1 - Math.pow(e, -Math.pow(er / 15.916, 8)));
+                - 0.065683 * Math.pow(Constant.Exp, -8.7513 * U);
+        double P2 = 0.33622 * (1 - Math.pow(Constant.Exp, -0.03442 * er));
+        double P3 = 0.0363 * Math.pow(Constant.Exp, -4.6 * U)
+                * (1 - Math.pow(Constant.Exp, -Math.pow(fn / 38.7, 4.97)));
+        double P4 = 1 + 2.751 * (1 - Math.pow(Constant.Exp, -Math.pow(er / 15.916, 8)));
         double Pf = P1 * P2 * Math.pow((0.1844 + P3 * P4) * fn, 1.5763);
         if (T != 0) {
             return (er - (er - Er_eff_thickness(W, H, T)) / (1 + Pf));
@@ -129,14 +127,14 @@ public class MLIN {
         double fn = H / 39.37007874 * f;
         double R1 = 0.03891 * Math.pow(er, 1.4);
         double R2 = 0.267 * Math.pow(U, 7);
-        double R3 = 4.766 * Math.pow(e, -3.228 * Math.pow(U, 0.641));
+        double R3 = 4.766 * Math.pow(Constant.Exp, -3.228 * Math.pow(U, 0.641));
         double R4 = 0.016 + Math.pow(0.0514 * er, 4.524);
         double R5 = Math.pow(fn / 28.843, 12);
         double R6 = 22.2 * Math.pow(U, 1.92);
-        double R7 = 1.206 - 0.3144 * Math.pow(e, -R1) * (1 - Math.pow(e, -R2));
+        double R7 = 1.206 - 0.3144 * Math.pow(Constant.Exp, -R1) * (1 - Math.pow(Constant.Exp, -R2));
         double R8 = 1.0 + 1.275 * (1.0 - Math.exp(-0.004625 * R3
                 * Math.pow(er, 1.674) * Math.pow(fn / 18.365, 2.745)));
-        double R9 = 5.086 * R4 * R5 / (0.3838 + 0.386 * R4) * Math.pow(e, -R6)
+        double R9 = 5.086 * R4 * R5 / (0.3838 + 0.386 * R4) * Math.pow(Constant.Exp, -R6)
                 / (1 + 1.2992 * R5) * Math.pow(er - 1, 6)
                 / (1 + 10 * Math.pow(er - 1, 6));
         double R10 = 0.00044 * Math.pow(er, 2.136) + 0.0184;
@@ -153,10 +151,10 @@ public class MLIN {
         }
         double R15 = 0.707 * R10 * Math.pow(fn / 12.3, 1.097);
         double R16 = 1 + 0.0505 * er * er * R11
-                * (1 - Math.pow(e, -Math.pow(U / 15, 6)));
+                * (1 - Math.pow(Constant.Exp, -Math.pow(U / 15, 6)));
         double R17 = R7
                 * (1 - 1.1241 * R12 / R16
-                * Math.pow(e, -0.026 * Math.pow(fn, 1.15656) - R15));
+                * Math.pow(Constant.Exp, -0.026 * Math.pow(fn, 1.15656) - R15));
         if (T != 0) {
             return (ZL_thickness(W, H, T) * Math.pow(R13 / R14, R17));
         } else {
@@ -207,13 +205,13 @@ public class MLIN {
 		 * iteration
 		 */
 
-        double A = ((er - 1) / (er + 1)) * (0.226 + 0.121 / er) + (pi / 377)
+        double A = ((er - 1) / (er + 1)) * (0.226 + 0.121 / er) + (Constant.Pi / 377)
                 * Math.sqrt(2 * (er + 1)) * zd;
 
-        double w_h = 4 / (0.5 * Math.pow(e, A) - Math.pow(e, -A));
+        double w_h = 4 / (0.5 * Math.pow(Constant.Exp, A) - Math.pow(Constant.Exp, -A));
         if (w_h > 2) {
-            double B = pi * 377 / (2 * zd * Math.sqrt(er));
-            w_h = (2 / pi)
+            double B = Constant.Pi * 377 / (2 * zd * Math.sqrt(er));
+            w_h = (2 / Constant.Pi)
                     * (B - 1 - Math.log(2 * B - 1) + ((er - 1) / (2 * er))
                     * (Math.log(B - 1) + 0.293 - 0.517 / er));
         }

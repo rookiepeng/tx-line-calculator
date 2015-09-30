@@ -4,16 +4,6 @@ package com.rookiedev.microwavetools.libs;
  * Created by rookie on 8/21/13.
  */
 public class CPWG {
-    /* free space speed of light, meters/second */
-    private static double LIGHTSPEED = 2.99792458e8;
-    /* free space permitivitty (Henries/meter) */
-    private static double FREESPACE_MU0 = 4.0 * Math.PI * 1.0e-7;
-
-    /* free space permitivitty (Farads/meter) */
-    // private static double FREESPACE_E0 = 1.0 / (LIGHTSPEED * LIGHTSPEED *
-    // FREESPACE_MU0);
-    /* free space impedance, Ohms */
-    private static double FREESPACEZ0 = FREESPACE_MU0 * LIGHTSPEED;
     private double W, S, H, er, L, Z0, Eeff, f, T;
     private int flag;
 
@@ -91,7 +81,7 @@ public class CPWG {
 
         double keff = (1.0 + er * k_kp1 / k_kp) / (1.0 + k_kp1 / k_kp);
 
-        return (FREESPACEZ0 / (2.0 * Math.sqrt(keff))) / (k_kp + k_kp1);
+        return (Constant.FREESPACEZ0 / (2.0 * Math.sqrt(keff))) / (k_kp + k_kp1);
     }
 
     private double Eeff_calc(double W, double S, double H, double L, double er,
@@ -108,7 +98,7 @@ public class CPWG {
 		 */
 
 		/* propagation velocity (meters/sec) */
-        double v = LIGHTSPEED / Math.sqrt(keff);
+        double v = Constant.LIGHTSPEED / Math.sqrt(keff);
         return (360 * L * f / v);
     }
 
@@ -592,7 +582,7 @@ public class CPWG {
 
 		/* velocity on line */
         // coplanar_calc(line, f);
-        v = LIGHTSPEED / Math.sqrt(er);
+        v = Constant.LIGHTSPEED / Math.sqrt(er);
         L = (Eeff / 360.0) * (v / f);
         return 0;
     }

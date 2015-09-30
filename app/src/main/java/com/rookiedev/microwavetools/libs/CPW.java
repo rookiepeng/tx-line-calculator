@@ -4,16 +4,6 @@ package com.rookiedev.microwavetools.libs;
  * Created by rookie on 8/21/13.
  */
 public class CPW {
-    /* free space speed of light, meters/second */
-    private static double LIGHTSPEED = 2.99792458e8;
-    /* free space permitivitty (Henries/meter) */
-    private static double FREESPACE_MU0 = 4.0 * Math.PI * 1.0e-7;
-
-    /* free space permitivitty (Farads/meter) */
-    // private static double FREESPACE_E0 = 1.0 / (LIGHTSPEED * LIGHTSPEED *
-    // FREESPACE_MU0);
-    /* free space impedance, Ohms */
-    private static double FREESPACEZ0 = FREESPACE_MU0 * LIGHTSPEED;
     private double W, S, H, er, L, Z0, Eeff, f, T;
     private int flag;
 
@@ -147,7 +137,7 @@ public class CPW {
         keff = eeff - (eeff - 1.0) / ((0.5 * (b - a) / (0.7 * T)) * k_kp + 1.0);
 
 		/* for coplanar waveguide (ground signal ground) */
-        z0 = FREESPACEZ0 / (4.0 * Math.sqrt(keff) * k_kpt);
+        z0 = Constant.FREESPACEZ0 / (4.0 * Math.sqrt(keff) * k_kpt);
         return z0;
     }
 
@@ -213,7 +203,7 @@ public class CPW {
 		 */
 
 		/* propagation velocity (meters/sec) */
-        double v = LIGHTSPEED / Math.sqrt(keff);
+        double v = Constant.LIGHTSPEED / Math.sqrt(keff);
         return (360 * L * f / v);
     }
 
@@ -697,7 +687,7 @@ public class CPW {
 
 		/* velocity on line */
         // coplanar_calc(line, f);
-        v = LIGHTSPEED / Math.sqrt(er);
+        v = Constant.LIGHTSPEED / Math.sqrt(er);
         L = (Eeff / 360.0) * (v / f);
         return 0;
     }

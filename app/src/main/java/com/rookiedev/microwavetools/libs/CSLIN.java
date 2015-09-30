@@ -4,14 +4,6 @@ package com.rookiedev.microwavetools.libs;
  * Created by rookie on 8/21/13.
  */
 public class CSLIN {
-    /* free space speed of light, meters/second */
-    private static double LIGHTSPEED = 2.99792458e8;
-    /* free space permitivitty (Henries/meter) */
-    private static double FREESPACE_MU0 = 4.0 * Math.PI * 1.0e-7;
-    /* free space permitivitty (Farads/meter) */
-    private static double FREESPACE_E0 = 1.0 / (LIGHTSPEED * LIGHTSPEED * FREESPACE_MU0);
-    /* free space impedance, Ohms */
-    private static double FREESPACEZ0 = FREESPACE_MU0 * LIGHTSPEED;
     private double W, S, L, Z0, k, Z0o, Z0e, Eeff, f, er, H, T;
     private boolean use_z0k;
 
@@ -92,7 +84,7 @@ public class CSLIN {
                 * Math.tanh(Math.PI * (W + S) / (2.0 * H));
 
 		/* (2) from Cohn */
-        return ((FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / er) / k_over_kp(ke));
+        return ((Constant.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / er) / k_over_kp(ke));
     }
 
     private double z0o_zerot(double W, double S, double H) {
@@ -103,7 +95,7 @@ public class CSLIN {
                 / Math.tanh(Math.PI * (W + S) / (2.0 * H));
 
 		/* (5) from Cohn */
-        return ((FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / er) / k_over_kp(ko));
+        return ((Constant.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / er) / k_over_kp(ko));
     }
 
     private double Z0_calc(double W, double H, double T) {
@@ -188,14 +180,14 @@ public class CSLIN {
             z0s_0t = Z0_calc(W, H, 0);
 
 			/* fringing capacitance */
-            cf_t = (FREESPACE_E0 * er / Math.PI)
+            cf_t = (Constant.FREESPACE_E0 * er / Math.PI)
                     * ((2.0 / (1.0 - T / H))
                     * Math.log((1.0 / (1.0 - T / H)) + 1.0) - (1.0 / (1.0 - T
                     / H) - 1.0)
                     * Math.log((1.0 / Math.pow(1.0 - T / H, 2.0)) - 1.0));
 
 			/* zero thickness fringing capacitance */
-            cf_0 = (FREESPACE_E0 * er / Math.PI) * 2.0 * Math.log(2.0);
+            cf_0 = (Constant.FREESPACE_E0 * er / Math.PI) * 2.0 * Math.log(2.0);
 
 			/* (18) from Cohn, (4.6.5.1) in Wadell */
             z0e = 1.0 / ((1.0 / z0s) - (cf_t / cf_0)
@@ -236,14 +228,14 @@ public class CSLIN {
             z0s_0t = Z0_calc(W, H, 0);
 
 			/* fringing capacitance */
-            cf_t = (FREESPACE_E0 * er / Math.PI)
+            cf_t = (Constant.FREESPACE_E0 * er / Math.PI)
                     * ((2.0 / (1.0 - T / H))
                     * Math.log((1.0 / (1.0 - T / H)) + 1.0) - (1.0 / (1.0 - T
                     / H) - 1.0)
                     * Math.log((1.0 / Math.pow(1.0 - T / H, 2.0)) - 1.0));
 
 			/* zero thickness fringing capacitance */
-            cf_0 = (FREESPACE_E0 * er / Math.PI) * 2.0 * Math.log(2.0);
+            cf_0 = (Constant.FREESPACE_E0 * er / Math.PI) * 2.0 * Math.log(2.0);
 
             if (S >= 5.0 * T) {
 				/*
@@ -260,16 +252,16 @@ public class CSLIN {
 				 * (Cohn)
 				 */
                 z0o = 1.0 / ((1.0 / z0o_0t) + ((1.0 / z0s) - (1.0 / z0s_0t))
-                        - (2.0 / FREESPACEZ0)
-                        * (cf_t / FREESPACE_E0 - cf_0 / FREESPACE_E0) + (2.0 * T)
-                        / (FREESPACEZ0 * S));
+                        - (2.0 / Constant.FREESPACEZ0)
+                        * (cf_t / Constant.FREESPACE_E0 - cf_0 / Constant.FREESPACE_E0) + (2.0 * T)
+                        / (Constant.FREESPACEZ0 * S));
             }
         }
         return z0o;
     }
 
     private double Eeff_calc(double L, double f) {
-        return (360.0 * L * f / LIGHTSPEED * Math.sqrt(er));
+        return (360.0 * L * f / Constant.LIGHTSPEED * Math.sqrt(er));
     }
 
     public void cslin_syn() {

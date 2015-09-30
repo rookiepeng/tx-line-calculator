@@ -4,15 +4,6 @@ package com.rookiedev.microwavetools.libs;
  * Created by rookie on 8/20/13.
  */
 public class CMLIN {
-    /* free space speed of light, meters/second */
-    private static double LIGHTSPEED = 2.99792458e8;
-    /* free space permitivitty (Henries/meter) */
-    private static double FREESPACE_MU0 = 4.0 * Math.PI * 1.0e-7;
-    /* free space permitivitty (Farads/meter) */
-    // private static double FREESPACE_E0 = 1.0 / (LIGHTSPEED * LIGHTSPEED *
-    // FREESPACE_MU0);
-    /* free space impedance, Ohms */
-    private static double FREESPACEZ0 = FREESPACE_MU0 * LIGHTSPEED;
     // private static double mu0 = 4 * Math.PI * 1.0e-7;
     // private static double e0 = 1.0 / (mu0 * LIGHTSPEED * LIGHTSPEED);
     private double W, S, L, Z0, k, Z0o, Z0e, Eeff, f, er, H, T;
@@ -94,7 +85,7 @@ public class CMLIN {
 
 		/* (1) from Hammerstad and Jensen */
         /* XXX decide on which to use here */
-        z01 = (FREESPACEZ0 / (2 * Math.PI))
+        z01 = (Constant.FREESPACEZ0 / (2 * Math.PI))
                 * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
         // z01 = (377.0/(2*Math.PI)) * Math.log(F/u + Math.sqrt(1.0 +
         // Math.pow((2/u),2.0)));
@@ -757,7 +748,7 @@ public class CMLIN {
         EFOF = Er_eff_o_f_calc(W, S, H, f);
 
 		/* propagation velocity (meters/sec) */
-        v = LIGHTSPEED / Math.sqrt(Math.sqrt(EFEF * EFOF));
+        v = Constant.LIGHTSPEED / Math.sqrt(Math.sqrt(EFEF * EFOF));
 
 		/* length in wavelengths */
         return 360.0 * L / (v / f);
