@@ -51,25 +51,25 @@ public class MLIN {
 
         l = MLINLine.getMetalLength();
 
-  /* Substrate dielectric thickness */
+        /* Substrate dielectric thickness */
         //h = line->subs->h;
         h = MLINLine.getSubHeight();
 
-  /* Substrate relative permittivity */
+        /* Substrate relative permittivity */
         //er = line->subs->er;
         er = MLINLine.getSubEpsilon();
 
-  /* Metal resistivity */
+        /* Metal resistivity */
         rho = line -> subs -> rho;
 
-  /* Loss tangent of the dielectric material */
+        /* Loss tangent of the dielectric material */
         tand = line -> subs -> tand;
 
-  /* Metal thickness */
+        /* Metal thickness */
         //t = line->subs->tmet;
         t = MLINLine.getMetalThick();
 
-  /*   subs(6) = Metalization roughness */
+        /*   subs(6) = Metalization roughness */
         rough = line -> subs -> rough;
 
         //#ifdef DEBUG_CALC
@@ -87,24 +87,24 @@ public class MLIN {
 
         //#endif
 
-  /*
-   * Start of microstrip calculations
-   */
+        /*
+        * Start of microstrip calculations
+        */
 
 
-  /* Find u and correction factor for nonzero metal thickness */
+        /* Find u and correction factor for nonzero metal thickness */
         u = w / h;
 
         if (t > 0.0) {
-    /* find normalized metal thickness */
+        /* find normalized metal thickness */
             T = t / h;
 
-    /* (6) from Hammerstad and Jensen */
-            deltau1 = (T / M_PI)
-                    * log(1.0 + 4.0 * exp(1.0) / (T * pow(coth(sqrt(6.517 * u)), 2.0)));
+            /* (6) from Hammerstad and Jensen */
+            deltau1 = (T / Constant.Pi)
+                    * Math.log(1.0 + 4.0 * Math.exp(1.0) / (T * Math.pow(coth(Math.sqrt(6.517 * u)), 2.0)));
 
-    /* (7) from Hammerstad and Jensen */
-            deltaur = 0.5 * (1.0 + 1.0 / cosh(sqrt(er - 1.0))) * deltau1;
+            /* (7) from Hammerstad and Jensen */
+            deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(er - 1.0))) * deltau1;
 
             deltau = deltaur;
 
@@ -120,20 +120,20 @@ public class MLIN {
         }
 
 
-  /*
-   * some test stuff to compare with Kobayashi
-   * u = 2;
-   * er=16;
-   * hl0 = 1;
-   * f=10e9;
-   * l0 = 3e8/f;
-   * h=hl0*l0;
-   */
+        /*
+        * some test stuff to compare with Kobayashi
+        * u = 2;
+        * er=16;
+        * hl0 = 1;
+        * f=10e9;
+        * l0 = 3e8/f;
+        * h=hl0*l0;
+        */
 
-  /*
-   * relative permittivity at f=0
-   *  (Hammerstad and Jensen)
-   */
+        /*
+        * relative permittivity at f=0
+        *  (Hammerstad and Jensen)
+        */
 
         u1 = u + deltau1;
         ur = u + deltaur;
@@ -152,86 +152,86 @@ public class MLIN {
         //printf("    the Rogers Corp. paper\n");
         //#endif
 
-  /*
-   * zero frequency characteristic impedance
-   * (8) from Hammerstad and Jensen
-   */
-        z0 = z0_HandJ(ur) / sqrt(E0);
+        /*
+        * zero frequency characteristic impedance
+        * (8) from Hammerstad and Jensen
+        */
+        z0 = z0_HandJ(ur) / Math.sqrt(E0);
 
         //#ifdef DEBUG_CALC
         //printf("microstrip.c: microstrip_calc():  z0(0) = %g \n",z0);
         //printf("              This is (8) from Hammerstad & Jensen\n");
         //#endif
 
-  /*
-   * zero frequency effective permitivity.
-   * (9) from Hammerstad and Jensen
-   */
-        EFF0 = E0 * pow(z0_HandJ(u1) / z0_HandJ(ur), 2.0);
+        /*
+        * zero frequency effective permitivity.
+        * (9) from Hammerstad and Jensen
+        */
+        EFF0 = E0 * Math.pow(z0_HandJ(u1) / z0_HandJ(ur), 2.0);
 
         //#ifdef DEBUG_CALC
         //printf("microstrip.c: microstrip_calc():  EFF0 = %g \n",EFF0);
         //printf("              This is (9) from Hammerstad & Jensen\n");
         //#endif
 
-  /*
-   * relative permittivity including dispersion
-   *  (Kirschning and Jansen)
-   */
+        /*
+        * relative permittivity including dispersion
+        *  (Kirschning and Jansen)
+        */
 
-  /* normalized frequency (GHz-cm)*/
+        /* normalized frequency (GHz-cm)*/
         fn = 1e-7 * f * h;
 
-  /* (2) from Kirschning and Jansen */
+        /* (2) from Kirschning and Jansen */
         P1 = 0.27488 +
-                (0.6315 + (0.525 / (pow((1.0 + 0.157 * fn), 20.0)))) * u
-                - 0.065683 * exp(-8.7513 * u);
-        P2 = 0.33622 * (1.0 - exp(-0.03442 * er));
-        P3 = 0.0363 * exp(-4.6 * u) * (1.0 - exp(-pow((fn / 3.87), 4.97)));
-        P4 = 1.0 + 2.751 * (1.0 - exp(-pow((er / 15.916), 8.0)));
-        P = P1 * P2 * pow(((0.1844 + P3 * P4) * 10.0 * fn), 1.5763);
+                (0.6315 + (0.525 / (Math.pow((1.0 + 0.157 * fn), 20.0)))) * u
+                - 0.065683 * Math.exp(-8.7513 * u);
+        P2 = 0.33622 * (1.0 - Math.exp(-0.03442 * er));
+        P3 = 0.0363 * Math.exp(-4.6 * u) * (1.0 - Math.exp(-Math.pow((fn / 3.87), 4.97)));
+        P4 = 1.0 + 2.751 * (1.0 - Math.exp(-Math.pow((er / 15.916), 8.0)));
+        P = P1 * P2 * Math.pow(((0.1844 + P3 * P4) * 10.0 * fn), 1.5763);
 
-  /* (1) from Kirschning and Jansen */
+        /* (1) from Kirschning and Jansen */
         EF = (EFF0 + er * P) / (1.0 + P);
 
 
-   /*
-    * Characteristic Impedance
-    *  (Jansen and Kirschning)
-    */
+        /*
+        * Characteristic Impedance
+        *  (Jansen and Kirschning)
+        */
 
-   /* normalized frequency (GHz-mm) */
+        /* normalized frequency (GHz-mm) */
         fn = 1.0e-6 * f * h;
 
 
-   /* (1) from Jansen and Kirschning */
-        R1 = 0.03891 * pow(er, 1.4);
-        R2 = 0.267 * pow(u, 7.0);
-        R3 = 4.766 * exp(-3.228 * pow(u, 0.641));
-        R4 = 0.016 + pow((0.0514 * er), 4.524);
-        R5 = pow((fn / 28.843), 12.0);
-        R6 = 22.20 * pow(u, 1.92);
+        /* (1) from Jansen and Kirschning */
+        R1 = 0.03891 * Math.pow(er, 1.4);
+        R2 = 0.267 * Math.pow(u, 7.0);
+        R3 = 4.766 * Math.exp(-3.228 * Math.pow(u, 0.641));
+        R4 = 0.016 + Math.pow((0.0514 * er), 4.524);
+        R5 = Math.pow((fn / 28.843), 12.0);
+        R6 = 22.20 * Math.pow(u, 1.92);
 
-   /* (2) from Jansen and Kirschning */
-        R7 = 1.206 - 0.3144 * exp(-R1) * (1.0 - exp(-R2));
+        /* (2) from Jansen and Kirschning */
+        R7 = 1.206 - 0.3144 * Math.exp(-R1) * (1.0 - Math.exp(-R2));
         R8 = 1.0 + 1.275 * (1.0 -
-                exp(-0.004625 * R3 *
-                        pow(er, 1.674) *
-                        pow(fn / 18.365, 2.745)));
-        R9 = (5.086 * R4 * R5 / (0.3838 + 0.386 * R4)) * (exp(-R6) / (1.0 + 1.2992 * R5));
-        R9 = R9 * pow((er - 1.0), 6.0) / (1.0 + 10.0 * pow((er - 1), 6.0));
+                Math.exp(-0.004625 * R3 *
+                        Math.pow(er, 1.674) *
+                        Math.pow(fn / 18.365, 2.745)));
+        R9 = (5.086 * R4 * R5 / (0.3838 + 0.386 * R4)) * (Math.exp(-R6) / (1.0 + 1.2992 * R5));
+        R9 = R9 * Math.pow((er - 1.0), 6.0) / (1.0 + 10.0 * Math.pow((er - 1), 6.0));
 
-   /* (3) from Jansen and Kirschning */
-        R10 = 0.00044 * pow(er, 2.136) + 0.0184;
-        R11 = pow((fn / 19.47), 6.0) / (1.0 + 0.0962 * pow((fn / 19.47), 6.0));
+        /* (3) from Jansen and Kirschning */
+        R10 = 0.00044 * Math.pow(er, 2.136) + 0.0184;
+        R11 = Math.pow((fn / 19.47), 6.0) / (1.0 + 0.0962 * Math.pow((fn / 19.47), 6.0));
         R12 = 1.0 / (1.0 + 0.00245 * u * u);
 
-   /* (4) from Jansen and Kirschning */
-        R13 = 0.9408 * pow(EF, R8) - 0.9603;
-        R14 = (0.9408 - R9) * pow(EFF0, R8) - 0.9603;
-        R15 = 0.707 * R10 * pow((fn / 12.3), 1.097);
-        R16 = 1.0 + 0.0503 * er * er * R11 * (1.0 - exp(-pow((u / 15), 6.0)));
-        R17 = R7 * (1.0 - 1.1241 * (R12 / R16) * exp(-0.026 * pow(fn, 1.15656) - R15));
+        /* (4) from Jansen and Kirschning */
+        R13 = 0.9408 * Math.pow(EF, R8) - 0.9603;
+        R14 = (0.9408 - R9) * Math.pow(EFF0, R8) - 0.9603;
+        R15 = 0.707 * R10 * Math.pow((fn / 12.3), 1.097);
+        R16 = 1.0 + 0.0503 * er * er * R11 * (1.0 - Math.exp(-Math.pow((u / 15), 6.0)));
+        R17 = R7 * (1.0 - 1.1241 * (R12 / R16) * Math.exp(-0.026 * Math.pow(fn, 1.15656) - R15));
 
 
         //#ifdef DEBUG_CALC
@@ -239,154 +239,154 @@ public class MLIN {
         //        R13,R14,R17);
         //#endif
 
-   /* (5) from Jansen and Kirschning */
-        z0 = z0 * pow((R13 / R14), R17);
+        /* (5) from Jansen and Kirschning */
+        z0 = z0 * Math.pow((R13 / R14), R17);
 
-   /*
-    * propagation velocity (meters/sec)
-    */
-        v = LIGHTSPEED / sqrt(EF);
+        /*
+        * propagation velocity (meters/sec)
+        */
+        v = Constant.LIGHTSPEED / Math.sqrt(EF);
 
-   /*
-    * delay on line
-    */
+        /*
+        * delay on line
+        */
         delay = line -> l / v;
 
-   /*
-    * End correction
-    *  (Kirschning, Jansen, and Koster)
-    */
-   /* DAN should decide what to do about this */
-        z1 = 0.434907 * ((pow(EF, 0.81) + 0.26) / (pow(EF, 0.81) - 0.189))
-                * (pow(u, 0.8544) + 0.236) / (pow(u, 0.8544) + 0.87);
-        z2 = 1.0 + (pow(u, 0.371)) / (2.358 * er + 1.0);
-        z3 = 1.0 + (0.5274 * atan(0.084 * (pow(u, (1.9413 / z2))))) / (pow(EF, 0.9236));
+        /*
+        * End correction
+        *  (Kirschning, Jansen, and Koster)
+        */
+        /* DAN should decide what to do about this */
+        z1 = 0.434907 * ((Math.pow(EF, 0.81) + 0.26) / (Math.pow(EF, 0.81) - 0.189))
+                * (Math.pow(u, 0.8544) + 0.236) / (Math.pow(u, 0.8544) + 0.87);
+        z2 = 1.0 + (Math.pow(u, 0.371)) / (2.358 * er + 1.0);
+        z3 = 1.0 + (0.5274 * Math.atan(0.084 * (Math.pow(u, (1.9413 / z2))))) / (Math.pow(EF, 0.9236));
         z4 = 1.0
-                + 0.0377 * atan(0.067 * (pow(u, 1.456))) * (6.0 - 5.0 * exp(0.036 * (1.0 - er)));
-        z5 = 1.0 - 0.218 * exp(-7.5 * u);
+                + 0.0377 * Math.atan(0.067 * (Math.pow(u, 1.456))) * (6.0 - 5.0 * Math.exp(0.036 * (1.0 - er)));
+        z5 = 1.0 - 0.218 * Math.exp(-7.5 * u);
 
         deltal = h * z1 * z3 * z5 / z4;
 
 
-   /* find the incremental circuit model */
-   /*
-    * find L and C from the impedance and velocity
-    *
-    * z0 = sqrt(L/C), v = 1/sqrt(LC)
-    *
-    * this gives the result below
-    */
+        /* find the incremental circuit model */
+        /*
+        * find L and C from the impedance and velocity
+        *
+        * z0 = sqrt(L/C), v = 1/sqrt(LC)
+        *
+        * this gives the result below
+        */
         L = z0 / v;
         C = 1.0 / (z0 * v);
 
-   /* resistance and conductance will be updated below */
+        /* resistance and conductance will be updated below */
         R = 0.0;
         G = 0.0;
 
         if (flag == WITHLOSS) {
-       /* length in wavelengths */
+        /* length in wavelengths */
             if (f > 0.0)
                 len = (l) / (v / f);
             else
                 len = 0.0;
 
-       /* convert to degrees */
+        /* convert to degrees */
             len = 360.0 * len;
 
 
 
-       /* effective relative permittivity */
+        /* effective relative permittivity */
             eeff = EF;
 
 
             line -> keff = eeff;
             line -> len = len;
 
-       /* calculate loss */
+        /* calculate loss */
 
 
-       /*
-    * Dielectric Losses
-	*/
+        /*
+        * Dielectric Losses
+	    */
 
-       /* loss in nepers/meter */
+        /* loss in nepers/meter */
 
-       /*
-	* The dielectric loss here matches equation (1) in the
-	* Denlinger paper although the form is slightly different.  In
-	* the Denlinger paper it is in dB/m.  Note that the 27.3 in
-	* the Denlinger paper is equal to pi * 20*log10( e ).
-	*
-	* See also equation (4.21) in Fooks and Zakarevicius.  The
-	* difference in form there is (4.21) uses c/sqrt(EF) in place
-	* of 'v' in our equation here.
-	*
-	*
-	* With a uniform dielectric, we would have this:
-	*
-	* G = 2 * M_PI * f * C * line->subs->tand;
-	*
-	* alpha_d = (G * Z0 / 2) * tand     (nepers/meter)
-	*
-	* but for the mixed air/dielectric that we have, the loss is
-	* less by a factor qd which is the filling factor.
-	* bu
-	*/
+        /*
+        * The dielectric loss here matches equation (1) in the
+	    * Denlinger paper although the form is slightly different.  In
+	    * the Denlinger paper it is in dB/m.  Note that the 27.3 in
+	    * the Denlinger paper is equal to pi * 20*log10( e ).
+	    *
+	    * See also equation (4.21) in Fooks and Zakarevicius.  The
+	    * difference in form there is (4.21) uses c/sqrt(EF) in place
+	    * of 'v' in our equation here.
+	    *
+	    *
+	    * With a uniform dielectric, we would have this:
+	    *
+	    * G = 2 * M_PI * f * C * line->subs->tand;
+	    *
+	    * alpha_d = (G * Z0 / 2) * tand     (nepers/meter)
+	    *
+	    * but for the mixed air/dielectric that we have, the loss is
+	    * less by a factor qd which is the filling factor.
+	    * bu
+	    */
 
             if (er > 1.0) {
-                ld = (M_PI * f / v) * (er / EF) * ((EF - 1.0) / (er - 1.0)) * tand;
+                ld = (Constant.Pi * f / v) * (er / EF) * ((EF - 1.0) / (er - 1.0)) * tand;
             } else {
-	 /* if er == 1, then this is probably a vacuum */
+	    /* if er == 1, then this is probably a vacuum */
                 ld = 0.0;
             }
 
             G = 2.0 * ld / z0;
             line -> alpha_d = ld;
 
-       /* loss in dB/meter */
-            ld = 20.0 * log10(exp(1.0)) * ld;
+        /* loss in dB/meter */
+            ld = 20.0 * Math.log10(Math.exp(1.0)) * ld;
 
-       /* loss in dB */
+        /* loss in dB */
             ld = ld * l;
 
-       /*
-	* Conduction Losses
-	*/
+        /*
+	    * Conduction Losses
+	    */
 
 
-       /* calculate skin depth */
+        /* calculate skin depth */
 
-       /* conductivity */
+        /* conductivity */
             sigma = 1.0 / rho;
 
-       /* permeability of free space */
-            mu = 4.0 * M_PI * 1e-7;
+        /* permeability of free space */
+            mu = 4.0 * Constant.Pi * 1e-7;
 
-       /* skin depth in meters */
-            delta = sqrt(1.0 / (M_PI * f * mu * sigma));
+        /* skin depth in meters */
+            delta = Math.sqrt(1.0 / (Constant.Pi * f * mu * sigma));
             depth = delta;
 
 
-       /* warn the user if the loss calc is suspect. */
+        /* warn the user if the loss calc is suspect. */
             if (t < 3.0 * depth) {
-                alert("Warning:  The metal thickness is less than\n"
-                        "three skin depths.  Use the loss results with\n"
-                        "caution.\n");
+                //alert("Warning:  The metal thickness is less than\n"
+                //        "three skin depths.  Use the loss results with\n"
+                //        "caution.\n");
             }
 
-       /*
-	* if the skinDepth is greater than Tmet, assume current
-	* flows uniformly through  the conductor.  Then loss
-	* is just calculated from the dc resistance of the
-	* trace.  This is somewhat
-	* suspect, but I dont have time right now to come up
-	* with a better result.
-	*/
+        /*
+	    * if the skinDepth is greater than Tmet, assume current
+	    * flows uniformly through  the conductor.  Then loss
+	    * is just calculated from the dc resistance of the
+	    * trace.  This is somewhat
+	    * suspect, but I dont have time right now to come up
+	    * with a better result.
+	    */
             if (depth <= t) {
 
-	   /* store the substrate parameters */
-	   /* XXX */
-	   /* subsl = subs; */
+	    /* store the substrate parameters */
+	    /* XXX */
+	    /* subsl = subs; */
 
                 line -> subs -> er = 1.0;
                 rslt = microstrip_calc_int(line, f, NOLOSS);
@@ -422,65 +422,65 @@ public class MLIN {
                 line -> subs -> tmet = t;
                 line -> w = w;
 
-	   /* conduction losses, nepers per meter */
-                lc = (M_PI * f / LIGHTSPEED) * (z1 - z2) / z0;
+	            /* conduction losses, nepers per meter */
+                lc = (Constant.Pi * f / Constant.LIGHTSPEED) * (z1 - z2) / z0;
 
                 R = lc * 2 * z0;
             }
 
-	   /* "dc" case  */
+	        /* "dc" case  */
             else if (t > 0.0) {
-	   /* resistance per meter = 1/(Area*conductivity) */
+	        /* resistance per meter = 1/(Area*conductivity) */
                 R = 1 / (line -> w * line -> subs -> tmet * sigma);
 
-	   /* resistance per meter = 1/(Area*conductivity) */
+	            /* resistance per meter = 1/(Area*conductivity) */
                 Res = 1 / (w * t * sigma);
 
-	   /* conduction losses, nepers per meter */
+	            /* conduction losses, nepers per meter */
                 lc = Res / (2.0 * z0);
 
-	   /*
-	    * change delta to be equal to the metal thickness for
-	    * use in surface roughness correction
-	    */
+	            /*
+	            * change delta to be equal to the metal thickness for
+	            * use in surface roughness correction
+	            */
                 delta = t;
 
-	   /* no conduction loss case */
+	        /* no conduction loss case */
             } else {
                 lc = 0.0;
             }
 
 
 
-       /* factor due to surface roughness
-	* note that the equation in Fooks and Zakarevicius is slightly
-	* errored.
-	* the correct equation is penciled in my copy and was
-	* found in Hammerstad and Bekkadal
-	*/
-            lc = lc * (1.0 + (2.0 / M_PI) * atan(1.4 * pow((rough / delta), 2.0)));
+            /* factor due to surface roughness
+	        * note that the equation in Fooks and Zakarevicius is slightly
+	        * errored.
+	        * the correct equation is penciled in my copy and was
+	        * found in Hammerstad and Bekkadal
+	        */
+            lc = lc * (1.0 + (2.0 / Constant.Pi) * Math.atan(1.4 * Math.pow((rough / delta), 2.0)));
 
             line -> alpha_c = lc;
 
-       /*
-	* recalculate R now that we have the surface roughness in
-	* place
-	*/
+            /*
+	        * recalculate R now that we have the surface roughness in
+	        * place
+	        */
             R = lc * 2.0 * z0;
 
             //#ifdef DEBUG_CALC
             //printf ("R (%g) = alpha_c (%g) * 2.0 * z0 (%g)\n", R, lc, z0);
             //#endif
 
-       /* loss in dB/meter */
-            lc = 20.0 * log10(exp(1.0)) * lc;
+            /* loss in dB/meter */
+            lc = 20.0 * Math.log10(Math.exp(1.0)) * lc;
 
-       /* loss in dB */
+            /* loss in dB */
             lc = lc * l;
 
-       /*
-	* Total Loss
-	*/
+            /*
+	        * Total Loss
+	        */
 
             loss = ld + lc;
 
@@ -489,8 +489,9 @@ public class MLIN {
             depth = 0.0;
         }
 
-   /*  store results */
-        line -> z0 = z0;
+        /*  store results */
+        //line -> z0 = z0;
+        MLINLine.setImpedance(z0);
 
         line -> loss = loss;
         line -> losslen = loss / line -> l;
@@ -506,6 +507,48 @@ public class MLIN {
 
 
         return (rslt);
+    }
+
+    private static double ee_HandJ(double u, double er) {
+        double A, B, E0;
+
+        /* (4) from Hammerstad and Jensen */
+        A = 1.0 + (1.0 / 49.0)
+                * Math.log((Math.pow(u, 4.0) + Math.pow((u / 52.0), 2.0)) / (Math.pow(u, 4.0) + 0.432))
+                + (1.0 / 18.7) * Math.log(1.0 + Math.pow((u / 18.1), 3.0));
+
+        /* (5) from Hammerstad and Jensen */
+        B = 0.564 * Math.pow(((er - 0.9) / (er + 3.0)), 0.053);
+
+
+        /*
+        * zero frequency effective permitivity.  (3) from Hammerstad and
+        * Jensen.  This is ee(ur,er) thats used by (9) in Hammerstad and
+        * Jensen.
+        */
+        E0 = (er + 1.0) / 2.0 + ((er - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / u), (-A * B));
+
+        return E0;
+    }
+
+    /*
+     * Characteristic impedance from (1) and (2) in Hammerstad and Jensen
+     */
+    private static double z0_HandJ(double u) {
+        double F, z01;
+
+        /* (2) from Hammerstad and Jensen.  'u' is the normalized width */
+        F = 6.0 + (2.0 * Constant.Pi - 6.0) * Math.exp(-Math.pow((30.666 / u), 0.7528));
+
+        /* (1) from Hammerstad and Jensen */
+        z01 = (Constant.FREESPACEZ0 / (2 * Constant.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
+
+        //#ifdef DEBUG_CALC
+        //printf("microstrip.c: z0_HandJ(%g) = %g Ohms. FREESPACEZ0=%g Ohms\n",
+        //        u,z01,FREESPACEZ0);
+        //#endif
+
+        return z01;
     }
 
     /*
