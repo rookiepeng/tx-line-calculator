@@ -11,8 +11,8 @@ public class MLIN {
     * flag=1 enables loss calculations
     * flag=0 disables loss calculations
     */
-    private int microstrip_calc_int(double f, int flag) {
-        int rslt = 0;
+    private void microstrip_calc_int(double f, int flag) {
+        //boolean rslt = false;
         double w, l;
 
         double h, er, rho, tand, t, rough;
@@ -60,17 +60,20 @@ public class MLIN {
         er = MLINLine.getSubEpsilon();
 
         /* Metal resistivity */
-        rho = line -> subs -> rho;
+        //rho = line -> subs -> rho;
+        rho=MLINLine.getRho();
 
         /* Loss tangent of the dielectric material */
-        tand = line -> subs -> tand;
+        //tand = line -> subs -> tand;
+        tand=MLINLine.getTand();
 
         /* Metal thickness */
         //t = line->subs->tmet;
         t = MLINLine.getMetalThick();
 
         /*   subs(6) = Metalization roughness */
-        rough = line -> subs -> rough;
+        //rough = line -> subs -> rough;
+        rough=MLINLine.getRough();
 
         //#ifdef DEBUG_CALC
         //printf("starting microstrip_calc_int() with %g MHz and ",f/1.0e6);
@@ -96,7 +99,7 @@ public class MLIN {
         u = w / h;
 
         if (t > 0.0) {
-        /* find normalized metal thickness */
+            /* find normalized metal thickness */
             T = t / h;
 
             /* (6) from Hammerstad and Jensen */
@@ -118,7 +121,6 @@ public class MLIN {
             deltau1 = 0.0;
             deltaur = 0.0;
         }
-
 
         /*
         * some test stuff to compare with Kobayashi
@@ -194,7 +196,6 @@ public class MLIN {
         /* (1) from Kirschning and Jansen */
         EF = (EFF0 + er * P) / (1.0 + P);
 
-
         /*
         * Characteristic Impedance
         *  (Jansen and Kirschning)
@@ -202,7 +203,6 @@ public class MLIN {
 
         /* normalized frequency (GHz-mm) */
         fn = 1.0e-6 * f * h;
-
 
         /* (1) from Jansen and Kirschning */
         R1 = 0.03891 * Math.pow(er, 1.4);
@@ -233,7 +233,6 @@ public class MLIN {
         R16 = 1.0 + 0.0503 * er * er * R11 * (1.0 - Math.exp(-Math.pow((u / 15), 6.0)));
         R17 = R7 * (1.0 - 1.1241 * (R12 / R16) * Math.exp(-0.026 * Math.pow(fn, 1.15656) - R15));
 
-
         //#ifdef DEBUG_CALC
         //printf("microstrip.c: microstrip_calc()  R13 = %g, R14 = %g, R17=%g\n",
         //        R13,R14,R17);
@@ -250,7 +249,8 @@ public class MLIN {
         /*
         * delay on line
         */
-        delay = line -> l / v;
+        //delay = line -> l / v;
+        delay=MLINLine.getMetalLength()/v;
 
         /*
         * End correction
@@ -299,8 +299,10 @@ public class MLIN {
             eeff = EF;
 
 
-            line -> keff = eeff;
-            line -> len = len;
+            //line -> keff = eeff;
+            MLINLine.setkEff(eeff);
+            //line -> len = len;
+            MLINLine.setElectricalLength(len);
 
         /* calculate loss */
 
@@ -341,7 +343,8 @@ public class MLIN {
             }
 
             G = 2.0 * ld / z0;
-            line -> alpha_d = ld;
+            //line -> alpha_d = ld;
+            MLINLine.setAlphaD(ld);
 
         /* loss in dB/meter */
             ld = 20.0 * Math.log10(Math.exp(1.0)) * ld;
@@ -388,23 +391,31 @@ public class MLIN {
 	    /* XXX */
 	    /* subsl = subs; */
 
-                line -> subs -> er = 1.0;
-                rslt = microstrip_calc_int(line, f, NOLOSS);
-                if (rslt)
-                    return rslt;
-                z2 = line -> z0;
+                //line -> subs -> er = 1.0;
+                MLINLine.setSubEpsilon(1.0);
+                //rslt = microstrip_calc_int(MLINLine, f, NOLOSS);
+                microstrip_calc_int(MLINLine, f, NOLOSS);
+                //if (rslt)
+                //    return rslt;
+                //z2 = line -> z0;
+                z2=MLINLine.getImpedance();
                 //#ifdef DEBUG_CALC
                 //printf("%s(): z2 = %g Ohms (er = 1.0, nom dimensions)\n",
                 //        __FUNCTION__, z2);
                 //#endif
 
-                line -> subs -> h = h + delta;
-                line -> subs -> tmet = t - delta;
-                line -> w = w - delta;
-                rslt = microstrip_calc_int(line, f, NOLOSS);
-                if (rslt)
-                    return rslt;
-                z1 = line -> z0;
+                //line -> subs -> h = h + delta;
+                MLINLine.setSubHeight(h + delta);
+                //line -> subs -> tmet = t - delta;
+                MLINLine.setMetalThick(t - delta);
+                //line -> w = w - delta;
+                MLINLine.setMetalWidth(w - delta);
+                //rslt = microstrip_calc_int(MLINLine, f, NOLOSS);
+                microstrip_calc_int(MLINLine, f, NOLOSS);
+                //if (rslt)
+                //    return rslt;
+                //z1 = line -> z0;
+                z1=MLINLine.getImpedance();
                 //#ifdef DEBUG_CALC
                 //printf("%s(): z1 = %g Ohms (er = 1.0, w=%g %s, h=%g %s, t=%g %s)\n",
                 //        __FUNCTION__, z1,
@@ -417,10 +428,14 @@ public class MLIN {
                 //printf("%s(): z1 - z2 = %g Ohms\n", __FUNCTION__, z1 - z2);
                 //#endif
 
-                line -> subs -> er = er;
-                line -> subs -> h = h;
-                line -> subs -> tmet = t;
-                line -> w = w;
+                //line -> subs -> er = er;
+                MLINLine.setSubEpsilon(er);
+                //line -> subs -> h = h;
+                MLINLine.setSubHeight(h);
+                //line -> subs -> tmet = t;
+                MLINLine.setMetalThick(t);
+                //line -> w = w;
+                MLINLine.setMetalWidth(w);
 
 	            /* conduction losses, nepers per meter */
                 lc = (Constant.Pi * f / Constant.LIGHTSPEED) * (z1 - z2) / z0;
@@ -431,7 +446,8 @@ public class MLIN {
 	        /* "dc" case  */
             else if (t > 0.0) {
 	        /* resistance per meter = 1/(Area*conductivity) */
-                R = 1 / (line -> w * line -> subs -> tmet * sigma);
+                //R = 1 / (line -> w * line -> subs -> tmet * sigma);
+                R = 1 / (MLINLine.getMetalWidth() * MLINLine.getMetalThick() * sigma);
 
 	            /* resistance per meter = 1/(Area*conductivity) */
                 Res = 1 / (w * t * sigma);
@@ -460,7 +476,8 @@ public class MLIN {
 	        */
             lc = lc * (1.0 + (2.0 / Constant.Pi) * Math.atan(1.4 * Math.pow((rough / delta), 2.0)));
 
-            line -> alpha_c = lc;
+            //line -> alpha_c = lc;
+            MLINLine.setAlphaC(lc);
 
             /*
 	        * recalculate R now that we have the surface roughness in
@@ -481,9 +498,7 @@ public class MLIN {
             /*
 	        * Total Loss
 	        */
-
             loss = ld + lc;
-
         } else {
             loss = 0.0;
             depth = 0.0;
@@ -493,20 +508,29 @@ public class MLIN {
         //line -> z0 = z0;
         MLINLine.setImpedance(z0);
 
-        line -> loss = loss;
-        line -> losslen = loss / line -> l;
-        line -> skindepth = depth;
+        //line -> loss = loss;
+        MLINLine.setLoss(loss);
+        //line -> losslen = loss / line -> l;
+        MLINLine.setLossLen(loss / MLINLine.getMetalLength());
+        //line -> skindepth = depth;
+        MLINLine.setSkinDepth(depth);
 
-        line -> deltal = deltal;
-        line -> delay = delay;
+        //line -> deltal = deltal;
+        MLINLine.setDeltal(deltal);
+        //line -> delay = delay;
+        MLINLine.setDelay(delay);
 
-        line -> Ls = L;
-        line -> Rs = R;
-        line -> Cs = C;
-        line -> Gs = G;
+        //line -> Ls = L;
+        MLINLine.setLs(L);
+        //line -> Rs = R;
+        MLINLine.setRs(R);
+        //line -> Cs = C;
+        MLINLine.setCs(C);
+        //line -> Gs = G;
+        MLINLine.setGs(G);
 
 
-        return (rslt);
+        //return rslt;
     }
 
     private static double ee_HandJ(double u, double er) {
