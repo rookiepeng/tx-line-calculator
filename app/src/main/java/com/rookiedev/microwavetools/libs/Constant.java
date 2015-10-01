@@ -16,4 +16,6 @@ public class Constant {
     public static final double Pi = Math.PI;
 
     public static final double Exp = Math.E;// base of the natural logarithm
+
+    public static final int MLIN=1;
 }
