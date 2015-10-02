@@ -576,7 +576,6 @@ public class MLIN {
     *   /////////////////ground///////////////////////
     *
     */
-
     public int microstrip_syn(int flag) {
         int rslt = 0;
         double l;
@@ -930,7 +929,13 @@ public class MLIN {
         return z01;
     }
 
-    public Line getResult(){
+    public Line getAnaResult(){
+        microstrip_calc();
+        return MLINLine;
+    }
+
+    public Line getSynResult(int flag){
+        microstrip_syn(flag);
         return MLINLine;
     }
 }

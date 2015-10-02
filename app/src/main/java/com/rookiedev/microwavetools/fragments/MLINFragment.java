@@ -1,3 +1,7 @@
+/**
+ * Created by rookie on 8/11/13.
+ */
+
 package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
@@ -25,9 +29,6 @@ import com.rookiedev.microwavetools.libs.MLIN;
 
 import java.math.BigDecimal;
 
-/**
- * Created by rookie on 8/11/13.
- */
 public class MLINFragment extends Fragment {
     public final static String MLIN_W = "MLIN_W";
     public final static String MLIN_W_UNIT = "MLIN_W_UNIT";
@@ -91,7 +92,7 @@ public class MLINFragment extends Fragment {
                     if (edittext_L.length() != 0) { // check the L input
                         MLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
                         MLIN mlin = new MLIN(MLINLine);
-                        Z0 = mlin.getZ0();
+                        MLINLine = mlin.getAnaResult();
 
                         BigDecimal Z0_temp = new BigDecimal(Z0);
                         Z0 = Z0_temp.setScale(DecimalLength,
@@ -129,8 +130,7 @@ public class MLINFragment extends Fragment {
                     edittext_W.setText("");
                 } else {
                     MLINLine.setImpedance(Double.parseDouble(edittext_Z0.getText().toString())); // get the parameters
-                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition();)
-                    ;
+                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
                     MLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
                     MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
                     MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
@@ -138,6 +138,7 @@ public class MLINFragment extends Fragment {
                     if (edittext_Eeff.length() != 0) {
                         MLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
                         MLIN mlin = new MLIN(MLINLine);
+                        MLINLine = mlin.getSynResult(Line.SYN_W);
                         W = mlin.getW();
                         mlin.setW(W);
                         L = mlin.getL();
