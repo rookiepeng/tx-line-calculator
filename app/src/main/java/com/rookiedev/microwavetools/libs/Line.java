@@ -4,6 +4,7 @@ package com.rookiedev.microwavetools.libs;
  * Created by rookie on 9/30/2015.
  */
 public class Line {
+    public static final int SYN_W=0, SYN_H=1, SYN_Er=2, SYN_L=3;
     private double metalWidth, metalLength, metalThick; // meter, meter, meter
     private double subEpsilon, subHeight; // n/a, meter
     private double Impedance, ElectricalLength; // ohms, degree
@@ -231,5 +232,30 @@ public class Line {
 
     public void setTand(double tand) {
         this.tand = tand;
+    }
+
+    public void setParameter(double para, int flag){
+        switch (flag) {
+            case SYN_W:
+                metalWidth=para;
+                break;
+
+            case SYN_H:
+                subHeight=para;
+                break;
+
+            case SYN_Er:
+                subEpsilon=para;
+                break;
+
+            case SYN_L:
+                metalLength=para;
+                break;
+
+            default:
+                //fprintf(stderr,"microstrip_synth():  illegal flag=%d\n",flag);
+                //exit(1);
+                break;
+        }
     }
 }

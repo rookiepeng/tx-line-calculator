@@ -7,12 +7,27 @@ public class MLIN {
         MLINLine = mlinLine;
     }
 
+    /* function [z0,len,loss,eeff,depth]=mlicalc(w,l,f,subs,flag)*/
+    public void microstrip_calc()
+    {
+        //int rslt;
+        microstrip_calc_int(Constant.LOSSY);
+        //if(rslt != 0)
+        //    return rslt;
+
+        //line->Ro = line->z0;
+        //line->Xo = 0.0;
+        MLINLine.setRo(MLINLine.getImpedance());
+        MLINLine.setXo(0.0);
+
+        //return(rslt);
+    }
+
     /*
     * flag=1 enables loss calculations
     * flag=0 disables loss calculations
     */
-    private void microstrip_calc_int(double f, int flag) {
-        //boolean rslt = false;
+    private void microstrip_calc_int(int flag) {
         double w, l;
 
         double h, er, rho, tand, t, rough;
@@ -61,11 +76,11 @@ public class MLIN {
 
         /* Metal resistivity */
         //rho = line -> subs -> rho;
-        rho=MLINLine.getRho();
+        rho = MLINLine.getRho();
 
         /* Loss tangent of the dielectric material */
         //tand = line -> subs -> tand;
-        tand=MLINLine.getTand();
+        tand = MLINLine.getTand();
 
         /* Metal thickness */
         //t = line->subs->tmet;
@@ -73,7 +88,7 @@ public class MLIN {
 
         /*   subs(6) = Metalization roughness */
         //rough = line -> subs -> rough;
-        rough=MLINLine.getRough();
+        rough = MLINLine.getRough();
 
         //#ifdef DEBUG_CALC
         //printf("starting microstrip_calc_int() with %g MHz and ",f/1.0e6);
@@ -104,7 +119,9 @@ public class MLIN {
 
             /* (6) from Hammerstad and Jensen */
             deltau1 = (T / Constant.Pi)
-                    * Math.log(1.0 + 4.0 * Math.exp(1.0) / (T * Math.pow(coth(Math.sqrt(6.517 * u)), 2.0)));
+                    * Math.log(1.0 + 4.0 * Math.exp(1.0)
+                    / (T * Math.pow(Math.cosh(Math.sqrt(6.517 * u))
+                    / Math.sinh(Math.sqrt(6.517 * u)), 2.0)));
 
             /* (7) from Hammerstad and Jensen */
             deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(er - 1.0))) * deltau1;
@@ -182,7 +199,7 @@ public class MLIN {
         */
 
         /* normalized frequency (GHz-cm)*/
-        fn = 1e-7 * f * h;
+        fn = 1e-7 * MLINLine.getFrequency() * h;
 
         /* (2) from Kirschning and Jansen */
         P1 = 0.27488 +
@@ -202,7 +219,7 @@ public class MLIN {
         */
 
         /* normalized frequency (GHz-mm) */
-        fn = 1.0e-6 * f * h;
+        fn = 1.0e-6 * MLINLine.getFrequency() * h;
 
         /* (1) from Jansen and Kirschning */
         R1 = 0.03891 * Math.pow(er, 1.4);
@@ -250,7 +267,7 @@ public class MLIN {
         * delay on line
         */
         //delay = line -> l / v;
-        delay=MLINLine.getMetalLength()/v;
+        delay = MLINLine.getMetalLength() / v;
 
         /*
         * End correction
@@ -283,10 +300,10 @@ public class MLIN {
         R = 0.0;
         G = 0.0;
 
-        if (flag == WITHLOSS) {
+        if (flag == Constant.LOSSY) {
         /* length in wavelengths */
-            if (f > 0.0)
-                len = (l) / (v / f);
+            if (MLINLine.getFrequency() > 0.0)
+                len = (l) / (v / MLINLine.getFrequency());
             else
                 len = 0.0;
 
@@ -336,9 +353,9 @@ public class MLIN {
 	    */
 
             if (er > 1.0) {
-                ld = (Constant.Pi * f / v) * (er / EF) * ((EF - 1.0) / (er - 1.0)) * tand;
+                ld = (Constant.Pi * MLINLine.getFrequency() / v) * (er / EF) * ((EF - 1.0) / (er - 1.0)) * tand;
             } else {
-	    /* if er == 1, then this is probably a vacuum */
+        /* if er == 1, then this is probably a vacuum */
                 ld = 0.0;
             }
 
@@ -366,7 +383,7 @@ public class MLIN {
             mu = 4.0 * Constant.Pi * 1e-7;
 
         /* skin depth in meters */
-            delta = Math.sqrt(1.0 / (Constant.Pi * f * mu * sigma));
+            delta = Math.sqrt(1.0 / (Constant.Pi * MLINLine.getFrequency() * mu * sigma));
             depth = delta;
 
 
@@ -394,11 +411,11 @@ public class MLIN {
                 //line -> subs -> er = 1.0;
                 MLINLine.setSubEpsilon(1.0);
                 //rslt = microstrip_calc_int(MLINLine, f, NOLOSS);
-                microstrip_calc_int(MLINLine, f, NOLOSS);
+                microstrip_calc_int(Constant.LOSSLESS);
                 //if (rslt)
                 //    return rslt;
                 //z2 = line -> z0;
-                z2=MLINLine.getImpedance();
+                z2 = MLINLine.getImpedance();
                 //#ifdef DEBUG_CALC
                 //printf("%s(): z2 = %g Ohms (er = 1.0, nom dimensions)\n",
                 //        __FUNCTION__, z2);
@@ -411,11 +428,11 @@ public class MLIN {
                 //line -> w = w - delta;
                 MLINLine.setMetalWidth(w - delta);
                 //rslt = microstrip_calc_int(MLINLine, f, NOLOSS);
-                microstrip_calc_int(MLINLine, f, NOLOSS);
+                microstrip_calc_int(Constant.LOSSLESS);
                 //if (rslt)
                 //    return rslt;
                 //z1 = line -> z0;
-                z1=MLINLine.getImpedance();
+                z1 = MLINLine.getImpedance();
                 //#ifdef DEBUG_CALC
                 //printf("%s(): z1 = %g Ohms (er = 1.0, w=%g %s, h=%g %s, t=%g %s)\n",
                 //        __FUNCTION__, z1,
@@ -438,7 +455,7 @@ public class MLIN {
                 MLINLine.setMetalWidth(w);
 
 	            /* conduction losses, nepers per meter */
-                lc = (Constant.Pi * f / Constant.LIGHTSPEED) * (z1 - z2) / z0;
+                lc = (Constant.Pi * MLINLine.getFrequency() / Constant.LIGHTSPEED) * (z1 - z2) / z0;
 
                 R = lc * 2 * z0;
             }
@@ -533,6 +550,344 @@ public class MLIN {
         //return rslt;
     }
 
+    /*
+    *  Synthesize microstrip transmission line from electrical parameters
+    *
+    *  calculates:
+    *    w     = microstrip line width (mils)
+    *    l     = microstrip line length (mils)
+    *    loss  = insertion loss (dB)
+    *    eeff  = effective relative permitivity
+    *
+    *  from:
+    *    z0    = characteristic impedance (ohms)
+    *    len   = electrical length (degrees)
+    *    f     = frequency (Hz)
+    *    subs  = substrate parameters.  See TRSUBS for details.
+    *
+    *                |<--W-->|
+    *                 _______
+    *                | metal |
+    *   ----------------------------------------------
+    *  (  dielectric,er                      /|\     (
+    *   )                                 H   |       )
+    *  (                                     \|/     (
+    *   ----------------------------------------------
+    *   /////////////////ground///////////////////////
+    *
+    */
+
+    public int microstrip_syn(int flag) {
+        int rslt = 0;
+        double l;
+        double Ro, Xo;
+        double v, len;
+        double eeff;
+
+        /* the parameters which define the structure */
+        double w;
+        double tmet;
+        double h, es, tand;
+
+        /* permeability and permitivity of free space */
+        double mu0, e0;
+
+
+        /* the optimization variables, current, min/max, and previous values */
+        double var = 0, varmax = 0, varmin = 0, varold = 0;
+
+        /* errors due to the above values for the optimization variable */
+        double err = 0, errmax = 0, errmin = 0, errold = 0;
+
+        /* derivative */
+        double deriv;
+
+        /* the sign of the slope of the function being optimized */
+        double sign = 0;
+
+        /* pointer to which parameter of the line is being optimized */
+        //double *optpar;
+
+        /* number of iterations so far, and max number allowed */
+        int iters = 0;
+        int maxiters = 100;
+
+        /* convergence parameters */
+        double abstol = 0.1e-6;
+        double reltol = 0.01e-6;
+
+        /* flag to end optimization */
+        boolean done = false;
+
+
+        /* permeability and permitivitty of free space (H/m and F/m) */
+        mu0 = 4 * Constant.Pi * 1.0e-7;
+        e0 = 1.0 / (mu0 * Constant.LIGHTSPEED * Constant.LIGHTSPEED);
+
+
+        /*
+        * figure out what parameter we're synthesizing and set up the
+        * various optimization parameters.
+        *
+        * Basically what we need to know are
+        *    1)  min/max values for the parameter
+        *    2)  how to access the parameter
+        *    3)  an initial guess for the parameter
+        */
+
+        switch (flag) {
+            case Line.SYN_W:
+                //optpar =&(line -> w);
+                //varmax = 100.0 * line -> subs -> h;
+                varmax = 100.0 * MLINLine.getSubHeight();
+                //varmin = 0.01 * line -> subs -> h;
+                varmin = 0.01 * MLINLine.getSubHeight();
+                //var = line -> subs -> h;
+                var = MLINLine.getSubHeight();
+                break;
+
+            case Line.SYN_H:
+                //optpar =&(line -> subs -> h);
+                //varmax = 100.0 * line -> w;
+                //varmin = 0.01 * line -> w;
+                //var = line -> w;
+                varmax = 100.0 * MLINLine.getMetalWidth();
+                varmin = 0.01 * MLINLine.getMetalWidth();
+                var = MLINLine.getMetalWidth();
+                break;
+
+            case Line.SYN_Er:
+                //optpar =&(line -> subs -> er);
+                varmax = 100.0;
+                varmin = 1.0;
+                var = 5.0;
+                break;
+
+            case Line.SYN_L:
+                //optpar =&(line -> l);
+                varmax = 100.0;
+                varmin = 1.0;
+                var = 5.0;
+                done = true;
+                break;
+
+            default:
+                //fprintf(stderr,"microstrip_synth():  illegal flag=%d\n",flag);
+                //exit(1);
+                break;
+        }
+
+        /*
+        * read values from the input line structure
+        */
+
+        //Ro = line -> Ro;
+        Ro = MLINLine.getRo();
+        //Xo = line -> Xo;
+        Xo = MLINLine.getXo();
+        //len = line -> len;
+        len = MLINLine.getElectricalLength();
+
+        /* Metal width, length, and thickness */
+        //w = line -> w;
+        w = MLINLine.getMetalWidth();
+        //l = line -> l;
+        l = MLINLine.getMetalLength();
+        //tmet = line -> subs -> tmet;
+        tmet = MLINLine.getMetalThick();
+
+        /* Substrate thickness, relative permitivity, and loss tangent */
+        //h = line -> subs -> h;
+        h = MLINLine.getSubHeight();
+        //es = line -> subs -> er;
+        es = MLINLine.getSubEpsilon();
+        //tand = line -> subs -> tand;
+        tand = MLINLine.getTand();
+
+        /*
+        * temp value for l used while synthesizing the other parameters.
+        * We'll correct l later.
+        */
+
+        l = 1000.0;
+        //line -> l = l;
+        MLINLine.setMetalLength(l);
+
+
+        /*#ifdef DEBUG_SYN
+        printf("microstrip_syn(): --------------- Microstrip Synthesis -----------\n");
+        printf("microstrip_syn(): Metal width                 = %g m\n",line->w);
+        printf("microstrip_syn():                             = %g %s\n",
+                line->w/line->w_sf,line->w_units);
+        printf("microstrip_syn(): Metal thickness             = %g m\n",line->subs->tmet);
+        printf("microstrip_syn():                             = %g %s\n",
+                line->subs->tmet/line->subs->tmet_sf,line->subs->tmet_units);
+        printf("microstrip_syn(): Metal relative resistivity  = %g \n",line->subs->rho);
+        printf("microstrip_syn(): Metal surface roughness     = %g m-rms\n",line->subs->rough);
+        printf("microstrip_syn():                             = %g %s\n",
+                line->subs->rough/line->subs->rough_sf,line->subs->rough_units);
+        printf("microstrip_syn(): Substrate thickness         = %g m\n",line->subs->h);
+        printf("microstrip_syn():                             = %g %s\n",
+                line->subs->h/line->subs->h_sf,line->subs->h_units);
+        printf("microstrip_syn(): Substrate dielectric const. = %g \n",line->subs->er);
+        printf("microstrip_syn(): Substrate loss tangent      = %g \n",line->subs->tand);
+        printf("microstrip_syn(): Frequency                   = %g MHz\n",f/1e6);
+        printf("microstrip_syn():                             = %g %s\n",
+                f/line->f_sf,line->f_units);
+        printf("microstrip_syn(): -------------- ---------------------- ----------\n");
+        printf("microstrip_syn(): Desired Zo                  = %g ohm\n", Ro);
+        printf("microstrip_syn(): Desired electrical length   = %g degrees\n", len);
+        printf("microstrip_syn(): -------------- ---------------------- ----------\n");
+        printf("microstrip_syn(): Starting optimization value = %g\n", var);
+        printf("microstrip_syn(): -------------- ---------------------- ----------\n");
+        #endif*/
+
+
+        if (!done) {
+            /* Initialize the various error values */
+            //*optpar = varmin;
+            MLINLine.setParameter(varmin, flag);
+            microstrip_calc_int(Constant.LOSSLESS);
+            //errmin = line -> z0 - Ro;
+            errmin = MLINLine.getImpedance() - Ro;
+
+            //*optpar = varmax;
+            MLINLine.setParameter(varmax, flag);
+            microstrip_calc_int(Constant.LOSSLESS);
+            //errmax = line -> z0 - Ro;
+            errmax = MLINLine.getImpedance() - Ro;
+
+            //*optpar = var;
+            MLINLine.setParameter(var, flag);
+            microstrip_calc_int(Constant.LOSSLESS);
+            //err = line -> z0 - Ro;
+            err = MLINLine.getImpedance() - Ro;
+
+            varold = 0.99 * var;
+            //*optpar = varold;
+            MLINLine.setParameter(varold, flag);
+            microstrip_calc_int(Constant.LOSSLESS);
+            //errold = line -> z0 - Ro;
+            errold = MLINLine.getImpedance() - Ro;
+
+
+            /* see if we've actually been able to bracket the solution */
+            if (errmax * errmin > 0) {
+                //alert("Could not bracket the solution.\n"
+                //        "Synthesis failed.\n");
+                return -1;
+            }
+
+            /* figure out the slope of the error vs variable */
+            if (errmax > 0)
+                sign = 1.0;
+            else
+                sign = -1.0;
+
+            iters = 0;
+        }
+
+        /* the actual iterations */
+        while (!done) {
+
+            /* update the interation count */
+            iters = iters + 1;
+
+            /* calculate an estimate of the derivative */
+            deriv = (err - errold) / (var - varold);
+
+            /* copy over the current estimate to the previous one */
+            varold = var;
+            errold = err;
+
+            /* try a quasi-newton iteration */
+            var = var - err / deriv;
+
+
+            /*
+            * see if the new guess is within our bracketed range.  If so,
+            * accept the new estimate.  If not, toss it out and do a
+            * bisection step to reduce the bracket.
+            */
+
+            if ((var > varmax) || (var < varmin)) {
+                //#ifdef DEBUG_SYN
+                //printf("microstrip_syn():  Taking a bisection step\n");
+                //#endif
+                var = (varmin + varmax) / 2.0;
+            }
+
+            /* update the error value */
+            //*optpar = var;
+            MLINLine.setParameter(var, flag);
+            microstrip_calc_int(Constant.LOSSLESS);
+            err = MLINLine.getImpedance() - Ro;
+            //if (rslt)
+            //    return rslt;
+
+
+            /* update our bracket of the solution. */
+
+            if (sign * err > 0)
+                varmax = var;
+            else
+                varmin = var;
+
+
+            /* check to see if we've converged */
+            if (Math.abs(err) < abstol) {
+                done = true;
+                //#ifdef DEBUG_SYN
+                //printf("microstrip_syn():  abstol converged after iteration #%d\n",
+                //        iters);
+                //#endif
+            } else if (Math.abs((var - varold) / var) < reltol) {
+                done = true;
+                //#ifdef DEBUG_SYN
+                //printf("microstrip_syn():  reltol converged after iteration #%d\n",
+                //        iters);
+                //#endif
+            } else if (iters >= maxiters) {
+                //alert("Synthesis failed to converge in\n"
+                //        "%d iterations\n", maxiters);
+                return -1;
+            }
+
+
+            //#ifdef DEBUG_SYN
+            //printf("microstrip_syn(): iteration #%d:  var = %g\terr = %g\n",iters,var,err);
+            //#endif
+            /* done with iteration */
+        }
+
+        /* velocity on line */
+        microstrip_calc();
+        //if (rslt)
+        //    return rslt;
+        //eeff = line -> keff;
+        eeff = MLINLine.getkEff();
+
+        v = Constant.LIGHTSPEED / Math.sqrt(eeff);
+
+        l = (len / 360) * (v / MLINLine.getFrequency());
+
+        //line -> l = l;
+        MLINLine.setMetalLength(l);
+
+        /* recalculate using real length to find loss  */
+        microstrip_calc();
+        //if (rslt)
+        //    return rslt;
+
+        //#ifdef DEBUG_SYN
+        //printf("synthesis for Z0=%g [ohms] and len=%g [deg]\n", line->z0, line->len);
+        //printf("produced:\n");
+        //printf("\twidth = %g [m] \n\tlength = %g [m]\n", line->w, line->l);
+        //#endif
+
+        return (0);
+    }
+
     private static double ee_HandJ(double u, double er) {
         double A, B, E0;
 
@@ -575,284 +930,7 @@ public class MLIN {
         return z01;
     }
 
-    /*
-    public double getZ0() {
-        return ZL_f(W, H, T, f);
+    public Line getResult(){
+        return MLINLine;
     }
-
-    public double getEeff() {
-        return Eeff(W, L, H, T, f);
-    }
-
-    public double getW() {
-        return W_syn(Z0, H, T, f);
-    }
-
-    public void setW(double wide) {
-        W = wide;
-    }
-
-    public double getL() {
-        return L_syn(W, H, T, f, Eeff);
-    }
-
-    // Hammerstad and Jensen
-    // Quasi-static characteristic impedance ZL1
-    private double ZL1(double U) {
-
-        double fu = 6 + (2 * Constant.Pi - 6)
-                * Math.pow(Constant.Exp, -Math.pow(30.666 / U, 0.7528));
-        return (n0 / 2 / Constant.Pi * Math.log(fu / U
-                + Math.sqrt(1 + Math.pow(2 / U, 2))));
-        // return n0;
-    }
-
-    // Hammerstad and Jensen
-    // Quasi-static characteristic impedance ZL
-    private double ZL(double U) {
-        return (ZL1(U) / Math.sqrt(er));
-    }
-
-    // Hammerstad and Jensen
-    // Quasi-static effective dielectric constant
-    private double Er_eff(double U) {
-        double a = 1
-                + Math.log((Math.pow(U, 4) + Math.pow(U / 52, 2))
-                / (Math.pow(U, 4) + 0.432)) / 49
-                + Math.log(1 + Math.pow(U / 18.1, 3)) / 18.7;
-        double b = 0.564 * Math.pow((er - 0.9) / (er + 3), 0.053);
-        return ((er + 1) / 2 + (er - 1) / 2 * Math.pow(1 + 10 / U, -a * b));
-    }
-
-    // Strip thickness correction
-    private double U1(double W, double H, double T) {
-        double U = W / H;
-        double t1 = Math.sqrt(6.517 * U);// ???
-        double dW1 = T
-                / H
-                / Constant.Pi
-                * Math.log(1 + 4 * Constant.Exp * H / T
-                / Math.pow(Math.cosh(t1) / Math.sinh(t1), 2));
-        return (U + dW1);
-    }
-
-    private double Ur(double W, double H, double T) {
-        double U = W / H;
-        // double t2 = Math.sqrt(er - 1);
-        // double sech = 2 / (Math.pow(e, t2) + Math.pow(e, -t2));
-        double t1 = Math.sqrt(6.517 * U);// ???
-        double dW1 = T
-                / H
-                / Constant.Pi
-                * Math.log(1 + 4 * Constant.Exp * H / T
-                / Math.pow(Math.cosh(t1) / Math.sinh(t1), 2));
-        double dWr = (1 + 1 / Math.cosh(Math.sqrt(er - 1))) * dW1 * 0.5;
-        // double dWr = 1 / 2 * dW1
-        // * (1 + 1 / Math.cosh(Math.sqrt(er - 1)));
-        return (U + dWr);// U or W???????????
-    }
-
-    private double ZL_thickness(double W, double H, double T) {
-        return (ZL1(Ur(W, H, T)) / Math.sqrt(Er_eff(Ur(W, H, T))));
-    }
-
-    private double Er_eff_thickness(double W, double H, double T) {
-        return (Er_eff(Ur(W, H, T)) * ZL1(U1(W, H, T))
-                * ZL1(U1(W, H, T)) / ZL1(Ur(W, H, T)) / ZL1(Ur(W, H, T)));
-    }
-
-    // Dispersion
-    private double Er_f(double W, double H, double T, double f) {
-        double U = W / H;
-        double fn = H / 39.37007874 * f;
-        double P1 = 0.27488
-                + (0.6315 + 0.525 / (Math.pow((1 + 0.0157 * fn), 20))) * U
-                - 0.065683 * Math.pow(Constant.Exp, -8.7513 * U);
-        double P2 = 0.33622 * (1 - Math.pow(Constant.Exp, -0.03442 * er));
-        double P3 = 0.0363 * Math.pow(Constant.Exp, -4.6 * U)
-                * (1 - Math.pow(Constant.Exp, -Math.pow(fn / 38.7, 4.97)));
-        double P4 = 1 + 2.751 * (1 - Math.pow(Constant.Exp, -Math.pow(er / 15.916, 8)));
-        double Pf = P1 * P2 * Math.pow((0.1844 + P3 * P4) * fn, 1.5763);
-        if (T != 0) {
-            return (er - (er - Er_eff_thickness(W, H, T)) / (1 + Pf));
-        } else {
-            return (er - (er - Er_eff(U)) / (1 + Pf));
-        }
-    }
-
-    private double ZL_f(double W, double H, double T, double f) {
-        double U = W / H;
-        double fn = H / 39.37007874 * f;
-        double R1 = 0.03891 * Math.pow(er, 1.4);
-        double R2 = 0.267 * Math.pow(U, 7);
-        double R3 = 4.766 * Math.pow(Constant.Exp, -3.228 * Math.pow(U, 0.641));
-        double R4 = 0.016 + Math.pow(0.0514 * er, 4.524);
-        double R5 = Math.pow(fn / 28.843, 12);
-        double R6 = 22.2 * Math.pow(U, 1.92);
-        double R7 = 1.206 - 0.3144 * Math.pow(Constant.Exp, -R1) * (1 - Math.pow(Constant.Exp, -R2));
-        double R8 = 1.0 + 1.275 * (1.0 - Math.exp(-0.004625 * R3
-                * Math.pow(er, 1.674) * Math.pow(fn / 18.365, 2.745)));
-        double R9 = 5.086 * R4 * R5 / (0.3838 + 0.386 * R4) * Math.pow(Constant.Exp, -R6)
-                / (1 + 1.2992 * R5) * Math.pow(er - 1, 6)
-                / (1 + 10 * Math.pow(er - 1, 6));
-        double R10 = 0.00044 * Math.pow(er, 2.136) + 0.0184;
-        double R11 = Math.pow(fn / 19.47, 6)
-                / (1 + 0.0962 * Math.pow(fn / 19.47, 6));
-        double R12 = 1 / (1 + 0.00245 * Math.pow(U, 2));
-        double R13 = 0.9408 * Math.pow(Er_f(W, H, T, f), R8) - 0.9603;
-        double R14;
-        if (T != 0) {
-            R14 = (0.9408 - R9) * Math.pow(Er_eff_thickness(W, H, T), R8)
-                    - 0.9603;
-        } else {
-            R14 = (0.9408 - R9) * Math.pow(Er_eff(U), R8) - 0.9603;
-        }
-        double R15 = 0.707 * R10 * Math.pow(fn / 12.3, 1.097);
-        double R16 = 1 + 0.0505 * er * er * R11
-                * (1 - Math.pow(Constant.Exp, -Math.pow(U / 15, 6)));
-        double R17 = R7
-                * (1 - 1.1241 * R12 / R16
-                * Math.pow(Constant.Exp, -0.026 * Math.pow(fn, 1.15656) - R15));
-        if (T != 0) {
-            return (ZL_thickness(W, H, T) * Math.pow(R13 / R14, R17));
-        } else {
-            return (ZL(U) * Math.pow(R13 / R14, R17));
-        }
-    }
-
-    private double Eeff(double W, double L, double H, double T, double f) {
-        double U = W / H;
-        double v;
-        v = c / Math.sqrt(Er_f(W, H, T, f));
-        return L / (v / f) * 360 / 39.37007874 / 1000;
-    }*/
-
-
-    private double W_syn(double zd, double H, double T, double f) {
-        double PHYSSF = 0.0000254;
-        // double rel = 1000000;
-        /*
-         * temp value for l used while finding w
-		 */
-        // double lx = 1000;
-
-		/*
-         * limits on the allowed range for w (in mils) - should limit w/h, not w
-		 */
-        double wmin = 0.01;
-        // var wmax = 1000;
-        double wmax = 499;
-
-        wmin = wmin * 25.4e-6 / PHYSSF;
-        wmax = wmax * 25.4e-6 / PHYSSF;
-
-		/*
-		 * impedance convergence tolerance (ohms)
-		 */
-        double abstol = 0.000001;
-
-		/*
-		 * width relative convergence tolerance (mils) (set to 0.1 micron)
-		 */
-        double reltol = 0.1 / 25.4;
-        reltol = reltol * 25.4e-6 / PHYSSF;
-
-        int maxiters = 50;
-
-		/*
-		 * take an initial guess at w and take a trial step to initialize the
-		 * iteration
-		 */
-
-        double A = ((er - 1) / (er + 1)) * (0.226 + 0.121 / er) + (Constant.Pi / 377)
-                * Math.sqrt(2 * (er + 1)) * zd;
-
-        double w_h = 4 / (0.5 * Math.pow(Constant.Exp, A) - Math.pow(Constant.Exp, -A));
-        if (w_h > 2) {
-            double B = Constant.Pi * 377 / (2 * zd * Math.sqrt(er));
-            w_h = (2 / Constant.Pi)
-                    * (B - 1 - Math.log(2 * B - 1) + ((er - 1) / (2 * er))
-                    * (Math.log(B - 1) + 0.293 - 0.517 / er));
-        }
-
-        // alert("w is " + document.mstripForm.H.value*w_h);
-
-        // var wx=50*25.4e-6/PHYSSF;
-        double wx = H * w_h;
-        if (wx >= wmax) {
-            wx = 0.95 * wmax;
-        }
-
-        if (wx <= wmin) {
-            wx = wmin;
-        }
-        // var wold = 1.001*wx;
-        double wold = 1.01 * wx;
-
-        double zold = ZL_f(wold, H, T, f);
-
-		/*
-		 * document.mstripForm.W.value = wold; document.mstripForm.L.value = lx;
-		 * computeAnalyzeForm(); var zold = computeAnalyzeForm();
-		 */
-
-		/*
-		 * check to see if we're too high or too low and bracket the value for
-		 * w.
-		 */
-        if (zold < zd) {
-            wmax = wold;
-        } else {
-            wmin = wold;
-        }
-
-        int iters = 0;
-        int done = 0;
-
-        while (done == 0) {
-
-            iters = iters + 1;
-
-            double zo = ZL_f(wx, H, T, f);
-
-            if (zo < zd) {
-                wmax = wx;
-            } else {
-                wmin = wx;
-            }
-
-            if (Math.abs(zo - zd) < abstol) {
-                done = 1;
-            } else if (Math.abs(wx - wold) < reltol) {
-                done = 1;
-            } else if (iters >= maxiters) {
-				/* failed */
-            } else {
-				/* calculate approximation to the derivative */
-                double dzdw = (zo - zold) / (wx - wold);
-                wold = wx;
-                zold = zo;
-
-				/* take a newton iteration */
-                wx = wx - (zo - zd) / dzdw;
-
-				/*
-				 * if the newton iteration takes us out of the known range for
-				 * w, take a bisection step
-				 */
-                if ((wx > wmax) | (wx < wmin)) {
-                    wx = (wmin + wmax) / 2;
-                }
-            }
-        }
-        return wx;
-    }
-
-    private double L_syn(double W, double H, double T, double f, double Eeff) {
-        //double U = W / H;
-        double v;
-        v = c / Math.sqrt(Er_f(W, H, T, f));
-        return Eeff * (v / f) / 360 * 39.37007874 * 1000;
-    }
-
 }

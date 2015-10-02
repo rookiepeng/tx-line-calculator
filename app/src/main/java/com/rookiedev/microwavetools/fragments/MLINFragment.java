@@ -3,7 +3,7 @@ package com.rookiedev.microwavetools.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.SubscriptSpan;
@@ -20,6 +20,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
+import com.rookiedev.microwavetools.libs.Line;
 import com.rookiedev.microwavetools.libs.MLIN;
 
 import java.math.BigDecimal;
@@ -55,11 +56,12 @@ public class MLINFragment extends Fragment {
             edittext_T, // the thickness of the metal
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
-    private double W, L, Z0, Eeff, Freq, T, H, er;
+    //private double W, L, Z0, Eeff, Freq, T, H, er;
     private Button mlin_syn,// button synthesize
             mlin_ana;// button analyze
     private Spinner spinner_W, spinner_L, spinner_T, spinner_H, spinner_Z0,
             spinner_Eeff, spinner_Freq;// the units of each parameter
+    private Line MLINLine;
 
     public MLINFragment() {
         // Empty constructor required for fragment subclasses
@@ -81,11 +83,11 @@ public class MLINFragment extends Fragment {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
                     edittext_Eeff.setText("");
                 } else {
-                    W = Double.parseDouble(edittext_W.getText().toString()); // get the parameters
-                    Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    er = Double.parseDouble(edittext_er.getText().toString());
-                    H = Double.parseDouble(edittext_H.getText().toString());
-                    T = Double.parseDouble(edittext_T.getText().toString());
+                    MLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString())); // get the parameters
+                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()));
+                    MLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()));
+                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()));
 
                     temp = spinner_W.getSelectedItemPosition(); // convert unit to mil
                     if (temp == 1) {
@@ -343,7 +345,7 @@ public class MLINFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
@@ -382,7 +384,7 @@ public class MLINFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
         // universal parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
@@ -396,7 +398,7 @@ public class MLINFragment extends Fragment {
         String mlin_W_unit, mlin_L_unit, mlin_T_unit, mlin_H_unit, mlin_Z0_unit, mlin_Eeff_unit, mlin_Freq_unit;
 
         SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);
+                AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         mlin_W = edittext_W.getText().toString();

@@ -18,4 +18,10 @@ public class Constant {
     public static final double Exp = Math.E;// base of the natural logarithm
 
     public static final int MLIN=1;
+
+    public static final int LOSSLESS=0;
+
+    public static final int LOSSY=1;
+
+
 }
