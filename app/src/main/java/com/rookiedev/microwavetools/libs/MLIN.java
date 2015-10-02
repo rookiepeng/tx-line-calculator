@@ -422,11 +422,11 @@ public class MLIN {
                 //#endif
 
                 //line -> subs -> h = h + delta;
-                MLINLine.setSubHeight(h + delta);
+                MLINLine.setSubHeight(h + delta,Line.LUnitm);
                 //line -> subs -> tmet = t - delta;
-                MLINLine.setMetalThick(t - delta);
+                MLINLine.setMetalThick(t - delta,Line.LUnitm);
                 //line -> w = w - delta;
-                MLINLine.setMetalWidth(w - delta);
+                MLINLine.setMetalWidth(w - delta,Line.LUnitm);
                 //rslt = microstrip_calc_int(MLINLine, f, NOLOSS);
                 microstrip_calc_int(Constant.LOSSLESS);
                 //if (rslt)
@@ -448,11 +448,11 @@ public class MLIN {
                 //line -> subs -> er = er;
                 MLINLine.setSubEpsilon(er);
                 //line -> subs -> h = h;
-                MLINLine.setSubHeight(h);
+                MLINLine.setSubHeight(h,Line.LUnitm);
                 //line -> subs -> tmet = t;
-                MLINLine.setMetalThick(t);
+                MLINLine.setMetalThick(t,Line.LUnitm);
                 //line -> w = w;
-                MLINLine.setMetalWidth(w);
+                MLINLine.setMetalWidth(w,Line.LUnitm);
 
 	            /* conduction losses, nepers per meter */
                 lc = (Constant.Pi * MLINLine.getFrequency() / Constant.LIGHTSPEED) * (z1 - z2) / z0;
@@ -711,7 +711,7 @@ public class MLIN {
 
         l = 1000.0;
         //line -> l = l;
-        MLINLine.setMetalLength(l);
+        MLINLine.setMetalLength(l,Line.LUnitm);
 
 
         /*#ifdef DEBUG_SYN
@@ -872,7 +872,7 @@ public class MLIN {
         l = (len / 360) * (v / MLINLine.getFrequency());
 
         //line -> l = l;
-        MLINLine.setMetalLength(l);
+        MLINLine.setMetalLength(l,Line.LUnitm);
 
         /* recalculate using real length to find loss  */
         microstrip_calc();

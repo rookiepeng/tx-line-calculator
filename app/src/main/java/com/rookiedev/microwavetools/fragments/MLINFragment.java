@@ -77,53 +77,20 @@ public class MLINFragment extends Fragment {
         mlin_ana.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int temp;
                 Preference_SharedPref();
                 if (!analysisInputCheck()) {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
                     edittext_Eeff.setText("");
                 } else {
-                    MLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString())); // get the parameters
-                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()));
+                    MLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition()); // get the parameters
+                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
                     MLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()));
-                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()));
-
-                    temp = spinner_W.getSelectedItemPosition(); // convert unit to mil
-                    if (temp == 1) {
-                        W = W * 39.37007874;
-                    } else if (temp == 2) {
-                        W = W * 10 * 39.37007874;
-                    }
-
-                    temp = spinner_Freq.getSelectedItemPosition(); // convert unit to GHz
-                    if (temp == 0) {
-                        Freq = Freq / 1000;
-                    }
-
-                    temp = spinner_H.getSelectedItemPosition(); // convert unit to mil
-                    if (temp == 1) {
-                        H = H * 39.37007874;
-                    } else if (temp == 2) {
-                        H = H * 10 * 39.37007874;
-                    }
-
-                    temp = spinner_T.getSelectedItemPosition(); // convert unit to mil
-                    if (temp == 1) {
-                        T = T * 39.37007874;
-                    } else if (temp == 2) {
-                        T = T * 10 * 39.37007874;
-                    }
+                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
                     if (edittext_L.length() != 0) { // check the L input
-                        L = Double.parseDouble(edittext_L.getText().toString());
-                        temp = spinner_L.getSelectedItemPosition(); // convert unit to mil
-                        if (temp == 1) {
-                            L = L * 39.37007874;
-                        } else if (temp == 2) {
-                            L = L * 10 * 39.37007874;
-                        }
-                        MLIN mlin = new MLIN(W, L, 0, 0, Freq, er, H, T);
+                        MLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
+                        MLIN mlin = new MLIN(MLINLine);
                         Z0 = mlin.getZ0();
 
                         BigDecimal Z0_temp = new BigDecimal(Z0);
@@ -161,46 +128,16 @@ public class MLINFragment extends Fragment {
                     edittext_L.setText(""); // clear the L and W outputs
                     edittext_W.setText("");
                 } else {
-                    Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
-                    Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    er = Double.parseDouble(edittext_er.getText().toString());
-                    H = Double.parseDouble(edittext_H.getText().toString());
-                    T = Double.parseDouble(edittext_T.getText().toString());
-
-					/*
-                     * temp = spinner_W.getSelectedItemPosition(); // mil if
-					 * (temp == 1) { W = W * 39.37007874; } else if (temp == 2)
-					 * { W = W * 10 * 39.37007874; }
-					 */
-
-					/*
-                     * temp = spinner_L.getSelectedItemPosition(); if (temp ==
-					 * 1) { L = L * 39.37007874; } else if (temp == 2) { L = L *
-					 * 10 * 39.37007874; }
-					 */
-
-                    temp = spinner_Freq.getSelectedItemPosition(); // convert the unit to GHz
-                    if (temp == 0) {
-                        Freq = Freq / 1000;
-                    }
-
-                    temp = spinner_H.getSelectedItemPosition(); // convert the unit to mil
-                    if (temp == 1) {
-                        H = H * 39.37007874;
-                    } else if (temp == 2) {
-                        H = H * 10 * 39.37007874;
-                    }
-
-                    temp = spinner_T.getSelectedItemPosition(); // convert the unit to mil
-                    if (temp == 1) {
-                        T = T * 39.37007874;
-                    } else if (temp == 2) {
-                        T = T * 10 * 39.37007874;
-                    }
+                    MLINLine.setImpedance(Double.parseDouble(edittext_Z0.getText().toString())); // get the parameters
+                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition();)
+                    ;
+                    MLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
                     if (edittext_Eeff.length() != 0) {
-                        Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-                        MLIN mlin = new MLIN(0, 0, Z0, Eeff, Freq, er, H, T);
+                        MLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
+                        MLIN mlin = new MLIN(MLINLine);
                         W = mlin.getW();
                         mlin.setW(W);
                         L = mlin.getL();

@@ -4,7 +4,10 @@ package com.rookiedev.microwavetools.libs;
  * Created by rookie on 9/30/2015.
  */
 public class Line {
+    public static final int MLIN=1;
     public static final int SYN_W=0, SYN_H=1, SYN_Er=2, SYN_L=3;
+    public static final int LUnitmil=0, LUnitmm=1, LUnitcm=2,LUnitm=3;
+    public static final int FUnitMHz=0, FUnitGHz=1,FunitHz=2;
     private double metalWidth, metalLength, metalThick; // meter, meter, meter
     private double subEpsilon, subHeight; // n/a, meter
     private double Impedance, ElectricalLength; // ohms, degree
@@ -33,24 +36,24 @@ public class Line {
         return lineType;
     }
 
-    public void setMetalWidth(double width){
-        metalWidth=width;
+    public void setMetalWidth(double width, int unit){
+        metalWidth=para2m(width,unit);
     }
 
     public double getMetalWidth(){
         return metalWidth;
     }
 
-    public void setMetalLength(double length){
-        metalLength=length;
+    public void setMetalLength(double length, int unit){
+        metalLength=para2m(length,unit);
     }
 
     public double getMetalLength(){
         return metalLength;
     }
 
-    public void setMetalThick(double thick){
-        metalThick=thick;
+    public void setMetalThick(double thick, int unit){
+        metalThick=para2m(thick,unit);
     }
 
     public double getMetalThick(){
@@ -65,8 +68,8 @@ public class Line {
         return subEpsilon;
     }
 
-    public void setSubHeight(double height){
-        subHeight=height;
+    public void setSubHeight(double height, int unit){
+        subHeight=para2m(height,unit);
     }
 
     public double getSubHeight(){
@@ -89,14 +92,13 @@ public class Line {
         return ElectricalLength;
     }
 
-    public void setFrequency(double frequency){
-        Frequency=frequency;
+    public void setFrequency(double frequency,int unit){
+        Frequency=para2hz(frequency,unit);
     }
 
     public double getFrequency(){
         return Frequency;
     }
-
 
     public double getDelay() {
         return Delay;
@@ -257,5 +259,40 @@ public class Line {
                 //exit(1);
                 break;
         }
+    }
+
+    private double para2m(double para, int unit){
+        double l=0;
+        switch(unit){
+            case LUnitmil:
+                l=para/ 39370.0787402;
+                break;
+            case LUnitmm:
+                l=para/ 1000;
+                break;
+            case LUnitcm:
+                l=para/100;
+                break;
+            case LUnitm:
+                l=para;
+                break;
+        }
+        return l;
+    }
+
+    private double para2hz(double para, int unit){
+        double l=0;
+        switch(unit){
+            case FUnitMHz:
+                l=para*1e6;
+                break;
+            case FUnitGHz:
+                l=para*1e9;
+                break;
+            case FunitHz:
+                l=para;
+                break;
+        }
+        return l;
     }
 }
