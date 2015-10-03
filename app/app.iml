@@ -143,5 +143,6 @@
     <orderEntry type="library" exported="" name="play-services-fitness-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-plus-8.1.0" level="project" />
+    <orderEntry type="library" exported="" name="org.apache.http.legacy-android-23" level="project" />
   </component>
 </module>

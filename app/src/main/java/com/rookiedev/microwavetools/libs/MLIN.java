@@ -11,7 +11,7 @@ public class MLIN {
 
     public void microstrip_calc() {
         //int rslt;
-        microstrip_calc_int(Constant.LOSSY);
+        microstrip_calc_int(Constant.LOSSLESS);
         //if(rslt != 0)
         //    return rslt;
 
@@ -88,118 +88,50 @@ public class MLIN {
         //rough = line -> subs -> rough;
         rough = MLINLine.getRough();
 
-        //#ifdef DEBUG_CALC
-        //printf("starting microstrip_calc_int() with %g MHz and ",f/1.0e6);
-        //if(flag == NOLOSS)
-        //    printf("NOLOSS\n");
-        //else
-        //    printf("WITHLOSS\n");
 
-        //printf("L = %g mil\n", M2MIL(l));
-        //printf("W = %g mil\n", M2MIL(w));
-        //printf("Tmet = %g mil\n", M2MIL(t));
-        //printf("er = %g\n", er);
-        //printf("\n");
-
-        //#endif
-
-        /*
-        * Start of microstrip calculations
-        */
-
-
-        /* Find u and correction factor for nonzero metal thickness */
+        // starting microstrip_calc_int() with %f/1.0e6 MHz and
+        // Find u and correction factor for nonzero metal thickness
         u = w / h;
 
         if (t > 0.0) {
-            /* find normalized metal thickness */
+            // find normalized metal thickness
             T = t / h;
 
-            /* (6) from Hammerstad and Jensen */
+            // (6) from Hammerstad and Jensen
             deltau1 = (T / Constant.Pi)
                     * Math.log(1.0 + 4.0 * Math.exp(1.0)
                     / (T * Math.pow(Math.cosh(Math.sqrt(6.517 * u))
                     / Math.sinh(Math.sqrt(6.517 * u)), 2.0)));
 
-            /* (7) from Hammerstad and Jensen */
+            // (7) from Hammerstad and Jensen
             deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(er - 1.0))) * deltau1;
 
             deltau = deltaur;
-
-            //#ifdef DEBUG_CALC
-            //printf("microstrip.c: microstrip_calc():  deltau1 = %g \n",deltau1);
-            //printf("                                  deltaur = %g \n",deltaur);
-            //printf("                                  t/h     = %g \n",T);
-            //#endif
         } else {
             deltau = 0.0;
             deltau1 = 0.0;
             deltaur = 0.0;
         }
 
-        /*
-        * some test stuff to compare with Kobayashi
-        * u = 2;
-        * er=16;
-        * hl0 = 1;
-        * f=10e9;
-        * l0 = 3e8/f;
-        * h=hl0*l0;
-        */
-
-        /*
-        * relative permittivity at f=0
-        *  (Hammerstad and Jensen)
-        */
-
+        // relative permittivity at f=0 (Hammerstad and Jensen)
+        // (3) from Hammerstad & Jensen and Y from the Rogers Corp. paper
         u1 = u + deltau1;
         ur = u + deltaur;
-
-        //#ifdef DEBUG_CALC
-        //printf("microstrip.c: microstrip_calc():  u  = %g \n",u);
-        //printf("                                  u1 = %g \n",u1);
-        //printf("                                  ur = %g \n",ur);
-        //#endif
-
-
         E0 = ee_HandJ(ur, er);
-        //#ifdef DEBUG_CALC
-        //printf("microstrip.c: microstrip_calc():  E0 = %g \n",E0);
-        //printf("    This is (3) from Hammerstad & Jensen and Y from\n");
-        //printf("    the Rogers Corp. paper\n");
-        //#endif
 
-        /*
-        * zero frequency characteristic impedance
-        * (8) from Hammerstad and Jensen
-        */
+        // zero frequency characteristic impedance
+        // (8) from Hammerstad and Jensen
         z0 = z0_HandJ(ur) / Math.sqrt(E0);
 
-        //#ifdef DEBUG_CALC
-        //printf("microstrip.c: microstrip_calc():  z0(0) = %g \n",z0);
-        //printf("              This is (8) from Hammerstad & Jensen\n");
-        //#endif
-
-        /*
-        * zero frequency effective permitivity.
-        * (9) from Hammerstad and Jensen
-        */
+        // zero frequency effective permitivity.
+        // (9) from Hammerstad and Jensen
         EFF0 = E0 * Math.pow(z0_HandJ(u1) / z0_HandJ(ur), 2.0);
 
-        //#ifdef DEBUG_CALC
-        //printf("microstrip.c: microstrip_calc():  EFF0 = %g \n",EFF0);
-        //printf("              This is (9) from Hammerstad & Jensen\n");
-        //#endif
-
-        /*
-        * relative permittivity including dispersion
-        *  (Kirschning and Jansen)
-        */
-
-        /* normalized frequency (GHz-cm)*/
+        // relative permittivity including dispersion (Kirschning and Jansen)
+        // normalized frequency (GHz-cm)
         fn = 1e-7 * MLINLine.getFrequency() * h;
 
-        /* (2) from Kirschning and Jansen */
+        // (2) from Kirschning and Jansen
         P1 = 0.27488 +
                 (0.6315 + (0.525 / (Math.pow((1.0 + 0.157 * fn), 20.0)))) * u
                 - 0.065683 * Math.exp(-8.7513 * u);
@@ -207,8 +139,13 @@ public class MLIN {
         P3 = 0.0363 * Math.exp(-4.6 * u) * (1.0 - Math.exp(-Math.pow((fn / 3.87), 4.97)));
         P4 = 1.0 + 2.751 * (1.0 - Math.exp(-Math.pow((er / 15.916), 8.0)));
         P = P1 * P2 * Math.pow(((0.1844 + P3 * P4) * 10.0 * fn), 1.5763);
+        Log.v("MLIN", "P1=" + Double.toString(P1));
+        Log.v("MLIN", "P2=" + Double.toString(P2));
+        Log.v("MLIN", "P3=" + Double.toString(P3));
+        Log.v("MLIN", "P4=" + Double.toString(P4));
+        Log.v("MLIN", "P=" + Double.toString(P));
 
-        /* (1) from Kirschning and Jansen */
+        // (1) from Kirschning and Jansen
         EF = (EFF0 + er * P) / (1.0 + P);
 
         /*
@@ -248,11 +185,6 @@ public class MLIN {
         R16 = 1.0 + 0.0503 * er * er * R11 * (1.0 - Math.exp(-Math.pow((u / 15), 6.0)));
         R17 = R7 * (1.0 - 1.1241 * (R12 / R16) * Math.exp(-0.026 * Math.pow(fn, 1.15656) - R15));
 
-        //#ifdef DEBUG_CALC
-        //printf("microstrip.c: microstrip_calc()  R13 = %g, R14 = %g, R17=%g\n",
-        //        R13,R14,R17);
-        //#endif
-
         /* (5) from Jansen and Kirschning */
         z0 = z0 * Math.pow((R13 / R14), R17);
 
@@ -279,7 +211,6 @@ public class MLIN {
         z4 = 1.0
                 + 0.0377 * Math.atan(0.067 * (Math.pow(u, 1.456))) * (6.0 - 5.0 * Math.exp(0.036 * (1.0 - er)));
         z5 = 1.0 - 0.218 * Math.exp(-7.5 * u);
-
         deltal = h * z1 * z3 * z5 / z4;
 
 
@@ -307,11 +238,8 @@ public class MLIN {
         /* convert to degrees */
         len = 360.0 * len;
 
-
-
         /* effective relative permittivity */
         eeff = EF;
-
 
         //line -> keff = eeff;
         MLINLine.setkEff(eeff);
@@ -321,12 +249,8 @@ public class MLIN {
         if (flag == Constant.LOSSY) {
         /* calculate loss */
 
-
-        /*
-        * Dielectric Losses
-	    */
-
-        /* loss in nepers/meter */
+            // Dielectric Losses
+            // loss in nepers/meter
 
         /*
         * The dielectric loss here matches equation (1) in the
@@ -400,56 +324,32 @@ public class MLIN {
 	    * suspect, but I dont have time right now to come up
 	    * with a better result.
 	    */
+            Line MLINLineStore= new Line(Line.MLIN);
+            MLINLineStore=MLINLine;
             if (depth <= t) {
 
 	    /* store the substrate parameters */
 	    /* XXX */
 	    /* subsl = subs; */
 
-                //line -> subs -> er = 1.0;
                 MLINLine.setSubEpsilon(1.0);
-                //rslt = microstrip_calc_int(MLINLine, f, NOLOSS);
                 microstrip_calc_int(Constant.LOSSLESS);
                 //if (rslt)
                 //    return rslt;
-                //z2 = line -> z0;
                 z2 = MLINLine.getImpedance();
-                //#ifdef DEBUG_CALC
-                //printf("%s(): z2 = %g Ohms (er = 1.0, nom dimensions)\n",
-                //        __FUNCTION__, z2);
-                //#endif
 
-                //line -> subs -> h = h + delta;
                 MLINLine.setSubHeight(h + delta, Line.LUnitm);
-                //line -> subs -> tmet = t - delta;
                 MLINLine.setMetalThick(t - delta, Line.LUnitm);
-                //line -> w = w - delta;
                 MLINLine.setMetalWidth(w - delta, Line.LUnitm);
                 //rslt = microstrip_calc_int(MLINLine, f, NOLOSS);
                 microstrip_calc_int(Constant.LOSSLESS);
                 //if (rslt)
                 //    return rslt;
-                //z1 = line -> z0;
                 z1 = MLINLine.getImpedance();
-                //#ifdef DEBUG_CALC
-                //printf("%s(): z1 = %g Ohms (er = 1.0, w=%g %s, h=%g %s, t=%g %s)\n",
-                //        __FUNCTION__, z1,
-                //        line->w/line->units_lwht->sf, line->units_lwht->name,
-                //        line->subs->h/line->units_lwht->sf, line->units_lwht->name,
-                //        line->subs->tmet/line->units_lwht->sf, line->units_lwht->name);
-                //printf("%s(): delta = %g m (%g %s)\n", __FUNCTION__,
-                //        delta, delta/line->units_lwht->sf, line->units_lwht->name);
 
-                //printf("%s(): z1 - z2 = %g Ohms\n", __FUNCTION__, z1 - z2);
-                //#endif
-
-                //line -> subs -> er = er;
                 MLINLine.setSubEpsilon(er);
-                //line -> subs -> h = h;
                 MLINLine.setSubHeight(h, Line.LUnitm);
-                //line -> subs -> tmet = t;
                 MLINLine.setMetalThick(t, Line.LUnitm);
-                //line -> w = w;
                 MLINLine.setMetalWidth(w, Line.LUnitm);
 
 	            /* conduction losses, nepers per meter */
@@ -492,6 +392,7 @@ public class MLIN {
             lc = lc * (1.0 + (2.0 / Constant.Pi) * Math.atan(1.4 * Math.pow((rough / delta), 2.0)));
 
             //line -> alpha_c = lc;
+            MLINLine=MLINLineStore;
             MLINLine.setAlphaC(lc);
 
             /*
@@ -520,30 +421,19 @@ public class MLIN {
         }
 
         /*  store results */
-        //line -> z0 = z0;
         MLINLine.setImpedance(z0);
 
-        //line -> loss = loss;
         MLINLine.setLoss(loss);
-        //line -> losslen = loss / line -> l;
         MLINLine.setLossLen(loss / MLINLine.getMetalLength());
-        //line -> skindepth = depth;
         MLINLine.setSkinDepth(depth);
 
-        //line -> deltal = deltal;
         MLINLine.setDeltal(deltal);
-        //line -> delay = delay;
         MLINLine.setDelay(delay);
 
-        //line -> Ls = L;
         MLINLine.setLs(L);
-        //line -> Rs = R;
         MLINLine.setRs(R);
-        //line -> Cs = C;
         MLINLine.setCs(C);
-        //line -> Gs = G;
         MLINLine.setGs(G);
-
 
         //return rslt;
     }
