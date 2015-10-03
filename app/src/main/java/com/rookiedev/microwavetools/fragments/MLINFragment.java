@@ -83,34 +83,40 @@ public class MLINFragment extends Fragment {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
                     edittext_Eeff.setText("");
                 } else {
-                    MLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition()); // get the parameters
-                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+                    MLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()),
+                            spinner_W.getSelectedItemPosition()); // get the parameters
+                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
+                            spinner_Freq.getSelectedItemPosition());
                     MLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
-                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
+                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),
+                            spinner_H.getSelectedItemPosition());
+                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),
+                            spinner_T.getSelectedItemPosition());
 
                     if (edittext_L.length() != 0) { // check the L input
-                        MLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
+                        MLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()),
+                                spinner_L.getSelectedItemPosition());
                         MLIN mlin = new MLIN(MLINLine);
                         MLINLine = mlin.getAnaResult();
 
-                        BigDecimal Z0_temp = new BigDecimal(Z0);
-                        Z0 = Z0_temp.setScale(DecimalLength,
+                        BigDecimal Z0_temp = new BigDecimal(MLINLine.getImpedance());
+                        double Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
 
-                        Eeff = mlin.getEeff(); // calculate the Eeff
+                        //Eeff = mlin.getEeff(); // calculate the Eeff
 
-                        BigDecimal Eeff_temp = new BigDecimal(Eeff); // cut the decimal of the Eeff
-                        Eeff = Eeff_temp.setScale(DecimalLength,
+                        BigDecimal Eeff_temp = new BigDecimal(MLINLine.getElectricalLength()); // cut the decimal of the Eeff
+                        double Eeff = Eeff_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
-                        MLIN mlin = new MLIN(W, L, 0, 0, Freq, er, H, T);
-                        Z0 = mlin.getZ0();
+                        MLIN mlin = new MLIN(MLINLine);
+                        MLINLine = mlin.getAnaResult();
+                        //Z0 = mlin.getZ0();
 
-                        BigDecimal Z0_temp = new BigDecimal(Z0);
-                        Z0 = Z0_temp.setScale(DecimalLength,
+                        BigDecimal Z0_temp = new BigDecimal(MLINLine.getImpedance());
+                        double Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
 
@@ -130,38 +136,47 @@ public class MLINFragment extends Fragment {
                     edittext_W.setText("");
                 } else {
                     MLINLine.setImpedance(Double.parseDouble(edittext_Z0.getText().toString())); // get the parameters
-                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
+                            spinner_Freq.getSelectedItemPosition());
                     MLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
-                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
+                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),
+                            spinner_H.getSelectedItemPosition());
+                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),
+                            spinner_T.getSelectedItemPosition());
 
+                    double W, L;
                     if (edittext_Eeff.length() != 0) {
                         MLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
                         MLIN mlin = new MLIN(MLINLine);
                         MLINLine = mlin.getSynResult(Line.SYN_W);
-                        W = mlin.getW();
-                        mlin.setW(W);
-                        L = mlin.getL();
+                        W = MLINLine.getMetalWidth();
+                        //mlin.setW(W);
+                        L = MLINLine.getMetalLength();
                         temp = spinner_L.getSelectedItemPosition();
-                        if (temp == 1) {
-                            L = L / 39.37007874;
+                        if (temp == 0) {
+                            L = L * 1000 * 39.37007874;
+                        } else if (temp == 1) {
+                            L = L * 1000;
                         } else if (temp == 2) {
-                            L = L / 10 / 39.37007874;
+                            L = L * 100;
                         }
                         BigDecimal L_temp = new BigDecimal(L); // cut the decimal of L
                         L = L_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_L.setText(String.valueOf(L));
                     } else {
-                        MLIN mlin = new MLIN(0, 0, Z0, 0, Freq, er, H, T);
-                        W = mlin.getW();
+                        MLIN mlin = new MLIN(MLINLine);
+                        MLINLine = mlin.getSynResult(Line.SYN_W);
+                        W = MLINLine.getMetalWidth();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
                     temp = spinner_W.getSelectedItemPosition();
-                    if (temp == 1) {
-                        W = W / 39.37007874;
+                    if (temp == 0) {
+                        W = W * 39370.0787402;
+                    } else if (temp == 1) {
+                        W = W * 1000;
                     } else if (temp == 2) {
-                        W = W / 10 / 39.37007874;
+                        W = W * 100;
                     }
 
                     BigDecimal W_temp = new BigDecimal(W); // cut the decimal of W
@@ -190,6 +205,7 @@ public class MLINFragment extends Fragment {
      * initialize the UI
 	 */
     private void initUI() {
+        MLINLine = new Line(Line.MLIN);
         error_er = new SpannableString(
                 this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
@@ -373,7 +389,7 @@ public class MLINFragment extends Fragment {
         editor.putString(MLIN_T, mlin_T);
         editor.putString(MLIN_T_UNIT, mlin_T_unit);
 
-        editor.commit();
+        editor.apply();
     }
 
     private boolean analysisInputCheck() {

@@ -1,5 +1,7 @@
 package com.rookiedev.microwavetools.libs;
 
+import android.util.Log;
+
 public class MLIN {
     private Line MLINLine;
 
@@ -7,16 +9,12 @@ public class MLIN {
         MLINLine = mlinLine;
     }
 
-    /* function [z0,len,loss,eeff,depth]=mlicalc(w,l,f,subs,flag)*/
-    public void microstrip_calc()
-    {
+    public void microstrip_calc() {
         //int rslt;
         microstrip_calc_int(Constant.LOSSY);
         //if(rslt != 0)
         //    return rslt;
 
-        //line->Ro = line->z0;
-        //line->Xo = 0.0;
         MLINLine.setRo(MLINLine.getImpedance());
         MLINLine.setXo(0.0);
 
@@ -300,27 +298,27 @@ public class MLIN {
         R = 0.0;
         G = 0.0;
 
-        if (flag == Constant.LOSSY) {
         /* length in wavelengths */
-            if (MLINLine.getFrequency() > 0.0)
-                len = (l) / (v / MLINLine.getFrequency());
-            else
-                len = 0.0;
+        if (MLINLine.getFrequency() > 0.0)
+            len = (l) / (v / MLINLine.getFrequency());
+        else
+            len = 0.0;
 
         /* convert to degrees */
-            len = 360.0 * len;
+        len = 360.0 * len;
 
 
 
         /* effective relative permittivity */
-            eeff = EF;
+        eeff = EF;
 
 
-            //line -> keff = eeff;
-            MLINLine.setkEff(eeff);
-            //line -> len = len;
-            MLINLine.setElectricalLength(len);
+        //line -> keff = eeff;
+        MLINLine.setkEff(eeff);
+        //line -> len = len;
+        MLINLine.setElectricalLength(len);
 
+        if (flag == Constant.LOSSY) {
         /* calculate loss */
 
 
@@ -370,7 +368,7 @@ public class MLIN {
             ld = ld * l;
 
         /*
-	    * Conduction Losses
+        * Conduction Losses
 	    */
 
 
@@ -422,11 +420,11 @@ public class MLIN {
                 //#endif
 
                 //line -> subs -> h = h + delta;
-                MLINLine.setSubHeight(h + delta,Line.LUnitm);
+                MLINLine.setSubHeight(h + delta, Line.LUnitm);
                 //line -> subs -> tmet = t - delta;
-                MLINLine.setMetalThick(t - delta,Line.LUnitm);
+                MLINLine.setMetalThick(t - delta, Line.LUnitm);
                 //line -> w = w - delta;
-                MLINLine.setMetalWidth(w - delta,Line.LUnitm);
+                MLINLine.setMetalWidth(w - delta, Line.LUnitm);
                 //rslt = microstrip_calc_int(MLINLine, f, NOLOSS);
                 microstrip_calc_int(Constant.LOSSLESS);
                 //if (rslt)
@@ -448,11 +446,11 @@ public class MLIN {
                 //line -> subs -> er = er;
                 MLINLine.setSubEpsilon(er);
                 //line -> subs -> h = h;
-                MLINLine.setSubHeight(h,Line.LUnitm);
+                MLINLine.setSubHeight(h, Line.LUnitm);
                 //line -> subs -> tmet = t;
-                MLINLine.setMetalThick(t,Line.LUnitm);
+                MLINLine.setMetalThick(t, Line.LUnitm);
                 //line -> w = w;
-                MLINLine.setMetalWidth(w,Line.LUnitm);
+                MLINLine.setMetalWidth(w, Line.LUnitm);
 
 	            /* conduction losses, nepers per meter */
                 lc = (Constant.Pi * MLINLine.getFrequency() / Constant.LIGHTSPEED) * (z1 - z2) / z0;
@@ -579,7 +577,8 @@ public class MLIN {
     public int microstrip_syn(int flag) {
         int rslt = 0;
         double l;
-        double Ro, Xo;
+        //double Ro;
+        double Xo, Z0;
         double v, len;
         double eeff;
 
@@ -676,108 +675,67 @@ public class MLIN {
                 break;
         }
 
-        /*
-        * read values from the input line structure
-        */
+        // read values from the input line structure
 
-        //Ro = line -> Ro;
-        Ro = MLINLine.getRo();
-        //Xo = line -> Xo;
+        //Ro = MLINLine.getRo();
+        //Log.v("MLIN", "Ro=" + Double.toString(Ro));
         Xo = MLINLine.getXo();
-        //len = line -> len;
         len = MLINLine.getElectricalLength();
+        Z0 = MLINLine.getImpedance();
 
-        /* Metal width, length, and thickness */
-        //w = line -> w;
+        // Metal width, length, and thickness
         w = MLINLine.getMetalWidth();
-        //l = line -> l;
         l = MLINLine.getMetalLength();
-        //tmet = line -> subs -> tmet;
         tmet = MLINLine.getMetalThick();
 
-        /* Substrate thickness, relative permitivity, and loss tangent */
-        //h = line -> subs -> h;
+        // Substrate thickness, relative permitivity, and loss tangent
         h = MLINLine.getSubHeight();
-        //es = line -> subs -> er;
         es = MLINLine.getSubEpsilon();
-        //tand = line -> subs -> tand;
         tand = MLINLine.getTand();
 
-        /*
-        * temp value for l used while synthesizing the other parameters.
-        * We'll correct l later.
-        */
+        //temp value for l used while synthesizing the other parameters.
+        //We'll correct l later.
 
         l = 1000.0;
-        //line -> l = l;
-        MLINLine.setMetalLength(l,Line.LUnitm);
-
-
-        /*#ifdef DEBUG_SYN
-        printf("microstrip_syn(): --------------- Microstrip Synthesis -----------\n");
-        printf("microstrip_syn(): Metal width                 = %g m\n",line->w);
-        printf("microstrip_syn():                             = %g %s\n",
-                line->w/line->w_sf,line->w_units);
-        printf("microstrip_syn(): Metal thickness             = %g m\n",line->subs->tmet);
-        printf("microstrip_syn():                             = %g %s\n",
-                line->subs->tmet/line->subs->tmet_sf,line->subs->tmet_units);
-        printf("microstrip_syn(): Metal relative resistivity  = %g \n",line->subs->rho);
-        printf("microstrip_syn(): Metal surface roughness     = %g m-rms\n",line->subs->rough);
-        printf("microstrip_syn():                             = %g %s\n",
-                line->subs->rough/line->subs->rough_sf,line->subs->rough_units);
-        printf("microstrip_syn(): Substrate thickness         = %g m\n",line->subs->h);
-        printf("microstrip_syn():                             = %g %s\n",
-                line->subs->h/line->subs->h_sf,line->subs->h_units);
-        printf("microstrip_syn(): Substrate dielectric const. = %g \n",line->subs->er);
-        printf("microstrip_syn(): Substrate loss tangent      = %g \n",line->subs->tand);
-        printf("microstrip_syn(): Frequency                   = %g MHz\n",f/1e6);
-        printf("microstrip_syn():                             = %g %s\n",
-                f/line->f_sf,line->f_units);
-        printf("microstrip_syn(): -------------- ---------------------- ----------\n");
-        printf("microstrip_syn(): Desired Zo                  = %g ohm\n", Ro);
-        printf("microstrip_syn(): Desired electrical length   = %g degrees\n", len);
-        printf("microstrip_syn(): -------------- ---------------------- ----------\n");
-        printf("microstrip_syn(): Starting optimization value = %g\n", var);
-        printf("microstrip_syn(): -------------- ---------------------- ----------\n");
-        #endif*/
+        MLINLine.setMetalLength(l, Line.LUnitm);
 
 
         if (!done) {
-            /* Initialize the various error values */
+            // Initialize the various error values
             //*optpar = varmin;
             MLINLine.setParameter(varmin, flag);
             microstrip_calc_int(Constant.LOSSLESS);
             //errmin = line -> z0 - Ro;
-            errmin = MLINLine.getImpedance() - Ro;
+            errmin = MLINLine.getImpedance() - Z0;
 
             //*optpar = varmax;
             MLINLine.setParameter(varmax, flag);
             microstrip_calc_int(Constant.LOSSLESS);
             //errmax = line -> z0 - Ro;
-            errmax = MLINLine.getImpedance() - Ro;
+            errmax = MLINLine.getImpedance() - Z0;
 
             //*optpar = var;
             MLINLine.setParameter(var, flag);
             microstrip_calc_int(Constant.LOSSLESS);
             //err = line -> z0 - Ro;
-            err = MLINLine.getImpedance() - Ro;
+            err = MLINLine.getImpedance() - Z0;
 
             varold = 0.99 * var;
             //*optpar = varold;
             MLINLine.setParameter(varold, flag);
             microstrip_calc_int(Constant.LOSSLESS);
             //errold = line -> z0 - Ro;
-            errold = MLINLine.getImpedance() - Ro;
+            errold = MLINLine.getImpedance() - Z0;
 
 
-            /* see if we've actually been able to bracket the solution */
+            // see if we've actually been able to bracket the solution
             if (errmax * errmin > 0) {
                 //alert("Could not bracket the solution.\n"
                 //        "Synthesis failed.\n");
                 return -1;
             }
 
-            /* figure out the slope of the error vs variable */
+            // figure out the slope of the error vs variable
             if (errmax > 0)
                 sign = 1.0;
             else
@@ -819,8 +777,9 @@ public class MLIN {
             /* update the error value */
             //*optpar = var;
             MLINLine.setParameter(var, flag);
+            Log.v("MLIN", "var=" + Double.toString(var));
             microstrip_calc_int(Constant.LOSSLESS);
-            err = MLINLine.getImpedance() - Ro;
+            err = MLINLine.getImpedance() - Z0;
             //if (rslt)
             //    return rslt;
 
@@ -832,31 +791,22 @@ public class MLIN {
             else
                 varmin = var;
 
-
             /* check to see if we've converged */
             if (Math.abs(err) < abstol) {
                 done = true;
-                //#ifdef DEBUG_SYN
                 //printf("microstrip_syn():  abstol converged after iteration #%d\n",
                 //        iters);
-                //#endif
             } else if (Math.abs((var - varold) / var) < reltol) {
                 done = true;
-                //#ifdef DEBUG_SYN
                 //printf("microstrip_syn():  reltol converged after iteration #%d\n",
                 //        iters);
-                //#endif
             } else if (iters >= maxiters) {
                 //alert("Synthesis failed to converge in\n"
                 //        "%d iterations\n", maxiters);
                 return -1;
             }
 
-
-            //#ifdef DEBUG_SYN
-            //printf("microstrip_syn(): iteration #%d:  var = %g\terr = %g\n",iters,var,err);
-            //#endif
-            /* done with iteration */
+            /// done with iteration
         }
 
         /* velocity on line */
@@ -871,18 +821,12 @@ public class MLIN {
         l = (len / 360) * (v / MLINLine.getFrequency());
 
         //line -> l = l;
-        MLINLine.setMetalLength(l,Line.LUnitm);
+        MLINLine.setMetalLength(l, Line.LUnitm);
 
         /* recalculate using real length to find loss  */
         microstrip_calc();
         //if (rslt)
         //    return rslt;
-
-        //#ifdef DEBUG_SYN
-        //printf("synthesis for Z0=%g [ohms] and len=%g [deg]\n", line->z0, line->len);
-        //printf("produced:\n");
-        //printf("\twidth = %g [m] \n\tlength = %g [m]\n", line->w, line->l);
-        //#endif
 
         return (0);
     }
@@ -929,12 +873,12 @@ public class MLIN {
         return z01;
     }
 
-    public Line getAnaResult(){
+    public Line getAnaResult() {
         microstrip_calc();
         return MLINLine;
     }
 
-    public Line getSynResult(int flag){
+    public Line getSynResult(int flag) {
         microstrip_syn(flag);
         return MLINLine;
     }
