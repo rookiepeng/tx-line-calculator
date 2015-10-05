@@ -9,11 +9,9 @@ public class MLIN {
         MLINLine = mlinLine;
     }
 
-    /*
-    * flag=1 enables loss calculations
-    * flag=0 disables loss calculations
-    */
-    private Line microstripAnaLossless(Line MLINLine, int flag) {
+    private Line microstripAna(Line MLINLine, int flag) {
+        // flag=1 enables loss calculations
+        // flag=0 disables loss calculations
         double w, l;
         double h, er, rho, tand, t, rough;
         double T;
@@ -151,7 +149,6 @@ public class MLIN {
         z5 = 1.0 - 0.218 * Math.exp(-7.5 * u);
         deltal = h * z1 * z3 * z5 / z4;
 
-
         // find the incremental circuit model
         // find L and C from the impedance and velocity
         // z0 = sqrt(L/C), v = 1/sqrt(LC)
@@ -188,11 +185,9 @@ public class MLIN {
         MLINLine.setGs(G);
 
         if (flag == Constant.LOSSY) {
-            /* calculate loss */
-
+            // calculate loss
             // Dielectric Losses
             // loss in nepers/meter
-
         /*
         * The dielectric loss here matches equation (1) in the
 	    * Denlinger paper although the form is slightly different.  In
@@ -214,42 +209,28 @@ public class MLIN {
 	    * less by a factor qd which is the filling factor.
 	    * bu
 	    */
-
             if (er > 1.0) {
                 ld = (Constant.Pi * MLINLine.getFrequency() / v) * (er / EF) * ((EF - 1.0) / (er - 1.0)) * tand;
             } else {
-        /* if er == 1, then this is probably a vacuum */
+                // if er == 1, then this is probably a vacuum
                 ld = 0.0;
             }
-
             //G = 2.0 * ld / z0;
             MLINLine.setAlphaD(ld);
-
-        /* loss in dB/meter */
+            // loss in dB/meter
             ld = 20.0 * Math.log10(Math.exp(1.0)) * ld;
-
-        /* loss in dB */
+            // loss in dB
             ld = ld * l;
-
-        /*
-        * Conduction Losses
-	    */
-
-
-        /* calculate skin depth */
-
-        /* conductivity */
+            // Conduction Losses
+            // calculate skin depth
+            // conductivity
             sigma = 1.0 / rho;
-
-        /* permeability of free space */
+            // permeability of free space
             mu = 4.0 * Constant.Pi * 1e-7;
-
-        /* skin depth in meters */
+            // skin depth in meters
             delta = Math.sqrt(1.0 / (Constant.Pi * MLINLine.getFrequency() * mu * sigma));
             depth = delta;
-
-
-        /* warn the user if the loss calc is suspect. */
+            // warn the user if the loss calc is suspect.
             if (t < 3.0 * depth) {
                 //alert("Warning:  The metal thickness is less than\n"
                 //        "three skin depths.  Use the loss results with\n"
@@ -269,13 +250,13 @@ public class MLIN {
             Line MLINLineStore = MLINLine;
             if (depth <= t) {
                 MLINLineStore.setSubEpsilon(1.0);
-                MLINLineStore = microstripAnaLossless(MLINLineStore, Constant.LOSSLESS);
+                MLINLineStore = microstripAna(MLINLineStore, Constant.LOSSLESS);
                 z2 = MLINLineStore.getImpedance();
 
                 MLINLineStore.setSubHeight(h + delta, Line.LUnitm);
                 MLINLineStore.setMetalThick(t - delta, Line.LUnitm);
                 MLINLineStore.setMetalWidth(w - delta, Line.LUnitm);
-                MLINLineStore = microstripAnaLossless(MLINLineStore, Constant.LOSSLESS);
+                MLINLineStore = microstripAna(MLINLineStore, Constant.LOSSLESS);
                 z1 = MLINLineStore.getImpedance();
 
                 MLINLineStore.setSubEpsilon(er);
@@ -297,8 +278,7 @@ public class MLIN {
                 Res = 1 / (w * t * sigma);
                 // conduction losses, nepers per meter
                 lc = Res / (2.0 * z0);
-                // change delta to be equal to the metal thickness for
-	            // use in surface roughness correction
+                // change delta to be equal to the metal thickness for use in surface roughness correction
                 delta = t;
                 // no conduction loss case
             } else {
@@ -306,7 +286,7 @@ public class MLIN {
             }
 
             /* factor due to surface roughness
-	        * note that the equation in Fooks and Zakarevicius is slightly
+            * note that the equation in Fooks and Zakarevicius is slightly
 	        * errored.
 	        * the correct equation is penciled in my copy and was
 	        * found in Hammerstad and Bekkadal
@@ -321,18 +301,18 @@ public class MLIN {
             // loss in dB/meter
             lc = 20.0 * Math.log10(Math.exp(1.0)) * lc;
 
-            /// loss in dB
+            // loss in dB
             lc = lc * l;
 
-            //Total Loss
+            // Total Loss
             loss = ld + lc;
         } else {
             loss = 0.0;
             depth = 0.0;
         }
-        //MLINLine.setLoss(loss);
-        //MLINLine.setLossLen(loss / MLINLine.getMetalLength());
-        //MLINLine.setSkinDepth(depth);
+        MLINLine.setLoss(loss);
+        MLINLine.setLossLen(loss / MLINLine.getMetalLength());
+        MLINLine.setSkinDepth(depth);
         return MLINLine;
     }
 
@@ -472,20 +452,20 @@ public class MLIN {
         if (!done) {
             // Initialize the various error values
             MLINLine.setParameter(varmin, flag);
-            MLINLine = microstripAnaLossless(MLINLine, Constant.LOSSLESS);
+            MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
             errmin = MLINLine.getImpedance() - Z0;
 
             MLINLine.setParameter(varmax, flag);
-            MLINLine = microstripAnaLossless(MLINLine, Constant.LOSSLESS);
+            MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
             errmax = MLINLine.getImpedance() - Z0;
 
             MLINLine.setParameter(var, flag);
-            MLINLine = microstripAnaLossless(MLINLine, Constant.LOSSLESS);
+            MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
             err = MLINLine.getImpedance() - Z0;
 
             varold = 0.99 * var;
             MLINLine.setParameter(varold, flag);
-            MLINLine = microstripAnaLossless(MLINLine, Constant.LOSSLESS);
+            MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
             errold = MLINLine.getImpedance() - Z0;
 
             // see if we've actually been able to bracket the solution
@@ -536,7 +516,7 @@ public class MLIN {
             /* update the error value */
             MLINLine.setParameter(var, flag);
             Log.v("MLIN", "var=" + Double.toString(var));
-            MLINLine = microstripAnaLossless(MLINLine, Constant.LOSSLESS);
+            MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
             err = MLINLine.getImpedance() - Z0;
             //if (rslt)
             //    return rslt;
@@ -567,7 +547,7 @@ public class MLIN {
         }
 
         // velocity on line
-        MLINLine = microstripAnaLossless(MLINLine, Constant.LOSSLESS);
+        MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
         eeff = MLINLine.getkEff();
 
         v = Constant.LIGHTSPEED / Math.sqrt(eeff);
@@ -577,7 +557,7 @@ public class MLIN {
         MLINLine.setMetalLength(l, Line.LUnitm);
 
         // recalculate using real length to find loss
-        MLINLine = microstripAnaLossless(MLINLine, Constant.LOSSLESS);
+        MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
 
         return 0;
     }
@@ -617,7 +597,7 @@ public class MLIN {
     }
 
     public Line getAnaResult() {
-        MLINLine = microstripAnaLossless(MLINLine, Constant.LOSSY);
+        MLINLine = microstripAna(MLINLine, Constant.LOSSY);
         return MLINLine;
     }
 

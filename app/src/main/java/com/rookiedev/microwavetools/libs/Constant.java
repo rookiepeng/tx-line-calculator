@@ -15,8 +15,6 @@ public class Constant {
 
     public static final double Pi = Math.PI;
 
-    public static final double Exp = Math.E;// base of the natural logarithm
-
     public static final int LOSSLESS=0;
 
     public static final int LOSSY=1;

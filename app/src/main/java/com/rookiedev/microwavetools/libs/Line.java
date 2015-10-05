@@ -4,11 +4,11 @@ package com.rookiedev.microwavetools.libs;
  * Created by rookie on 9/30/2015.
  */
 public class Line {
-    public static final int MLIN=1;
-    public static final int SYN_W=0, SYN_H=1, SYN_Er=2, SYN_L=3;
-    public static final int LUnitmil=0, LUnitmm=1, LUnitcm=2,LUnitm=3;
-    public static final int FUnitMHz=0, FUnitGHz=1,FunitHz=2;
-    private double metalWidth, metalLength, metalThick; // meter, meter, meter
+    public static final int MLIN = 1;
+    public static final int SYN_W = 0, SYN_H = 1, SYN_Er = 2, SYN_L = 3;
+    public static final int LUnitmil = 0, LUnitmm = 1, LUnitcm = 2, LUnitm = 3;
+    public static final int FUnitMHz = 0, FUnitGHz = 1, FunitHz = 2;
+    private double metalWidth, metalLength, metalThick, metalSpace; // meter, meter, meter, meter
     private double subEpsilon, subHeight; // n/a, meter
     private double Impedance, ElectricalLength; // ohms, degree
     private double Frequency; // Hz
@@ -24,79 +24,79 @@ public class Line {
     /* the actual characteristic impedance is Ro + j Xo */
     private double Ro, Xo;
 
-    private double rho,rough,tand;
+    private double rho, rough, tand;
 
     private int lineType;
 
-    public Line(int type){
-        lineType=type;
+    public Line(int type) {
+        lineType = type;
     }
 
-    public int getLineType(){
+    public int getLineType() {
         return lineType;
     }
 
-    public void setMetalWidth(double width, int unit){
-        metalWidth=para2m(width,unit);
+    public void setMetalWidth(double width, int unit) {
+        metalWidth = para2m(width, unit);
     }
 
-    public double getMetalWidth(){
+    public double getMetalWidth() {
         return metalWidth;
     }
 
-    public void setMetalLength(double length, int unit){
-        metalLength=para2m(length,unit);
+    public void setMetalLength(double length, int unit) {
+        metalLength = para2m(length, unit);
     }
 
-    public double getMetalLength(){
+    public double getMetalLength() {
         return metalLength;
     }
 
-    public void setMetalThick(double thick, int unit){
-        metalThick=para2m(thick,unit);
+    public void setMetalThick(double thick, int unit) {
+        metalThick = para2m(thick, unit);
     }
 
-    public double getMetalThick(){
+    public double getMetalThick() {
         return metalThick;
     }
 
-    public void setSubEpsilon(double epsilon){
-        subEpsilon=epsilon;
+    public void setSubEpsilon(double epsilon) {
+        subEpsilon = epsilon;
     }
 
-    public double getSubEpsilon(){
+    public double getSubEpsilon() {
         return subEpsilon;
     }
 
-    public void setSubHeight(double height, int unit){
-        subHeight=para2m(height,unit);
+    public void setSubHeight(double height, int unit) {
+        subHeight = para2m(height, unit);
     }
 
-    public double getSubHeight(){
+    public double getSubHeight() {
         return subHeight;
     }
 
-    public void setImpedance(double impedance){
-        Impedance=impedance;
+    public void setImpedance(double impedance) {
+        Impedance = impedance;
     }
 
-    public double getImpedance(){
+    public double getImpedance() {
         return Impedance;
     }
 
-    public void setElectricalLength(double electricalLength){
-        ElectricalLength=electricalLength;
+    public void setElectricalLength(double electricalLength) {
+        ElectricalLength = electricalLength;
     }
 
-    public double getElectricalLength(){
+    public double getElectricalLength() {
         return ElectricalLength;
     }
 
-    public void setFrequency(double frequency,int unit){
-        Frequency=para2hz(frequency,unit);
+    public void setFrequency(double frequency, int unit) {
+        Frequency = para2hz(frequency, unit);
     }
 
-    public double getFrequency(){
+    public double getFrequency() {
         return Frequency;
     }
 
@@ -236,63 +236,69 @@ public class Line {
         this.tand = tand;
     }
 
-    public void setParameter(double para, int flag){
+    public void setParameter(double para, int flag) {
         switch (flag) {
             case SYN_W:
-                metalWidth=para;
+                metalWidth = para;
                 break;
 
             case SYN_H:
-                subHeight=para;
+                subHeight = para;
                 break;
 
             case SYN_Er:
-                subEpsilon=para;
+                subEpsilon = para;
                 break;
 
             case SYN_L:
-                metalLength=para;
+                metalLength = para;
                 break;
 
             default:
-                //fprintf(stderr,"microstrip_synth():  illegal flag=%d\n",flag);
-                //exit(1);
                 break;
         }
     }
 
-    private double para2m(double para, int unit){
-        double l=0;
-        switch(unit){
+    private double para2m(double para, int unit) {
+        double l = 0;
+        switch (unit) {
             case LUnitmil:
-                l=para/ 39370.0787402;
+                l = para / 39370.0787402;
                 break;
             case LUnitmm:
-                l=para/ 1000;
+                l = para / 1000;
                 break;
             case LUnitcm:
-                l=para/100;
+                l = para / 100;
                 break;
             case LUnitm:
-                l=para;
+                l = para;
                 break;
         }
         return l;
     }
 
-    private double para2hz(double para, int unit){
-        double l=0;
-        switch(unit){
+    private double para2hz(double para, int unit) {
+        double l = 0;
+        switch (unit) {
             case FUnitMHz:
-                l=para*1e6;
+                l = para * 1e6;
                 break;
             case FUnitGHz:
-                l=para*1e9;
+                l = para * 1e9;
                 break;
             case FunitHz:
-                l=para;
+                l = para;
                 break;
         }
         return l;
+    }
+
+    public double getMetalSpace() {
+        return metalSpace;
+    }
+
+    public void setMetalSpace(double metalSpace) {
+        this.metalSpace = metalSpace;
     }
 }
