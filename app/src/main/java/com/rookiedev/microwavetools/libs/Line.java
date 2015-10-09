@@ -14,12 +14,16 @@ public class Line {
     private double Frequency; // Hz
     private double Delay; // s
     /* open end length correction */
-    private double Deltal;
-    private double kEff, loss, lossLen, skinDepth;
+    private double Deltal,deltalEven,deltalOdd;
+    private double kEff, loss, lossEven, lossOdd, lossLen, skinDepth;
     private double alphaC, alphaD;
+    private double lossLenEven, lossLenOdd;
+    private double impedanceEven, impedanceOdd;
+    private double kEven,kOdd;
 
     /* incremental circuit model */
     private double Ls, Rs, Cs, Gs;
+    private double LEven, LOdd, REven, ROdd, CEven, COdd, GEven, GOdd;
 
     /* the actual characteristic impedance is Ro + j Xo */
     private double Ro, Xo;
@@ -298,7 +302,151 @@ public class Line {
         return metalSpace;
     }
 
-    public void setMetalSpace(double metalSpace) {
-        this.metalSpace = metalSpace;
+    public void setMetalSpace(double metalSpace, int unit) {
+        this.metalSpace = para2m(metalSpace, unit);
+    }
+
+    public double getLossLenEven() {
+        return lossLenEven;
+    }
+
+    public void setLossLenEven(double lossLenEven) {
+        this.lossLenEven = lossLenEven;
+    }
+
+    public double getLossLenOdd() {
+        return lossLenOdd;
+    }
+
+    public void setLossLenOdd(double lossLenOdd) {
+        this.lossLenOdd = lossLenOdd;
+    }
+
+    public double getImpedanceEven() {
+        return impedanceEven;
+    }
+
+    public void setImpedanceEven(double impedanceEven) {
+        this.impedanceEven = impedanceEven;
+    }
+
+    public double getImpedanceOdd() {
+        return impedanceOdd;
+    }
+
+    public void setImpedanceOdd(double impedanceOdd) {
+        this.impedanceOdd = impedanceOdd;
+    }
+
+    public double getkEven() {
+        return kEven;
+    }
+
+    public void setkEven(double kEven) {
+        this.kEven = kEven;
+    }
+
+    public double getkOdd() {
+        return kOdd;
+    }
+
+    public void setkOdd(double kOdd) {
+        this.kOdd = kOdd;
+    }
+
+    public double getDeltalEven() {
+        return deltalEven;
+    }
+
+    public void setDeltalEven(double deltalEven) {
+        this.deltalEven = deltalEven;
+    }
+
+    public double getDeltalOdd() {
+        return deltalOdd;
+    }
+
+    public void setDeltalOdd(double deltalOdd) {
+        this.deltalOdd = deltalOdd;
+    }
+
+    public double getLEven() {
+        return LEven;
+    }
+
+    public void setLEven(double LEven) {
+        this.LEven = LEven;
+    }
+
+    public double getLOdd() {
+        return LOdd;
+    }
+
+    public void setLOdd(double LOdd) {
+        this.LOdd = LOdd;
+    }
+
+    public double getREven() {
+        return REven;
+    }
+
+    public void setREven(double REven) {
+        this.REven = REven;
+    }
+
+    public double getROdd() {
+        return ROdd;
+    }
+
+    public void setROdd(double ROdd) {
+        this.ROdd = ROdd;
+    }
+
+    public double getCEven() {
+        return CEven;
+    }
+
+    public void setCEven(double CEven) {
+        this.CEven = CEven;
+    }
+
+    public double getCOdd() {
+        return COdd;
+    }
+
+    public void setCOdd(double COdd) {
+        this.COdd = COdd;
+    }
+
+    public double getGEven() {
+        return GEven;
+    }
+
+    public void setGEven(double GEven) {
+        this.GEven = GEven;
+    }
+
+    public double getGOdd() {
+        return GOdd;
+    }
+
+    public void setGOdd(double GOdd) {
+        this.GOdd = GOdd;
+    }
+
+    public double getLossEven() {
+        return lossEven;
+    }
+
+    public void setLossEven(double lossEven) {
+        this.lossEven = lossEven;
+    }
+
+    public double getLossOdd() {
+        return lossOdd;
+    }
+
+    public void setLossOdd(double lossOdd) {
+        this.lossOdd = lossOdd;
     }
 }
