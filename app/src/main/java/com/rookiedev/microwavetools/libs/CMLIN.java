@@ -672,7 +672,7 @@ public class CMLIN {
 
         // coupling coefficient
         //line -> k = (z0ef - z0of) / (z0ef + z0of);
-        CMLINLine.setkEff((z0ef - z0of) / (z0ef + z0of));
+        CMLINLine.setCouplingFactor((z0ef - z0of) / (z0ef + z0of));
         CMLINLine.setDeltalEven(deltale);
         //line -> deltale = deltale;
         //line -> deltalo = deltalo;
@@ -716,6 +716,305 @@ public class CMLIN {
         //line -> loss_odd = l * line -> losslen_odd;
         CMLINLine.setLossOdd(l * CMLINLine.getLossLenOdd());
         return CMLINLine;
+    }
+
+    /*function [w,l,s,loss,kev,kodd]=cmlisyn(z0e,z0o,len,f,subs) */
+/* CMLISYN    Synthesize coupled microstrip transmission line from electrical parameters
+ *
+ *  [w,l,s,loss,kev,kodd]=cmlisyn(z0e,z0o,len,f,subs)
+ *  calculates:
+ *    w     = microstrip line width (mils)
+ *    l     = microstrip line length (mils)
+ *    s     = spacing between lines (mils)
+ *    loss  = insertion loss (dB)
+ *    kev   = even mode effective relative permitivity
+ *    kodd  = odd mode effective relative permitivity
+ *
+ *  from:
+ *    z0e   = even mode characteristic impedance (ohms)
+ *    z0o   = odd mode characteristic impedance (ohms)
+ *    len   = electrical length (degrees)
+ *    f     = frequency (Hz)
+ *    subs  = substrate parameters.  See TRSUBS for details.
+ *
+ *          |<--W-->|<---S--->|<--W-->|
+ *           _______           _______
+ *          | metal |         | metal |
+ *   ----------------------------------------------
+ *  (  dielectric,er                      /|\     (
+ *   )                                 H   |       )
+ *  (                                     \|/     (
+ *   ----------------------------------------------
+ *   /////////////////ground///////////////////////
+ *
+ *  Part of the Filter Design Toolbox
+ *  See Also:  CMLICALC, MLISYN, MLICALC, SLISYN, SLICALC, TRSUBS
+ *
+ *  Dan McMahill, 7/17/97
+ *  Copyright (C) 1997 by Dan McMahill.
+ *
+ */
+
+    private int coupledMicrostripSyn()
+    {
+
+        double h, er, l, wmin, wmax, abstol, reltol;
+        int maxiters;
+        double z0, w;
+        int iters;
+        int done;
+        double len;
+
+        double s, smin, smax, z0e, z0o, k;
+        double loss, kev, kodd, delta, cval, err, d;
+
+        double AW,F1,F2,F3;
+
+        double ai[] = {1, -0.301, 3.209, -27.282, 56.609, -37.746};
+        double bi[] = {0.020, -0.623, 17.192, -68.946, 104.740, -16.148};
+        double ci[] = {0.002, -0.347, 7.171, -36.910, 76.132, -51.616};
+
+        int i;
+        double dw, ds;
+        double ze0=0,ze1,ze2,dedw,deds;
+        double zo0=0,zo1,zo2,dodw,dods;
+
+        /*
+        #ifdef DEBUG_SYN
+        printf("coupled_microstrip_syn(): -------- Coupled_Microstrip Synthesis ----------\n");
+        printf("coupled_microstrip_syn(): Metal width                 = %g %s\n",
+                line->w/line->units_lwst->sf, line->units_lwst->name);
+        printf("coupled_microstrip_syn(): Metal spacing               = %g %s\n",
+                line->s/line->units_lwst->sf, line->units_lwst->name);
+        printf("coupled_microstrip_syn(): Metal thickness             = %g %s\n",
+                line->subs->tmet/line->units_lwst->sf, line->units_lwst->name);
+        printf("coupled_microstrip_syn(): Metal relative resistivity  = %g %s\n",
+                line->subs->rho/line->units_rho->sf, line->units_rho->name);
+        printf("coupled_microstrip_syn(): Metal surface roughness     = %g %s-rms\n",
+                line->subs->rough/line->units_rough->sf, line->units_rough->name);
+        printf("coupled_microstrip_syn(): Substrate thickness         = %g %s\n",
+                line->subs->h/line->units_lwst->sf, line->units_lwst->name);
+        printf("coupled_microstrip_syn(): Substrate dielectric const. = %g \n",
+                line->subs->er);
+        printf("coupled_microstrip_syn(): Substrate loss tangent      = %g \n",
+                line->subs->tand);
+        printf("coupled_microstrip_syn(): Frequency                   = %g %s\n",
+                line->freq/line->units_freq->sf, line->units_freq->name);
+        printf("coupled_microstrip_syn(): -------------- ---------------------- ----------\n");
+        printf("coupled_microstrip_syn(): Desired Zo                  = %g ohm\n", line->z0);
+        printf("coupled_microstrip_syn(): Desired k                   = %g \n", line->k);
+        printf("coupled_microstrip_syn(): Desired Even Mode Zo        = %g ohm\n", line->z0e);
+        printf("coupled_microstrip_syn(): Desired Odd Mode Zo         = %g ohm\n", line->z0o);
+        printf("coupled_microstrip_syn(): Desired electrical length   = %g degrees\n",line->len);
+        printf("coupled_microstrip_syn(): -------------- ---------------------- ----------\n");
+        #endif*/
+
+            //len = line->len;
+        len=CMLINLine.getElectricalLength();
+
+  /* Substrate dielectric thickness (m) */
+        //h = line->subs->h;
+        h = CMLINLine.getSubHeight();
+
+  /* Substrate relative permittivity */
+        //er = line->subs->er;
+        er=CMLINLine.getSubEpsilon();
+
+  /* impedance and coupling */
+        //z0 = line->z0;
+        z0 = CMLINLine.getImpedance();
+        //k = line->k;
+        k = CMLINLine.getCouplingFactor();
+
+  /* even/odd mode impedances */
+        //z0e = line->z0e;
+        z0e = CMLINLine.getImpedanceEven();
+        //z0o = line->z0o;
+        z0o = CMLINLine.getImpedanceOdd();
+
+        if( line->use_z0k ) {
+    /* use z0 and k to calculate z0e and z0o */
+            z0o = z0*Math.sqrt((1.0 - k) / (1.0 + k));
+            z0e = z0*Math.sqrt((1.0 + k) / (1.0 - k));
+        } else {
+    /* use z0e and z0o to calculate z0 and k */
+            z0 = Math.sqrt(z0e * z0o);
+            k = (z0e - z0o)/(z0e + z0o);
+        }
+
+  /* temp value for l used while finding w and s */
+        l = 1000.0;
+        //line->l=l;
+        CMLINLine.setMetalLength(l,Line.LUnitm);
+
+
+  /* limits on the allowed range for w */
+        wmin = Constant.MIL2M(0.5);
+        wmax = Constant.MIL2M(1000);
+
+  /* limits on the allowed range for s */
+        smin = Constant.MIL2M(0.5);
+        smax = Constant.MIL2M(1000);
+
+
+  /* impedance convergence tolerance (ohms) */
+        abstol = 1e-6;
+
+  /* width relative convergence tolerance (mils) (set to 0.1 micron) */
+        reltol = Constant.MICRON2MIL(0.1);
+
+        maxiters = 50;
+
+
+  /*
+   * Initial guess at a solution
+   */
+        AW = Math.exp(z0 * Math.sqrt(er + 1.0) / 42.4) - 1.0;
+        F1 = 8.0*Math.sqrt(AW * (7.0 + 4.0 / er) / 11.0 + (1.0 + 1.0 / er) / 0.81)/AW;
+
+        F2 = 0;
+        for (i=0; i<=5 ; i++)
+        {
+            F2 = F2 + ai[i] * Math.pow(k, i);
+        }
+
+        F3 = 0;
+        for (i=0 ; i<=5 ; i++)
+        {
+            F3 = F3 + (bi[i] - ci[i]*(9.6 - er))*Math.pow((0.6 - k), (double) (i));
+        }
+
+        w = h*Math.abs(F1 * F2);
+        s = h*Math.abs(F1 * F3);
+
+
+        //#ifdef DEBUG_SYN
+        //printf("coupled_microstrip_syn():  AW=%g, F1=%g, F2=%g, F3=%g\n",
+        //        AW, F1, F2, F3);
+
+        //printf("coupled_microstrip_syn():  Initial estimate:\n"
+        //        "                w = %g %s, s = %g %s\n",
+        //        w/line->units_lwst->sf, line->units_lwst->name,
+        //        s/line->units_lwst->sf, line->units_lwst->name);
+        //#endif
+
+            l=100;
+        loss=0;
+        kev=1;
+        kodd=1;
+
+
+        iters = 0;
+        done = 0;
+        if( w < s )
+            delta = 1e-3*w;
+        else
+            delta = 1e-3*s;
+
+        delta = Constant.MIL2M(1e-5);
+
+        cval = 1e-12*z0e*z0o;
+
+  /*
+   * We should never need anything anywhere near maxiters iterations.
+   * This limit is just to prevent going to lala land if something
+   * breaks.
+   */
+        while( (!done) && (iters < maxiters) )
+        {
+            iters++;
+            //line->w = w;
+            CMLINLine.setMetalWidth(w,Line.LUnitm);
+            //line->s = s;
+            CMLINLine.setMetalSpace(s,Line.LUnitm);
+      /* don't bother with loss calculations while we are iterating */
+            CMLINLine=coupledMicrostripAna(CMLINLine,Constant.LOSSLESS);
+
+            ze0 = line->z0e;
+            zo0 = line->z0o;
+
+            //#ifdef DEBUG_SYN
+            //printf("Iteration #%d ze = %g\tzo = %g\tw = %g %s\ts = %g %s\n",
+            //        iters, ze0, zo0,
+            //        w/line->units_lwst->sf, line->units_lwst->name,
+            //        s/line->units_lwst->sf, line->units_lwst->name);
+            //#endif
+
+      /* check for convergence */
+                err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
+            if(err < cval) {
+                done = 1;
+            } else {
+	/* approximate the first jacobian */
+                line->w = w + delta;
+                line->s = s;
+                CMLINLine=coupledMicrostripAna(CMLINLine,Constant.LOSSLESS);
+                ze1 = line->z0e;
+                zo1 = line->z0o;
+
+                line->w = w;
+                line->s = s + delta;
+                CMLINLine=coupledMicrostripAna(CMLINLine,Constant.LOSSLESS);
+                ze2 = line->z0e;
+                zo2 = line->z0o;
+
+                dedw = (ze1 - ze0)/delta;
+                dodw = (zo1 - zo0)/delta;
+                deds = (ze2 - ze0)/delta;
+                dods = (zo2 - zo0)/delta;
+
+	/* find the determinate */
+                d = dedw*dods - deds*dodw;
+
+	/* estimate the new solution */
+                dw = -1.0 *  ((ze0-z0e)*dods - (zo0-z0o)*deds)/d;
+                w = Math.abs(w + dw);
+
+                ds =         ((ze0-z0e)*dodw - (zo0-z0o)*dedw)/d;
+                s = Math.abs(s + ds);
+
+                /*
+                #ifdef DEBUG_SYN
+                printf("coupled_microstrip_syn():  delta = %g, determinate = %g\n", delta, d);
+                printf("coupled_microstrip_syn():  ze0 = %16.8g,  ze1 = %16.8g,  ze2 = %16.8g\n",
+                        ze0, ze1, ze2);
+                printf("coupled_microstrip_syn():  zo0 = %16.8g,  zo1 = %16.8g,  zo2 = %16.8g\n",
+                        zo0, zo1, zo2);
+                printf("coupled_microstrip_syn(): dedw = %16.8g, dodw = %16.8g\n",
+                        dedw, dodw);
+                printf("coupled_microstrip_syn(): ze1-ze0 = %16.8g, ze2-ze0 = %16.8g\n",
+                        ze1-ze0, ze2-ze0);
+                printf("coupled_microstrip_syn(): deds = %16.8g, dods = %16.8g\n",
+                        deds, dods);
+                printf("coupled_microstrip_syn(): zo1-zo0 = %16.8g, zo2-zo0 = %16.8g\n",
+                        zo1-zo0, zo2-zo0);
+                printf("coupled_microstrip_syn(): dw = %g %s, ds = %g %s\n",
+                        dw/line->units_lwst->sf, line->units_lwst->name,
+                        ds/line->units_lwst->sf, line->units_lwst->name);
+                printf("-----------------------------------------------------\n");
+                #endif
+                */
+            }
+        }
+
+        line->w = w;
+        line->s = s;
+        CMLINLine=coupledMicrostripAna(CMLINLine,Constant.LOSSLESS);
+
+  /* scale the line length to get the desired electrical length */
+        line->l = line->l * len/line->len;
+
+  /*
+   * one last calculation and this time we find the loss too.
+   */
+        CMLINLine=coupledMicrostripAna (CMLINLine,Constant.LOSSY);
+
+        //#ifdef DEBUG_SYN
+        //printf("Took %d iterations, err = %g\n", iters, err);
+        //printf("ze = %g\tzo = %g\tz0e = %g\tz0o = %g\n", ze0, zo0, z0e, z0o);
+        //#endif
+
+        return(0);
     }
 
     /*

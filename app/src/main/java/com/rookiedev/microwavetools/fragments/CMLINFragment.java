@@ -22,6 +22,7 @@ import com.google.android.gms.ads.AdView;
 import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CMLIN;
+import com.rookiedev.microwavetools.libs.Line;
 
 import java.math.BigDecimal;
 
@@ -67,7 +68,8 @@ public class CMLINFragment extends Fragment {
             edittext_T, // the thickness of the metal
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
-    private double W, L, S, Z0, k, Z0o, Z0e, Eeff, Freq, T, H, er;
+    //private double W, L, S, Z0, k, Z0o, Z0e, Eeff, Freq, T, H, er;
+    private Line CMLINLine;
     private Button cmlin_syn,// button synthesize
             cmlin_ana;// button analyze
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
@@ -377,6 +379,7 @@ public class CMLINFragment extends Fragment {
 
         radioBtn1 = (RadioButton) rootView.findViewById(R.id.radioBtn1);
         radioBtn2 = (RadioButton) rootView.findViewById(R.id.radioBtn2);
+        CMLINLine = new Line(Line.CMLIN);
     }
 
     private void setRadioBtn() {

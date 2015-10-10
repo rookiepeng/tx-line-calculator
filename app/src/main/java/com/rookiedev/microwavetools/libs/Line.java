@@ -4,7 +4,7 @@ package com.rookiedev.microwavetools.libs;
  * Created by rookie on 9/30/2015.
  */
 public class Line {
-    public static final int MLIN = 1;
+    public static final int MLIN = 1, CMLIN =2;
     public static final int SYN_W = 0, SYN_H = 1, SYN_Er = 2, SYN_L = 3;
     public static final int LUnitmil = 0, LUnitmm = 1, LUnitcm = 2, LUnitm = 3;
     public static final int FUnitMHz = 0, FUnitGHz = 1, FunitHz = 2;
@@ -19,7 +19,7 @@ public class Line {
     private double alphaC, alphaD;
     private double lossLenEven, lossLenOdd;
     private double impedanceEven, impedanceOdd;
-    private double kEven,kOdd;
+    private double kEven,kOdd,couplingFactor;
 
     /* incremental circuit model */
     private double Ls, Rs, Cs, Gs;
@@ -448,5 +448,13 @@ public class Line {
 
     public void setLossOdd(double lossOdd) {
         this.lossOdd = lossOdd;
+    }
+
+    public double getCouplingFactor() {
+        return couplingFactor;
+    }
+
+    public void setCouplingFactor(double couplingFactor) {
+        this.couplingFactor = couplingFactor;
     }
 }
