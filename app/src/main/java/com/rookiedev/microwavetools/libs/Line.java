@@ -457,4 +457,5 @@ public class Line {
     public void setCouplingFactor(double couplingFactor) {
         this.couplingFactor = couplingFactor;
     }
+
 }

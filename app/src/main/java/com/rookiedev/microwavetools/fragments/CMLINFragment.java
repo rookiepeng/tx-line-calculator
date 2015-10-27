@@ -102,112 +102,64 @@ public class CMLINFragment extends Fragment {
                     edittext_Z0e.setText(""); //
                     edittext_k.setText("");
                 } else {
-                    W = Double.parseDouble(edittext_W.getText().toString()); // get the parameters
-                    S = Double.parseDouble(edittext_S.getText().toString());
-                    Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    er = Double.parseDouble(edittext_er.getText().toString());
-                    H = Double.parseDouble(edittext_H.getText().toString());
-                    T = Double.parseDouble(edittext_T.getText().toString());
+                    CMLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());  // get the parameters
+                   CMLINLine.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
+                    CMLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+                    CMLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                    CMLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+                    CMLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
-                    temp = spinner_W.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        W = W / 39370.0787402;
-                    } else if (temp == 1) {
-                        W = W / 1000;
-                    } else if (temp == 2) {
-                        W = W / 100;
-                    }
-
-                    temp = spinner_S.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        S = S / 39370.0787402;
-                    } else if (temp == 1) {
-                        S = S / 1000;
-                    } else if (temp == 2) {
-                        S = S / 100;
-                    }
-
-                    temp = spinner_Freq.getSelectedItemPosition(); // convert unit to Hz
-                    if (temp == 0) {
-                        Freq = Freq * 1e6;
-                    } else if (temp == 1) {
-                        Freq = Freq * 1e9;
-                    }
-
-                    temp = spinner_H.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        H = H / 39370.0787402;
-                    } else if (temp == 1) {
-                        H = H / 1000;
-                    } else if (temp == 2) {
-                        H = H / 100;
-                    }
-
-                    temp = spinner_T.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        T = T / 39370.0787402;
-                    } else if (temp == 1) {
-                        T = T / 1000;
-                    } else if (temp == 2) {
-                        T = T / 100;
-                    }
                     if (edittext_L.length() != 0) {
-                        L = Double.parseDouble(edittext_L.getText().toString());
-                        temp = spinner_L.getSelectedItemPosition(); // convert unit to meter
-                        if (temp == 0) {
-                            L = L / 39370.0787402;
-                        } else if (temp == 1) {
-                            L = L / 1000;
-                        } else if (temp == 2) {
-                            L = L / 100;
-                        }
-                        CMLIN cmlin = new CMLIN(W, S, L, 0, 0, 0, 0, 0, Freq, er, H, T, use_z0k);
-                        Z0o = cmlin.getZ0o();
-                        Z0e = cmlin.getZ0e();
+                        CMLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
+
+                        CMLIN cmlin = new CMLIN(CMLINLine, use_z0k);
+                        CMLINLine = cmlin.getAnaResult();
                         //Z0o = Z0_o_f_calc(W, 0, S, H, T, er, Freq);
                         //Z0e = Z0_e_f_calc(W, 0, S, H, T, er, Freq);
-                        Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
-                        k = (Z0e - Z0o) / (Z0e + Z0o);
+                        //CMLINLine.setImpedance(Math.sqrt(CMLINLine.getImpedanceEven() * CMLINLine.getImpedanceOdd())); // calculate the Z0
+                        //CMLINLine.setCouplingFactor((CMLINLine.getImpedanceEven() - CMLINLine.getImpedanceOdd())/(CMLINLine.getImpedanceEven() + CMLINLine.getImpedanceOdd()));
+                        //k = (Z0e - Z0o) / (Z0e + Z0o);
                         // Z0=ZL_thickness(W,H,epsilon,Freq);
                         // Z0=Wr( W, H, T,epsilon);
                         // edittext_Z0.setText(String.valueOf(Z0));
 
-                        Eeff = cmlin.getEeff(); // calculate the Eeff
-                        BigDecimal Eeff_temp = new BigDecimal(Eeff); // cut the decimal of the Eeff
-                        Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        //Eeff = cmlin.getEeff(); // calculate the Eeff
+                        BigDecimal Eeff_temp = new BigDecimal(CMLINLine.getElectricalLength()); // cut the decimal of the Eeff
+                        double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
-                        CMLIN cmlin = new CMLIN(W, S, 0, 0, 0, 0, 0, 0, Freq, er, H, T, use_z0k);
-                        Z0o = cmlin.getZ0o();
-                        Z0e = cmlin.getZ0e();
+                        CMLIN cmlin = new CMLIN(CMLINLine, use_z0k);
+                        CMLINLine = cmlin.getAnaResult();
+                        //Z0o = cmlin.getZ0o();
+                        //Z0e = cmlin.getZ0e();
                         //Z0o = Z0_o_f_calc(W, 0, S, H, T, er, Freq);
                         //Z0e = Z0_e_f_calc(W, 0, S, H, T, er, Freq);
-                        Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
-                        k = (Z0e - Z0o) / (Z0e + Z0o);
+                        //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
+                        //k = (Z0e - Z0o) / (Z0e + Z0o);
                         // Z0=ZL_thickness(W,H,epsilon,Freq);
                         // Z0=Wr( W, H, T,epsilon);
                         // edittext_Z0.setText(String.valueOf(Z0));
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
 
                     }
-                    BigDecimal Z0_temp = new BigDecimal(Z0);
-                    Z0 = Z0_temp.setScale(DecimalLength,
+                    BigDecimal Z0_temp = new BigDecimal(CMLINLine.getImpedance());
+                    double Z0 = Z0_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
                     // of the Z0
-                    BigDecimal k_temp = new BigDecimal(k);
-                    k = k_temp
+                    BigDecimal k_temp = new BigDecimal(CMLINLine.getCouplingFactor());
+                    double k = k_temp
                             .setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                             .doubleValue();
                     edittext_k.setText(String.valueOf(k));
 
-                    BigDecimal Z0o_temp = new BigDecimal(Z0o);
-                    Z0o = Z0o_temp.setScale(DecimalLength,
+                    BigDecimal Z0o_temp = new BigDecimal(CMLINLine.getImpedanceOdd());
+                    double Z0o = Z0o_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0o.setText(String.valueOf(Z0o));
 
-                    BigDecimal Z0e_temp = new BigDecimal(Z0e);
-                    Z0e = Z0e_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    BigDecimal Z0e_temp = new BigDecimal(CMLINLine.getImpedanceEven());
+                    double Z0e = Z0e_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0e.setText(String.valueOf(Z0e));
                 }
             }

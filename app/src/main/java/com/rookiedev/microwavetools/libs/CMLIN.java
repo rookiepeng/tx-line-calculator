@@ -762,7 +762,7 @@ public class CMLIN {
         int maxiters;
         double z0, w;
         int iters;
-        int done;
+        boolean done;
         double len;
 
         double s, smin, smax, z0e, z0o, k;
@@ -832,7 +832,7 @@ public class CMLIN {
         //z0o = line->z0o;
         z0o = CMLINLine.getImpedanceOdd();
 
-        if( line->use_z0k ) {
+        if( use_z0k ) {
     /* use z0 and k to calculate z0e and z0o */
             z0o = z0*Math.sqrt((1.0 - k) / (1.0 + k));
             z0e = z0*Math.sqrt((1.0 + k) / (1.0 - k));
@@ -905,7 +905,7 @@ public class CMLIN {
 
 
         iters = 0;
-        done = 0;
+        done = false;
         if( w < s )
             delta = 1e-3*w;
         else
@@ -930,8 +930,10 @@ public class CMLIN {
       /* don't bother with loss calculations while we are iterating */
             CMLINLine=coupledMicrostripAna(CMLINLine,Constant.LOSSLESS);
 
-            ze0 = line->z0e;
-            zo0 = line->z0o;
+            //ze0 = line->z0e;
+            //zo0 = line->z0o;
+            ze0 = CMLINLine.getImpedanceEven();
+            zo0 = CMLINLine.getImpedanceOdd();
 
             //#ifdef DEBUG_SYN
             //printf("Iteration #%d ze = %g\tzo = %g\tw = %g %s\ts = %g %s\n",
@@ -943,20 +945,24 @@ public class CMLIN {
       /* check for convergence */
                 err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
             if(err < cval) {
-                done = 1;
+                done = true;
             } else {
 	/* approximate the first jacobian */
-                line->w = w + delta;
-                line->s = s;
-                CMLINLine=coupledMicrostripAna(CMLINLine,Constant.LOSSLESS);
-                ze1 = line->z0e;
-                zo1 = line->z0o;
+                CMLINLine.setMetalWidth(w + delta, Line.LUnitm);
+                CMLINLine.setMetalSpace(s, Line.LUnitm);
+                CMLINLine=coupledMicrostripAna(CMLINLine, Constant.LOSSLESS);
+                //ze1 = line->z0e;
+                //zo1 = line->z0o;
+                ze1=CMLINLine.getImpedanceEven();
+                zo1=CMLINLine.getImpedanceOdd();
 
-                line->w = w;
-                line->s = s + delta;
+                //line->w = w;
+                CMLINLine.setMetalWidth(w,Line.LUnitm);
+                //line->s = s + delta;
+                CMLINLine.setMetalSpace(s + delta,Line.LUnitm);
                 CMLINLine=coupledMicrostripAna(CMLINLine,Constant.LOSSLESS);
-                ze2 = line->z0e;
-                zo2 = line->z0o;
+                ze2 = CMLINLine.getImpedanceEven();
+                zo2 = CMLINLine.getImpedanceOdd();
 
                 dedw = (ze1 - ze0)/delta;
                 dodw = (zo1 - zo0)/delta;
@@ -997,12 +1003,15 @@ public class CMLIN {
             }
         }
 
-        line->w = w;
-        line->s = s;
+        //line->w = w;
+        CMLINLine.setMetalWidth(w, Line.LUnitm);
+        //line->s = s;
+        CMLINLine.setMetalSpace(s,Line.LUnitm);
         CMLINLine=coupledMicrostripAna(CMLINLine,Constant.LOSSLESS);
 
   /* scale the line length to get the desired electrical length */
-        line->l = line->l * len/line->len;
+        //line->l = line->l * len/line->len;
+        CMLINLine.setMetalLength(CMLINLine.getMetalLength() * len/CMLINLine.getElectricalLength(),Line.LUnitm);
 
   /*
    * one last calculation and this time we find the loss too.
@@ -1056,5 +1065,15 @@ public class CMLIN {
         z01 = (377.0 / (2 * Constant.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
 
         return z01;
+    }
+
+    public Line getAnaResult() {
+        CMLINLine = coupledMicrostripAna(CMLINLine, Constant.LOSSY);
+        return CMLINLine;
+    }
+
+    public Line getSynResult() {
+        coupledMicrostripSyn();
+        return CMLINLine;
     }
 }
