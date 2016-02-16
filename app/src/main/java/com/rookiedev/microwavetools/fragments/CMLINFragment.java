@@ -590,23 +590,35 @@ public class CMLINFragment extends Fragment {
     private void synthesizeButton() {
         int temp;
         if (use_z0k) {
-            Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
-            k = Double.parseDouble(edittext_k.getText().toString());
-            Z0o = 0;
-            Z0e = 0;
+            CMLINLine.setImpedance(Double.parseDouble(edittext_Z0.getText().toString()));
+            CMLINLine.setCouplingFactor(Double.parseDouble(edittext_k.getText().toString()));
+            CMLINLine.setImpedanceOdd(0);
+            CMLINLine.setImpedanceEven(0);
+            //Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
+            //k = Double.parseDouble(edittext_k.getText().toString());
+            //Z0o = 0;
+            //Z0e = 0;
         } else {
-            Z0e = Double.parseDouble(edittext_Z0e.getText().toString());
-            Z0o = Double.parseDouble(edittext_Z0o.getText().toString());
-            Z0 = 0;
-            k = 0;
+            CMLINLine.setImpedanceEven(Double.parseDouble(edittext_Z0e.getText().toString()));
+            CMLINLine.setImpedanceOdd(Double.parseDouble(edittext_Z0o.getText().toString()));
+            CMLINLine.setImpedance(0);
+            CMLINLine.setCouplingFactor(0);
+            //Z0e = Double.parseDouble(edittext_Z0e.getText().toString());
+            //Z0o = Double.parseDouble(edittext_Z0o.getText().toString());
+            //Z0 = 0;
+            //k = 0;
         }
 
-        Freq = Double.parseDouble(edittext_Freq.getText().toString());
-        er = Double.parseDouble(edittext_er.getText().toString());
-        H = Double.parseDouble(edittext_H.getText().toString());
-        T = Double.parseDouble(edittext_T.getText().toString());
+        CMLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),spinner_Freq.getSelectedItemPosition());
+        CMLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+        CMLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),spinner_H.getSelectedItemPosition());
+        CMLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),spinner_T.getSelectedItemPosition());
+        //Freq = Double.parseDouble(edittext_Freq.getText().toString());
+        //er = Double.parseDouble(edittext_er.getText().toString());
+        //H = Double.parseDouble(edittext_H.getText().toString());
+        //T = Double.parseDouble(edittext_T.getText().toString());
 
-        temp = spinner_Freq.getSelectedItemPosition(); // convert the unit to Hz
+        /*temp = spinner_Freq.getSelectedItemPosition(); // convert the unit to Hz
         if (temp == 0) {
             Freq = Freq * 1000000;
         } else if (temp == 1) {
@@ -629,15 +641,21 @@ public class CMLINFragment extends Fragment {
             T = T / 1000;
         } else if (temp == 2) {
             T = T / 100;
-        }
+        }*/
 
+        double W, S, L;
         if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
-            Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-            CMLIN cmlin = new CMLIN(0, 0, 0, Z0, k, Z0o, Z0e, Eeff, Freq, er, H, T, use_z0k);
-            cmlin.cmlin_syn();
-            L = cmlin.getL();
-            W = cmlin.getW();
-            S = cmlin.getS();
+            CMLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
+            //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
+            CMLIN cmlin = new CMLIN(CMLINLine,use_z0k);
+            CMLINLine=cmlin.getSynResult();
+            //cmlin.cmlin_syn();
+            L=CMLINLine.getMetalLength();
+            W=CMLINLine.getMetalWidth();
+            S=CMLINLine.getMetalSpace();
+            //L = cmlin.getL();
+            //W = cmlin.getW();
+            //S = cmlin.getS();
             //cmlin_syn(H, T, er, Freq, Z0, k, Z0e, Z0o, Eeff);
 
             temp = spinner_L.getSelectedItemPosition();
@@ -653,10 +671,13 @@ public class CMLINFragment extends Fragment {
                     .doubleValue();
             edittext_L.setText(String.valueOf(L));
         } else {
-            CMLIN cmlin = new CMLIN(0, 0, 0, Z0, k, Z0o, Z0e, 0, Freq, er, H, T, use_z0k);
-            cmlin.cmlin_syn();
-            W = cmlin.getW();
-            S = cmlin.getS();
+            CMLIN cmlin = new CMLIN(CMLINLine, use_z0k);
+            CMLINLine=cmlin.getSynResult();
+            //cmlin.cmlin_syn();
+            W=CMLINLine.getMetalWidth();
+            S=CMLINLine.getMetalSpace();
+            //W = cmlin.getW();
+            //S = cmlin.getS();
             //cmlin_syn(H, T, er, Freq, Z0, k, Z0e, Z0o, 0);
             edittext_L.setText(""); // clear the L if the Eeff input is empty
         }
