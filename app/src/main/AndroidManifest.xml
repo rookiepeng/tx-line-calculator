@@ -28,13 +28,13 @@
             android:name="com.rookiedev.microwavetools.preferences"
             android:label="Preferences"
             android:screenOrientation="sensor"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name="com.rookiedev.microwavetools.about"
             android:label="About"
             android:screenOrientation="sensor"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
         </activity>
         <activity
             android:name="com.google.android.gms.ads.AdActivity"

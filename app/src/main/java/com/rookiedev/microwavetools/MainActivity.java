@@ -3,6 +3,7 @@ package com.rookiedev.microwavetools;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +21,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.rookiedev.microwavetools.fragments.CMLINFragment;
 import com.rookiedev.microwavetools.fragments.COAXFragment;
 import com.rookiedev.microwavetools.fragments.CPWFragment;
@@ -26,20 +34,20 @@ import com.rookiedev.microwavetools.fragments.CSLINFragment;
 import com.rookiedev.microwavetools.fragments.MLINFragment;
 import com.rookiedev.microwavetools.fragments.SLINFragment;
 
+import static android.view.Gravity.LEFT;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
-    public static final String PREFS_POSITION = "POSITION";
-    public static final String PREFS_ISFIRSTRUN = "ISFIRSTRUN";
+    private static final String PREFS_POSITION = "POSITION";
+    private static final String PREFS_ISFIRSTRUN = "ISFIRSTRUN";
     public static final String PREFS_MLIN = "MLIN";
-    private ActionBarDrawerToggle mDrawerToggle;
-    private String[] mLineTypes;
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
     private int pos;
+    private DrawerLayout drawer;
+    private Fragment fragment=null;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,68 +56,55 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-        mDrawerTitle = getTitle();
-        mLineTypes = getResources().getStringArray(R.array.line_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mLineTypes));
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        */
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        readSharedPref();
-        mTitle = mLineTypes[pos];
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
 
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle(mTitle);
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                //toolbar,
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
-                supportInvalidateOptionsMenu();
-                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
+            @Override
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
-                supportInvalidateOptionsMenu();
-                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                if (fragment!=null){
+                    getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                }
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
             }
         };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-        selectItem(pos);
+        readSharedPref();
+
+        navigationView.getMenu().getItem(pos).setChecked(true);
+        getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
         if (isFirstRun()) {
-            mDrawerLayout.openDrawer(mDrawerList);
+            drawer.openDrawer(GravityCompat.START);
         }
 
-        //if (savedInstanceState == null) {
-        //    selectItem(0);
-        //}
+        /** Look up the AdView as a resource and load a request. */
+        AdView adView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR) // All emulators
+                .addTestDevice("015d172c791c0215") // my test device
+                .addTestDevice("04afa117002e7ebc") // my test device
+                .build();
+        adView.loadAd(adRequest);
     }
 
     @Override
@@ -123,20 +118,11 @@ public class MainActivity extends AppCompatActivity
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(R.id.menu_preference).setVisible(!drawerOpen);
-        menu.findItem(R.id.menu_about).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
         // Handle action buttons
         Intent intent = new Intent();
         switch (item.getItemId()) {
@@ -155,68 +141,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void selectItem(int position) {
-        // update the main content by replacing fragments
-        Fragment fragment;
-        switch (position) {
-            case 0:
-                fragment = new MLINFragment();
-                break;
-            case 1:
-                fragment = new CMLINFragment();
-                break;
-            case 2:
-                fragment = new SLINFragment();
-                break;
-            case 3:
-                fragment = new CSLINFragment();
-                break;
-            case 4:
-                fragment = new CPWFragment();
-                break;
-            case 5:
-                fragment = new COAXFragment();
-                break;
-            default:
-                fragment = new MLINFragment();
-                break;
-        }
-        Bundle args = new Bundle();
-        //args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-        fragment.setArguments(args);
-
-        //FragmentManager fragmentManager = getSupportFragmentManager();
-        //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-        // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        mTitle = mLineTypes[position];
-        mDrawerLayout.closeDrawer(mDrawerList);
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-        //mTitle = title;
-        getSupportActionBar().setTitle(title);
-    }
-
-    /**
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        toggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        //mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -237,18 +173,46 @@ public class MainActivity extends AppCompatActivity
         pos = Integer.parseInt(prefs.getString(PREFS_POSITION, "0"));
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        return false;
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        if (id == R.id.nav_mlin) {
+            fragment = new MLINFragment();
+            pos=0;
+        } else if (id == R.id.nav_cmlin) {
+            fragment = new CMLINFragment();
+            pos=1;
+        } else if (id == R.id.nav_slin) {
+            fragment = new SLINFragment();
+            pos=2;
+        } else if (id == R.id.nav_cslin) {
+            fragment = new CSLINFragment();
+            pos=3;
+        } else if (id == R.id.nav_cpwg) {
+            fragment = new CPWFragment();
+            pos=4;
+        } else if (id == R.id.nav_coax) {
+            fragment = new COAXFragment();
+            pos=5;
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        } else {
+            fragment = new MLINFragment();
+        }
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 
-    /* The click listner for ListView in the navigation drawer */
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-            pos = position;
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     private boolean isFirstRun() {
@@ -263,5 +227,4 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
     }
-
 }

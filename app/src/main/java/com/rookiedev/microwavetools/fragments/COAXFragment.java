@@ -386,15 +386,6 @@ public class COAXFragment extends Fragment {
             }
         });
 
-        /** Look up the AdView as a resource and load a request. */
-        AdView adView = (AdView) rootView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR) // All emulators
-                .addTestDevice("015d172c791c0215") // my test device
-                .addTestDevice("04afa117002e7ebc") // my test device
-                .build();
-        adView.loadAd(adRequest);
-
         return rootView;
     }
 

@@ -17,13 +17,13 @@
             android:orientation="vertical">
 
             <!-- The main content view -->
-            <com.google.android.gms.ads.AdView
+            <!--<com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 ads:adSize="SMART_BANNER"
-                ads:adUnitId="ca-app-pub-6523245757541965/4597430937" />
+                ads:adUnitId="ca-app-pub-6523245757541965/4597430937" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
