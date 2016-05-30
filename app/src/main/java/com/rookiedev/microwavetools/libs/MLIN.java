@@ -597,7 +597,7 @@ public class MLIN {
     }
 
     public Line getAnaResult() {
-        MLINLine = microstripAna(MLINLine, Constant.LOSSY);
+        MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
         return MLINLine;
     }
 
