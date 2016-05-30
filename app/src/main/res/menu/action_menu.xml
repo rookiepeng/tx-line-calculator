@@ -4,13 +4,14 @@
 
     <item
             android:id="@+id/menu_preference"
-            android:icon="@drawable/action_settings"
+            android:icon="@drawable/ic_menu_setting"
             app:showAsAction="never|withText"
             android:title="@string/menu_preference"/>
+    <!--
     <item
             android:id="@+id/menu_about"
-            android:icon="@drawable/action_about"
+            android:icon="@drawable/ic_menu_about"
             app:showAsAction="never|withText"
             android:title="@string/menu_about"/>
-
+    -->
 </menu>
