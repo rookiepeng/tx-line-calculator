@@ -191,10 +191,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_coax) {
             fragment = new COAXFragment();
             pos=5;
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         } else {
             fragment = new MLINFragment();
         }

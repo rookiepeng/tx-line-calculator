@@ -4,30 +4,31 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_mlin"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_mlin"
             android:title="Microstrip Line" />
         <item
             android:id="@+id/nav_cmlin"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_cmlin"
             android:title="Coupled Microstrip Line" />
         <item
             android:id="@+id/nav_slin"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_slin"
             android:title="Stripline" />
         <item
             android:id="@+id/nav_cslin"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_cslin"
             android:title="Coupled Stripline" />
         <item
             android:id="@+id/nav_cpwg"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_cpwg"
             android:title="Coplanar Waveguide" />
         <item
             android:id="@+id/nav_coax"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_coax"
             android:title="Coaxial Line" />
     </group>
 
+    <!--
     <item android:title="Communicate">
         <menu>
             <item
@@ -40,5 +41,5 @@
                 android:title="Send" />
         </menu>
     </item>
-
+    -->
 </menu>
