@@ -3,7 +3,6 @@ package com.rookiedev.microwavetools;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,28 +12,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.rookiedev.microwavetools.fragments.CMLINFragment;
 import com.rookiedev.microwavetools.fragments.COAXFragment;
 import com.rookiedev.microwavetools.fragments.CPWFragment;
 import com.rookiedev.microwavetools.fragments.CSLINFragment;
 import com.rookiedev.microwavetools.fragments.MLINFragment;
 import com.rookiedev.microwavetools.fragments.SLINFragment;
-
-import static android.view.Gravity.LEFT;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragment=null;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +47,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
+
+        fragmentManager = getSupportFragmentManager();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -76,7 +69,7 @@ public class MainActivity extends AppCompatActivity
             public void onDrawerClosed(View drawerView) {
                 if (fragment!=null){
                     getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
-                    FragmentManager fragmentManager = getSupportFragmentManager();
+
                     fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
                 }
             }
@@ -93,6 +86,7 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.getMenu().getItem(pos).setChecked(true);
         getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
+        initFragment(pos);
         if (isFirstRun()) {
             drawer.openDrawer(GravityCompat.START);
         }
@@ -178,6 +172,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        fragmentManager.beginTransaction().remove(fragment).commit();
         if (id == R.id.nav_mlin) {
             fragment = new MLINFragment();
             pos=0;
@@ -208,6 +203,33 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    private void initFragment(int item){
+        if (item==0) {
+            fragment = new MLINFragment();
+            pos=0;
+        } else if (item==1) {
+            fragment = new CMLINFragment();
+            pos=1;
+        } else if (item==2) {
+            fragment = new SLINFragment();
+            pos=2;
+        } else if (item==3) {
+            fragment = new CSLINFragment();
+            pos=3;
+        } else if (item==4) {
+            fragment = new CPWFragment();
+            pos=4;
+        } else if (item==5) {
+            fragment = new COAXFragment();
+            pos=5;
+        } else {
+            fragment = new MLINFragment();
+        }
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 
     @Override
