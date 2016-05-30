@@ -3,7 +3,7 @@ package com.rookiedev.microwavetools.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.SubscriptSpan;
@@ -30,29 +30,29 @@ import java.math.BigDecimal;
  * Created by rookie on 8/11/13.
  */
 public class CMLINFragment extends Fragment {
-    public final static String CMLIN_W = "CMLIN_W";
-    public final static String CMLIN_W_UNIT = "CMLIN_W_UNIT";
-    public final static String CMLIN_S = "CMLIN_S";
-    public final static String CMLIN_S_UNIT = "CMLIN_S_UNIT";
-    public final static String CMLIN_L = "CMLIN_L";
-    public final static String CMLIN_L_UNIT = "CMLIN_L_UNIT";
-    public final static String CMLIN_Z0 = "CMLIN_Z0";
-    public final static String CMLIN_Z0_UNIT = "CMLIN_Z0_UNIT";
-    public final static String CMLIN_k = "CMLIN_k";
-    public final static String CMLIN_Z0o = "CMLIN_Z0o";
-    public final static String CMLIN_Z0o_UNIT = "CMLIN_Z0o_UNIT";
-    public final static String CMLIN_Z0e = "CMLIN_Z0e";
-    public final static String CMLIN_Z0e_UNIT = "CMLIN_Z0e_UNIT";
-    public final static String CMLIN_Eeff = "CMLIN_Eeff";
-    public final static String CMLIN_Eeff_UNIT = "CMLIN_Eeff_UNIT";
-    public final static String CMLIN_Freq = "CMLIN_Freq";
-    public final static String CMLIN_Freq_UNIT = "CMLIN_Freq_UNIT";
-    public final static String CMLIN_er = "CMLIN_er";
-    public final static String CMLIN_H = "CMLIN_H";
-    public final static String CMLIN_H_UNIT = "CMLIN_H_UNIT";
-    public final static String CMLIN_T = "CMLIN_T";
-    public final static String CMLIN_T_UNIT = "CMLIN_T_UNIT";
-    public final static String CMLIN_USEZ0k = "CMLIN_USEZ0k";
+    private final static String CMLIN_W = "CMLIN_W";
+    private final static String CMLIN_W_UNIT = "CMLIN_W_UNIT";
+    private final static String CMLIN_S = "CMLIN_S";
+    private final static String CMLIN_S_UNIT = "CMLIN_S_UNIT";
+    private final static String CMLIN_L = "CMLIN_L";
+    private final static String CMLIN_L_UNIT = "CMLIN_L_UNIT";
+    private final static String CMLIN_Z0 = "CMLIN_Z0";
+    private final static String CMLIN_Z0_UNIT = "CMLIN_Z0_UNIT";
+    private final static String CMLIN_k = "CMLIN_k";
+    private final static String CMLIN_Z0o = "CMLIN_Z0o";
+    private final static String CMLIN_Z0o_UNIT = "CMLIN_Z0o_UNIT";
+    private final static String CMLIN_Z0e = "CMLIN_Z0e";
+    private final static String CMLIN_Z0e_UNIT = "CMLIN_Z0e_UNIT";
+    private final static String CMLIN_Eeff = "CMLIN_Eeff";
+    private final static String CMLIN_Eeff_UNIT = "CMLIN_Eeff_UNIT";
+    private final static String CMLIN_Freq = "CMLIN_Freq";
+    private final static String CMLIN_Freq_UNIT = "CMLIN_Freq_UNIT";
+    private final static String CMLIN_er = "CMLIN_er";
+    private final static String CMLIN_H = "CMLIN_H";
+    private final static String CMLIN_H_UNIT = "CMLIN_H_UNIT";
+    private final static String CMLIN_T = "CMLIN_T";
+    private final static String CMLIN_T_UNIT = "CMLIN_T_UNIT";
+    private final static String CMLIN_USEZ0k = "CMLIN_USEZ0k";
     private int DecimalLength; // the length of the Decimal, accurate of the result
     private View rootView;
     private SpannableString error_er, error_Z0, error_Z0e, error_Z0o;
@@ -93,7 +93,7 @@ public class CMLINFragment extends Fragment {
         cmlin_ana.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int temp;
+                //int temp;
                 Preference_SharedPref();
                 if (!analysisInputCheck()) {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
@@ -176,27 +176,29 @@ public class CMLINFragment extends Fragment {
                 } else {
                     synthesizeButton();
                     if (use_z0k) {
-                        Z0o = Z0 * Math.sqrt((1.0 - k) / (1.0 + k));
-                        Z0e = Z0 * Math.sqrt((1.0 + k) / (1.0 - k));
+                        double Z0e,Z0o;
+                        //Z0o = Z0 * Math.sqrt((1.0 - k) / (1.0 + k));
+                        //Z0e = Z0 * Math.sqrt((1.0 + k) / (1.0 - k));
 
-                        BigDecimal Z0o_temp = new BigDecimal(Z0o);
+                        BigDecimal Z0o_temp = new BigDecimal(CMLINLine.getImpedanceOdd());
                         Z0o = Z0o_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0o.setText(String.valueOf(Z0o));
 
-                        BigDecimal Z0e_temp = new BigDecimal(Z0e);
+                        BigDecimal Z0e_temp = new BigDecimal(CMLINLine.getImpedanceEven());
                         Z0e = Z0e_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0e.setText(String.valueOf(Z0e));
                     } else {
-                        Z0 = Math.sqrt(Z0e * Z0o);
-                        k = (Z0e - Z0o) / (Z0e + Z0o);
+                        double Z0,k;
+                        //Z0 = Math.sqrt(Z0e * Z0o);
+                        //k = (Z0e - Z0o) / (Z0e + Z0o);
 
-                        BigDecimal Z0_temp = new BigDecimal(Z0);
+                        BigDecimal Z0_temp = new BigDecimal(CMLINLine.getImpedance());
                         Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
-                        BigDecimal k_temp = new BigDecimal(k);
+                        BigDecimal k_temp = new BigDecimal(CMLINLine.getCouplingFactor());
                         k = k_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_k.setText(String.valueOf(k));
@@ -378,7 +380,7 @@ public class CMLINFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
@@ -433,7 +435,7 @@ public class CMLINFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared Preferences in the device universal parameters
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared Preferences in the device universal parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
@@ -446,7 +448,7 @@ public class CMLINFragment extends Fragment {
         String cmlin_use_z0k;
 
         SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);
+                AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         cmlin_W = edittext_W.getText().toString();

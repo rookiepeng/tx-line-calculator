@@ -1,20 +1,7 @@
 package com.rookiedev.microwavetools.libs;
 
-/**
- * Created by rookie on 8/20/13.
- */
-public class CMLIN {
-    //private double W, S, L, Z0, k, Z0o, Z0e, Eeff, f, er, H, T;
-    private boolean use_z0k;
-    private Line CMLINLine;
-
-    public CMLIN(Line CMLINLine, boolean usez0k) {
-        this.CMLINLine = CMLINLine;
-        use_z0k = usez0k;
-    }
-
-    /*function [z0e,z0o,len,loss,kev,kodd,deltale,deltalo]=cmlicalc(w,l,s,f,subs,flag)*/
-/* CMLICALC   Analyze coupled microstrip transmission line from physical parameters
+/** Created by rookie on 8/20/13.
+ * CMLICALC   Analyze coupled microstrip transmission line from physical parameters
  *
  *  [z0e,z0o,len,loss,kev,kodd]=cmlicalc(w,l,s,f,subs)
  *  calculates:
@@ -89,6 +76,96 @@ public class CMLIN {
  *  code and one in mine.  A win for everyone!
  *
  */
+
+/** CMLISYN    Synthesize coupled microstrip transmission line from electrical parameters
+ *
+ *  [w,l,s,loss,kev,kodd]=cmlisyn(z0e,z0o,len,f,subs)
+ *  calculates:
+ *    w     = microstrip line width (mils)
+ *    l     = microstrip line length (mils)
+ *    s     = spacing between lines (mils)
+ *    loss  = insertion loss (dB)
+ *    kev   = even mode effective relative permitivity
+ *    kodd  = odd mode effective relative permitivity
+ *
+ *  from:
+ *    z0e   = even mode characteristic impedance (ohms)
+ *    z0o   = odd mode characteristic impedance (ohms)
+ *    len   = electrical length (degrees)
+ *    f     = frequency (Hz)
+ *    subs  = substrate parameters.  See TRSUBS for details.
+ *
+ *          |<--W-->|<---S--->|<--W-->|
+ *           _______           _______
+ *          | metal |         | metal |
+ *   ----------------------------------------------
+ *  (  dielectric,er                      /|\     (
+ *   )                                 H   |       )
+ *  (                                     \|/     (
+ *   ----------------------------------------------
+ *   /////////////////ground///////////////////////
+ *
+ *  Part of the Filter Design Toolbox
+ *  See Also:  CMLICALC, MLISYN, MLICALC, SLISYN, SLICALC, TRSUBS
+ *
+ *  Dan McMahill, 7/17/97
+ *  Copyright (C) 1997 by Dan McMahill.
+ *
+ */
+
+public class CMLIN {
+    private boolean use_z0k;
+    private Line CMLINLine;
+
+    public CMLIN(Line CMLINLine, boolean usez0k) {
+        this.CMLINLine = CMLINLine;
+        use_z0k = usez0k;
+    }
+
+    /*function [z0e,z0o,len,loss,kev,kodd,deltale,deltalo]=cmlicalc(w,l,s,f,subs,flag)*/
+
+    /*
+     * Effective dielectric constant from Hammerstad and Jensen
+     */
+    private static double ee_HandJ(double u, double er) {
+        double A, B, E0;
+
+        // (4) from Hammerstad and Jensen
+        A = 1.0 + (1.0 / 49.0)
+                * Math.log((Math.pow(u, 4.0) + Math.pow((u / 52.0), 2.0)) / (Math.pow(u, 4.0) + 0.432))
+                + (1.0 / 18.7) * Math.log(1.0 + Math.pow((u / 18.1), 3.0));
+
+        // (5) from Hammerstad and Jensen
+        B = 0.564 * Math.pow(((er - 0.9) / (er + 3.0)), 0.053);
+
+        // zero frequency effective permitivity.  (3) from Hammerstad and
+        // Jensen.  This is ee(ur,er) thats used by (9) in Hammerstad and
+        // Jensen.
+        E0 = (er + 1.0) / 2.0 + ((er - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / u), (-A * B));
+
+
+        return E0;
+    }
+
+    /*function [w,l,s,loss,kev,kodd]=cmlisyn(z0e,z0o,len,f,subs) */
+
+
+    /*
+     * Characteristic impedance from (1) and (2) in Hammerstad and Jensen
+     */
+    private static double z0_HandJ(double u) {
+        double F, z01;
+
+        // (2) from Hammerstad and Jensen.  'u' is the normalized width
+        F = 6.0 + (2.0 * Constant.Pi - 6.0) * Math.exp(-Math.pow((30.666 / u), 0.7528));
+
+        // (1) from Hammerstad and Jensen
+        // XXX decide on which to use here
+        z01 = (Constant.FREESPACEZ0 / (2 * Constant.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
+        z01 = (377.0 / (2 * Constant.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
+
+        return z01;
+    }
 
     private Line coupledMicrostripAna(Line CMLINLine, int do_loss) {
 
@@ -718,43 +795,6 @@ public class CMLIN {
         return CMLINLine;
     }
 
-    /*function [w,l,s,loss,kev,kodd]=cmlisyn(z0e,z0o,len,f,subs) */
-/* CMLISYN    Synthesize coupled microstrip transmission line from electrical parameters
- *
- *  [w,l,s,loss,kev,kodd]=cmlisyn(z0e,z0o,len,f,subs)
- *  calculates:
- *    w     = microstrip line width (mils)
- *    l     = microstrip line length (mils)
- *    s     = spacing between lines (mils)
- *    loss  = insertion loss (dB)
- *    kev   = even mode effective relative permitivity
- *    kodd  = odd mode effective relative permitivity
- *
- *  from:
- *    z0e   = even mode characteristic impedance (ohms)
- *    z0o   = odd mode characteristic impedance (ohms)
- *    len   = electrical length (degrees)
- *    f     = frequency (Hz)
- *    subs  = substrate parameters.  See TRSUBS for details.
- *
- *          |<--W-->|<---S--->|<--W-->|
- *           _______           _______
- *          | metal |         | metal |
- *   ----------------------------------------------
- *  (  dielectric,er                      /|\     (
- *   )                                 H   |       )
- *  (                                     \|/     (
- *   ----------------------------------------------
- *   /////////////////ground///////////////////////
- *
- *  Part of the Filter Design Toolbox
- *  See Also:  CMLICALC, MLISYN, MLICALC, SLISYN, SLICALC, TRSUBS
- *
- *  Dan McMahill, 7/17/97
- *  Copyright (C) 1997 by Dan McMahill.
- *
- */
-
     private int coupledMicrostripSyn()
     {
 
@@ -809,7 +849,7 @@ public class CMLIN {
         printf("coupled_microstrip_syn(): -------------- ---------------------- ----------\n");
         #endif*/
 
-            //len = line->len;
+        //len = line->len;
         len=CMLINLine.getElectricalLength();
 
   /* Substrate dielectric thickness (m) */
@@ -836,10 +876,14 @@ public class CMLIN {
     /* use z0 and k to calculate z0e and z0o */
             z0o = z0*Math.sqrt((1.0 - k) / (1.0 + k));
             z0e = z0*Math.sqrt((1.0 + k) / (1.0 - k));
+            CMLINLine.setImpedanceEven(z0e);
+            CMLINLine.setImpedanceOdd(z0e);
         } else {
     /* use z0e and z0o to calculate z0 and k */
             z0 = Math.sqrt(z0e * z0o);
             k = (z0e - z0o)/(z0e + z0o);
+            CMLINLine.setImpedance(z0);
+            CMLINLine.setCouplingFactor(k);
         }
 
   /* temp value for l used while finding w and s */
@@ -898,11 +942,10 @@ public class CMLIN {
         //        s/line->units_lwst->sf, line->units_lwst->name);
         //#endif
 
-            l=100;
+        l=100;
         loss=0;
         kev=1;
         kodd=1;
-
 
         iters = 0;
         done = false;
@@ -943,7 +986,7 @@ public class CMLIN {
             //#endif
 
       /* check for convergence */
-                err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
+            err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
             if(err < cval) {
                 done = true;
             } else {
@@ -1024,47 +1067,6 @@ public class CMLIN {
         //#endif
 
         return(0);
-    }
-
-    /*
-     * Effective dielectric constant from Hammerstad and Jensen
-     */
-    static double ee_HandJ(double u, double er) {
-        double A, B, E0;
-
-        // (4) from Hammerstad and Jensen
-        A = 1.0 + (1.0 / 49.0)
-                * Math.log((Math.pow(u, 4.0) + Math.pow((u / 52.0), 2.0)) / (Math.pow(u, 4.0) + 0.432))
-                + (1.0 / 18.7) * Math.log(1.0 + Math.pow((u / 18.1), 3.0));
-
-        // (5) from Hammerstad and Jensen
-        B = 0.564 * Math.pow(((er - 0.9) / (er + 3.0)), 0.053);
-
-        // zero frequency effective permitivity.  (3) from Hammerstad and
-        // Jensen.  This is ee(ur,er) thats used by (9) in Hammerstad and
-        // Jensen.
-        E0 = (er + 1.0) / 2.0 + ((er - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / u), (-A * B));
-
-
-        return E0;
-    }
-
-
-    /*
-     * Characteristic impedance from (1) and (2) in Hammerstad and Jensen
-     */
-    static double z0_HandJ(double u) {
-        double F, z01;
-
-        // (2) from Hammerstad and Jensen.  'u' is the normalized width
-        F = 6.0 + (2.0 * Constant.Pi - 6.0) * Math.exp(-Math.pow((30.666 / u), 0.7528));
-
-        // (1) from Hammerstad and Jensen
-        // XXX decide on which to use here
-        z01 = (Constant.FREESPACEZ0 / (2 * Constant.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
-        z01 = (377.0 / (2 * Constant.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
-
-        return z01;
     }
 
     public Line getAnaResult() {

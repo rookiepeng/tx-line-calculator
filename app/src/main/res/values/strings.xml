@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">RF Line Calculator</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <!-- error -->
     <string name="Error_W_empty">Error: The \"W\" can\'t be empty.</string>
     <string name="Error_S_empty">Error: The \"S\" can\'t be empty.</string>

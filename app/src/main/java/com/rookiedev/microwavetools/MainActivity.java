@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +26,9 @@ import com.rookiedev.microwavetools.fragments.CSLINFragment;
 import com.rookiedev.microwavetools.fragments.MLINFragment;
 import com.rookiedev.microwavetools.fragments.SLINFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
+
     public static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
     public static final String PREFS_POSITION = "POSITION";
     public static final String PREFS_ISFIRSTRUN = "ISFIRSTRUN";
@@ -41,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        /*
         mDrawerTitle = getTitle();
         mLineTypes = getResources().getStringArray(R.array.line_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -54,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.drawer_list_item, mLineTypes));
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        */
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         readSharedPref();
         mTitle = mLineTypes[pos];
@@ -169,8 +185,8 @@ public class MainActivity extends AppCompatActivity {
         //args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
         fragment.setArguments(args);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        //FragmentManager fragmentManager = getSupportFragmentManager();
+        //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
@@ -219,6 +235,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         pos = Integer.parseInt(prefs.getString(PREFS_POSITION, "0"));
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        return false;
     }
 
     /* The click listner for ListView in the navigation drawer */

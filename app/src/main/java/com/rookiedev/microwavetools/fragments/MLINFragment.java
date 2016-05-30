@@ -30,21 +30,21 @@ import com.rookiedev.microwavetools.libs.MLIN;
 import java.math.BigDecimal;
 
 public class MLINFragment extends Fragment {
-    public final static String MLIN_W = "MLIN_W";
-    public final static String MLIN_W_UNIT = "MLIN_W_UNIT";
-    public final static String MLIN_L = "MLIN_L";
-    public final static String MLIN_L_UNIT = "MLIN_L_UNIT";
-    public final static String MLIN_Z0 = "MLIN_Z0";
-    public final static String MLIN_Z0_UNIT = "MLIN_Z0_UNIT";
-    public final static String MLIN_Eeff = "MLIN_Eeff";
-    public final static String MLIN_Eeff_UNIT = "MLIN_Eeff_UNIT";
-    public final static String MLIN_Freq = "MLIN_Freq";
-    public final static String MLIN_Freq_UNIT = "MLIN_Freq_UNIT";
-    public final static String MLIN_er = "MLIN_er";
-    public final static String MLIN_H = "MLIN_H";
-    public final static String MLIN_H_UNIT = "MLIN_H_UNIT";
-    public final static String MLIN_T = "MLIN_T";
-    public final static String MLIN_T_UNIT = "MLIN_T_UNIT";
+    private final static String MLIN_W = "MLIN_W";
+    private final static String MLIN_W_UNIT = "MLIN_W_UNIT";
+    private final static String MLIN_L = "MLIN_L";
+    private final static String MLIN_L_UNIT = "MLIN_L_UNIT";
+    private final static String MLIN_Z0 = "MLIN_Z0";
+    private final static String MLIN_Z0_UNIT = "MLIN_Z0_UNIT";
+    private final static String MLIN_Eeff = "MLIN_Eeff";
+    private final static String MLIN_Eeff_UNIT = "MLIN_Eeff_UNIT";
+    private final static String MLIN_Freq = "MLIN_Freq";
+    private final static String MLIN_Freq_UNIT = "MLIN_Freq_UNIT";
+    private final static String MLIN_er = "MLIN_er";
+    private final static String MLIN_H = "MLIN_H";
+    private final static String MLIN_H_UNIT = "MLIN_H_UNIT";
+    private final static String MLIN_T = "MLIN_T";
+    private final static String MLIN_T_UNIT = "MLIN_T_UNIT";
     private View rootView;
     private SpannableString error_er, error_Z0;
     private int DecimalLength; // the length of the Decimal, accurate of the result
@@ -348,7 +348,7 @@ public class MLINFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
-        String mlin_W, mlin_T, mlin_H, mlin_epsilon, mlin_L, mlin_Z0, mlin_Eeff, mlin_Freq, mlin_mu;
+        String mlin_W, mlin_T, mlin_H, mlin_epsilon, mlin_L, mlin_Z0, mlin_Eeff, mlin_Freq;
         String mlin_W_unit, mlin_L_unit, mlin_T_unit, mlin_H_unit, mlin_Z0_unit, mlin_Eeff_unit, mlin_Freq_unit;
 
         SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
