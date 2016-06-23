@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24'
+    buildToolsVersion '24.0.0'
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 24
         versionCode 10
         versionName "3.0"
@@ -30,7 +30,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.0.0'
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.google.android.gms:play-services:9.0.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha3'
     compile 'com.android.support:design:24.0.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

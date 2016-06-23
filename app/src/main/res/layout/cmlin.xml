@@ -2,13 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/windowBackground"
     android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:attr/windowBackground">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,7 +75,8 @@
                             android:layout_centerVertical="true"
                             android:layout_marginRight="100dip"
                             android:layout_toRightOf="@+id/cmlin_text_W"
-                            android:inputType="numberDecimal">
+                            android:inputType="numberDecimal"
+                            style="@style/Widget.AppCompat.EditText">
 
                             <!-- <requestFocus /> -->
                         </EditText>
@@ -88,8 +87,10 @@
                             android:id="@+id/cmlin_spinner_W"
                             android:layout_width="100dip"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true"
+                            style="@style/Base.Widget.AppCompat.Spinner.Underlined"/>
                     </RelativeLayout>
 
                     <RelativeLayout
