@@ -1,8 +1,5 @@
 package com.rookiedev.microwavetools.libs;
 
-/**
- * Created by rookie on 9/30/2015.
- */
 public class Line {
     public static final int MLIN = 1, CMLIN =2;
     public static final int SYN_W = 0, SYN_H = 1, SYN_Er = 2, SYN_L = 3;

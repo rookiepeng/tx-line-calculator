@@ -1,6 +1,5 @@
 package com.rookiedev.microwavetools;
 
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -8,10 +7,11 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,10 +32,9 @@ public class MainActivity extends AppCompatActivity
     public static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
     private static final String PREFS_POSITION = "POSITION";
     private static final String PREFS_ISFIRSTRUN = "ISFIRSTRUN";
-    public static final String PREFS_MLIN = "MLIN";
     private int pos;
     private DrawerLayout drawer;
-    private Fragment fragment=null;
+    private Fragment fragment = null;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private FragmentManager fragmentManager;
@@ -68,15 +67,13 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                if (fragment!=null){
+                if (fragment != null) {
                     getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
-
-
 
                     //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-                    transaction.replace(R.id.content_frame,fragment);
+                    transaction.replace(R.id.content_frame, fragment);
                     //transaction.addToBackStack(null);
                     transaction.commit();
 
@@ -194,22 +191,22 @@ public class MainActivity extends AppCompatActivity
         //fragmentManager.beginTransaction().remove(fragment).commit();
         if (id == R.id.nav_mlin) {
             fragment = new MLINFragment();
-            pos=0;
+            pos = 0;
         } else if (id == R.id.nav_cmlin) {
             fragment = new CMLINFragment();
-            pos=1;
+            pos = 1;
         } else if (id == R.id.nav_slin) {
             fragment = new SLINFragment();
-            pos=2;
+            pos = 2;
         } else if (id == R.id.nav_cslin) {
             fragment = new CSLINFragment();
-            pos=3;
+            pos = 3;
         } else if (id == R.id.nav_cpwg) {
             fragment = new CPWFragment();
-            pos=4;
+            pos = 4;
         } else if (id == R.id.nav_coax) {
             fragment = new COAXFragment();
-            pos=5;
+            pos = 5;
         } else {
             fragment = new MLINFragment();
         }
@@ -220,25 +217,25 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void initFragment(int item){
-        if (item==0) {
+    private void initFragment(int item) {
+        if (item == 0) {
             fragment = new MLINFragment();
-            pos=0;
-        } else if (item==1) {
+            pos = 0;
+        } else if (item == 1) {
             fragment = new CMLINFragment();
-            pos=1;
-        } else if (item==2) {
+            pos = 1;
+        } else if (item == 2) {
             fragment = new SLINFragment();
-            pos=2;
-        } else if (item==3) {
+            pos = 2;
+        } else if (item == 3) {
             fragment = new CSLINFragment();
-            pos=3;
-        } else if (item==4) {
+            pos = 3;
+        } else if (item == 4) {
             fragment = new CPWFragment();
-            pos=4;
-        } else if (item==5) {
+            pos = 4;
+        } else if (item == 5) {
             fragment = new COAXFragment();
-            pos=5;
+            pos = 5;
         } else {
             fragment = new MLINFragment();
         }

@@ -1,8 +1,5 @@
 package com.rookiedev.microwavetools.libs;
 
-/**
- * Created by rookie on 9/29/2015.
- */
 public class Constant {
     /* free space speed of light, meters/second */
     public static double LIGHTSPEED = 2.99792458e8;
