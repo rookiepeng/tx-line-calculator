@@ -385,35 +385,7 @@ public class CMLIN {
    * EFF is the frequency dependent relative dielectric constant for a
    * single microstrip given in Kirschning and Jansen (EL)
    */
-        R13 = 0.9408 * (Math.pow(EFF, R8)) - 0.9603;/*
-        #ifdef DEBUG_SYN
-        printf("coupled_microstrip_syn(): -------- Coupled_Microstrip Synthesis ----------\n");
-        printf("coupled_microstrip_syn(): Metal width                 = %g %s\n",
-                line->w/line->units_lwst->sf, line->units_lwst->name);
-        printf("coupled_microstrip_syn(): Metal spacing               = %g %s\n",
-                line->s/line->units_lwst->sf, line->units_lwst->name);
-        printf("coupled_microstrip_syn(): Metal thickness             = %g %s\n",
-                line->subs->tmet/line->units_lwst->sf, line->units_lwst->name);
-        printf("coupled_microstrip_syn(): Metal relative resistivity  = %g %s\n",
-                line->subs->rho/line->units_rho->sf, line->units_rho->name);
-        printf("coupled_microstrip_syn(): Metal surface roughness     = %g %s-rms\n",
-                line->subs->rough/line->units_rough->sf, line->units_rough->name);
-        printf("coupled_microstrip_syn(): Substrate thickness         = %g %s\n",
-                line->subs->h/line->units_lwst->sf, line->units_lwst->name);
-        printf("coupled_microstrip_syn(): Substrate dielectric const. = %g \n",
-                line->subs->er);
-        printf("coupled_microstrip_syn(): Substrate loss tangent      = %g \n",
-                line->subs->tand);
-        printf("coupled_microstrip_syn(): Frequency                   = %g %s\n",
-                line->freq/line->units_freq->sf, line->units_freq->name);
-        printf("coupled_microstrip_syn(): -------------- ---------------------- ----------\n");
-        printf("coupled_microstrip_syn(): Desired Zo                  = %g ohm\n", line->z0);
-        printf("coupled_microstrip_syn(): Desired k                   = %g \n", line->k);
-        printf("coupled_microstrip_syn(): Desired Even Mode Zo        = %g ohm\n", line->z0e);
-        printf("coupled_microstrip_syn(): Desired Odd Mode Zo         = %g ohm\n", line->z0o);
-        printf("coupled_microstrip_syn(): Desired electrical length   = %g degrees\n",line->len);
-        printf("coupled_microstrip_syn(): -------------- ---------------------- ----------\n");
-        #endif*/
+        R13 = 0.9408 * (Math.pow(EFF, R8)) - 0.9603;
 
         R14 = (0.9408 - R9) * Math.pow(EF, R8) - 0.9603;
         R15 = 0.707 * R10 * (Math.pow((frequencyToHeight / 12.3), 1.097));
