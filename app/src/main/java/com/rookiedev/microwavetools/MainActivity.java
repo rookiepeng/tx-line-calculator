@@ -1,5 +1,6 @@
 package com.rookiedev.microwavetools;
 
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -70,7 +71,15 @@ public class MainActivity extends AppCompatActivity
                 if (fragment!=null){
                     getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
 
-                    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+
+                    //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment);
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                    transaction.replace(R.id.content_frame,fragment);
+                    //transaction.addToBackStack(null);
+                    transaction.commit();
+
                 }
             }
 
@@ -182,7 +191,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        fragmentManager.beginTransaction().remove(fragment).commit();
+        //fragmentManager.beginTransaction().remove(fragment).commit();
         if (id == R.id.nav_mlin) {
             fragment = new MLINFragment();
             pos=0;
@@ -204,8 +213,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             fragment = new MLINFragment();
         }
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+        //Bundle args = new Bundle();
+        //fragment.setArguments(args);
         drawer.closeDrawer(GravityCompat.START);
 
         return true;

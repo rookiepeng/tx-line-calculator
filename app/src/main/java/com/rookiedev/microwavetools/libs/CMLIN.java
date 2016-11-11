@@ -122,8 +122,6 @@ public class CMLIN {
         use_z0k = usez0k;
     }
 
-    /*function [z0e,z0o,len,loss,kev,kodd,deltale,deltalo]=cmlicalc(w,l,s,f,subs,flag)*/
-
     /*
      * Effective dielectric constant from Hammerstad and Jensen
      */
