@@ -73,6 +73,8 @@ package com.rookiedev.microwavetools.libs;
  * code and one in mine.  A win for everyone!
  */
 
+import android.util.Log;
+
 /**
  *  calculates:
  *    w     = microstrip line width (mils)
@@ -109,10 +111,8 @@ package com.rookiedev.microwavetools.libs;
 
 public class CMLIN {
     private boolean use_z0k;
-    private Line CMLINLine;
 
-    public CMLIN(Line CMLINLine, boolean usez0k) {
-        this.CMLINLine = CMLINLine;
+    public CMLIN(boolean usez0k) {
         use_z0k = usez0k;
     }
 
@@ -148,7 +148,7 @@ public class CMLIN {
         return z01;
     }
 
-    private Line Analysis(Line CMLINLine, int do_loss) {
+    private Line Analysis(Line CMLINLine) {
 
         // input physical dimensions
         double width, length, space;
@@ -180,13 +180,6 @@ public class CMLIN {
         // even/odd mode open end correction lengths
         double deltale, deltalo;
         double fnold;
-        // for skindepth calculation
-        double mu, sigma, depth;
-        // even and odd mode conductor and dielectric losses in nepers/meter
-        double alpha_c_even, alpha_c_odd, alpha_d_even, alpha_d_odd;
-        double Ko, Rs, lc, Res, delta, Q_c_even, Q_c_odd;
-        // correction factor for surface roughness
-        double rough_factor;
         double frequency;
 
         width = CMLINLine.getMetalWidth();
@@ -197,14 +190,6 @@ public class CMLIN {
         height = CMLINLine.getSubHeight();
         // Substrate relative permittivity
         dielectric = CMLINLine.getSubEpsilon();
-        // Metal resistivity
-        resistivity = CMLINLine.getRho();
-        // Loss tangent of the dielectric material
-        lossTangent = CMLINLine.getTand();
-        // Metal thickness
-        thickness = CMLINLine.getMetalThick();
-        // subs(6) = Metalization roughness
-        roughness = CMLINLine.getRough();
 
         // Start of coupled microstrip calculations
         // Find widthToHeight and correction factor for nonzero metal thickness
@@ -332,7 +317,6 @@ public class CMLIN {
 
 
         /** relative permittivity including dispersion of single microstrip of width W, Tmet=0. Kirschning and Jansen (EL) **/
-
         // normalized frequency (GHz-cm)
         // save fn
         fnold = frequencyToHeight;
@@ -353,7 +337,6 @@ public class CMLIN {
         frequencyToHeight = fnold;
 
         /** Characteristic Impedance of single strip, Width=W, Tmet=0. Jansen and Kirschning **/
-
         // normalized frequency (GHz-mm)
         // save fn
         fnold = frequencyToHeight;
@@ -488,171 +471,6 @@ public class CMLIN {
         // convert to degrees
         electricalLength = 360.0 * electricalLength;
 
-        // Dielectric Losses
-        // loss in nepers/meter
-        if (dielectric > 1.0) {
-            CMLINLine.setLossLenEven((Constant.Pi * frequency * Math.sqrt(EFE0) / Constant.LIGHTSPEED) * (dielectric / EFE0) * ((EFE0 - 1.0) / (dielectric - 1.0)) * lossTangent);
-            CMLINLine.setLossLenOdd((Constant.Pi * frequency * Math.sqrt(EFO0) / Constant.LIGHTSPEED) * (dielectric / EFO0) * ((EFO0 - 1.0) / (dielectric - 1.0)) * lossTangent);
-        } else {
-            // XXX verify this one
-            CMLINLine.setLossLenEven(0.0);
-            CMLINLine.setLossLenOdd(0.0);
-        }
-        // remember these two for later
-        alpha_d_even = CMLINLine.getLossLenEven();
-        alpha_d_odd = CMLINLine.getLossLenOdd();
-
-        // calculate skin depth
-        // conductivity
-        sigma = 1.0 / resistivity;
-        // permeability of free space Henries/meter
-        mu = 4.0 * Constant.Pi * 1e-7;
-        // skin depth in meters
-        depth = Math.sqrt(1.0 / (Constant.Pi * frequency * mu * sigma));
-        // warn the user if the loss calc is suspect.g
-        if (thickness > 0.0 && thickness < 3.0 * depth) {
-            //alert("Warning:  The metal thickness is less than\n"
-            //        "three skin depths.  Use the loss results with\n"
-            //       "caution.\n");
-        }
-  /*
-   * if the skinDepth is greater than Tmet, assume current
-   * flows uniformly through  the conductor.  Then loss
-   * is just calculated from the dc resistance of the
-   * trace.  This is somewhat
-   * suspect, but I dont have time right now to come up
-   * with a better result.
-   */
-        alpha_c_even = 0.0;
-        alpha_c_odd = 0.0;
-        delta = depth;
-        lc = 0.0;
-        if (do_loss == Constant.LOSSY) {
-            if (3.0 * depth <= thickness &&
-                    3.0 * depth <= width) {
-                // Find the current distribution factor.  This is (39) from Hammerstad and Jensen.
-                Ko = Math.exp(-1.2 * Math.pow(Math.sqrt(dielectric) * (z0e0 + z0o0) / (2.0 * Constant.FREESPACEZ0), 0.7));
-                // skin resistance
-                Rs = 1.0 / (sigma * depth);
-    /*
-     * Inductive quality factor (34) from Hammerstand and Jensen
-	 *
-	 * FIXME -- should these be the impedances with or without
-	 * dispersion?  Does is really matter that much for a loss
-	 * calculation which I think in general may be a little less accurate?
-	 *
-	 * The impedance here is the impedance in a homogeneous
-	 * dielectric.  See (1) and (8) in Hammerstad and Jensen.
-	 */
-                Q_c_even = (Constant.Pi * z0e0 * Math.sqrt(EFEF) * height * frequency / (Rs * Constant.LIGHTSPEED)) * (widthToHeight / Ko);
-                Q_c_odd = (Constant.Pi * z0o0 * Math.sqrt(EFOF) * height * frequency / (Rs * Constant.LIGHTSPEED)) * (widthToHeight / Ko);
-
-	/*
-     * (38) from Hammerstad and Jensen says (after converting to
-	 * nepers/meter)
-	 * alpha_c = pi * lightpeed / (Q * f * sqrt(keff)
-	 *         = pi * lambda_g / Q where lambda_g is the guided
-	 * wavelength
-	 *
-	 * However, I think they have the lambda_g on the wrong side
-	 *
-	 */
-                alpha_c_even = Constant.Pi * frequency * Math.sqrt(EFEF) / (Q_c_even * Constant.LIGHTSPEED);
-                alpha_c_odd = Constant.Pi * frequency * Math.sqrt(EFOF) / (Q_c_odd * Constant.LIGHTSPEED);
-
-	/*
-     * Instead try out Wheelers incremental inductance rule
-	 * for some reason, I'm getting more loss (almost a factor of
-	 * 2) from the above formulation.  Using the incremental
-	 * inductance approach below, I get an answer which is close
-	 * to single microstrip when I make the spacing between traces
-	 * wide.  Until I can get an electromagnetic solver going, go
-	 * with the incremental inductance approach.
-	 */
-                Line tmp_line;
-                double z1e, z1o, z2e, z2o;
-
-                // clone the line
-                tmp_line = CMLINLine;
-                //tmp_line.subs = microstrip_subs_new();
-                //*(tmp_line.subs) =*(line -> subs);
-
-                //tmp_line.subs->er = 1.0;
-                tmp_line.setSubEpsilon(1.0);
-                tmp_line = Analysis(tmp_line, 0);
-                //z1e = tmp_line.z0e;
-                z1e = tmp_line.getImpedanceEven();
-                //z1o = tmp_line.z0o;
-                z1o = tmp_line.getImpedanceOdd();
-
-
-                tmp_line.setMetalWidth(tmp_line.getMetalWidth() - depth, Line.LUnitm);
-                tmp_line.setMetalSpace(tmp_line.getMetalSpace() + depth, Line.LUnitm);
-                //tmp_line.subs->tmet = line -> subs -> tmet - depth;
-                tmp_line.setMetalThick(tmp_line.getMetalThick() - depth, Line.LUnitm);
-                //tmp_line.subs->h = line -> subs -> h + depth;
-                tmp_line.setSubHeight(tmp_line.getSubHeight() + depth, Line.LUnitm);
-                tmp_line = Analysis(tmp_line, Constant.LOSSLESS);
-                //z2e = tmp_line.z0e;
-                z2e = tmp_line.getImpedanceEven();
-                //z2o = tmp_line.z0o;
-                z2o = tmp_line.getImpedanceOdd();
-
-                //free(tmp_line.subs);
-
-                // conduction losses, nepers per meter
-                alpha_c_even = (Constant.Pi * frequency / Constant.LIGHTSPEED) * (z2e - z1e) / z0ef;
-                alpha_c_odd = (Constant.Pi * frequency / Constant.LIGHTSPEED) * (z2o - z1o) / z0of;
-
-                if (z2e > z1e) {
-                    //printf("%s():  Q_c_even (via incremental inductance) = %g\n", __FUNCTION__, sqrt(EFEF) * z0ef / (z2e - z1e));
-                } else {
-                    //printf("%s():  Q_c_even (via incremental inductance) = Infinite\n", __FUNCTION__);
-                }
-                if (z2o > z1o) {
-                    //printf("%s():  Q_c_odd  (via incremental inductance) = %g\n", __FUNCTION__, sqrt(EFOF) * z0of / (z2o - z1o));
-                } else {
-                    //printf("%s():  Q_c_odd  (via incremental inductance) = Infinite\n", __FUNCTION__);
-                }
-                //#endif
-            }
-            // "dc" case
-            else if (thickness > 0.0) {
-                // resistance per meter = 1/(Area*conductivity)
-                Res = 1 / (width * thickness * sigma);
-
-                // conduction losses, nepers per meter
-                alpha_c_even = Res / (2.0 * z0e0);
-                ;
-                alpha_c_odd = Res / (2.0 * z0o0);
-                lc = Res / (2.0 * Math.sqrt(z0e0 * z0o0));
-
-                // dB/meter
-                lc = 20.0 * Math.log10(Math.exp(1.0)) * lc;
-
-                // change delta to be equal to the metal thickness fo use in surface roughness correction
-                delta = thickness;
-
-                // no conduction loss case
-            } else {
-                lc = 0.0;
-            }
-        }
-        // loss in dB
-        lc = lc * length;
-
-  /* factor due to surface roughness
-   * note that the equation in Fooks and Zakarevicius is slightly
-   * errored.
-   * the correct equation is penciled in my copy and was
-   * found in Hammerstad and Bekkadal as well as Hammerstad and Jensen
-   */
-        // XXX this was roughmil/delta double check it
-        rough_factor = 1.0 + (2.0 / Constant.Pi) * Math.atan(1.4 * Math.pow((roughness / delta), 2.0));
-        lc = lc * rough_factor;
-        alpha_c_even = alpha_c_even * rough_factor;
-        alpha_c_odd = alpha_c_odd * rough_factor;
-
         // Single Line End correction (Kirschning, Jansen, and Koster)
         // deltal(2u,er) (per Kirschning and Jansen (MTT) notation)
         uold = widthToHeight;
@@ -685,7 +503,6 @@ public class CMLIN {
         deltale = (d2 - d1 + 0.0198 * height * Math.pow(spaceToHeight, R1)) * Math.exp(-0.328 * Math.pow(spaceToHeight, 2.244)) + d1;
         deltalo = (d1 - height * R3) * (1.0 - Math.exp(-R4)) + height * R3;
 
-        // [z0e,z0o,len,loss,kev,kodd]=cmlicalc(w,l,s,f,subs)
         // copy over the results
         CMLINLine.setImpedanceEven(z0ef);
         CMLINLine.setImpedanceOdd(z0of);
@@ -701,30 +518,10 @@ public class CMLIN {
         // electrical length
         CMLINLine.setElectricalLength(electricalLength);
 
-        // skin depth in m
-        CMLINLine.setSkinDepth(depth);
-
-        // incremental circuit model
-        CMLINLine.setLEven(CMLINLine.getImpedanceEven() * Math.sqrt(CMLINLine.getkEven()) / Constant.LIGHTSPEED);
-        CMLINLine.setCEven(Math.sqrt(CMLINLine.getkEven()) / (CMLINLine.getImpedanceEven() * Constant.LIGHTSPEED));
-        CMLINLine.setLOdd(CMLINLine.getImpedanceOdd() * Math.sqrt(CMLINLine.getkOdd()) / Constant.LIGHTSPEED);
-        CMLINLine.setCOdd(Math.sqrt(CMLINLine.getkOdd()) / (CMLINLine.getImpedanceOdd() * Constant.LIGHTSPEED));
-        CMLINLine.setREven(alpha_c_even * 2.0 * z0ef);
-        CMLINLine.setGEven(2.0 * alpha_d_even / z0ef);
-        CMLINLine.setROdd(alpha_c_odd * 2.0 * z0of);
-        CMLINLine.setGOdd(2.0 * alpha_d_odd / z0of);
-
-        // loss in dB/meter
-        CMLINLine.setLossLenEven(20.0 * Math.log10(Math.exp(1.0)) * (alpha_c_even + alpha_d_even));
-        CMLINLine.setLossLenOdd(20.0 * Math.log10(Math.exp(1.0)) * (alpha_c_odd + alpha_d_odd));
-
-        // loss in dB
-        CMLINLine.setLossEven(length * CMLINLine.getLossLenEven());
-        CMLINLine.setLossOdd(length * CMLINLine.getLossLenOdd());
         return CMLINLine;
     }
 
-    private int Synthesize() {
+    private Line Synthesize(Line CMLINLine) {
 
         double h, er, l, wmin, wmax, abstol, reltol;
         int maxiters;
@@ -770,6 +567,7 @@ public class CMLIN {
         //z0o = line->z0o;
         z0o = CMLINLine.getImpedanceOdd();
 
+        // TODO check z0e<z0o app crash, (k>0)
         if (use_z0k) {
     /* use z0 and k to calculate z0e and z0o */
             z0o = z0 * Math.sqrt((1.0 - k) / (1.0 + k));
@@ -780,6 +578,7 @@ public class CMLIN {
     /* use z0e and z0o to calculate z0 and k */
             z0 = Math.sqrt(z0e * z0o);
             k = (z0e - z0o) / (z0e + z0o);
+            Log.v("CMLIN", "k=" + Double.toString(k));
             CMLINLine.setImpedance(z0);
             CMLINLine.setCouplingFactor(k);
         }
@@ -853,7 +652,7 @@ public class CMLIN {
             CMLINLine.setMetalWidth(w, Line.LUnitm);
             CMLINLine.setMetalSpace(s, Line.LUnitm);
       /* don't bother with loss calculations while we are iterating */
-            CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
+            CMLINLine = Analysis(CMLINLine);
 
             ze0 = CMLINLine.getImpedanceEven();
             zo0 = CMLINLine.getImpedanceOdd();
@@ -866,13 +665,13 @@ public class CMLIN {
     /* approximate the first jacobian */
                 CMLINLine.setMetalWidth(w + delta, Line.LUnitm);
                 CMLINLine.setMetalSpace(s, Line.LUnitm);
-                CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
+                CMLINLine = Analysis(CMLINLine);
                 ze1 = CMLINLine.getImpedanceEven();
                 zo1 = CMLINLine.getImpedanceOdd();
 
                 CMLINLine.setMetalWidth(w, Line.LUnitm);
                 CMLINLine.setMetalSpace(s + delta, Line.LUnitm);
-                CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
+                CMLINLine = Analysis(CMLINLine);
                 ze2 = CMLINLine.getImpedanceEven();
                 zo2 = CMLINLine.getImpedanceOdd();
 
@@ -895,7 +694,7 @@ public class CMLIN {
 
         CMLINLine.setMetalWidth(w, Line.LUnitm);
         CMLINLine.setMetalSpace(s, Line.LUnitm);
-        CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
+        CMLINLine = Analysis(CMLINLine);
 
   /* scale the line length to get the desired electrical length */
         CMLINLine.setMetalLength(CMLINLine.getMetalLength() * electricalLength / CMLINLine.getElectricalLength(), Line.LUnitm);
@@ -903,18 +702,16 @@ public class CMLIN {
   /*
    * one last calculation and this time we find the loss too.
    */
-        CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
+        CMLINLine = Analysis(CMLINLine);
 
-        return (0);
-    }
-
-    public Line getAnaResult() {
-        CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
         return CMLINLine;
     }
 
-    public Line getSynResult() {
-        Synthesize();
-        return CMLINLine;
+    public Line getAnaResult(Line CMLINLine) {
+        return Analysis(CMLINLine);
+    }
+
+    public Line getSynResult(Line CMLINLine) {
+        return Synthesize(CMLINLine);
     }
 }

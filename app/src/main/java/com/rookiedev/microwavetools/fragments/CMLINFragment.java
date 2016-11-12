@@ -24,9 +24,6 @@ import com.rookiedev.microwavetools.libs.Line;
 
 import java.math.BigDecimal;
 
-/**
- * Created by rookie on 8/11/13.
- */
 public class CMLINFragment extends Fragment {
     private final static String CMLIN_W = "CMLIN_W";
     private final static String CMLIN_W_UNIT = "CMLIN_W_UNIT";
@@ -110,33 +107,15 @@ public class CMLINFragment extends Fragment {
                     if (edittext_L.length() != 0) {
                         CMLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        CMLIN cmlin = new CMLIN(CMLINLine, use_z0k);
-                        CMLINLine = cmlin.getAnaResult();
-                        //Z0o = Z0_o_f_calc(W, 0, S, H, T, er, Freq);
-                        //Z0e = Z0_e_f_calc(W, 0, S, H, T, er, Freq);
-                        //CMLINLine.setImpedance(Math.sqrt(CMLINLine.getImpedanceEven() * CMLINLine.getImpedanceOdd())); // calculate the Z0
-                        //CMLINLine.setCouplingFactor((CMLINLine.getImpedanceEven() - CMLINLine.getImpedanceOdd())/(CMLINLine.getImpedanceEven() + CMLINLine.getImpedanceOdd()));
-                        //k = (Z0e - Z0o) / (Z0e + Z0o);
-                        // Z0=ZL_thickness(W,H,epsilon,Freq);
-                        // Z0=Wr( W, H, T,epsilon);
-                        // edittext_Z0.setText(String.valueOf(Z0));
+                        CMLIN cmlin = new CMLIN(use_z0k);
+                        CMLINLine = cmlin.getAnaResult(CMLINLine);
 
-                        //Eeff = cmlin.getEeff(); // calculate the Eeff
                         BigDecimal Eeff_temp = new BigDecimal(CMLINLine.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
-                        CMLIN cmlin = new CMLIN(CMLINLine, use_z0k);
-                        CMLINLine = cmlin.getAnaResult();
-                        //Z0o = cmlin.getZ0o();
-                        //Z0e = cmlin.getZ0e();
-                        //Z0o = Z0_o_f_calc(W, 0, S, H, T, er, Freq);
-                        //Z0e = Z0_e_f_calc(W, 0, S, H, T, er, Freq);
-                        //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
-                        //k = (Z0e - Z0o) / (Z0e + Z0o);
-                        // Z0=ZL_thickness(W,H,epsilon,Freq);
-                        // Z0=Wr( W, H, T,epsilon);
-                        // edittext_Z0.setText(String.valueOf(Z0));
+                        CMLIN cmlin = new CMLIN(use_z0k);
+                        CMLINLine = cmlin.getAnaResult(CMLINLine);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
 
                     }
@@ -175,8 +154,6 @@ public class CMLINFragment extends Fragment {
                     synthesizeButton();
                     if (use_z0k) {
                         double Z0e,Z0o;
-                        //Z0o = Z0 * Math.sqrt((1.0 - k) / (1.0 + k));
-                        //Z0e = Z0 * Math.sqrt((1.0 + k) / (1.0 - k));
 
                         BigDecimal Z0o_temp = new BigDecimal(CMLINLine.getImpedanceOdd());
                         Z0o = Z0o_temp.setScale(DecimalLength,
@@ -189,8 +166,6 @@ public class CMLINFragment extends Fragment {
                         edittext_Z0e.setText(String.valueOf(Z0e));
                     } else {
                         double Z0,k;
-                        //Z0 = Math.sqrt(Z0e * Z0o);
-                        //k = (Z0e - Z0o) / (Z0e + Z0o);
 
                         BigDecimal Z0_temp = new BigDecimal(CMLINLine.getImpedance());
                         Z0 = Z0_temp.setScale(DecimalLength,
@@ -223,7 +198,8 @@ public class CMLINFragment extends Fragment {
         text_Z0e = (TextView) rootView.findViewById(R.id.cmlin_text_Z0e);
 
         SpannableString spanEr = new SpannableString(
-                this.getString(R.string.text_er));
+                this.getString(R.string.text_er));                        //Z0 = Math.sqrt(Z0e * Z0o);
+                        //k = (Z0e - Z0o) / (Z0e + Z0o);
         spanEr.setSpan(new SubscriptSpan(), 1, 2,
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_er.append(spanEr);
@@ -496,7 +472,7 @@ public class CMLINFragment extends Fragment {
         editor.putString(CMLIN_T_UNIT, cmlin_T_unit);
         editor.putString(CMLIN_USEZ0k, cmlin_use_z0k);
 
-        editor.commit();
+        editor.apply();
     }
 
     private boolean analysisInputCheck() {
@@ -585,61 +561,24 @@ public class CMLINFragment extends Fragment {
             CMLINLine.setCouplingFactor(Double.parseDouble(edittext_k.getText().toString()));
             CMLINLine.setImpedanceOdd(0);
             CMLINLine.setImpedanceEven(0);
-            //Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
-            //k = Double.parseDouble(edittext_k.getText().toString());
-            //Z0o = 0;
-            //Z0e = 0;
         } else {
             CMLINLine.setImpedanceEven(Double.parseDouble(edittext_Z0e.getText().toString()));
             CMLINLine.setImpedanceOdd(Double.parseDouble(edittext_Z0o.getText().toString()));
             CMLINLine.setImpedance(0);
             CMLINLine.setCouplingFactor(0);
-            //Z0e = Double.parseDouble(edittext_Z0e.getText().toString());
-            //Z0o = Double.parseDouble(edittext_Z0o.getText().toString());
-            //Z0 = 0;
-            //k = 0;
         }
 
         CMLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),spinner_Freq.getSelectedItemPosition());
         CMLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
         CMLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),spinner_H.getSelectedItemPosition());
         CMLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),spinner_T.getSelectedItemPosition());
-        //Freq = Double.parseDouble(edittext_Freq.getText().toString());
-        //er = Double.parseDouble(edittext_er.getText().toString());
-        //H = Double.parseDouble(edittext_H.getText().toString());
-        //T = Double.parseDouble(edittext_T.getText().toString());
-
-        /*temp = spinner_Freq.getSelectedItemPosition(); // convert the unit to Hz
-        if (temp == 0) {
-            Freq = Freq * 1000000;
-        } else if (temp == 1) {
-            Freq = Freq * 1000000000;
-        }
-
-        temp = spinner_H.getSelectedItemPosition(); // convert the unit to metre
-        if (temp == 0) {
-            H = H / 39370.0787402;
-        } else if (temp == 1) {
-            H = H / 1000;
-        } else if (temp == 2) {
-            H = H / 100;
-        }
-
-        temp = spinner_T.getSelectedItemPosition(); // convert the unit to metre
-        if (temp == 0) {
-            T = T / 39370.0787402;
-        } else if (temp == 1) {
-            T = T / 1000;
-        } else if (temp == 2) {
-            T = T / 100;
-        }*/
 
         double W, S, L;
         if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
             CMLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
             //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-            CMLIN cmlin = new CMLIN(CMLINLine,use_z0k);
-            CMLINLine=cmlin.getSynResult();
+            CMLIN cmlin = new CMLIN(use_z0k);
+            CMLINLine=cmlin.getSynResult(CMLINLine);
             //cmlin.cmlin_syn();
             L=CMLINLine.getMetalLength();
             W=CMLINLine.getMetalWidth();
@@ -662,8 +601,8 @@ public class CMLINFragment extends Fragment {
                     .doubleValue();
             edittext_L.setText(String.valueOf(L));
         } else {
-            CMLIN cmlin = new CMLIN(CMLINLine, use_z0k);
-            CMLINLine=cmlin.getSynResult();
+            CMLIN cmlin = new CMLIN(use_z0k);
+            CMLINLine=cmlin.getSynResult(CMLINLine);
             //cmlin.cmlin_syn();
             W=CMLINLine.getMetalWidth();
             S=CMLINLine.getMetalSpace();

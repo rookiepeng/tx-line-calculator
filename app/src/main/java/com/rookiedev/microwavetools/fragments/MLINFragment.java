@@ -94,8 +94,8 @@ public class MLINFragment extends Fragment {
                     if (edittext_L.length() != 0) { // check the L input
                         MLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()),
                                 spinner_L.getSelectedItemPosition());
-                        MLIN mlin = new MLIN(MLINLine);
-                        MLINLine = mlin.getAnaResult();
+                        MLIN mlin = new MLIN();
+                        MLINLine = mlin.getAnaResult(MLINLine);
 
                         BigDecimal Z0_temp = new BigDecimal(MLINLine.getImpedance());
                         double Z0 = Z0_temp.setScale(DecimalLength,
@@ -109,8 +109,8 @@ public class MLINFragment extends Fragment {
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
-                        MLIN mlin = new MLIN(MLINLine);
-                        MLINLine = mlin.getAnaResult();
+                        MLIN mlin = new MLIN();
+                        MLINLine = mlin.getAnaResult(MLINLine);
                         //Z0 = mlin.getZ0();
 
                         BigDecimal Z0_temp = new BigDecimal(MLINLine.getImpedance());
@@ -145,8 +145,8 @@ public class MLINFragment extends Fragment {
                     double W, L;
                     if (edittext_Eeff.length() != 0) {
                         MLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
-                        MLIN mlin = new MLIN(MLINLine);
-                        MLINLine = mlin.getSynResult(Line.SYN_W);
+                        MLIN mlin = new MLIN();
+                        MLINLine = mlin.getSynResult(MLINLine,Line.SYN_W);
                         W = MLINLine.getMetalWidth();
                         //mlin.setW(W);
                         L = MLINLine.getMetalLength();
@@ -163,8 +163,8 @@ public class MLINFragment extends Fragment {
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_L.setText(String.valueOf(L));
                     } else {
-                        MLIN mlin = new MLIN(MLINLine);
-                        MLINLine = mlin.getSynResult(Line.SYN_W);
+                        MLIN mlin = new MLIN();
+                        MLINLine = mlin.getSynResult(MLINLine,Line.SYN_W);
                         W = MLINLine.getMetalWidth();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
