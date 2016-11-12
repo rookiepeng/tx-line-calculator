@@ -148,28 +148,35 @@ public class CMLIN {
         return z01;
     }
 
-    private Line coupledMicrostripAna(Line CMLINLine, int do_loss) {
+    private Line Analysis(Line CMLINLine, int do_loss) {
 
         // input physical dimensions
         double width, length, space;
         // substrate parameters
         double height, dielectric, resistivity, lossTangent, thickness, roughness;
 
-        double widthToHeight, spaceToHeight, deltau, deltau1, deltaur, thicknessToHeight, V, EFE0, EF, AO, BO, CO, DO;
+        double widthToHeight, spaceToHeight, deltau, deltau1, deltaur, thicknessToHeight, V, EFE0, AO, BO, CO, DO;
         double EFO0, frequencyToHeight;
+        double EF; // 0 frequency (static) relative dielectric constant for a single microstrip.
+        double EFF; // frequency dependent relative dielectric constant for a single microstrip given in Kirschning and Jansen (EL)
+        double ZL0; // static single strip, T=0, characteristic impedance (f=0) (Hammerstad and Jensen)
+        double ZLF; // frequency dependent single microstrip characteristic impedance from Jansen and Kirschning.
+        double z0ef, z0of; // even/odd mode impedance at the frequency of interest
+        double electricalLength; // degree
+
+
         double P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15;
-        double FEF, FOF, EFEF, EFOF, ZL0;
+        double FEF, FOF, EFEF, EFOF;
         double Q0, Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14;
         double Q15, Q16, Q17, Q18, Q19, Q20, Q21, Q22, Q23, Q24, Q25, Q26;
         double Q27, Q28, Q29;
         double z0e0, z0o0;
-        double xP1, xP2, xP3, xP4, xP, EFF;
+        double xP1, xP2, xP3, xP4, xP;
         double R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17;
-        double ZLF;
         double RE, QE, PE, DE, CE;
-        // even/odd mode impedance at the frequency of interest
-        double z0ef, z0of;
-        double v, len, uold, z1, z2, z3, z4, z5, d1, d2;
+
+
+        double v, uold, z1, z2, z3, z4, z5, d1, d2;
         // even/odd mode open end correction lengths
         double deltale, deltalo;
         double fnold;
@@ -218,6 +225,7 @@ public class CMLIN {
             //        "For best accuracy 1.0 < er < 18.0"), er);
         }
 
+        /*
         if (thickness > 0.0) {
             // find normalized metal thickness
             thicknessToHeight = thickness / height;
@@ -235,7 +243,7 @@ public class CMLIN {
             deltau = 0.0;
             deltau1 = 0.0;
             deltaur = 0.0;
-        }
+        }*/
 
         // static even mode relative permittivity (f=0)
         // (3) from Kirschning and Jansen (MTT).  Accurate to 0.7 % over
@@ -322,11 +330,8 @@ public class CMLIN {
         Q10 = (Q2 * Q4 - Q5 * Math.exp(Math.log(widthToHeight) * Q6 * (Math.pow(widthToHeight, -Q9)))) / Q2;
         z0o0 = ZL0 * Math.sqrt(EF / EFO0) / (1.0 - (ZL0 / 377.0) * Math.sqrt(EF) * Q10);
 
-  /*
-   * relative permittivity including dispersion
-   * of single microstrip of width W, Tmet=0
-   * Kirschning and Jansen (EL)
-   */
+
+        /** relative permittivity including dispersion of single microstrip of width W, Tmet=0. Kirschning and Jansen (EL) **/
 
         // normalized frequency (GHz-cm)
         // save fn
@@ -347,10 +352,8 @@ public class CMLIN {
         // recall fn
         frequencyToHeight = fnold;
 
-  /*
-   * Characteristic Impedance of single strip, Width=W, Tmet=0
-   * Jansen and Kirschning
-   */
+        /** Characteristic Impedance of single strip, Width=W, Tmet=0. Jansen and Kirschning **/
+
         // normalized frequency (GHz-mm)
         // save fn
         fnold = frequencyToHeight;
@@ -379,12 +382,6 @@ public class CMLIN {
         R12 = 1.0 / (1.0 + 0.00245 * widthToHeight * widthToHeight);
 
         // (4) from Jansen and Kirschning
-  /*
-   * EF is the 0 frequency (static) relative dielectric constant for a
-   * single microstrip.
-   * EFF is the frequency dependent relative dielectric constant for a
-   * single microstrip given in Kirschning and Jansen (EL)
-   */
         R13 = 0.9408 * (Math.pow(EFF, R8)) - 0.9603;
 
         R14 = (0.9408 - R9) * Math.pow(EF, R8) - 0.9603;
@@ -426,12 +423,9 @@ public class CMLIN {
         CE = 1.0 + 1.275 * (1.0 - Math.exp(-0.004625 * PE * Math.pow(dielectric, 1.674) * Math.pow((frequencyToHeight / 18.365), 2.745)))
                 - Q12 + Q16 - Q17 + Q18 + Q20;
 
-  /*
-   * EFF is the single microstrip effective dielectric constant from
-   * Kirschning and Jansen (EL).
-   * Note:  This line contains one of the published corrections.
+  /** Note:  This line contains one of the published corrections.
    * The second EFF from the original paper is replaced by EF.
-   */
+   **/
         if (dielectric > 1.0) {
             z0ef = z0e0
                     * (Math.pow((0.9408 * Math.pow(EFF, CE) - 0.9603), Q0))
@@ -455,7 +449,6 @@ public class CMLIN {
             Q25 = (0.3 * frequencyToHeight * frequencyToHeight / (10.0 + frequencyToHeight * frequencyToHeight))
                     * (1.0 + 2.333 * (Math.pow((dielectric - 1.0), 2.0)) / (5.0 + Math.pow((dielectric - 1.0), 2.0)));
         } else {
-            // it seems that pow(0.0, x) gives a floating exception
             Q29 = 15.16 / (1.0 + 0.196);
             Q28 = 0.149 / (94.5 + 0.038 * 1.0);
             Q27 = 0.4 * Math.pow(spaceToHeight, 0.84)
@@ -491,9 +484,9 @@ public class CMLIN {
         // propagation velocity (meters/sec)
         v = Constant.LIGHTSPEED / Math.sqrt(Math.sqrt(EFEF * EFOF));
         // length in wavelengths
-        len = length / (v / frequency);
+        electricalLength = length / (v / frequency);
         // convert to degrees
-        len = 360.0 * len;
+        electricalLength = 360.0 * electricalLength;
 
         // Dielectric Losses
         // loss in nepers/meter
@@ -554,11 +547,6 @@ public class CMLIN {
                 Q_c_even = (Constant.Pi * z0e0 * Math.sqrt(EFEF) * height * frequency / (Rs * Constant.LIGHTSPEED)) * (widthToHeight / Ko);
                 Q_c_odd = (Constant.Pi * z0o0 * Math.sqrt(EFOF) * height * frequency / (Rs * Constant.LIGHTSPEED)) * (widthToHeight / Ko);
 
-                //#ifdef DEBUG_CALC
-                //printf("%s():  Q_c_even = %g\n", __FUNCTION__, Q_c_even);
-                //printf("%s():  Q_c_odd = %g\n", __FUNCTION__, Q_c_odd);
-                //#endif
-
 	/*
      * (38) from Hammerstad and Jensen says (after converting to
 	 * nepers/meter)
@@ -572,13 +560,6 @@ public class CMLIN {
                 alpha_c_even = Constant.Pi * frequency * Math.sqrt(EFEF) / (Q_c_even * Constant.LIGHTSPEED);
                 alpha_c_odd = Constant.Pi * frequency * Math.sqrt(EFOF) / (Q_c_odd * Constant.LIGHTSPEED);
 
-                //#ifdef DEBUG_CALC
-                //printf("%s():  Even mode conduction loss = %g dB/m\n",
-                //        __FUNCTION__, 20.0 * log10(exp(1.0)) * alpha_c_even);
-                //printf("%s():  Odd mode conduction loss = %g dB/m\n",
-                //        __FUNCTION__, 20.0 * log10(exp(1.0)) * alpha_c_odd);
-                //#endif
-
 	/*
      * Instead try out Wheelers incremental inductance rule
 	 * for some reason, I'm getting more loss (almost a factor of
@@ -589,7 +570,6 @@ public class CMLIN {
 	 * with the incremental inductance approach.
 	 */
                 Line tmp_line;
-                int rslt;
                 double z1e, z1o, z2e, z2o;
 
                 // clone the line
@@ -599,7 +579,7 @@ public class CMLIN {
 
                 //tmp_line.subs->er = 1.0;
                 tmp_line.setSubEpsilon(1.0);
-                tmp_line = coupledMicrostripAna(tmp_line, 0);
+                tmp_line = Analysis(tmp_line, 0);
                 //z1e = tmp_line.z0e;
                 z1e = tmp_line.getImpedanceEven();
                 //z1o = tmp_line.z0o;
@@ -612,7 +592,7 @@ public class CMLIN {
                 tmp_line.setMetalThick(tmp_line.getMetalThick() - depth, Line.LUnitm);
                 //tmp_line.subs->h = line -> subs -> h + depth;
                 tmp_line.setSubHeight(tmp_line.getSubHeight() + depth, Line.LUnitm);
-                tmp_line = coupledMicrostripAna(tmp_line, Constant.LOSSLESS);
+                tmp_line = Analysis(tmp_line, Constant.LOSSLESS);
                 //z2e = tmp_line.z0e;
                 z2e = tmp_line.getImpedanceEven();
                 //z2o = tmp_line.z0o;
@@ -623,13 +603,6 @@ public class CMLIN {
                 // conduction losses, nepers per meter
                 alpha_c_even = (Constant.Pi * frequency / Constant.LIGHTSPEED) * (z2e - z1e) / z0ef;
                 alpha_c_odd = (Constant.Pi * frequency / Constant.LIGHTSPEED) * (z2o - z1o) / z0of;
-
-                //#ifdef DEBUG_CALC
-
-                //printf("%s():  Odd mode conduction loss = %g dB/m (Via Wheelers incremental inductance)\n",
-                //        __FUNCTION__, 20.0 * log10(exp(1.0)) * alpha_c_odd);
-                //printf("%s():  Even mode conduction loss = %g dB/m (Via Wheelers incremental inductance)\n",
-                //        __FUNCTION__, 20.0 * log10(exp(1.0)) * alpha_c_even);
 
                 if (z2e > z1e) {
                     //printf("%s():  Q_c_even (via incremental inductance) = %g\n", __FUNCTION__, sqrt(EFEF) * z0ef / (z2e - z1e));
@@ -680,10 +653,6 @@ public class CMLIN {
         alpha_c_even = alpha_c_even * rough_factor;
         alpha_c_odd = alpha_c_odd * rough_factor;
 
-        //#ifdef DEBUG_CALC
-        //printf("%s():  rough_factor = %g \n", __FUNCTION__, rough_factor);
-        //#endif
-
         // Single Line End correction (Kirschning, Jansen, and Koster)
         // deltal(2u,er) (per Kirschning and Jansen (MTT) notation)
         uold = widthToHeight;
@@ -718,73 +687,51 @@ public class CMLIN {
 
         // [z0e,z0o,len,loss,kev,kodd]=cmlicalc(w,l,s,f,subs)
         // copy over the results
-        //line -> z0e = z0ef;
         CMLINLine.setImpedanceEven(z0ef);
-        //line -> z0o = z0of;
         CMLINLine.setImpedanceOdd(z0of);
-        //line -> z0 = Math.sqrt(z0ef * z0of);
         CMLINLine.setImpedance(Math.sqrt(z0ef * z0of));
-        //line -> kev = EFEF;
         CMLINLine.setkEven(EFEF);
-        //line -> kodd = EFOF;
         CMLINLine.setkOdd(EFOF);
 
         // coupling coefficient
-        //line -> k = (z0ef - z0of) / (z0ef + z0of);
         CMLINLine.setCouplingFactor((z0ef - z0of) / (z0ef + z0of));
         CMLINLine.setDeltalEven(deltale);
-        //line -> deltale = deltale;
-        //line -> deltalo = deltalo;
         CMLINLine.setDeltalOdd(deltalo);
 
         // electrical length
-        //line -> len = len;
-        CMLINLine.setElectricalLength(len);
+        CMLINLine.setElectricalLength(electricalLength);
 
         // skin depth in m
-        //line -> skindepth = depth;
         CMLINLine.setSkinDepth(depth);
 
         // incremental circuit model
-        //line -> Lev = line -> z0e * Math.sqrt(line -> kev) / Constant.LIGHTSPEED;
         CMLINLine.setLEven(CMLINLine.getImpedanceEven() * Math.sqrt(CMLINLine.getkEven()) / Constant.LIGHTSPEED);
-        //line -> Cev = Math.sqrt(line -> kev) / (line -> z0e * Constant.LIGHTSPEED);
         CMLINLine.setCEven(Math.sqrt(CMLINLine.getkEven()) / (CMLINLine.getImpedanceEven() * Constant.LIGHTSPEED));
-        //line -> Lodd = line -> z0o * Math.sqrt(line -> kodd) / Constant.LIGHTSPEED;
         CMLINLine.setLOdd(CMLINLine.getImpedanceOdd() * Math.sqrt(CMLINLine.getkOdd()) / Constant.LIGHTSPEED);
-        //line -> Codd = Math.sqrt(line -> kodd) / (line -> z0o * Constant.LIGHTSPEED);
         CMLINLine.setCOdd(Math.sqrt(CMLINLine.getkOdd()) / (CMLINLine.getImpedanceOdd() * Constant.LIGHTSPEED));
-        //line -> Rev = alpha_c_even * 2.0 * z0ef;
         CMLINLine.setREven(alpha_c_even * 2.0 * z0ef);
-        //line -> Gev = 2.0 * alpha_d_even / z0ef;
         CMLINLine.setGEven(2.0 * alpha_d_even / z0ef);
-        //line -> Rodd = alpha_c_odd * 2.0 * z0of;
         CMLINLine.setROdd(alpha_c_odd * 2.0 * z0of);
-        //line -> Godd = 2.0 * alpha_d_odd / z0of;
         CMLINLine.setGOdd(2.0 * alpha_d_odd / z0of);
 
         // loss in dB/meter
-        //line -> losslen_ev = 20.0 * Math.log10(Math.exp(1.0)) * (alpha_c_even + alpha_d_even);
         CMLINLine.setLossLenEven(20.0 * Math.log10(Math.exp(1.0)) * (alpha_c_even + alpha_d_even));
-        //line -> losslen_odd = 20.0 * Math.log10(Math.exp(1.0)) * (alpha_c_odd + alpha_d_odd);
         CMLINLine.setLossLenOdd(20.0 * Math.log10(Math.exp(1.0)) * (alpha_c_odd + alpha_d_odd));
 
         // loss in dB
-        //line -> loss_ev = l * line -> losslen_ev;
         CMLINLine.setLossEven(length * CMLINLine.getLossLenEven());
-        //line -> loss_odd = l * line -> losslen_odd;
         CMLINLine.setLossOdd(length * CMLINLine.getLossLenOdd());
         return CMLINLine;
     }
 
-    private int coupledMicrostripSyn() {
+    private int Synthesize() {
 
         double h, er, l, wmin, wmax, abstol, reltol;
         int maxiters;
         double z0, w;
         int iters;
         boolean done;
-        double len;
+        double electricalLength; // degree
 
         double s, smin, smax, z0e, z0o, k;
         double loss, kev, kodd, delta, cval, err, d;
@@ -801,7 +748,7 @@ public class CMLIN {
         double zo0 = 0, zo1, zo2, dodw, dods;
 
         //len = line->len;
-        len = CMLINLine.getElectricalLength();
+        electricalLength = CMLINLine.getElectricalLength();
 
   /* Substrate dielectric thickness (m) */
         //h = line->subs->h;
@@ -880,17 +827,6 @@ public class CMLIN {
         w = h * Math.abs(F1 * F2);
         s = h * Math.abs(F1 * F3);
 
-
-        //#ifdef DEBUG_SYN
-        //printf("coupled_microstrip_syn():  AW=%g, F1=%g, F2=%g, F3=%g\n",
-        //        AW, F1, F2, F3);
-
-        //printf("coupled_microstrip_syn():  Initial estimate:\n"
-        //        "                w = %g %s, s = %g %s\n",
-        //        w/line->units_lwst->sf, line->units_lwst->name,
-        //        s/line->units_lwst->sf, line->units_lwst->name);
-        //#endif
-
         l = 100;
         loss = 0;
         kev = 1;
@@ -914,24 +850,13 @@ public class CMLIN {
    */
         while ((!done) && (iters < maxiters)) {
             iters++;
-            //line->w = w;
             CMLINLine.setMetalWidth(w, Line.LUnitm);
-            //line->s = s;
             CMLINLine.setMetalSpace(s, Line.LUnitm);
       /* don't bother with loss calculations while we are iterating */
-            CMLINLine = coupledMicrostripAna(CMLINLine, Constant.LOSSLESS);
+            CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
 
-            //ze0 = line->z0e;
-            //zo0 = line->z0o;
             ze0 = CMLINLine.getImpedanceEven();
             zo0 = CMLINLine.getImpedanceOdd();
-
-            //#ifdef DEBUG_SYN
-            //printf("Iteration #%d ze = %g\tzo = %g\tw = %g %s\ts = %g %s\n",
-            //        iters, ze0, zo0,
-            //        w/line->units_lwst->sf, line->units_lwst->name,
-            //        s/line->units_lwst->sf, line->units_lwst->name);
-            //#endif
 
       /* check for convergence */
             err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
@@ -941,17 +866,13 @@ public class CMLIN {
     /* approximate the first jacobian */
                 CMLINLine.setMetalWidth(w + delta, Line.LUnitm);
                 CMLINLine.setMetalSpace(s, Line.LUnitm);
-                CMLINLine = coupledMicrostripAna(CMLINLine, Constant.LOSSLESS);
-                //ze1 = line->z0e;
-                //zo1 = line->z0o;
+                CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
                 ze1 = CMLINLine.getImpedanceEven();
                 zo1 = CMLINLine.getImpedanceOdd();
 
-                //line->w = w;
                 CMLINLine.setMetalWidth(w, Line.LUnitm);
-                //line->s = s + delta;
                 CMLINLine.setMetalSpace(s + delta, Line.LUnitm);
-                CMLINLine = coupledMicrostripAna(CMLINLine, Constant.LOSSLESS);
+                CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
                 ze2 = CMLINLine.getImpedanceEven();
                 zo2 = CMLINLine.getImpedanceOdd();
 
@@ -969,61 +890,31 @@ public class CMLIN {
 
                 ds = ((ze0 - z0e) * dodw - (zo0 - z0o) * dedw) / d;
                 s = Math.abs(s + ds);
-
-                /*
-                #ifdef DEBUG_SYN
-                printf("coupled_microstrip_syn():  delta = %g, determinate = %g\n", delta, d);
-                printf("coupled_microstrip_syn():  ze0 = %16.8g,  ze1 = %16.8g,  ze2 = %16.8g\n",
-                        ze0, ze1, ze2);
-                printf("coupled_microstrip_syn():  zo0 = %16.8g,  zo1 = %16.8g,  zo2 = %16.8g\n",
-                        zo0, zo1, zo2);
-                printf("coupled_microstrip_syn(): dedw = %16.8g, dodw = %16.8g\n",
-                        dedw, dodw);
-                printf("coupled_microstrip_syn(): ze1-ze0 = %16.8g, ze2-ze0 = %16.8g\n",
-                        ze1-ze0, ze2-ze0);
-                printf("coupled_microstrip_syn(): deds = %16.8g, dods = %16.8g\n",
-                        deds, dods);
-                printf("coupled_microstrip_syn(): zo1-zo0 = %16.8g, zo2-zo0 = %16.8g\n",
-                        zo1-zo0, zo2-zo0);
-                printf("coupled_microstrip_syn(): dw = %g %s, ds = %g %s\n",
-                        dw/line->units_lwst->sf, line->units_lwst->name,
-                        ds/line->units_lwst->sf, line->units_lwst->name);
-                printf("-----------------------------------------------------\n");
-                #endif
-                */
             }
         }
 
-        //line->w = w;
         CMLINLine.setMetalWidth(w, Line.LUnitm);
-        //line->s = s;
         CMLINLine.setMetalSpace(s, Line.LUnitm);
-        CMLINLine = coupledMicrostripAna(CMLINLine, Constant.LOSSLESS);
+        CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
 
   /* scale the line length to get the desired electrical length */
-        //line->l = line->l * len/line->len;
-        CMLINLine.setMetalLength(CMLINLine.getMetalLength() * len / CMLINLine.getElectricalLength(), Line.LUnitm);
+        CMLINLine.setMetalLength(CMLINLine.getMetalLength() * electricalLength / CMLINLine.getElectricalLength(), Line.LUnitm);
 
   /*
    * one last calculation and this time we find the loss too.
    */
-        CMLINLine = coupledMicrostripAna(CMLINLine, Constant.LOSSY);
-
-        //#ifdef DEBUG_SYN
-        //printf("Took %d iterations, err = %g\n", iters, err);
-        //printf("ze = %g\tzo = %g\tz0e = %g\tz0o = %g\n", ze0, zo0, z0e, z0o);
-        //#endif
+        CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
 
         return (0);
     }
 
     public Line getAnaResult() {
-        CMLINLine = coupledMicrostripAna(CMLINLine, Constant.LOSSY);
+        CMLINLine = Analysis(CMLINLine, Constant.LOSSLESS);
         return CMLINLine;
     }
 
     public Line getSynResult() {
-        coupledMicrostripSyn();
+        Synthesize();
         return CMLINLine;
     }
 }

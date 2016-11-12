@@ -171,19 +171,14 @@ public class MLIN {
 
         // effective relative permittivity
         eeff = EF;
+        Log.v("MLIN", "eeff=" + Double.toString(eeff));
+        Log.v("MLIN", "l=" + Double.toString(l));
+        Log.v("MLIN", "v=" + Double.toString(v));
+        Log.v("MLIN", "freq=" + Double.toString(len));
         MLINLine.setkEff(eeff);
         MLINLine.setElectricalLength(len);
 
-        //  store results
-        MLINLine.setImpedance(z0);
-
-        MLINLine.setDeltal(deltal);
-        MLINLine.setDelay(delay);
-        MLINLine.setLs(L);
-        MLINLine.setRs(R);
-        MLINLine.setCs(C);
-        MLINLine.setGs(G);
-
+        // TODO Move this out
         if (flag == Constant.LOSSY) {
             // calculate loss
             // Dielectric Losses
@@ -209,13 +204,14 @@ public class MLIN {
 	    * less by a factor qd which is the filling factor.
 	    * bu
 	    */
+
             if (er > 1.0) {
                 ld = (Constant.Pi * MLINLine.getFrequency() / v) * (er / EF) * ((EF - 1.0) / (er - 1.0)) * tand;
             } else {
                 // if er == 1, then this is probably a vacuum
                 ld = 0.0;
             }
-            //G = 2.0 * ld / z0;
+            G = 2.0 * ld / z0;
             MLINLine.setAlphaD(ld);
             // loss in dB/meter
             ld = 20.0 * Math.log10(Math.exp(1.0)) * ld;
@@ -248,6 +244,8 @@ public class MLIN {
 
 
             Line MLINLineStore = MLINLine;
+            //MLINLineStore=MLINLine;
+
             if (depth <= t) {
                 MLINLineStore.setSubEpsilon(1.0);
                 MLINLineStore = microstripAna(MLINLineStore, Constant.LOSSLESS);
@@ -259,10 +257,10 @@ public class MLIN {
                 MLINLineStore = microstripAna(MLINLineStore, Constant.LOSSLESS);
                 z1 = MLINLineStore.getImpedance();
 
-                MLINLineStore.setSubEpsilon(er);
-                MLINLineStore.setSubHeight(h, Line.LUnitm);
-                MLINLineStore.setMetalThick(t, Line.LUnitm);
-                MLINLineStore.setMetalWidth(w, Line.LUnitm);
+                //MLINLine.setSubEpsilon(er);
+                //MLINLine.setSubHeight(h, Line.LUnitm);
+                //MLINLine.setMetalThick(t, Line.LUnitm);
+                //MLINLine.setMetalWidth(w, Line.LUnitm);
 
                 // conduction losses, nepers per meter
                 lc = (Constant.Pi * MLINLineStore.getFrequency() / Constant.LIGHTSPEED) * (z1 - z2) / z0;
@@ -313,6 +311,16 @@ public class MLIN {
         MLINLine.setLoss(loss);
         MLINLine.setLossLen(loss / MLINLine.getMetalLength());
         MLINLine.setSkinDepth(depth);
+        //  store results
+        MLINLine.setImpedance(z0);
+
+        MLINLine.setDeltal(deltal);
+        MLINLine.setDelay(delay);
+        MLINLine.setLs(L);
+        MLINLine.setRs(R);
+        MLINLine.setCs(C);
+        MLINLine.setGs(G);
+
         return MLINLine;
     }
 
@@ -515,7 +523,6 @@ public class MLIN {
 
             /* update the error value */
             MLINLine.setParameter(var, flag);
-            Log.v("MLIN", "var=" + Double.toString(var));
             MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
             err = MLINLine.getImpedance() - Z0;
             //if (rslt)
@@ -548,11 +555,13 @@ public class MLIN {
 
         // velocity on line
         MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
+
         eeff = MLINLine.getkEff();
 
         v = Constant.LIGHTSPEED / Math.sqrt(eeff);
 
         l = (len / 360) * (v / MLINLine.getFrequency());
+        //Log.v("MLIN", "eeff=" + Double.toString(eeff));
 
         MLINLine.setMetalLength(l, Line.LUnitm);
 
