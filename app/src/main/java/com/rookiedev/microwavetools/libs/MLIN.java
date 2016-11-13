@@ -4,7 +4,7 @@ public class MLIN {
 
     public MLIN() {}
 
-    private Line microstripAna(Line MLINLine) {
+    private Line Analysis(Line MLINLine) {
         // flag=1 enables loss calculations
         // flag=0 disables loss calculations
         double w, l;
@@ -166,7 +166,7 @@ public class MLIN {
     *   /////////////////ground///////////////////////
     *
     */
-    private Line microstrip_syn(Line MLINLine, int flag) {
+    private Line Synthesize(Line MLINLine, int flag) {
         double l;
         //double Ro;
         double Xo, Z0;
@@ -275,20 +275,20 @@ public class MLIN {
         if (!done) {
             // Initialize the various error values
             MLINLine.setParameter(varmin, flag);
-            MLINLine = microstripAna(MLINLine);
+            MLINLine = Analysis(MLINLine);
             errmin = MLINLine.getImpedance() - Z0;
 
             MLINLine.setParameter(varmax, flag);
-            MLINLine = microstripAna(MLINLine);
+            MLINLine = Analysis(MLINLine);
             errmax = MLINLine.getImpedance() - Z0;
 
             MLINLine.setParameter(var, flag);
-            MLINLine = microstripAna(MLINLine);
+            MLINLine = Analysis(MLINLine);
             err = MLINLine.getImpedance() - Z0;
 
             varold = 0.99 * var;
             MLINLine.setParameter(varold, flag);
-            MLINLine = microstripAna(MLINLine);
+            MLINLine = Analysis(MLINLine);
             errold = MLINLine.getImpedance() - Z0;
 
             // see if we've actually been able to bracket the solution
@@ -338,7 +338,7 @@ public class MLIN {
 
             /* update the error value */
             MLINLine.setParameter(var, flag);
-            MLINLine = microstripAna(MLINLine);
+            MLINLine = Analysis(MLINLine);
             err = MLINLine.getImpedance() - Z0;
             //if (rslt)
             //    return rslt;
@@ -369,7 +369,7 @@ public class MLIN {
         }
 
         // velocity on line
-        MLINLine = microstripAna(MLINLine);
+        MLINLine = Analysis(MLINLine);
 
         eeff = MLINLine.getkEff();
 
@@ -421,10 +421,10 @@ public class MLIN {
     }
 
     public Line getAnaResult(Line MLINLine) {
-        return microstripAna(MLINLine);
+        return Analysis(MLINLine);
     }
 
     public Line getSynResult(Line MLINLine, int flag) {
-        return microstrip_syn(MLINLine, flag);
+        return Synthesize(MLINLine, flag);
     }
 }

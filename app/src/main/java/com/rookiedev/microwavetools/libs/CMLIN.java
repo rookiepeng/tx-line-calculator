@@ -110,11 +110,8 @@ import android.util.Log;
  */
 
 public class CMLIN {
-    private boolean use_z0k;
 
-    public CMLIN(boolean usez0k) {
-        use_z0k = usez0k;
-    }
+    public CMLIN() {}
 
     // Effective dielectric constant from Hammerstad and Jensen
     private static double EffectiveDielectricConstant_Effer(double widthToHeight, double dielectricConstant) {
@@ -521,7 +518,7 @@ public class CMLIN {
         return CMLINLine;
     }
 
-    private Line Synthesize(Line CMLINLine) {
+    private Line Synthesize(Line CMLINLine, boolean use_z0k) {
 
         double h, er, l, wmin, wmax, abstol, reltol;
         int maxiters;
@@ -711,7 +708,7 @@ public class CMLIN {
         return Analysis(CMLINLine);
     }
 
-    public Line getSynResult(Line CMLINLine) {
-        return Synthesize(CMLINLine);
+    public Line getSynResult(Line CMLINLine, boolean use_z0k) {
+        return Synthesize(CMLINLine, use_z0k);
     }
 }

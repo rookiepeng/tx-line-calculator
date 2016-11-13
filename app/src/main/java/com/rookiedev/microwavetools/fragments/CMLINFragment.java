@@ -107,14 +107,14 @@ public class CMLINFragment extends Fragment {
                     if (edittext_L.length() != 0) {
                         CMLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        CMLIN cmlin = new CMLIN(use_z0k);
+                        CMLIN cmlin = new CMLIN();
                         CMLINLine = cmlin.getAnaResult(CMLINLine);
 
                         BigDecimal Eeff_temp = new BigDecimal(CMLINLine.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
-                        CMLIN cmlin = new CMLIN(use_z0k);
+                        CMLIN cmlin = new CMLIN();
                         CMLINLine = cmlin.getAnaResult(CMLINLine);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
 
@@ -577,8 +577,8 @@ public class CMLINFragment extends Fragment {
         if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
             CMLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
             //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-            CMLIN cmlin = new CMLIN(use_z0k);
-            CMLINLine=cmlin.getSynResult(CMLINLine);
+            CMLIN cmlin = new CMLIN();
+            CMLINLine=cmlin.getSynResult(CMLINLine,use_z0k);
             //cmlin.cmlin_syn();
             L=CMLINLine.getMetalLength();
             W=CMLINLine.getMetalWidth();
@@ -601,8 +601,8 @@ public class CMLINFragment extends Fragment {
                     .doubleValue();
             edittext_L.setText(String.valueOf(L));
         } else {
-            CMLIN cmlin = new CMLIN(use_z0k);
-            CMLINLine=cmlin.getSynResult(CMLINLine);
+            CMLIN cmlin = new CMLIN();
+            CMLINLine=cmlin.getSynResult(CMLINLine, use_z0k);
             //cmlin.cmlin_syn();
             W=CMLINLine.getMetalWidth();
             S=CMLINLine.getMetalSpace();

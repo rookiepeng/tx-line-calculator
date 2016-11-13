@@ -31,6 +31,8 @@
     <string name="Phy">Physical</string>
     <string name="Syn">Synthesize</string>
     <string name="Ana">Analyze</string>
+    <string name="Syn_button">▲Synthesize▲</string>
+    <string name="Ana_button">▼Analyze▼</string>
     <string name="text_er">εr:</string>
     <string name="text_Z0">Z0:</string>
     <string name="text_Z0o">Z0o:</string>
