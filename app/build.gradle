@@ -5,7 +5,7 @@ android {
     buildToolsVersion '25.0.0'
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 10
         versionName "3.0"
@@ -19,9 +19,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
+    //dexOptions {
+    //    javaMaxHeapSize "4g"
+    //}
     //useLibrary 'org.apache.http.legacy'
 }
 

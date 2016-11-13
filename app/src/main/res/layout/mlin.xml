@@ -1,414 +1,420 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/windowBackground"
     android:orientation="vertical">
 
-    <!-- 微带线结构图 -->
-
-    <ImageView
-        android:id="@+id/mlin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dip"
-        android:layout_marginTop="10dip"
-        android:contentDescription="@string/mlin"
-        android:src="@drawable/mlin" />
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        card_view:cardElevation="6dp"
-        android:id="@+id/deviceListCard">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <!-- 微带线结构图 -->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Ana"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorTertiary" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dip"
-                android:background="?android:attr/listDivider" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!-- W: -->
-
-                <TextView
-                    android:id="@+id/mlin_text_W"
-                    android:layout_width="20dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="3dip"
-                    android:layout_marginEnd="3dip"
-                    android:text="@string/mlin_text_W" />
-
-                <!-- W输入框 -->
-
-                <EditText
-                    android:id="@+id/mlin_editText_W"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="100dip"
-                    android:layout_toRightOf="@+id/mlin_text_W"
-                    android:inputType="numberDecimal">
-
-                    <!-- <requestFocus /> -->
-                </EditText>
-
-                <!-- W单位 -->
-
-                <Spinner
-                    android:id="@+id/mlin_spinner_W"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip">
-
-                <!-- L: -->
-
-                <TextView
-                    android:id="@+id/mlin_text_L"
-                    android:layout_width="20dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="3dip"
-                    android:text="@string/mlin_text_L" />
-
-                <!-- L输入框 -->
-
-                <EditText
-                    android:id="@+id/mlin_editText_L"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="100dip"
-                    android:layout_toRightOf="@+id/mlin_text_L"
-                    android:inputType="numberDecimal">
-
-                    <!-- <requestFocus /> -->
-                </EditText>
-
-                <!-- L单位 -->
-
-                <Spinner
-                    android:id="@+id/mlin_spinner_L"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true" />
-            </RelativeLayout>
-
-            <!-- bottom -->
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:clipToPadding="false">
-
-                <Button
-                    android:id="@+id/mlin_syn"
-                    android:layout_width="120dip"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/Syn_button"
-                    android:textAppearance="?android:attr/textAppearanceInverse"
-                    android:theme="@style/MyButton" />
-
-                <Button
-                    android:id="@+id/mlin_ana"
-                    android:layout_width="120dip"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="@string/Ana_button"
-                    android:textAppearance="?android:attr/textAppearanceInverse"
-                    android:theme="@style/MyButton" />
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Syn"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorTertiary" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dip"
-                android:background="?android:attr/listDivider" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!-- Z0: -->
-
-                <TextView
-                    android:id="@+id/mlin_text_Z0"
-                    android:layout_width="30dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="3dip" />
-
-                <!-- Z0输入框 -->
-
-                <EditText
-                    android:id="@+id/mlin_editText_Z0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="100dip"
-                    android:layout_toRightOf="@+id/mlin_text_Z0"
-                    android:inputType="numberDecimal">
-
-                    <!-- <requestFocus /> -->
-                </EditText>
-
-                <!-- Z0单位 -->
-
-                <Spinner
-                    android:id="@+id/mlin_spinner_Z0"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!-- E eff: -->
-
-                <TextView
-                    android:id="@+id/mlin_text_Eeff"
-                    android:layout_width="30dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="3dip" />
-
-                <!-- E eff输入框 -->
-
-                <EditText
-                    android:id="@+id/mlin_editText_Eeff"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="100dip"
-                    android:layout_toRightOf="@+id/mlin_text_Eeff"
-                    android:inputType="numberDecimal">
-
-                    <!-- <requestFocus /> -->
-                </EditText>
-
-                <!-- E eff单位 -->
-
-                <Spinner
-                    android:id="@+id/mlin_spinner_Eeff"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true" />
-            </RelativeLayout>
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Phy"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?android:attr/textColorTertiary" />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dip"
-        android:background="?android:attr/listDivider" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <!-- f: -->
-
-        <TextView
-            android:id="@+id/mlin_text_Freq"
+        <ImageView
+            android:id="@+id/mlin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="3dip"
-            android:text="@string/Freq" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="10dip"
+            android:contentDescription="@string/mlin"
+            android:src="@drawable/mlin" />
 
-        <!-- f输入框 -->
-
-        <EditText
-            android:id="@+id/mlin_editText_Freq"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="110dip"
-            android:layout_toRightOf="@+id/mlin_text_Freq"
-            android:inputType="numberDecimal">
+            android:layout_margin="6dp"
+            card_view:cardElevation="6dp"
+            android:id="@+id/deviceListCard">
 
-            <!-- <requestFocus /> -->
-        </EditText>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <!-- f单位 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Ana"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:attr/textColorTertiary" />
 
-        <Spinner
-            android:id="@+id/mlin_spinner_Freq"
-            android:layout_width="100dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dip" />
-    </RelativeLayout>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:background="?android:attr/listDivider" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <!-- epsilon: -->
+                    <!-- W: -->
+
+                    <TextView
+                        android:id="@+id/mlin_text_W"
+                        android:layout_width="20dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="3dip"
+                        android:layout_marginEnd="3dip"
+                        android:text="@string/mlin_text_W" />
+
+                    <!-- W输入框 -->
+
+                    <EditText
+                        android:id="@+id/mlin_editText_W"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="100dip"
+                        android:layout_toRightOf="@+id/mlin_text_W"
+                        android:inputType="numberDecimal">
+
+                        <!-- <requestFocus /> -->
+                    </EditText>
+
+                    <!-- W单位 -->
+
+                    <Spinner
+                        android:id="@+id/mlin_spinner_W"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip">
+
+                    <!-- L: -->
+
+                    <TextView
+                        android:id="@+id/mlin_text_L"
+                        android:layout_width="20dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="3dip"
+                        android:text="@string/mlin_text_L" />
+
+                    <!-- L输入框 -->
+
+                    <EditText
+                        android:id="@+id/mlin_editText_L"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="100dip"
+                        android:layout_toRightOf="@+id/mlin_text_L"
+                        android:inputType="numberDecimal">
+
+                        <!-- <requestFocus /> -->
+                    </EditText>
+
+                    <!-- L单位 -->
+
+                    <Spinner
+                        android:id="@+id/mlin_spinner_L"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+                <!-- bottom -->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:clipToPadding="false">
+
+                    <Button
+                        android:id="@+id/mlin_syn"
+                        android:layout_width="120dip"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/Syn_button"
+                        android:textAppearance="?android:attr/textAppearanceInverse"
+                        android:theme="@style/MyButton" />
+
+                    <Button
+                        android:id="@+id/mlin_ana"
+                        android:layout_width="120dip"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/Ana_button"
+                        android:textAppearance="?android:attr/textAppearanceInverse"
+                        android:theme="@style/MyButton" />
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Syn"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:attr/textColorTertiary" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:background="?android:attr/listDivider" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- Z0: -->
+
+                    <TextView
+                        android:id="@+id/mlin_text_Z0"
+                        android:layout_width="30dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="3dip" />
+
+                    <!-- Z0输入框 -->
+
+                    <EditText
+                        android:id="@+id/mlin_editText_Z0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="100dip"
+                        android:layout_toRightOf="@+id/mlin_text_Z0"
+                        android:inputType="numberDecimal">
+
+                        <!-- <requestFocus /> -->
+                    </EditText>
+
+                    <!-- Z0单位 -->
+
+                    <Spinner
+                        android:id="@+id/mlin_spinner_Z0"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- E eff: -->
+
+                    <TextView
+                        android:id="@+id/mlin_text_Eeff"
+                        android:layout_width="30dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="3dip" />
+
+                    <!-- E eff输入框 -->
+
+                    <EditText
+                        android:id="@+id/mlin_editText_Eeff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="100dip"
+                        android:layout_toRightOf="@+id/mlin_text_Eeff"
+                        android:inputType="numberDecimal">
+
+                        <!-- <requestFocus /> -->
+                    </EditText>
+
+                    <!-- E eff单位 -->
+
+                    <Spinner
+                        android:id="@+id/mlin_spinner_Eeff"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
         <TextView
-            android:id="@+id/mlin_text_er"
-            android:layout_width="20dip"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="3dip" />
+            android:text="@string/Phy"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorTertiary" />
 
-        <!-- epsilon输入框 -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:background="?android:attr/listDivider" />
 
-        <EditText
-            android:id="@+id/mlin_editText_er"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- f: -->
+
+            <TextView
+                android:id="@+id/mlin_text_Freq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="3dip"
+                android:text="@string/Freq" />
+
+            <!-- f输入框 -->
+
+            <EditText
+                android:id="@+id/mlin_editText_Freq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="110dip"
+                android:layout_toRightOf="@+id/mlin_text_Freq"
+                android:inputType="numberDecimal">
+
+                <!-- <requestFocus /> -->
+            </EditText>
+
+            <!-- f单位 -->
+
+            <Spinner
+                android:id="@+id/mlin_spinner_Freq"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dip" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- epsilon: -->
+
+            <TextView
+                android:id="@+id/mlin_text_er"
+                android:layout_width="20dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="3dip" />
+
+            <!-- epsilon输入框 -->
+
+            <EditText
+                android:id="@+id/mlin_editText_er"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="110dip"
+                android:layout_toRightOf="@+id/mlin_text_er"
+                android:inputType="numberDecimal"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- H: -->
+
+            <TextView
+                android:id="@+id/mlin_text_H"
+                android:layout_width="20dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="3dip"
+                android:text="@string/mlin_text_H" />
+
+            <!-- H输入框 -->
+
+            <EditText
+                android:id="@+id/mlin_editText_H"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="110dip"
+                android:layout_toRightOf="@+id/mlin_text_H"
+                android:inputType="numberDecimal"/>
+
+            <!-- H单位 -->
+
+            <Spinner
+                android:id="@+id/mlin_spinner_H"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dip" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="110dip"
-            android:layout_toRightOf="@+id/mlin_text_er"
-            android:inputType="numberDecimal"/>
-    </RelativeLayout>
+            android:layout_marginBottom="10dip">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <!-- T: -->
 
-        <!-- H: -->
+            <TextView
+                android:id="@+id/mlin_text_T"
+                android:layout_width="20dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="3dip"
+                android:text="@string/mlin_text_T" />
 
-        <TextView
-            android:id="@+id/mlin_text_H"
-            android:layout_width="20dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="3dip"
-            android:text="@string/mlin_text_H" />
+            <!-- T输入框 -->
 
-        <!-- H输入框 -->
+            <EditText
+                android:id="@+id/mlin_editText_T"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="110dip"
+                android:layout_toRightOf="@+id/mlin_text_T"
+                android:inputType="numberDecimal"/>
+            <!-- T单位 -->
 
-        <EditText
-            android:id="@+id/mlin_editText_H"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="110dip"
-            android:layout_toRightOf="@+id/mlin_text_H"
-            android:inputType="numberDecimal"/>
-
-        <!-- H单位 -->
-
-        <Spinner
-            android:id="@+id/mlin_spinner_H"
-            android:layout_width="100dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dip" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dip">
-
-        <!-- T: -->
-
-        <TextView
-            android:id="@+id/mlin_text_T"
-            android:layout_width="20dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="3dip"
-            android:text="@string/mlin_text_T" />
-
-        <!-- T输入框 -->
-
-        <EditText
-            android:id="@+id/mlin_editText_T"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="110dip"
-            android:layout_toRightOf="@+id/mlin_text_T"
-            android:inputType="numberDecimal"/>
-        <!-- T单位 -->
-
-        <Spinner
-            android:id="@+id/mlin_spinner_T"
-            android:layout_width="100dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dip" />
-    </RelativeLayout>
-</LinearLayout>
+            <Spinner
+                android:id="@+id/mlin_spinner_T"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dip" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>
