@@ -19,6 +19,7 @@ import android.view.View;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.rookiedev.microwavetools.fragments.AdFragment;
 import com.rookiedev.microwavetools.fragments.CMLINFragment;
 import com.rookiedev.microwavetools.fragments.COAXFragment;
 import com.rookiedev.microwavetools.fragments.CPWFragment;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     private int pos;
     private DrawerLayout drawer;
     private Fragment fragment = null;
+    private Fragment adFragment = null;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private FragmentManager fragmentManager;
@@ -97,14 +99,8 @@ public class MainActivity extends AppCompatActivity
             drawer.openDrawer(GravityCompat.START);
         }
 
-        /** Look up the AdView as a resource and load a request. */
-        AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR) // All emulators
-                .addTestDevice("015d172c791c0215") // my test device
-                .addTestDevice("04afa117002e7ebc") // my test device
-                .build();
-        adView.loadAd(adRequest);
+        adFragment=new AdFragment();
+        fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
     }
 
     @Override
@@ -239,8 +235,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             fragment = new MLINFragment();
         }
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+        //Bundle args = new Bundle();
+        //fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 

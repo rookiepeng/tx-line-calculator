@@ -41,7 +41,7 @@
     <string name="unit_mil">mil</string>
     <string name="unit_Omega">Ω</string>
     <string name="unit_mm">mm</string>
-    <string name="Freq">Freq:</string>
+    <string name="Freq">Frequency:</string>
     <string name="Ground">Ground</string>
     <!-- mlin -->
     <string name="mlin">Microstrip Line</string>

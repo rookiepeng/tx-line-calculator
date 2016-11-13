@@ -183,7 +183,6 @@ public class MLINFragment extends Fragment {
                             .doubleValue();
                     edittext_W.setText(String.valueOf(W));
                 }
-
             }
         });
 

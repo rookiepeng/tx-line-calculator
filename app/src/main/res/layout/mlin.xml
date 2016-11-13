@@ -12,8 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:clipToPadding="false">
 
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            card_view:cardElevation="6dp"
+            android:id="@+id/imageCard">
         <!-- 微带线结构图 -->
 
         <ImageView
@@ -25,6 +32,14 @@
             android:layout_marginTop="10dip"
             android:contentDescription="@string/mlin"
             android:src="@drawable/mlin" />
+
+        </android.support.v7.widget.CardView>
+
+        <include
+            layout="@layout/frequency_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"/>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -273,46 +288,7 @@
             android:layout_height="2dip"
             android:background="?android:attr/listDivider" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <!-- f: -->
-
-            <TextView
-                android:id="@+id/mlin_text_Freq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="3dip"
-                android:text="@string/Freq" />
-
-            <!-- f输入框 -->
-
-            <EditText
-                android:id="@+id/mlin_editText_Freq"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="110dip"
-                android:layout_toRightOf="@+id/mlin_text_Freq"
-                android:inputType="numberDecimal">
-
-                <!-- <requestFocus /> -->
-            </EditText>
-
-            <!-- f单位 -->
-
-            <Spinner
-                android:id="@+id/mlin_spinner_Freq"
-                android:layout_width="100dip"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dip" />
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

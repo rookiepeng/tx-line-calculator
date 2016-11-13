@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardElevation="6dp"
+    android:id="@+id/freqCard">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- f: -->
+
+        <TextView
+            android:id="@+id/mlin_text_Freq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="3dp"
+            android:text="@string/Freq" />
+
+        <!-- f输入框 -->
+
+        <EditText
+            android:id="@+id/mlin_editText_Freq"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="110dip"
+            android:layout_toRightOf="@+id/mlin_text_Freq"
+            android:inputType="numberDecimal">
+
+            <!-- <requestFocus /> -->
+        </EditText>
+
+        <!-- f单位 -->
+
+        <Spinner
+            android:id="@+id/mlin_spinner_Freq"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
