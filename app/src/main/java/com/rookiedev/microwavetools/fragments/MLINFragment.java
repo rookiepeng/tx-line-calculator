@@ -5,8 +5,6 @@
 package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -204,9 +202,9 @@ public class MLINFragment extends Fragment {
         /** find the elements */
 
         // Subscript strings
-        text_epsilon = (TextView) rootView.findViewById(R.id.mlin_text_er);
-        text_z0 = (TextView) rootView.findViewById(R.id.mlin_text_Z0);
-        text_eeff = (TextView) rootView.findViewById(R.id.mlin_text_Eeff);
+        text_epsilon = (TextView) rootView.findViewById(R.id.text_er);
+        text_z0 = (TextView) rootView.findViewById(R.id.text_Z0);
+        text_eeff = (TextView) rootView.findViewById(R.id.text_Eeff);
 
         SpannableString spanEpsilon = new SpannableString(
                 this.getString(R.string.text_er));
@@ -242,29 +240,29 @@ public class MLINFragment extends Fragment {
         eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         // edittext elements
-        edittext_W = (EditText) rootView.findViewById(R.id.mlin_editText_W);
+        edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
         //edittext_W.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.green), PorterDuff.Mode.SRC_ATOP);
         //edittext_W.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
-        edittext_L = (EditText) rootView.findViewById(R.id.mlin_editText_L);
-        edittext_Z0 = (EditText) rootView.findViewById(R.id.mlin_editText_Z0);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.mlin_editText_Eeff);
-        edittext_Freq = (EditText) rootView.findViewById(R.id.mlin_editText_Freq);
-        edittext_T = (EditText) rootView.findViewById(R.id.mlin_editText_T);
-        edittext_H = (EditText) rootView.findViewById(R.id.mlin_editText_H);
-        edittext_er = (EditText) rootView.findViewById(R.id.mlin_editText_er);
+        edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
+        edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
+        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff);
+        edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
+        edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
+        edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
+        edittext_er = (EditText) rootView.findViewById(R.id.editText_er);
 
         // button elements
-        mlin_ana = (Button) rootView.findViewById(R.id.mlin_ana);
-        mlin_syn = (Button) rootView.findViewById(R.id.mlin_syn);
+        mlin_ana = (Button) rootView.findViewById(R.id.button_ana);
+        mlin_syn = (Button) rootView.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinner_W = (Spinner) rootView.findViewById(R.id.mlin_spinner_W);
-        spinner_L = (Spinner) rootView.findViewById(R.id.mlin_spinner_L);
-        spinner_Z0 = (Spinner) rootView.findViewById(R.id.mlin_spinner_Z0);
-        spinner_Eeff = (Spinner) rootView.findViewById(R.id.mlin_spinner_Eeff);
-        spinner_Freq = (Spinner) rootView.findViewById(R.id.mlin_spinner_Freq);
-        spinner_T = (Spinner) rootView.findViewById(R.id.mlin_spinner_T);
-        spinner_H = (Spinner) rootView.findViewById(R.id.mlin_spinner_H);
+        spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W);
+        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
+        spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0);
+        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Eeff);
+        spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
+        spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
+        spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);
 
         // configure the length units
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter

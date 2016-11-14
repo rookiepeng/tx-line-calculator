@@ -3,36 +3,43 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- E eff: -->
-
-    <TextView
-        android:id="@+id/text_Eeff"
-        android:layout_width="30dip"
+    <RadioButton
+        android:id="@+id/radioBtn_Z0"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="3dp" />
+        android:layout_centerVertical="true" />
 
-    <!-- E eff输入框 -->
+    <!-- Z0: -->
+
+    <TextView
+        android:id="@+id/text_Z0_radio"
+        android:layout_width="30dip"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/radioBtn_Z0" />
+
+    <!-- Z0输入框 -->
 
     <EditText
-        android:id="@+id/editText_Eeff"
+        android:id="@+id/editText_Z0_radio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginEnd="100dip"
-        android:layout_toEndOf="@+id/text_Eeff"
+        android:layout_toEndOf="@+id/text_Z0_radio"
         android:inputType="numberDecimal">
 
         <!-- <requestFocus /> -->
     </EditText>
 
-    <!-- E eff单位 -->
+    <!-- Z0单位 -->
 
     <Spinner
-        android:id="@+id/spinner_Eeff"
+        android:id="@+id/spinner_Z0_radio"
         android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true" />
+
 </RelativeLayout>

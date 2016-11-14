@@ -6,7 +6,7 @@
         <!-- epsilon: -->
 
         <TextView
-            android:id="@+id/mlin_text_er"
+            android:id="@+id/text_er"
             android:layout_width="20dip"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -15,12 +15,12 @@
         <!-- epsilon输入框 -->
 
         <EditText
-            android:id="@+id/mlin_editText_er"
+            android:id="@+id/editText_er"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="100dp"
-            android:layout_toEndOf="@+id/mlin_text_er"
+            android:layout_toEndOf="@+id/text_er"
             android:inputType="numberDecimal"/>
 
 </RelativeLayout>

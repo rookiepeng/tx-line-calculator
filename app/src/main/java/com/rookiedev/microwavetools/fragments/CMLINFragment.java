@@ -69,7 +69,7 @@ public class CMLINFragment extends Fragment {
             cmlin_ana;// button analyze
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
             spinner_Z0, spinner_Z0o, spinner_Z0e, spinner_Eeff, spinner_Freq;// the units of each parameter
-    private RadioButton radioBtn1, radioBtn2;
+    private RadioButton radioBtn_Z0, radioBtn2;
     private boolean use_z0k;
 
     public CMLINFragment() {
@@ -191,8 +191,8 @@ public class CMLINFragment extends Fragment {
         /** find the elements */
 
         // Subscript strings
-        text_er = (TextView) rootView.findViewById(R.id.cmlin_text_er);
-        text_Z0 = (TextView) rootView.findViewById(R.id.cmlin_text_Z0);
+        text_er = (TextView) rootView.findViewById(R.id.text_er);
+        text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0_radio);
         text_Eeff = (TextView) rootView.findViewById(R.id.cmlin_text_Eeff);
         text_Z0o = (TextView) rootView.findViewById(R.id.cmlin_text_Z0o);
         text_Z0e = (TextView) rootView.findViewById(R.id.cmlin_text_Z0e);
@@ -229,34 +229,34 @@ public class CMLINFragment extends Fragment {
         text_Eeff.append(spanEeff);
 
         // edittext elements
-        edittext_W = (EditText) rootView.findViewById(R.id.cmlin_editText_W);
-        edittext_S = (EditText) rootView.findViewById(R.id.cmlin_editText_S);
-        edittext_L = (EditText) rootView.findViewById(R.id.cmlin_editText_L);
-        edittext_Z0 = (EditText) rootView.findViewById(R.id.cmlin_editText_Z0);
+        edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
+        edittext_S = (EditText) rootView.findViewById(R.id.editText_S);
+        edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
+        edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0_radio);
         edittext_k = (EditText) rootView.findViewById(R.id.cmlin_editText_k);
         edittext_Z0o = (EditText) rootView.findViewById(R.id.cmlin_editText_Z0o);
         edittext_Z0e = (EditText) rootView.findViewById(R.id.cmlin_editText_Z0e);
         edittext_Eeff = (EditText) rootView.findViewById(R.id.cmlin_editText_Eeff);
-        edittext_Freq = (EditText) rootView.findViewById(R.id.cmlin_editText_Freq);
-        edittext_T = (EditText) rootView.findViewById(R.id.cmlin_editText_T);
-        edittext_H = (EditText) rootView.findViewById(R.id.cmlin_editText_H);
-        edittext_er = (EditText) rootView.findViewById(R.id.cmlin_editText_er);
+        edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
+        edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
+        edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
+        edittext_er = (EditText) rootView.findViewById(R.id.editText_er);
 
         // button elements
-        cmlin_ana = (Button) rootView.findViewById(R.id.cmlin_ana);
-        cmlin_syn = (Button) rootView.findViewById(R.id.cmlin_syn);
+        cmlin_ana = (Button) rootView.findViewById(R.id.button_ana);
+        cmlin_syn = (Button) rootView.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinner_W = (Spinner) rootView.findViewById(R.id.cmlin_spinner_W);
-        spinner_S = (Spinner) rootView.findViewById(R.id.cmlin_spinner_S);
-        spinner_L = (Spinner) rootView.findViewById(R.id.cmlin_spinner_L);
-        spinner_Z0 = (Spinner) rootView.findViewById(R.id.cmlin_spinner_Z0);
+        spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W);
+        spinner_S = (Spinner) rootView.findViewById(R.id.spinner_S);
+        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
+        spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0_radio);
         spinner_Z0o = (Spinner) rootView.findViewById(R.id.cmlin_spinner_Z0o);
         spinner_Z0e = (Spinner) rootView.findViewById(R.id.cmlin_spinner_Z0e);
         spinner_Eeff = (Spinner) rootView.findViewById(R.id.cmlin_spinner_Eeff);
-        spinner_Freq = (Spinner) rootView.findViewById(R.id.cmlin_spinner_Freq);
-        spinner_T = (Spinner) rootView.findViewById(R.id.cmlin_spinner_T);
-        spinner_H = (Spinner) rootView.findViewById(R.id.cmlin_spinner_H);
+        spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
+        spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
+        spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);
 
         // configure the length units
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter
@@ -296,16 +296,16 @@ public class CMLINFragment extends Fragment {
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_Freq.setAdapter(adapterFreq);
 
-        radioBtn1 = (RadioButton) rootView.findViewById(R.id.radioBtn1);
+        radioBtn_Z0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
         radioBtn2 = (RadioButton) rootView.findViewById(R.id.radioBtn2);
         CMLINLine = new Line(Line.CMLIN);
     }
 
     private void setRadioBtn() {
-        radioBtn1.setOnClickListener(new View.OnClickListener() {
+        radioBtn_Z0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                radioBtn1.setChecked(true);
+                radioBtn_Z0.setChecked(true);
                 radioBtn2.setChecked(false);
                 use_z0k = true;
                 edittext_Z0.setEnabled(true);
@@ -318,7 +318,7 @@ public class CMLINFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioBtn2.setChecked(true);
-                radioBtn1.setChecked(false);
+                radioBtn_Z0.setChecked(false);
                 use_z0k = false;
                 edittext_Z0.setEnabled(false);
                 edittext_k.setEnabled(false);
@@ -327,14 +327,14 @@ public class CMLINFragment extends Fragment {
             }
         });
         if (use_z0k == true) {
-            radioBtn1.setChecked(true);
+            radioBtn_Z0.setChecked(true);
             radioBtn2.setChecked(false);
             edittext_Z0.setEnabled(true);
             edittext_k.setEnabled(true);
             edittext_Z0o.setEnabled(false);
             edittext_Z0e.setEnabled(false);
         } else {
-            radioBtn1.setChecked(false);
+            radioBtn_Z0.setChecked(false);
             radioBtn2.setChecked(true);
             edittext_Z0.setEnabled(false);
             edittext_k.setEnabled(false);

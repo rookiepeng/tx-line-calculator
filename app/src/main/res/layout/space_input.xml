@@ -3,31 +3,34 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <!-- H: -->
+        <!-- S: -->
 
         <TextView
-            android:id="@+id/text_H"
+            android:id="@+id/text_S"
             android:layout_width="20dip"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
-            android:text="@string/mlin_text_H" />
+            android:text="@string/cmlin_text_S" />
 
-        <!-- H输入框 -->
+        <!-- S输入框 -->
 
         <EditText
-            android:id="@+id/editText_H"
+            android:id="@+id/editText_S"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="100dip"
-            android:layout_toEndOf="@+id/text_H"
-            android:inputType="numberDecimal"/>
+            android:layout_toEndOf="@+id/text_S"
+            android:inputType="numberDecimal">
 
-        <!-- H单位 -->
+            <!-- <requestFocus /> -->
+        </EditText>
+
+        <!-- S单位 -->
 
         <Spinner
-            android:id="@+id/spinner_H"
+            android:id="@+id/spinner_S"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

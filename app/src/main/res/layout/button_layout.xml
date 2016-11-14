@@ -5,7 +5,7 @@
     android:clipToPadding="false">
 
     <Button
-        android:id="@+id/mlin_syn"
+        android:id="@+id/button_syn"
         android:layout_width="120dip"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
@@ -18,7 +18,7 @@
         android:theme="@style/SynButton" />
 
     <Button
-        android:id="@+id/mlin_ana"
+        android:id="@+id/button_ana"
         android:layout_width="120dip"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

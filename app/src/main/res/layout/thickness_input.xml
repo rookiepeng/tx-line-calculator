@@ -6,7 +6,7 @@
         <!-- T: -->
 
         <TextView
-            android:id="@+id/mlin_text_T"
+            android:id="@+id/text_T"
             android:layout_width="20dip"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -16,17 +16,17 @@
         <!-- T输入框 -->
 
         <EditText
-            android:id="@+id/mlin_editText_T"
+            android:id="@+id/editText_T"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="100dp"
-            android:layout_toEndOf="@+id/mlin_text_T"
+            android:layout_toEndOf="@+id/text_T"
             android:inputType="numberDecimal"/>
         <!-- T单位 -->
 
         <Spinner
-            android:id="@+id/mlin_spinner_T"
+            android:id="@+id/spinner_T"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

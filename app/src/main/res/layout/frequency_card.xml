@@ -13,24 +13,22 @@
         <!-- f: -->
 
         <TextView
-            android:id="@+id/mlin_text_Freq"
+            android:id="@+id/text_Freq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_marginStart="10dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="3dp"
             android:text="@string/Freq" />
 
         <!-- f输入框 -->
 
         <EditText
-            android:id="@+id/mlin_editText_Freq"
+            android:id="@+id/editText_Freq"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="110dip"
-            android:layout_toRightOf="@+id/mlin_text_Freq"
+            android:layout_marginEnd="110dip"
+            android:layout_toEndOf="@+id/text_Freq"
             android:inputType="numberDecimal">
 
             <!-- <requestFocus /> -->
@@ -39,7 +37,7 @@
         <!-- f单位 -->
 
         <Spinner
-            android:id="@+id/mlin_spinner_Freq"
+            android:id="@+id/spinner_Freq"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
