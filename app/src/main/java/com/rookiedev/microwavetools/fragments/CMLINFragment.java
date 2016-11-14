@@ -70,7 +70,7 @@ public class CMLINFragment extends Fragment {
             cmlin_ana;// button analyze
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
             spinner_Z0, spinner_Z0o, spinner_Z0e, spinner_Eeff, spinner_Freq;// the units of each parameter
-    private RadioButton radioBtn_Z0, radioBtn_z0o;
+    private RadioButton radioBtn_Z0, radioBtn_Z0o;
     private boolean use_z0k;
 
     public CMLINFragment() {
@@ -321,7 +321,7 @@ public class CMLINFragment extends Fragment {
         spinner_Freq.setAdapter(adapterFreq);
 
         radioBtn_Z0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
-        radioBtn_z0o = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0o);
+        radioBtn_Z0o = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0o);
         CMLINLine = new Line(Line.CMLIN);
     }
 
@@ -330,7 +330,7 @@ public class CMLINFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioBtn_Z0.setChecked(true);
-                radioBtn_z0o.setChecked(false);
+                radioBtn_Z0o.setChecked(false);
                 use_z0k = true;
                 edittext_Z0.setEnabled(true);
                 edittext_k.setEnabled(true);
@@ -338,10 +338,10 @@ public class CMLINFragment extends Fragment {
                 edittext_Z0e.setEnabled(false);
             }
         });
-        radioBtn_z0o.setOnClickListener(new View.OnClickListener() {
+        radioBtn_Z0o.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                radioBtn_z0o.setChecked(true);
+                radioBtn_Z0o.setChecked(true);
                 radioBtn_Z0.setChecked(false);
                 use_z0k = false;
                 edittext_Z0.setEnabled(false);
@@ -352,14 +352,14 @@ public class CMLINFragment extends Fragment {
         });
         if (use_z0k == true) {
             radioBtn_Z0.setChecked(true);
-            radioBtn_z0o.setChecked(false);
+            radioBtn_Z0o.setChecked(false);
             edittext_Z0.setEnabled(true);
             edittext_k.setEnabled(true);
             edittext_Z0o.setEnabled(false);
             edittext_Z0e.setEnabled(false);
         } else {
             radioBtn_Z0.setChecked(false);
-            radioBtn_z0o.setChecked(true);
+            radioBtn_Z0o.setChecked(true);
             edittext_Z0.setEnabled(false);
             edittext_k.setEnabled(false);
             edittext_Z0o.setEnabled(true);
