@@ -43,8 +43,8 @@
                     android:id="@+id/checkBoxGround"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="6dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="6dp"
                     android:text="@string/Ground" />
 
             </LinearLayout>
@@ -118,11 +118,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:background="?android:attr/listDivider" />
-
                 <include
                     android:id="@+id/length_input_radio"
                     layout="@layout/length_input_radio"
@@ -151,7 +146,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="10dp">
-
 
                 <TextView
                     android:layout_width="wrap_content"
