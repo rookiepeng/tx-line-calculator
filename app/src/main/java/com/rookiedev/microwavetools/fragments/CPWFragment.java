@@ -1,8 +1,10 @@
 package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -29,9 +31,6 @@ import com.rookiedev.microwavetools.libs.CPWG;
 
 import java.math.BigDecimal;
 
-/**
- * Created by rookie on 8/11/13.
- */
 public class CPWFragment extends Fragment {
     public final static String CPW_W = "CPW_W";
     public final static String CPW_W_UNIT = "CPW_W_UNIT";
@@ -52,7 +51,8 @@ public class CPWFragment extends Fragment {
     public final static String CPW_T_UNIT = "CPW_T_UNIT";
     public final static String CPW_Flag = "CPW_Flag";
     public final static String CPW_WITH_GROUND = "CPW_WITH_GROUND";
-    private View rootView;
+    private View rootView, width_input, space_input, height_input, er_input;
+    ;
     private int DecimalLength; // the length of the Decimal, accurate of the result
     private SpannableString error_er, error_Z0;
     private TextView text_er, text_Z0, text_Eeff; // strings which include the subscript
@@ -66,12 +66,12 @@ public class CPWFragment extends Fragment {
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
     private double W, L, S, Z0, Eeff, Freq, T, H, er;
-    private Button cpw_syn,// button synthesize
-            cpw_ana;// button analyze
+    private Button button_syn,// button synthesize
+            button_ana;// button analyze
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
             spinner_Z0, spinner_Eeff, spinner_Freq;// the units of each parameter
     private int flag;
-    private RadioButton radioBtn1, radioBtn2, radioBtn3, radioBtn4;
+    private RadioButton radioBtn_W, radioBtn_S, radioBtn_H, radioBtn_er;
     private CheckBox withGround;
     private boolean hasGround;
     private ImageView CPW_G;
@@ -89,7 +89,7 @@ public class CPWFragment extends Fragment {
         setRadioBtn();
         setImage();
 
-        cpw_ana.setOnClickListener(new View.OnClickListener() {
+        button_ana.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int temp;
@@ -190,7 +190,7 @@ public class CPWFragment extends Fragment {
             }
         });
 
-        cpw_syn.setOnClickListener(new View.OnClickListener() {
+        button_syn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Preference_SharedPref();
@@ -427,14 +427,29 @@ public class CPWFragment extends Fragment {
     }
 
     private void initUI() {
+        width_input = rootView.findViewById(R.id.width_input_radio);
+        height_input = rootView.findViewById(R.id.height_input_radio);
+        er_input = rootView.findViewById(R.id.epsilon_input_radio);
+        space_input = rootView.findViewById(R.id.space_input_radio);
+        //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View length_input = rootView.findViewById(R.id.length_input_radio);
+        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View z0_input = rootView.findViewById(R.id.z0_input);
+        z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        View eeff_input = rootView.findViewById(R.id.eeff_input);
+        eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
         /** find the elements */
 
         // Subscript strings
-        text_er = (TextView) rootView.findViewById(R.id.cpw_text_er);
-        text_Z0 = (TextView) rootView.findViewById(R.id.cpw_text_Z0);
-        text_Eeff = (TextView) rootView.findViewById(R.id.cpw_text_Eeff);
+        text_er = (TextView) rootView.findViewById(R.id.text_er_radio);
+        text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
+        text_Eeff = (TextView) rootView.findViewById(R.id.text_Eeff);
 
         SpannableString spanEr = new SpannableString(
                 this.getString(R.string.text_er));
@@ -455,29 +470,29 @@ public class CPWFragment extends Fragment {
         text_Eeff.append(spanEeff);
 
         // edittext elements
-        edittext_W = (EditText) rootView.findViewById(R.id.cpw_editText_W);
-        edittext_S = (EditText) rootView.findViewById(R.id.cpw_editText_S);
-        edittext_L = (EditText) rootView.findViewById(R.id.cpw_editText_L);
-        edittext_Z0 = (EditText) rootView.findViewById(R.id.cpw_editText_Z0);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.cpw_editText_Eeff);
-        edittext_Freq = (EditText) rootView.findViewById(R.id.cpw_editText_Freq);
-        edittext_T = (EditText) rootView.findViewById(R.id.cpw_editText_T);
-        edittext_H = (EditText) rootView.findViewById(R.id.cpw_editText_H);
-        edittext_er = (EditText) rootView.findViewById(R.id.cpw_editText_er);
+        edittext_W = (EditText) rootView.findViewById(R.id.editText_W_radio);
+        edittext_S = (EditText) rootView.findViewById(R.id.editText_S_radio);
+        edittext_L = (EditText) rootView.findViewById(R.id.editText_L_radio);
+        edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
+        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff);
+        edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
+        edittext_T = (EditText) rootView.findViewById(R.id.editText_T_radio);
+        edittext_H = (EditText) rootView.findViewById(R.id.editText_H_radio);
+        edittext_er = (EditText) rootView.findViewById(R.id.editText_er_radio);
 
         // button elements
-        cpw_ana = (Button) rootView.findViewById(R.id.cpw_ana);
-        cpw_syn = (Button) rootView.findViewById(R.id.cpw_syn);
+        button_ana = (Button) rootView.findViewById(R.id.button_ana);
+        button_syn = (Button) rootView.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinner_W = (Spinner) rootView.findViewById(R.id.cpw_spinner_W);
-        spinner_S = (Spinner) rootView.findViewById(R.id.cpw_spinner_S);
-        spinner_L = (Spinner) rootView.findViewById(R.id.cpw_spinner_L);
-        spinner_Z0 = (Spinner) rootView.findViewById(R.id.cpw_spinner_Z0);
-        spinner_Eeff = (Spinner) rootView.findViewById(R.id.cpw_spinner_Eeff);
-        spinner_Freq = (Spinner) rootView.findViewById(R.id.cpw_spinner_Freq);
-        spinner_T = (Spinner) rootView.findViewById(R.id.cpw_spinner_T);
-        spinner_H = (Spinner) rootView.findViewById(R.id.cpw_spinner_H);
+        spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W_radio);
+        spinner_S = (Spinner) rootView.findViewById(R.id.spinner_S_radio);
+        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L_radio);
+        spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0);
+        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Eeff);
+        spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
+        spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T_radio);
+        spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H_radio);
 
         // configure the length units
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter
@@ -515,10 +530,10 @@ public class CPWFragment extends Fragment {
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_Freq.setAdapter(adapterFreq);
 
-        radioBtn1 = (RadioButton) rootView.findViewById(R.id.radioBtn1);
-        radioBtn2 = (RadioButton) rootView.findViewById(R.id.radioBtn2);
-        radioBtn3 = (RadioButton) rootView.findViewById(R.id.radioBtn3);
-        radioBtn4 = (RadioButton) rootView.findViewById(R.id.radioBtn4);
+        radioBtn_W = (RadioButton) rootView.findViewById(R.id.radioBtn_W);
+        radioBtn_S = (RadioButton) rootView.findViewById(R.id.radioBtn_S);
+        radioBtn_H = (RadioButton) rootView.findViewById(R.id.radioBtn_H);
+        radioBtn_er = (RadioButton) rootView.findViewById(R.id.radioBtn_er);
 
         withGround = (CheckBox) rootView.findViewById(R.id.checkBoxGround);
         CPW_G = (ImageView) rootView.findViewById(R.id.cpw_G);
@@ -580,63 +595,95 @@ public class CPWFragment extends Fragment {
 
     private void setRadioBtn() {
         if (flag == 0) {
-            radioBtn1.setChecked(true);
-            radioBtn2.setChecked(false);
-            radioBtn3.setChecked(false);
-            radioBtn4.setChecked(false);
+            radioBtn_W.setChecked(true);
+            radioBtn_S.setChecked(false);
+            radioBtn_H.setChecked(false);
+            radioBtn_er.setChecked(false);
+            width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            space_input.setBackgroundColor(Color.WHITE);
+            height_input.setBackgroundColor(Color.WHITE);
+            er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == 1) {
-            radioBtn1.setChecked(false);
-            radioBtn2.setChecked(true);
-            radioBtn3.setChecked(false);
-            radioBtn4.setChecked(false);
+            radioBtn_W.setChecked(false);
+            radioBtn_S.setChecked(true);
+            radioBtn_H.setChecked(false);
+            radioBtn_er.setChecked(false);
+            width_input.setBackgroundColor(Color.WHITE);
+            space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            height_input.setBackgroundColor(Color.WHITE);
+            er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == 2) {
-            radioBtn1.setChecked(false);
-            radioBtn2.setChecked(false);
-            radioBtn3.setChecked(true);
-            radioBtn4.setChecked(false);
+            radioBtn_W.setChecked(false);
+            radioBtn_S.setChecked(false);
+            radioBtn_H.setChecked(true);
+            radioBtn_er.setChecked(false);
+            width_input.setBackgroundColor(Color.WHITE);
+            space_input.setBackgroundColor(Color.WHITE);
+            height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == 3) {
-            radioBtn1.setChecked(false);
-            radioBtn2.setChecked(false);
-            radioBtn3.setChecked(false);
-            radioBtn4.setChecked(true);
+            radioBtn_W.setChecked(false);
+            radioBtn_S.setChecked(false);
+            radioBtn_H.setChecked(false);
+            radioBtn_er.setChecked(true);
+            width_input.setBackgroundColor(Color.WHITE);
+            space_input.setBackgroundColor(Color.WHITE);
+            height_input.setBackgroundColor(Color.WHITE);
+            er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
         }
-        radioBtn1.setOnClickListener(new View.OnClickListener() {
+        radioBtn_W.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                radioBtn1.setChecked(true);
-                radioBtn2.setChecked(false);
-                radioBtn3.setChecked(false);
-                radioBtn4.setChecked(false);
+                radioBtn_W.setChecked(true);
+                radioBtn_S.setChecked(false);
+                radioBtn_H.setChecked(false);
+                radioBtn_er.setChecked(false);
+                width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                space_input.setBackgroundColor(Color.WHITE);
+                height_input.setBackgroundColor(Color.WHITE);
+                er_input.setBackgroundColor(Color.WHITE);
                 flag = 0;
             }
         });
-        radioBtn2.setOnClickListener(new View.OnClickListener() {
+        radioBtn_S.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                radioBtn1.setChecked(false);
-                radioBtn2.setChecked(true);
-                radioBtn3.setChecked(false);
-                radioBtn4.setChecked(false);
+                radioBtn_W.setChecked(false);
+                radioBtn_S.setChecked(true);
+                radioBtn_H.setChecked(false);
+                radioBtn_er.setChecked(false);
+                width_input.setBackgroundColor(Color.WHITE);
+                space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                height_input.setBackgroundColor(Color.WHITE);
+                er_input.setBackgroundColor(Color.WHITE);
                 flag = 1;
             }
         });
-        radioBtn3.setOnClickListener(new View.OnClickListener() {
+        radioBtn_H.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                radioBtn1.setChecked(false);
-                radioBtn2.setChecked(false);
-                radioBtn3.setChecked(true);
-                radioBtn4.setChecked(false);
+                radioBtn_W.setChecked(false);
+                radioBtn_S.setChecked(false);
+                radioBtn_H.setChecked(true);
+                radioBtn_er.setChecked(false);
+                width_input.setBackgroundColor(Color.WHITE);
+                space_input.setBackgroundColor(Color.WHITE);
+                height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                er_input.setBackgroundColor(Color.WHITE);
                 flag = 2;
             }
         });
-        radioBtn4.setOnClickListener(new View.OnClickListener() {
+        radioBtn_er.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                radioBtn1.setChecked(false);
-                radioBtn2.setChecked(false);
-                radioBtn3.setChecked(false);
-                radioBtn4.setChecked(true);
+                radioBtn_W.setChecked(false);
+                radioBtn_S.setChecked(false);
+                radioBtn_H.setChecked(false);
+                radioBtn_er.setChecked(true);
+                width_input.setBackgroundColor(Color.WHITE);
+                space_input.setBackgroundColor(Color.WHITE);
+                height_input.setBackgroundColor(Color.WHITE);
+                er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 flag = 3;
             }
         });
