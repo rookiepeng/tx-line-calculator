@@ -70,7 +70,7 @@ public class CMLINFragment extends Fragment {
             cmlin_ana;// button analyze
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
             spinner_Z0, spinner_Z0o, spinner_Z0e, spinner_Eeff, spinner_Freq;// the units of each parameter
-    private RadioButton radioBtn_Z0, radioBtn2;
+    private RadioButton radioBtn_Z0, radioBtn_z0o;
     private boolean use_z0k;
 
     public CMLINFragment() {
@@ -260,7 +260,7 @@ public class CMLINFragment extends Fragment {
         edittext_k = (EditText) rootView.findViewById(R.id.editText_k_radio);
         edittext_Z0o = (EditText) rootView.findViewById(R.id.editText_Z0o_radio);
         edittext_Z0e = (EditText) rootView.findViewById(R.id.editText_Z0e_radio);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff);
+        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff_radio);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
         edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
@@ -277,7 +277,7 @@ public class CMLINFragment extends Fragment {
         spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0_radio);
         spinner_Z0o = (Spinner) rootView.findViewById(R.id.spinner_Z0o_radio);
         spinner_Z0e = (Spinner) rootView.findViewById(R.id.spinner_Z0e_radio);
-        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Eeff);
+        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Eeff_radio);
         spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
         spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
         spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);
@@ -321,7 +321,7 @@ public class CMLINFragment extends Fragment {
         spinner_Freq.setAdapter(adapterFreq);
 
         radioBtn_Z0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
-        radioBtn2 = (RadioButton) rootView.findViewById(R.id.radioBtn2);
+        radioBtn_z0o = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0o);
         CMLINLine = new Line(Line.CMLIN);
     }
 
@@ -330,7 +330,7 @@ public class CMLINFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioBtn_Z0.setChecked(true);
-                radioBtn2.setChecked(false);
+                radioBtn_z0o.setChecked(false);
                 use_z0k = true;
                 edittext_Z0.setEnabled(true);
                 edittext_k.setEnabled(true);
@@ -338,10 +338,10 @@ public class CMLINFragment extends Fragment {
                 edittext_Z0e.setEnabled(false);
             }
         });
-        radioBtn2.setOnClickListener(new View.OnClickListener() {
+        radioBtn_z0o.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                radioBtn2.setChecked(true);
+                radioBtn_z0o.setChecked(true);
                 radioBtn_Z0.setChecked(false);
                 use_z0k = false;
                 edittext_Z0.setEnabled(false);
@@ -352,14 +352,14 @@ public class CMLINFragment extends Fragment {
         });
         if (use_z0k == true) {
             radioBtn_Z0.setChecked(true);
-            radioBtn2.setChecked(false);
+            radioBtn_z0o.setChecked(false);
             edittext_Z0.setEnabled(true);
             edittext_k.setEnabled(true);
             edittext_Z0o.setEnabled(false);
             edittext_Z0e.setEnabled(false);
         } else {
             radioBtn_Z0.setChecked(false);
-            radioBtn2.setChecked(true);
+            radioBtn_z0o.setChecked(true);
             edittext_Z0.setEnabled(false);
             edittext_k.setEnabled(false);
             edittext_Z0o.setEnabled(true);
