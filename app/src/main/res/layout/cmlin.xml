@@ -77,6 +77,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/listDivider" />
+
                 <include
                     layout="@layout/thickness_input"
                     android:layout_width="match_parent"
@@ -151,144 +156,28 @@
                     android:layout_height="1dip"
                     android:background="?android:attr/listDivider" />
 
-                <RelativeLayout
+                <include
+                    android:id="@+id/z0o_input_radio"
+                    layout="@layout/z0o_input_radio"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent" />
 
-                    <RadioButton
-                        android:id="@+id/radioBtn2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true" />
-
-                    <!-- Z0o: -->
-
-                    <TextView
-                        android:id="@+id/cmlin_text_Z0o"
-                        android:layout_width="30dip"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/radioBtn2" />
-
-                    <!-- Z0o输入框 -->
-
-                    <EditText
-                        android:id="@+id/cmlin_editText_Z0o"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="100dip"
-                        android:layout_toRightOf="@+id/cmlin_text_Z0o"
-                        android:inputType="numberDecimal">
-
-                        <!-- <requestFocus /> -->
-                    </EditText>
-
-                    <!-- Z0o单位 -->
-
-                    <Spinner
-                        android:id="@+id/cmlin_spinner_Z0o"
-                        android:layout_width="100dip"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
-                </RelativeLayout>
-
-                <RelativeLayout
+                <include
+                    android:id="@+id/z0e_input_radio"
+                    layout="@layout/z0e_input_radio"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RadioButton
-                        android:id="@+id/radioBtn4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:visibility="invisible" />
-
-                    <!-- Z0e: -->
-
-                    <TextView
-                        android:id="@+id/cmlin_text_Z0e"
-                        android:layout_width="30dip"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/radioBtn4" />
-
-                    <!-- Z0e输入框 -->
-
-                    <EditText
-                        android:id="@+id/cmlin_editText_Z0e"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="100dip"
-                        android:layout_toRightOf="@+id/cmlin_text_Z0e"
-                        android:inputType="numberDecimal">
-
-                        <!-- <requestFocus /> -->
-                    </EditText>
-
-                    <!-- Z0e单位 -->
-
-                    <Spinner
-                        android:id="@+id/cmlin_spinner_Z0e"
-                        android:layout_width="100dip"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
-                </RelativeLayout>
+                    android:layout_height="match_parent" />
 
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="1dip"
                     android:background="?android:attr/listDivider" />
 
-                <RelativeLayout
+                <include
+                    android:id="@+id/eeff_input_radio"
+                    layout="@layout/eeff_input_radio"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RadioButton
-                        android:id="@+id/radioBtn5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:visibility="invisible" />
-
-                    <!-- E eff: -->
-
-                    <TextView
-                        android:id="@+id/cmlin_text_Eeff"
-                        android:layout_width="30dip"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/radioBtn5" />
-
-                    <!-- E eff输入框 -->
-
-                    <EditText
-                        android:id="@+id/cmlin_editText_Eeff"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="100dip"
-                        android:layout_toRightOf="@+id/cmlin_text_Eeff"
-                        android:inputType="numberDecimal">
-
-                        <!-- <requestFocus /> -->
-                    </EditText>
-
-                    <!-- E eff单位 -->
-
-                    <Spinner
-                        android:id="@+id/cmlin_spinner_Eeff"
-                        android:layout_width="100dip"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
-                </RelativeLayout>
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

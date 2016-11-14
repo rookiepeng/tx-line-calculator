@@ -10,15 +10,14 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.rookiedev.microwavetools.R;
 
-
 public class AdFragment extends Fragment {
-    public AdFragment()
-    {}
+    public AdFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View adView=inflater.inflate(R.layout.banner_layout, container, false);
+        View adView = inflater.inflate(R.layout.banner_layout, container, false);
 
         AdView banner = (AdView) adView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
@@ -29,5 +28,5 @@ public class AdFragment extends Fragment {
         banner.loadAd(adRequest);
 
         return adView;
-    };
+    }
 }

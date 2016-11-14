@@ -3,6 +3,7 @@ package com.rookiedev.microwavetools.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -98,7 +99,7 @@ public class CMLINFragment extends Fragment {
                     edittext_k.setText("");
                 } else {
                     CMLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());  // get the parameters
-                   CMLINLine.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
+                    CMLINLine.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
                     CMLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
                     CMLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
                     CMLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
@@ -153,7 +154,7 @@ public class CMLINFragment extends Fragment {
                 } else {
                     synthesizeButton();
                     if (use_z0k) {
-                        double Z0e,Z0o;
+                        double Z0e, Z0o;
 
                         BigDecimal Z0o_temp = new BigDecimal(CMLINLine.getImpedanceOdd());
                         Z0o = Z0o_temp.setScale(DecimalLength,
@@ -165,7 +166,7 @@ public class CMLINFragment extends Fragment {
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0e.setText(String.valueOf(Z0e));
                     } else {
-                        double Z0,k;
+                        double Z0, k;
 
                         BigDecimal Z0_temp = new BigDecimal(CMLINLine.getImpedance());
                         Z0 = Z0_temp.setScale(DecimalLength,
@@ -184,22 +185,45 @@ public class CMLINFragment extends Fragment {
     }
 
     private void initUI() {
+        View width_input = rootView.findViewById(R.id.width_input);
+        width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View space_input = rootView.findViewById(R.id.space_input);
+        space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View length_input = rootView.findViewById(R.id.length_input);
+        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View z0_input_radio = rootView.findViewById(R.id.z0_input_radio);
+        z0_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        View k_input_radio = rootView.findViewById(R.id.k_input_radio);
+        k_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        View z0o_input_radio = rootView.findViewById(R.id.z0o_input_radio);
+        z0o_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        View z0e_input_radio = rootView.findViewById(R.id.z0e_input_radio);
+        z0e_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        View eeff_input_radio = rootView.findViewById(R.id.eeff_input_radio);
+        eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
         error_Z0e = new SpannableString(this.getString(R.string.Error_Z0e_empty));
         error_Z0o = new SpannableString(this.getString(R.string.Error_Z0o_empty));
-        /** find the elements */
 
-        // Subscript strings
+        // find the elements
         text_er = (TextView) rootView.findViewById(R.id.text_er);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0_radio);
-        text_Eeff = (TextView) rootView.findViewById(R.id.cmlin_text_Eeff);
-        text_Z0o = (TextView) rootView.findViewById(R.id.cmlin_text_Z0o);
-        text_Z0e = (TextView) rootView.findViewById(R.id.cmlin_text_Z0e);
+        text_Eeff = (TextView) rootView.findViewById(R.id.text_Eeff_radio);
+        text_Z0o = (TextView) rootView.findViewById(R.id.text_Z0o_radio);
+        text_Z0e = (TextView) rootView.findViewById(R.id.text_Z0e_radio);
 
+        // Subscript strings
         SpannableString spanEr = new SpannableString(
-                this.getString(R.string.text_er));                        //Z0 = Math.sqrt(Z0e * Z0o);
-                        //k = (Z0e - Z0o) / (Z0e + Z0o);
+                this.getString(R.string.text_er));
         spanEr.setSpan(new SubscriptSpan(), 1, 2,
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_er.append(spanEr);
@@ -233,10 +257,10 @@ public class CMLINFragment extends Fragment {
         edittext_S = (EditText) rootView.findViewById(R.id.editText_S);
         edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0_radio);
-        edittext_k = (EditText) rootView.findViewById(R.id.cmlin_editText_k);
-        edittext_Z0o = (EditText) rootView.findViewById(R.id.cmlin_editText_Z0o);
-        edittext_Z0e = (EditText) rootView.findViewById(R.id.cmlin_editText_Z0e);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.cmlin_editText_Eeff);
+        edittext_k = (EditText) rootView.findViewById(R.id.editText_k_radio);
+        edittext_Z0o = (EditText) rootView.findViewById(R.id.editText_Z0o_radio);
+        edittext_Z0e = (EditText) rootView.findViewById(R.id.editText_Z0e_radio);
+        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
         edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
@@ -251,9 +275,9 @@ public class CMLINFragment extends Fragment {
         spinner_S = (Spinner) rootView.findViewById(R.id.spinner_S);
         spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
         spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0_radio);
-        spinner_Z0o = (Spinner) rootView.findViewById(R.id.cmlin_spinner_Z0o);
-        spinner_Z0e = (Spinner) rootView.findViewById(R.id.cmlin_spinner_Z0e);
-        spinner_Eeff = (Spinner) rootView.findViewById(R.id.cmlin_spinner_Eeff);
+        spinner_Z0o = (Spinner) rootView.findViewById(R.id.spinner_Z0o_radio);
+        spinner_Z0e = (Spinner) rootView.findViewById(R.id.spinner_Z0e_radio);
+        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Eeff);
         spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
         spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
         spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);
@@ -568,25 +592,19 @@ public class CMLINFragment extends Fragment {
             CMLINLine.setCouplingFactor(0);
         }
 
-        CMLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),spinner_Freq.getSelectedItemPosition());
+        CMLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
         CMLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-        CMLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),spinner_H.getSelectedItemPosition());
-        CMLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),spinner_T.getSelectedItemPosition());
+        CMLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+        CMLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
         double W, S, L;
         if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
             CMLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
-            //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
             CMLIN cmlin = new CMLIN();
-            CMLINLine=cmlin.getSynResult(CMLINLine,use_z0k);
-            //cmlin.cmlin_syn();
-            L=CMLINLine.getMetalLength();
-            W=CMLINLine.getMetalWidth();
-            S=CMLINLine.getMetalSpace();
-            //L = cmlin.getL();
-            //W = cmlin.getW();
-            //S = cmlin.getS();
-            //cmlin_syn(H, T, er, Freq, Z0, k, Z0e, Z0o, Eeff);
+            CMLINLine = cmlin.getSynResult(CMLINLine, use_z0k);
+            L = CMLINLine.getMetalLength();
+            W = CMLINLine.getMetalWidth();
+            S = CMLINLine.getMetalSpace();
 
             temp = spinner_L.getSelectedItemPosition();
             if (temp == 0) {
@@ -602,13 +620,9 @@ public class CMLINFragment extends Fragment {
             edittext_L.setText(String.valueOf(L));
         } else {
             CMLIN cmlin = new CMLIN();
-            CMLINLine=cmlin.getSynResult(CMLINLine, use_z0k);
-            //cmlin.cmlin_syn();
-            W=CMLINLine.getMetalWidth();
-            S=CMLINLine.getMetalSpace();
-            //W = cmlin.getW();
-            //S = cmlin.getS();
-            //cmlin_syn(H, T, er, Freq, Z0, k, Z0e, Z0o, 0);
+            CMLINLine = cmlin.getSynResult(CMLINLine, use_z0k);
+            W = CMLINLine.getMetalWidth();
+            S = CMLINLine.getMetalSpace();
             edittext_L.setText(""); // clear the L if the Eeff input is empty
         }
 

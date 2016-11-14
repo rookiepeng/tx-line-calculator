@@ -5,42 +5,41 @@
     android:orientation="vertical">
 
     <RadioButton
-        android:id="@+id/radioBtn_Z0"
+        android:id="@+id/radioBtn_Z0o"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true" />
 
-    <!-- Z0: -->
+    <!-- Z0o: -->
 
     <TextView
-        android:id="@+id/text_Z0_radio"
+        android:id="@+id/text_Z0o_radio"
         android:layout_width="30dip"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/radioBtn_Z0" />
+        android:layout_toEndOf="@+id/radioBtn_Z0o" />
 
-    <!-- Z0输入框 -->
+    <!-- Z0o输入框 -->
 
     <EditText
-        android:id="@+id/editText_Z0_radio"
+        android:id="@+id/editText_Z0o_radio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginEnd="100dip"
-        android:layout_toEndOf="@+id/text_Z0_radio"
+        android:layout_toEndOf="@+id/text_Z0o_radio"
         android:inputType="numberDecimal">
 
         <!-- <requestFocus /> -->
     </EditText>
 
-    <!-- Z0单位 -->
+    <!-- Z0o单位 -->
 
     <Spinner
-        android:id="@+id/spinner_Z0_radio"
+        android:id="@+id/spinner_Z0o_radio"
         android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true" />
-
 </RelativeLayout>

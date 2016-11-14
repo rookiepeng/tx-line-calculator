@@ -76,6 +76,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/listDivider" />
+
                 <include
                     layout="@layout/thickness_input"
                     android:layout_width="match_parent"

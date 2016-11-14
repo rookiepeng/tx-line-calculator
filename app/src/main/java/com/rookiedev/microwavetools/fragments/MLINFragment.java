@@ -147,7 +147,7 @@ public class MLINFragment extends Fragment {
                     if (edittext_Eeff.length() != 0) {
                         MLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
                         MLIN mlin = new MLIN();
-                        MLINLine = mlin.getSynResult(MLINLine,Line.SYN_W);
+                        MLINLine = mlin.getSynResult(MLINLine, Line.SYN_W);
                         W = MLINLine.getMetalWidth();
                         //mlin.setW(W);
                         L = MLINLine.getMetalLength();
@@ -165,7 +165,7 @@ public class MLINFragment extends Fragment {
                         edittext_L.setText(String.valueOf(L));
                     } else {
                         MLIN mlin = new MLIN();
-                        MLINLine = mlin.getSynResult(MLINLine,Line.SYN_W);
+                        MLINLine = mlin.getSynResult(MLINLine, Line.SYN_W);
                         W = MLINLine.getMetalWidth();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
@@ -194,6 +194,18 @@ public class MLINFragment extends Fragment {
      * initialize the UI
 	 */
     private void initUI() {
+        View width_input = rootView.findViewById(R.id.width_input);
+        width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View length_input = rootView.findViewById(R.id.length_input);
+        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View z0_input = rootView.findViewById(R.id.z0_input);
+        z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        View eeff_input = rootView.findViewById(R.id.eeff_input);
+        eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
         MLINLine = new Line(Line.MLIN);
         error_er = new SpannableString(
                 this.getString(R.string.Error_er_empty));
@@ -226,18 +238,6 @@ public class MLINFragment extends Fragment {
 
         // show the epsilon with html style
         // text_epsilon.setText(Html.fromHtml(string_epsilon));
-
-        View width_input =  rootView.findViewById(R.id.width_input);
-        width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-
-        View length_input =  rootView.findViewById(R.id.length_input);
-        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-
-        View z0_input =  rootView.findViewById(R.id.z0_input);
-        z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-
-        View eeff_input =  rootView.findViewById(R.id.eeff_input);
-        eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         // edittext elements
         edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
