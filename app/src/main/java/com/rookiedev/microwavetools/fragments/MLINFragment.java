@@ -103,8 +103,6 @@ public class MLINFragment extends Fragment {
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
 
-                        //Eeff = mlin.getEeff(); // calculate the Eeff
-
                         BigDecimal Eeff_temp = new BigDecimal(MLINLine.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -112,7 +110,6 @@ public class MLINFragment extends Fragment {
                     } else {
                         MLIN mlin = new MLIN();
                         MLINLine = mlin.getAnaResult(MLINLine);
-                        //Z0 = mlin.getZ0();
 
                         BigDecimal Z0_temp = new BigDecimal(MLINLine.getImpedance());
                         double Z0 = Z0_temp.setScale(DecimalLength,

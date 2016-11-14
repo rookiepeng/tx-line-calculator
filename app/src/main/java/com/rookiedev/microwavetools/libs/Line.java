@@ -9,7 +9,6 @@ public class Line {
     private double subEpsilon, subHeight; // n/a, meter
     private double Impedance, ElectricalLength; // ohms, degree
     private double Frequency; // Hz
-    private double Delay; // s
     /* open end length correction */
     private double Deltal,deltalEven,deltalOdd;
     private double kEff, loss, lossEven, lossOdd, lossLen, skinDepth;
@@ -99,14 +98,6 @@ public class Line {
 
     public double getFrequency() {
         return Frequency;
-    }
-
-    public double getDelay() {
-        return Delay;
-    }
-
-    public void setDelay(double delay) {
-        Delay = delay;
     }
 
     public double getDeltal() {
