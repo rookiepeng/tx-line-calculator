@@ -28,7 +28,8 @@
     <string name="longname_cslin">Coupled Stripline</string>
     <string name="longname_coax">Coaxial Line</string>
     <!-- global -->
-    <string name="Phy">Physical</string>
+    <string name="Phy">Physical Parameters</string>
+    <string name="Ele">Electrical Parameters</string>
     <string name="Syn">Synthesize</string>
     <string name="Ana">Analyze</string>
     <string name="Syn_button">▲Synthesize▲</string>

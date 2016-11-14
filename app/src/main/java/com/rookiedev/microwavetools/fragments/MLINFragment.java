@@ -5,8 +5,11 @@
 package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -226,8 +229,22 @@ public class MLINFragment extends Fragment {
         // show the epsilon with html style
         // text_epsilon.setText(Html.fromHtml(string_epsilon));
 
+        View width_input =  rootView.findViewById(R.id.width_input);
+        width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View length_input =  rootView.findViewById(R.id.length_input);
+        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+
+        View z0_input =  rootView.findViewById(R.id.z0_input);
+        z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        View eeff_input =  rootView.findViewById(R.id.eeff_input);
+        eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
         // edittext elements
         edittext_W = (EditText) rootView.findViewById(R.id.mlin_editText_W);
+        //edittext_W.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.green), PorterDuff.Mode.SRC_ATOP);
+        //edittext_W.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
         edittext_L = (EditText) rootView.findViewById(R.id.mlin_editText_L);
         edittext_Z0 = (EditText) rootView.findViewById(R.id.mlin_editText_Z0);
         edittext_Eeff = (EditText) rootView.findViewById(R.id.mlin_editText_Eeff);

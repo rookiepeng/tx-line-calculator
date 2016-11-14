@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <!-- T: -->
+
+        <TextView
+            android:id="@+id/mlin_text_T"
+            android:layout_width="20dip"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:text="@string/mlin_text_T" />
+
+        <!-- T输入框 -->
+
+        <EditText
+            android:id="@+id/mlin_editText_T"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="100dp"
+            android:layout_toEndOf="@+id/mlin_text_T"
+            android:inputType="numberDecimal"/>
+        <!-- T单位 -->
+
+        <Spinner
+            android:id="@+id/mlin_spinner_T"
+            android:layout_width="100dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
+
+</RelativeLayout>

@@ -10,6 +10,16 @@
     <color name="overlayBackground">#80808080</color>
 
     <color name="pink">#E91E63</color>
-    <color name="indigo">#3F51B5</color>
+    <color name="pink_shadow">#F8BBD0</color>
+
+    <color name="purple">#9C27B0</color>
+
+    <color name="green">#2E7D32</color>
+    <color name="green_shadow">#C8E6C9</color>
+    <color name="teal">#00695C</color>
+
+    <color name="blue">#1565C0</color>
+    <color name="blue_shadow">#BBDEFB</color>
+    <color name="indigo">#283593</color>
 
 </resources>
