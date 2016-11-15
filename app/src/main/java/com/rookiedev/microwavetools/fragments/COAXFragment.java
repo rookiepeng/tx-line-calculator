@@ -2,10 +2,14 @@ package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.SubscriptSpan;
@@ -47,6 +51,7 @@ public class COAXFragment extends Fragment {
     public final static String COAX_T_UNIT = "COAX_T_UNIT";
     public final static String COAX_Flag = "COAX_Flag";
     private View rootView, height_input, er_input, a_input, b_input;
+    private CardView electricalCard, physicalCard;
     private int DecimalLength; // the length of the Decimal,
     private SpannableString error_er, error_Z0;
     private TextView text_er, text_Z0, text_Eeff; // strings which include the subscript
@@ -170,6 +175,7 @@ public class COAXFragment extends Fragment {
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
                 }
+                forceRippleAnimation(electricalCard);
             }
         });
 
@@ -382,6 +388,7 @@ public class COAXFragment extends Fragment {
                         edittext_er.setText(String.valueOf(er));
                     }
                 }
+                forceRippleAnimation(physicalCard);
             }
         });
 
@@ -402,6 +409,9 @@ public class COAXFragment extends Fragment {
 
         View eeff_input = rootView.findViewById(R.id.eeff_input);
         eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
@@ -803,5 +813,20 @@ public class COAXFragment extends Fragment {
             }
         }
         return checkResult;
+    }
+
+    protected void forceRippleAnimation(View view)
+    {
+        if(Build.VERSION.SDK_INT >= 23)
+        {
+            view.setClickable(true);
+            Drawable background = view.getForeground();
+            final RippleDrawable rippleDrawable = (RippleDrawable) background;
+
+            rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
+
+            view.setClickable(false);
+            rippleDrawable.setState(new int[]{});
+        }
     }
 }

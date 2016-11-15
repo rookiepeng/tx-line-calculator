@@ -1,10 +1,14 @@
 package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.SubscriptSpan;
@@ -51,6 +55,7 @@ public class CSLINFragment extends Fragment {
     public final static String CSLIN_T_UNIT = "CSLIN_T_UNIT";
     public final static String CSLIN_USEZ0k = "CSLIN_USEZ0k";
     private View rootView;
+    private CardView electricalCard, physicalCard;
     private int DecimalLength; // the length of the Decimal,
     // accurate of the result
     private SpannableString error_er, error_Z0, error_Z0e, error_Z0o;
@@ -202,6 +207,7 @@ public class CSLINFragment extends Fragment {
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0e.setText(String.valueOf(Z0e));
                 }
+                forceRippleAnimation(electricalCard);
             }
         });
 
@@ -242,6 +248,7 @@ public class CSLINFragment extends Fragment {
                         edittext_k.setText(String.valueOf(k));
                     }
                 }
+                forceRippleAnimation(physicalCard);
             }
         });
 
@@ -272,6 +279,9 @@ public class CSLINFragment extends Fragment {
 
         View eeff_input_radio = rootView.findViewById(R.id.eeff_input_radio);
         eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
@@ -738,5 +748,20 @@ public class CSLINFragment extends Fragment {
         S = S_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                 .doubleValue();
         edittext_S.setText(String.valueOf(S));
+    }
+
+    protected void forceRippleAnimation(View view)
+    {
+        if(Build.VERSION.SDK_INT >= 23)
+        {
+            view.setClickable(true);
+            Drawable background = view.getForeground();
+            final RippleDrawable rippleDrawable = (RippleDrawable) background;
+
+            rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
+
+            view.setClickable(false);
+            rippleDrawable.setState(new int[]{});
+        }
     }
 }

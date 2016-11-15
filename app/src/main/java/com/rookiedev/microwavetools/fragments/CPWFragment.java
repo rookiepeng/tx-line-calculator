@@ -2,10 +2,14 @@ package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.SubscriptSpan;
@@ -52,7 +56,7 @@ public class CPWFragment extends Fragment {
     public final static String CPW_Flag = "CPW_Flag";
     public final static String CPW_WITH_GROUND = "CPW_WITH_GROUND";
     private View rootView, width_input, space_input, height_input, er_input;
-    ;
+    private CardView electricalCard, physicalCard;
     private int DecimalLength; // the length of the Decimal, accurate of the result
     private SpannableString error_er, error_Z0;
     private TextView text_er, text_Z0, text_Eeff; // strings which include the subscript
@@ -187,6 +191,7 @@ public class CPWFragment extends Fragment {
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
                 }
+                forceRippleAnimation(electricalCard);
             }
         });
 
@@ -420,6 +425,7 @@ public class CPWFragment extends Fragment {
                         edittext_er.setText(String.valueOf(er));
                     }
                 }
+                forceRippleAnimation(physicalCard);
             }
         });
 
@@ -441,6 +447,9 @@ public class CPWFragment extends Fragment {
 
         View eeff_input = rootView.findViewById(R.id.eeff_input);
         eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
@@ -876,5 +885,20 @@ public class CPWFragment extends Fragment {
             }
         }
         return checkResult;
+    }
+
+    protected void forceRippleAnimation(View view)
+    {
+        if(Build.VERSION.SDK_INT >= 23)
+        {
+            view.setClickable(true);
+            Drawable background = view.getForeground();
+            final RippleDrawable rippleDrawable = (RippleDrawable) background;
+
+            rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
+
+            view.setClickable(false);
+            rippleDrawable.setState(new int[]{});
+        }
     }
 }

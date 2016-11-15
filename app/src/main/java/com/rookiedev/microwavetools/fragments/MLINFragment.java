@@ -5,10 +5,14 @@
 package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.SubscriptSpan;
@@ -45,6 +49,7 @@ public class MLINFragment extends Fragment {
     private final static String MLIN_T = "MLIN_T";
     private final static String MLIN_T_UNIT = "MLIN_T_UNIT";
     private View rootView;
+    private CardView electricalCard, physicalCard;
     private SpannableString error_er, error_Z0;
     private int DecimalLength; // the length of the Decimal, accurate of the result
     private TextView text_epsilon, text_z0, text_eeff; // strings which include the subscript
@@ -119,6 +124,7 @@ public class MLINFragment extends Fragment {
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
                     }
                 }
+                forceRippleAnimation(electricalCard);
             }
         });
 
@@ -181,6 +187,7 @@ public class MLINFragment extends Fragment {
                             .doubleValue();
                     edittext_W.setText(String.valueOf(W));
                 }
+                forceRippleAnimation(physicalCard);
             }
         });
 
@@ -202,6 +209,9 @@ public class MLINFragment extends Fragment {
 
         View eeff_input = rootView.findViewById(R.id.eeff_input);
         eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+
+        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         MLINLine = new Line(Line.MLIN);
         error_er = new SpannableString(
@@ -446,5 +456,33 @@ public class MLINFragment extends Fragment {
             checkResult = false;
         }
         return checkResult;
+    }
+
+    protected void forceRippleAnimation(View view)
+    {
+        if(Build.VERSION.SDK_INT >= 23)
+        {
+            view.setClickable(true);
+            Drawable background = view.getForeground();
+            final RippleDrawable rippleDrawable = (RippleDrawable) background;
+
+            rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
+
+            view.setClickable(false);
+            rippleDrawable.setState(new int[]{});
+
+            /*
+            Handler handler = new Handler();
+
+            handler.postDelayed(new Runnable()
+            {
+                @Override public void run()
+                {
+                    rippleDrawable.setState(new int[]{});
+                    physicalCard.setClickable(false);
+                    electricalCard.setClickable(false);
+                }
+            }, 200);*/
+        }
     }
 }
