@@ -4,9 +4,9 @@
 
     <item
         android:id="@+id/menu_ad"
-        android:icon="@drawable/ic_menu_setting"
-        app:showAsAction="ifRoom"
-        android:title="@string/menu_preference" />
+        android:icon="@drawable/ic_shop_white_24dp"
+        app:showAsAction="always|withText"
+        android:title="@string/menu_shop" />
 
     <item
             android:id="@+id/menu_preference"

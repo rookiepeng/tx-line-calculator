@@ -116,5 +116,6 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <string name="menu_preference">preference</string>
+    <string name="menu_shop">Ad free</string>
     <string name="menu_about">about</string>
 </resources>

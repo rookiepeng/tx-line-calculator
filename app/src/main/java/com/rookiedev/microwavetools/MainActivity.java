@@ -63,7 +63,9 @@ public class MainActivity extends AppCompatActivity
             //Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
 
             // if we were disposed of in the meantime, quit.
-            if (mHelper == null) return;
+            if (mHelper == null) {
+                return;
+            }
 
             if (result.isFailure()) {
                 complain("Error purchasing: " + result);
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity
             if (!verifyDeveloperPayload(purchase)) {
                 complain("Error purchasing. Authenticity verification failed.");
                 //setWaitScreen(false);
+                adFragment = new AdFragment();
+                fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
                 return;
             }
 
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity
                 // bought 1/4 tank of gas. So consume it.
                 //Log.d(TAG, "Purchase is gas. Starting gas consumption.");
                 isAdFree = true;
+                invalidateOptionsMenu();
 
                 // TODO hide adview here
                 //try {
@@ -101,11 +106,15 @@ public class MainActivity extends AppCompatActivity
             //Log.d(TAG, "Query inventory finished.");
 
             // Have we been disposed of in the meantime? If so, quit.
-            if (mHelper == null) return;
+            if (mHelper == null) {
+                return;
+            }
 
             // Is it a failure?
             if (result.isFailure()) {
                 complain("Failed to query inventory: " + result);
+                adFragment = new AdFragment();
+                fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
                 return;
             }
 
@@ -120,6 +129,12 @@ public class MainActivity extends AppCompatActivity
             // Do we have the premium upgrade?
             Purchase premiumPurchase = inventory.getPurchase(SKU_ADFREE);
             isAdFree = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
+            if (isAdFree) {
+                invalidateOptionsMenu();
+            } else {
+                adFragment = new AdFragment();
+                fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
+            }
             //Log.d(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
 
             // First find out which subscription is auto renewing
@@ -283,8 +298,6 @@ public class MainActivity extends AppCompatActivity
             drawer.openDrawer(GravityCompat.START);
         }
 
-        adFragment = new AdFragment();
-        fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
     }
 
     @Override
@@ -308,6 +321,12 @@ public class MainActivity extends AppCompatActivity
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.menu_ad);
+        if (isAdFree) {
+            menuItem.setVisible(false);
+        } else {
+            menuItem.setVisible(true);
+        }
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -316,6 +335,9 @@ public class MainActivity extends AppCompatActivity
         // Handle action buttons
         Intent intent = new Intent();
         switch (item.getItemId()) {
+            case R.id.menu_ad:
+                onAdfreeButtonClicked();
+                return true;
             case R.id.menu_preference:
                 intent.setClass(this, preferences.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -492,7 +514,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // User clicked the "Buy Gas" button
-    public void onAdfreeButtonClicked(View arg0) {
+    public void onAdfreeButtonClicked() {
         //Log.d(TAG, "Buy gas button clicked.");
 
         /* TODO: for security, generate your payload here for verification. See the comments on
