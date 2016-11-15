@@ -169,7 +169,7 @@ public class MLIN {
     private Line Synthesize(Line MLINLine, int flag) {
         double l;
         //double Ro;
-        double Xo, Z0;
+        double Z0;
         double v, len;
         double eeff;
 
@@ -253,7 +253,7 @@ public class MLIN {
 
         //Ro = MLINLine.getRo();
         //Log.v("MLIN", "Ro=" + Double.toString(Ro));
-        Xo = MLINLine.getXo();
+        //Xo = MLINLine.getXo();
         len = MLINLine.getElectricalLength();
         Z0 = MLINLine.getImpedance();
 
@@ -270,7 +270,6 @@ public class MLIN {
         //temp value for l used while synthesizing the other parameters. We'll correct l later.
         l = 1000.0;
         MLINLine.setMetalLength(l, Line.LUnitm);
-
 
         if (!done) {
             // Initialize the various error values
@@ -376,12 +375,8 @@ public class MLIN {
         v = Constant.LIGHTSPEED / Math.sqrt(eeff);
 
         l = (len / 360) * (v / MLINLine.getFrequency());
-        //Log.v("MLIN", "eeff=" + Double.toString(eeff));
 
         MLINLine.setMetalLength(l, Line.LUnitm);
-
-        // recalculate using real length to find loss
-        //MLINLine = microstripAna(MLINLine, Constant.LOSSLESS);
 
         return MLINLine;
     }

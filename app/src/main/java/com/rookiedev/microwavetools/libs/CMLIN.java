@@ -150,9 +150,9 @@ public class CMLIN {
         // input physical dimensions
         double width, length, space;
         // substrate parameters
-        double height, dielectric, resistivity, lossTangent, thickness, roughness;
+        double height, dielectric;
 
-        double widthToHeight, spaceToHeight, deltau, deltau1, deltaur, thicknessToHeight, V, EFE0, AO, BO, CO, DO;
+        double widthToHeight, spaceToHeight, V, EFE0, AO, BO, CO, DO;
         double EFO0, frequencyToHeight;
         double EF; // 0 frequency (static) relative dielectric constant for a single microstrip.
         double EFF; // frequency dependent relative dielectric constant for a single microstrip given in Kirschning and Jansen (EL)
@@ -313,7 +313,7 @@ public class CMLIN {
         z0o0 = ZL0 * Math.sqrt(EF / EFO0) / (1.0 - (ZL0 / 377.0) * Math.sqrt(EF) * Q10);
 
 
-        /** relative permittivity including dispersion of single microstrip of width W, Tmet=0. Kirschning and Jansen (EL) **/
+        // relative permittivity including dispersion of single microstrip of width W, Tmet=0. Kirschning and Jansen (EL) **/
         // normalized frequency (GHz-cm)
         // save fn
         fnold = frequencyToHeight;
@@ -333,7 +333,7 @@ public class CMLIN {
         // recall fn
         frequencyToHeight = fnold;
 
-        /** Characteristic Impedance of single strip, Width=W, Tmet=0. Jansen and Kirschning **/
+        // Characteristic Impedance of single strip, Width=W, Tmet=0. Jansen and Kirschning **/
         // normalized frequency (GHz-mm)
         // save fn
         fnold = frequencyToHeight;
