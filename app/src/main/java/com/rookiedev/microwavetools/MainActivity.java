@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     IabHelper mHelper;
     // Provides purchase notification while this app is running
     IabBroadcastReceiver mBroadcastReceiver;
-    private final static String SKU_ADFREE = "ADFREE";
+    private final static String SKU_ADFREE = "com.rookiedev.rfline.adfree.v1";
     private boolean isAdFree = false;
     // (arbitrary) request code for the purchase flow
     static final int RC_REQUEST = 10001;
@@ -86,16 +86,11 @@ public class MainActivity extends AppCompatActivity
                 // bought 1/4 tank of gas. So consume it.
                 //Log.d(TAG, "Purchase is gas. Starting gas consumption.");
                 isAdFree = true;
+                if (adFragment != null) {
+                    fragmentManager.beginTransaction().remove(adFragment).commit();
+                }
                 invalidateOptionsMenu();
 
-                // TODO hide adview here
-                //try {
-                //    mHelper.consumeAsync(purchase, mConsumeFinishedListener);
-                //} catch (IabHelper.IabAsyncInProgressException e) {
-                //    complain("Error consuming gas. Another async operation in progress.");
-                //    //setWaitScreen(false);
-                //    return;
-                //}
             }
         }
     };
