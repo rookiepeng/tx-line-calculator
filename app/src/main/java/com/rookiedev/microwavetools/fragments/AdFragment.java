@@ -22,8 +22,8 @@ public class AdFragment extends Fragment {
         AdView banner = (AdView) adView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR) // All emulators
-                .addTestDevice("015d172c791c0215") // my test device
-                .addTestDevice("04afa117002e7ebc") // my test device
+                .addTestDevice("g000kw0463460qxf") // Kindle Fire
+                .addTestDevice("00a1d2e725463456") // Nexus 5X
                 .build();
         banner.loadAd(adRequest);
 

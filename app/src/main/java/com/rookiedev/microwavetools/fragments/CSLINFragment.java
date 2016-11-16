@@ -27,6 +27,7 @@ import com.google.android.gms.ads.AdView;
 import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CSLIN;
+import com.rookiedev.microwavetools.libs.Constant;
 
 import java.math.BigDecimal;
 
@@ -440,7 +441,7 @@ public class CSLINFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
@@ -495,7 +496,7 @@ public class CSLINFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared Preferences in the device universal parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
@@ -508,7 +509,7 @@ public class CSLINFragment extends Fragment {
         String cslin_W_unit, cslin_S_unit, cslin_L_unit, cslin_Z0_unit, cslin_Z0e_unit, cslin_Z0o_unit, cslin_Eeff_unit, cslin_Freq_unit, cslin_H_unit, cslin_T_unit;
         String cslin_use_z0k;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         cslin_W = edittext_W.getText().toString();

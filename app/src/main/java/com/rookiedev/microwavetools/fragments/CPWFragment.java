@@ -32,6 +32,7 @@ import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CPW;
 import com.rookiedev.microwavetools.libs.CPWG;
+import com.rookiedev.microwavetools.libs.Constant;
 
 import java.math.BigDecimal;
 
@@ -549,7 +550,7 @@ public class CPWFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
@@ -595,7 +596,7 @@ public class CPWFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
         // universal parameters
@@ -726,7 +727,7 @@ public class CPWFragment extends Fragment {
         String cpw_flag;
         String cpw_with_ground;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         cpw_W = edittext_W.getText().toString();

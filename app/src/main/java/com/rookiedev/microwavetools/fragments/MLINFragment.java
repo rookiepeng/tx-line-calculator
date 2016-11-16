@@ -27,7 +27,9 @@ import android.widget.TextView;
 
 import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
+import com.rookiedev.microwavetools.libs.Constant;
 import com.rookiedev.microwavetools.libs.Line;
+import com.rookiedev.microwavetools.libs.LineMLIN;
 import com.rookiedev.microwavetools.libs.MLIN;
 
 import java.math.BigDecimal;
@@ -66,7 +68,7 @@ public class MLINFragment extends Fragment {
             mlin_ana;// button analyze
     private Spinner spinner_W, spinner_L, spinner_T, spinner_H, spinner_Z0,
             spinner_Eeff, spinner_Freq;// the units of each parameter
-    private Line MLINLine;
+    private LineMLIN MLINLine;
 
     public MLINFragment() {
         // Empty constructor required for fragment subclasses
@@ -210,10 +212,10 @@ public class MLINFragment extends Fragment {
         View eeff_input = rootView.findViewById(R.id.eeff_input);
         eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
-        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
-        MLINLine = new Line(Line.MLIN);
+        MLINLine = new LineMLIN();
         error_er = new SpannableString(
                 this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
@@ -308,7 +310,7 @@ public class MLINFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
@@ -347,7 +349,7 @@ public class MLINFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
         // universal parameters
@@ -361,7 +363,7 @@ public class MLINFragment extends Fragment {
         String mlin_W, mlin_T, mlin_H, mlin_epsilon, mlin_L, mlin_Z0, mlin_Eeff, mlin_Freq;
         String mlin_W_unit, mlin_L_unit, mlin_T_unit, mlin_H_unit, mlin_Z0_unit, mlin_Eeff_unit, mlin_Freq_unit;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -458,10 +460,8 @@ public class MLINFragment extends Fragment {
         return checkResult;
     }
 
-    protected void forceRippleAnimation(View view)
-    {
-        if(Build.VERSION.SDK_INT >= 23)
-        {
+    protected void forceRippleAnimation(View view) {
+        if (Build.VERSION.SDK_INT >= 23) {
             view.setClickable(true);
             Drawable background = view.getForeground();
             final RippleDrawable rippleDrawable = (RippleDrawable) background;

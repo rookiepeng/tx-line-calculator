@@ -28,6 +28,7 @@ import com.google.android.gms.ads.AdView;
 import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.COAX;
+import com.rookiedev.microwavetools.libs.Constant;
 
 import java.math.BigDecimal;
 
@@ -506,7 +507,7 @@ public class COAXFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
@@ -550,7 +551,7 @@ public class COAXFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
         // universal parameters
@@ -660,7 +661,7 @@ public class COAXFragment extends Fragment {
         String coax_a_unit, coax_H_unit, coax_b_unit, coax_L_unit, coax_Z0_unit, coax_Eeff_unit, coax_Freq_unit, coax_T_unit;
         String coax_flag;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         coax_a = edittext_a.getText().toString();

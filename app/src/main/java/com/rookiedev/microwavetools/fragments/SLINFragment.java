@@ -27,6 +27,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
+import com.rookiedev.microwavetools.libs.Constant;
 import com.rookiedev.microwavetools.libs.SLIN;
 
 import java.math.BigDecimal;
@@ -423,7 +424,7 @@ public class SLINFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
@@ -463,7 +464,7 @@ public class SLINFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
         // universal parameters
@@ -538,7 +539,7 @@ public class SLINFragment extends Fragment {
         String slin_W_unit, slin_H_unit, slin_L_unit, slin_Z0_unit, slin_Eeff_unit, slin_Freq_unit, slin_T_unit;
         String slin_flag;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 ActionBarActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         slin_W = edittext_W.getText().toString();

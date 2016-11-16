@@ -1,12 +1,12 @@
 package com.rookiedev.microwavetools.libs;
 
 public class MLIN {
+    private double kEff;
 
-    public MLIN() {}
+    public MLIN() {
+    }
 
-    private Line Analysis(Line MLINLine) {
-        // flag=1 enables loss calculations
-        // flag=0 disables loss calculations
+    private LineMLIN Analysis(LineMLIN MLINLine) {
         double w, l;
         double h, er, t;
         double T;
@@ -131,7 +131,8 @@ public class MLIN {
         // effective relative permittivity
         eeff = EF;
 
-        MLINLine.setkEff(eeff);
+        kEff = eeff;
+        //MLINLine.setkEff(eeff);
         MLINLine.setElectricalLength(len);
 
         //  store results
@@ -166,7 +167,7 @@ public class MLIN {
     *   /////////////////ground///////////////////////
     *
     */
-    private Line Synthesize(Line MLINLine, int flag) {
+    private LineMLIN Synthesize(LineMLIN MLINLine, int flag) {
         double l;
         //double Ro;
         double Z0;
@@ -263,9 +264,9 @@ public class MLIN {
         tmet = MLINLine.getMetalThick();
 
         // Substrate thickness, relative permitivity, and loss tangent
-        h = MLINLine.getSubHeight();
-        es = MLINLine.getSubEpsilon();
-        tand = MLINLine.getTand();
+        //h = MLINLine.getSubHeight();
+        //es = MLINLine.getSubEpsilon();
+        //tand = MLINLine.getTand();
 
         //temp value for l used while synthesizing the other parameters. We'll correct l later.
         l = 1000.0;
@@ -273,20 +274,20 @@ public class MLIN {
 
         if (!done) {
             // Initialize the various error values
-            MLINLine.setParameter(varmin, flag);
+            MLINLine.setSynthesizeParameter(varmin, flag);
             MLINLine = Analysis(MLINLine);
             errmin = MLINLine.getImpedance() - Z0;
 
-            MLINLine.setParameter(varmax, flag);
+            MLINLine.setSynthesizeParameter(varmax, flag);
             MLINLine = Analysis(MLINLine);
             errmax = MLINLine.getImpedance() - Z0;
 
-            MLINLine.setParameter(var, flag);
+            MLINLine.setSynthesizeParameter(var, flag);
             MLINLine = Analysis(MLINLine);
             err = MLINLine.getImpedance() - Z0;
 
             varold = 0.99 * var;
-            MLINLine.setParameter(varold, flag);
+            MLINLine.setSynthesizeParameter(varold, flag);
             MLINLine = Analysis(MLINLine);
             errold = MLINLine.getImpedance() - Z0;
 
@@ -336,7 +337,7 @@ public class MLIN {
             }
 
             /* update the error value */
-            MLINLine.setParameter(var, flag);
+            MLINLine.setSynthesizeParameter(var, flag);
             MLINLine = Analysis(MLINLine);
             err = MLINLine.getImpedance() - Z0;
             //if (rslt)
@@ -370,7 +371,8 @@ public class MLIN {
         // velocity on line
         MLINLine = Analysis(MLINLine);
 
-        eeff = MLINLine.getkEff();
+        //eeff = MLINLine.getkEff();
+        eeff = kEff;
 
         v = Constant.LIGHTSPEED / Math.sqrt(eeff);
 
@@ -415,11 +417,11 @@ public class MLIN {
         return z01;
     }
 
-    public Line getAnaResult(Line MLINLine) {
+    public LineMLIN getAnaResult(LineMLIN MLINLine) {
         return Analysis(MLINLine);
     }
 
-    public Line getSynResult(Line MLINLine, int flag) {
+    public LineMLIN getSynResult(LineMLIN MLINLine, int flag) {
         return Synthesize(MLINLine, flag);
     }
 }

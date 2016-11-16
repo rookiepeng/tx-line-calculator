@@ -19,8 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.rookiedev.microwavetools.fragments.AdFragment;
 import com.rookiedev.microwavetools.fragments.CMLINFragment;
 import com.rookiedev.microwavetools.fragments.COAXFragment;
@@ -28,6 +26,7 @@ import com.rookiedev.microwavetools.fragments.CPWFragment;
 import com.rookiedev.microwavetools.fragments.CSLINFragment;
 import com.rookiedev.microwavetools.fragments.MLINFragment;
 import com.rookiedev.microwavetools.fragments.SLINFragment;
+import com.rookiedev.microwavetools.libs.Constant;
 import com.rookiedev.microwavetools.util.IabBroadcastReceiver;
 import com.rookiedev.microwavetools.util.IabHelper;
 import com.rookiedev.microwavetools.util.IabResult;
@@ -37,9 +36,6 @@ import com.rookiedev.microwavetools.util.Purchase;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IabBroadcastReceiver.IabBroadcastListener {
 
-    public static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
-    private static final String PREFS_POSITION = "POSITION";
-    private static final String PREFS_ISFIRSTRUN = "ISFIRSTRUN";
     private int pos;
     private DrawerLayout drawer;
     private Fragment fragment = null;
@@ -90,7 +86,6 @@ public class MainActivity extends AppCompatActivity
                     fragmentManager.beginTransaction().remove(adFragment).commit();
                 }
                 invalidateOptionsMenu();
-
             }
         }
     };
@@ -365,19 +360,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStop() {
         super.onStop();
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME,
+        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString(PREFS_POSITION, String.valueOf(pos));
+        editor.putString(Constant.PREFS_POSITION, String.valueOf(pos));
         editor.apply();
         // saveSharedPref();
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME,
+        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
-        pos = Integer.parseInt(prefs.getString(PREFS_POSITION, "0"));
+        pos = Integer.parseInt(prefs.getString(Constant.PREFS_POSITION, "0"));
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -447,11 +442,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean isFirstRun() {
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME,
+        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
-        if (prefs.getString(PREFS_ISFIRSTRUN, "true").equals("true")) {
+        if (prefs.getString(Constant.PREFS_ISFIRSTRUN, "true").equals("true")) {
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(PREFS_ISFIRSTRUN, "false");
+            editor.putString(Constant.PREFS_ISFIRSTRUN, "false");
             editor.apply();
             return true;
         } else {
@@ -477,12 +472,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // Enables or disables the "please wait" screen.
-    //void setWaitScreen(boolean set) {
-    //    findViewById(R.id.screen_main).setVisibility(set ? View.GONE : View.VISIBLE);
-    //    findViewById(R.id.screen_wait).setVisibility(set ? View.VISIBLE : View.GONE);
-    //}
-
     void complain(String message) {
         //Log.e(TAG, "**** TrivialDrive Error: " + message);
         alert("Error: " + message);
@@ -492,7 +481,6 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder bld = new AlertDialog.Builder(this);
         bld.setMessage(message);
         bld.setNeutralButton("OK", null);
-        //Log.d(TAG, "Showing alert dialog: " + message);
         bld.create().show();
     }
 
