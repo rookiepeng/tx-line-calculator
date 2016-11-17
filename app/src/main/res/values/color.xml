@@ -4,9 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="blueDarkHoloTrans">#990099cc</color>
-    <color name="blueLightHoloTrans">#8033b5e5</color>
-
     <color name="overlayBackground">#80808080</color>
 
     <color name="pink">#E91E63</color>

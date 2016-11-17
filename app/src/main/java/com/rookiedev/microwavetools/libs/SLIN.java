@@ -1,8 +1,5 @@
 package com.rookiedev.microwavetools.libs;
 
-/**
- * Created by rookie on 8/21/13.
- */
 public class SLIN {
     private double W, H, er, L, Z0, Eeff, f, T;
     private int flag;

@@ -30,8 +30,6 @@
     <!-- global -->
     <string name="Phy">Physical Parameters</string>
     <string name="Ele">Electrical Parameters</string>
-    <string name="Syn">Synthesize</string>
-    <string name="Ana">Analyze</string>
     <string name="Syn_button">▲Synthesize▲</string>
     <string name="Ana_button">▼Analyze▼</string>
     <string name="text_er">εr:</string>
