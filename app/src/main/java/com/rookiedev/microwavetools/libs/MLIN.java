@@ -1,46 +1,45 @@
 package com.rookiedev.microwavetools.libs;
 
 public class MLIN {
-    private double kEff;
+    private double effectiveEr;
 
     public MLIN() {
     }
 
-    private LineMLIN Analysis(LineMLIN MLINLine) {
-        double w, l;
-        double h, er, t;
-        double T;
-        double u;
+    private LineMLIN Analysis(LineMLIN line) {
+        double width, length, height, er, thickness;
+
+        double impedance, electricalLength;
+
+        double thicknessToHeight, widthToHeight;
+
         double u1, ur, deltau1, deltaur;
         double E0, EFF0;
-        double fn;
+        double fn; // normalized frequency
         double P1, P2, P3, P4, P, EF;
-        double z0;
         double R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17;
         double v;
-        double len;
-        double eeff;
 
-        w = MLINLine.getMetalWidth();
-        l = MLINLine.getMetalLength();
+        width = line.getMetalWidth();
+        length = line.getMetalLength();
         // Substrate dielectric thickness
-        h = MLINLine.getSubHeight();
+        height = line.getSubHeight();
         // Substrate relative permittivity
-        er = MLINLine.getSubEpsilon();
+        er = line.getSubEpsilon();
         // Metal thickness
-        t = MLINLine.getMetalThick();
+        thickness = line.getMetalThick();
 
         // starting microstrip_calc_int() with %f/1.0e6 MHz and
         // Find u and correction factor for nonzero metal thickness
-        u = w / h;
-        if (t > 0.0) {
+        widthToHeight = width / height;
+        if (thickness > 0.0) {
             // find normalized metal thickness
-            T = t / h;
+            thicknessToHeight = thickness / height;
             // (6) from Hammerstad and Jensen
-            deltau1 = (T / Constant.Pi)
+            deltau1 = (thicknessToHeight / Constant.Pi)
                     * Math.log(1.0 + 4.0 * Math.exp(1.0)
-                    / (T * Math.pow(Math.cosh(Math.sqrt(6.517 * u))
-                    / Math.sinh(Math.sqrt(6.517 * u)), 2.0)));
+                    / (thicknessToHeight * Math.pow(Math.cosh(Math.sqrt(6.517 * widthToHeight))
+                    / Math.sinh(Math.sqrt(6.517 * widthToHeight)), 2.0)));
             // (7) from Hammerstad and Jensen
             deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(er - 1.0))) * deltau1;
             //deltau = deltaur;
@@ -52,28 +51,28 @@ public class MLIN {
 
         // relative permittivity at f=0 (Hammerstad and Jensen)
         // (3) from Hammerstad & Jensen and Y from the Rogers Corp. paper
-        u1 = u + deltau1;
-        ur = u + deltaur;
-        E0 = ee_HandJ(ur, er);
+        u1 = widthToHeight + deltau1;
+        ur = widthToHeight + deltaur;
+        E0 = EffectiveDielectricConstant_Effer(ur, er);
 
         // zero frequency characteristic impedance
         // (8) from Hammerstad and Jensen
-        z0 = z0_HandJ(ur) / Math.sqrt(E0);
+        impedance = CharacteristicImpedance_Z0(ur) / Math.sqrt(E0);
 
         // zero frequency effective permitivity.
         // (9) from Hammerstad and Jensen
-        EFF0 = E0 * Math.pow(z0_HandJ(u1) / z0_HandJ(ur), 2.0);
+        EFF0 = E0 * Math.pow(CharacteristicImpedance_Z0(u1) / CharacteristicImpedance_Z0(ur), 2.0);
 
         // relative permittivity including dispersion (Kirschning and Jansen)
         // normalized frequency (GHz-cm)
-        fn = 1e-7 * MLINLine.getFrequency() * h;
+        fn = 1e-7 * line.getFrequency() * height;
 
         // (2) from Kirschning and Jansen
         P1 = 0.27488 +
-                (0.6315 + (0.525 / (Math.pow((1.0 + 0.157 * fn), 20.0)))) * u
-                - 0.065683 * Math.exp(-8.7513 * u);
+                (0.6315 + (0.525 / (Math.pow((1.0 + 0.157 * fn), 20.0)))) * widthToHeight
+                - 0.065683 * Math.exp(-8.7513 * widthToHeight);
         P2 = 0.33622 * (1.0 - Math.exp(-0.03442 * er));
-        P3 = 0.0363 * Math.exp(-4.6 * u) * (1.0 - Math.exp(-Math.pow((fn / 3.87), 4.97)));
+        P3 = 0.0363 * Math.exp(-4.6 * widthToHeight) * (1.0 - Math.exp(-Math.pow((fn / 3.87), 4.97)));
         P4 = 1.0 + 2.751 * (1.0 - Math.exp(-Math.pow((er / 15.916), 8.0)));
         P = P1 * P2 * Math.pow(((0.1844 + P3 * P4) * 10.0 * fn), 1.5763);
 
@@ -82,15 +81,15 @@ public class MLIN {
 
         // Characteristic Impedance (Jansen and Kirschning)
         // normalized frequency (GHz-mm)
-        fn = 1.0e-6 * MLINLine.getFrequency() * h;
+        fn = 1.0e-6 * line.getFrequency() * height;
 
         // (1) from Jansen and Kirschning
         R1 = 0.03891 * Math.pow(er, 1.4);
-        R2 = 0.267 * Math.pow(u, 7.0);
-        R3 = 4.766 * Math.exp(-3.228 * Math.pow(u, 0.641));
+        R2 = 0.267 * Math.pow(widthToHeight, 7.0);
+        R3 = 4.766 * Math.exp(-3.228 * Math.pow(widthToHeight, 0.641));
         R4 = 0.016 + Math.pow((0.0514 * er), 4.524);
         R5 = Math.pow((fn / 28.843), 12.0);
-        R6 = 22.20 * Math.pow(u, 1.92);
+        R6 = 22.20 * Math.pow(widthToHeight, 1.92);
 
         // (2) from Jansen and Kirschning
         R7 = 1.206 - 0.3144 * Math.exp(-R1) * (1.0 - Math.exp(-R2));
@@ -104,41 +103,42 @@ public class MLIN {
         // (3) from Jansen and Kirschning
         R10 = 0.00044 * Math.pow(er, 2.136) + 0.0184;
         R11 = Math.pow((fn / 19.47), 6.0) / (1.0 + 0.0962 * Math.pow((fn / 19.47), 6.0));
-        R12 = 1.0 / (1.0 + 0.00245 * u * u);
+        R12 = 1.0 / (1.0 + 0.00245 * widthToHeight * widthToHeight);
 
         // (4) from Jansen and Kirschning
         R13 = 0.9408 * Math.pow(EF, R8) - 0.9603;
         R14 = (0.9408 - R9) * Math.pow(EFF0, R8) - 0.9603;
         R15 = 0.707 * R10 * Math.pow((fn / 12.3), 1.097);
-        R16 = 1.0 + 0.0503 * er * er * R11 * (1.0 - Math.exp(-Math.pow((u / 15), 6.0)));
+        R16 = 1.0 + 0.0503 * er * er * R11 * (1.0 - Math.exp(-Math.pow((widthToHeight / 15), 6.0)));
         R17 = R7 * (1.0 - 1.1241 * (R12 / R16) * Math.exp(-0.026 * Math.pow(fn, 1.15656) - R15));
 
         // (5) from Jansen and Kirschning
-        z0 = z0 * Math.pow((R13 / R14), R17);
+        impedance = impedance * Math.pow((R13 / R14), R17);
 
         // propagation velocity (meters/sec)
         v = Constant.LIGHTSPEED / Math.sqrt(EF);
 
         // length in wavelengths
-        if (MLINLine.getFrequency() > 0.0)
-            len = (l) / (v / MLINLine.getFrequency());
-        else
-            len = 0.0;
+        if (line.getFrequency() > 0.0) {
+            electricalLength = (length) / (v / line.getFrequency());
+        } else {
+            electricalLength = 0.0;
+        }
 
         // convert to degrees
-        len = 360.0 * len;
+        electricalLength = 360.0 * electricalLength;
 
         // effective relative permittivity
-        eeff = EF;
+        effectiveEr = EF;
 
-        kEff = eeff;
+        //this.effectiveEr = effectiveEr;
         //MLINLine.setkEff(eeff);
-        MLINLine.setElectricalLength(len);
+        line.setElectricalLength(electricalLength);
 
         //  store results
-        MLINLine.setImpedance(z0);
+        line.setImpedance(impedance);
 
-        return MLINLine;
+        return line;
     }
 
     /*
@@ -167,21 +167,10 @@ public class MLIN {
     *   /////////////////ground///////////////////////
     *
     */
-    private LineMLIN Synthesize(LineMLIN MLINLine, int flag) {
-        double l;
-        //double Ro;
-        double Z0;
-        double v, len;
-        double eeff;
-
-        /* the parameters which define the structure */
-        double w;
-        double tmet;
-        double h, es, tand;
-
-        /* permeability and permitivity of free space */
-        double mu0, e0;
-
+    private LineMLIN Synthesize(LineMLIN line, int flag) {
+        double length;
+        double impedance;
+        double v, electricalLength;
 
         /* the optimization variables, current, min/max, and previous values */
         double var = 0, varmax = 0, varmin = 0, varold = 0;
@@ -207,8 +196,8 @@ public class MLIN {
         boolean done = false;
 
         /* permeability and permitivitty of free space (H/m and F/m) */
-        mu0 = 4 * Constant.Pi * 1.0e-7;
-        e0 = 1.0 / (mu0 * Constant.LIGHTSPEED * Constant.LIGHTSPEED);
+        //mu0 = 4 * Constant.Pi * 1.0e-7;
+        //e0 = 1.0 / (mu0 * Constant.LIGHTSPEED * Constant.LIGHTSPEED);
 
         /*
         * figure out what parameter we're synthesizing and set up the
@@ -222,15 +211,15 @@ public class MLIN {
 
         switch (flag) {
             case Line.SYN_W:
-                varmax = 100.0 * MLINLine.getSubHeight();
-                varmin = 0.01 * MLINLine.getSubHeight();
-                var = MLINLine.getSubHeight();
+                varmax = 100.0 * line.getSubHeight();
+                varmin = 0.01 * line.getSubHeight();
+                var = line.getSubHeight();
                 break;
 
             case Line.SYN_H:
-                varmax = 100.0 * MLINLine.getMetalWidth();
-                varmin = 0.01 * MLINLine.getMetalWidth();
-                var = MLINLine.getMetalWidth();
+                varmax = 100.0 * line.getMetalWidth();
+                varmin = 0.01 * line.getMetalWidth();
+                var = line.getMetalWidth();
                 break;
 
             case Line.SYN_Er:
@@ -255,13 +244,8 @@ public class MLIN {
         //Ro = MLINLine.getRo();
         //Log.v("MLIN", "Ro=" + Double.toString(Ro));
         //Xo = MLINLine.getXo();
-        len = MLINLine.getElectricalLength();
-        Z0 = MLINLine.getImpedance();
-
-        // Metal width, length, and thickness
-        w = MLINLine.getMetalWidth();
-        l = MLINLine.getMetalLength();
-        tmet = MLINLine.getMetalThick();
+        electricalLength = line.getElectricalLength();
+        impedance = line.getImpedance();
 
         // Substrate thickness, relative permitivity, and loss tangent
         //h = MLINLine.getSubHeight();
@@ -269,27 +253,27 @@ public class MLIN {
         //tand = MLINLine.getTand();
 
         //temp value for l used while synthesizing the other parameters. We'll correct l later.
-        l = 1000.0;
-        MLINLine.setMetalLength(l, Line.LUnitm);
+        length = 1000.0;
+        line.setMetalLength(length, Line.LUnitm);
 
         if (!done) {
             // Initialize the various error values
-            MLINLine.setSynthesizeParameter(varmin, flag);
-            MLINLine = Analysis(MLINLine);
-            errmin = MLINLine.getImpedance() - Z0;
+            line.setSynthesizeParameter(varmin, flag);
+            line = Analysis(line);
+            errmin = line.getImpedance() - impedance;
 
-            MLINLine.setSynthesizeParameter(varmax, flag);
-            MLINLine = Analysis(MLINLine);
-            errmax = MLINLine.getImpedance() - Z0;
+            line.setSynthesizeParameter(varmax, flag);
+            line = Analysis(line);
+            errmax = line.getImpedance() - impedance;
 
-            MLINLine.setSynthesizeParameter(var, flag);
-            MLINLine = Analysis(MLINLine);
-            err = MLINLine.getImpedance() - Z0;
+            line.setSynthesizeParameter(var, flag);
+            line = Analysis(line);
+            err = line.getImpedance() - impedance;
 
             varold = 0.99 * var;
-            MLINLine.setSynthesizeParameter(varold, flag);
-            MLINLine = Analysis(MLINLine);
-            errold = MLINLine.getImpedance() - Z0;
+            line.setSynthesizeParameter(varold, flag);
+            line = Analysis(line);
+            errold = line.getImpedance() - impedance;
 
             // see if we've actually been able to bracket the solution
             if (errmax * errmin > 0) {
@@ -337,9 +321,9 @@ public class MLIN {
             }
 
             /* update the error value */
-            MLINLine.setSynthesizeParameter(var, flag);
-            MLINLine = Analysis(MLINLine);
-            err = MLINLine.getImpedance() - Z0;
+            line.setSynthesizeParameter(var, flag);
+            line = Analysis(line);
+            err = line.getImpedance() - impedance;
             //if (rslt)
             //    return rslt;
 
@@ -369,35 +353,29 @@ public class MLIN {
         }
 
         // velocity on line
-        MLINLine = Analysis(MLINLine);
+        line = Analysis(line);
+        v = Constant.LIGHTSPEED / Math.sqrt(effectiveEr);
+        length = (electricalLength / 360) * (v / line.getFrequency());
+        line.setMetalLength(length, Line.LUnitm);
 
-        //eeff = MLINLine.getkEff();
-        eeff = kEff;
-
-        v = Constant.LIGHTSPEED / Math.sqrt(eeff);
-
-        l = (len / 360) * (v / MLINLine.getFrequency());
-
-        MLINLine.setMetalLength(l, Line.LUnitm);
-
-        return MLINLine;
+        return line;
     }
 
-    private static double ee_HandJ(double u, double er) {
+    private static double EffectiveDielectricConstant_Effer(double widthToHeight, double dielectricConstant) {
         double A, B, E0;
 
         // (4) from Hammerstad and Jensen
         A = 1.0 + (1.0 / 49.0)
-                * Math.log((Math.pow(u, 4.0) + Math.pow((u / 52.0), 2.0)) / (Math.pow(u, 4.0) + 0.432))
-                + (1.0 / 18.7) * Math.log(1.0 + Math.pow((u / 18.1), 3.0));
+                * Math.log((Math.pow(widthToHeight, 4.0) + Math.pow((widthToHeight / 52.0), 2.0)) / (Math.pow(widthToHeight, 4.0) + 0.432))
+                + (1.0 / 18.7) * Math.log(1.0 + Math.pow((widthToHeight / 18.1), 3.0));
 
         // (5) from Hammerstad and Jensen
-        B = 0.564 * Math.pow(((er - 0.9) / (er + 3.0)), 0.053);
+        B = 0.564 * Math.pow(((dielectricConstant - 0.9) / (dielectricConstant + 3.0)), 0.053);
 
         // zero frequency effective permitivity.
         // (3) from Hammerstad and Jensen.
         // This is ee(ur,er) that is used by (9) in Hammerstad and Jensen.
-        E0 = (er + 1.0) / 2.0 + ((er - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / u), (-A * B));
+        E0 = (dielectricConstant + 1.0) / 2.0 + ((dielectricConstant - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / widthToHeight), (-A * B));
 
         return E0;
     }
@@ -405,14 +383,14 @@ public class MLIN {
     /*
      * Characteristic impedance from (1) and (2) in Hammerstad and Jensen
      */
-    private static double z0_HandJ(double u) {
+    private static double CharacteristicImpedance_Z0(double widthToHeight) {
         double F, z01;
 
         // (2) from Hammerstad and Jensen.  'u' is the normalized width
-        F = 6.0 + (2.0 * Constant.Pi - 6.0) * Math.exp(-Math.pow((30.666 / u), 0.7528));
+        F = 6.0 + (2.0 * Constant.Pi - 6.0) * Math.exp(-Math.pow((30.666 / widthToHeight), 0.7528));
 
         // (1) from Hammerstad and Jensen
-        z01 = (Constant.FREESPACEZ0 / (2 * Constant.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
+        z01 = (Constant.FREESPACEZ0 / (2 * Constant.Pi)) * Math.log(F / widthToHeight + Math.sqrt(1.0 + Math.pow((2 / widthToHeight), 2.0)));
 
         return z01;
     }

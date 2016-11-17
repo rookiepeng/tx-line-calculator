@@ -16,7 +16,7 @@ public class Constant {
     // flags
     static final int Synthesize_Width = 0, Synthesize_Height = 1, Synthesize_Er = 2, Synthesize_Length = 3;
     private static final int LengthUnit_mil = 0, LengthUnit_mm = 1, LengthUnit_cm = 2, LengthUnit_m = 3;
-    private static final int FreqUnit_Hz = 0, FreqUnit_KHz = 1, FreqUnit_MHz = 2, FreqUnit_GHz = 3;
+    private static final int FreqUnit_Hz = 10, FreqUnit_MHz = 0, FreqUnit_GHz = 1;
 
     // unit conversion
     static double value2meter(double value, int lengthUnit) {
@@ -43,9 +43,6 @@ public class Constant {
         switch (freqUnit) {
             case FreqUnit_Hz:
                 f = value;
-                break;
-            case FreqUnit_KHz:
-                f = value * 1e3;
                 break;
             case FreqUnit_MHz:
                 f = value * 1e6;

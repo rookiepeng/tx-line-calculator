@@ -470,19 +470,6 @@ public class MLINFragment extends Fragment {
 
             view.setClickable(false);
             rippleDrawable.setState(new int[]{});
-
-            /*
-            Handler handler = new Handler();
-
-            handler.postDelayed(new Runnable()
-            {
-                @Override public void run()
-                {
-                    rippleDrawable.setState(new int[]{});
-                    physicalCard.setClickable(false);
-                    electricalCard.setClickable(false);
-                }
-            }, 200);*/
         }
     }
 }
