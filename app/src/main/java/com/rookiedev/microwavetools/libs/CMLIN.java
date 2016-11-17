@@ -174,7 +174,7 @@ public class CMLIN {
 
         double v, uold, z1, z2, z3, z4, z5, d1, d2;
         // even/odd mode open end correction lengths
-        double deltale, deltalo;
+        //double deltale, deltalo;
         double fnold;
         double frequency;
 
@@ -469,47 +469,43 @@ public class CMLIN {
 
         // Single line end correction (Kirschning, Jansen, and Koster)
         // deltal(2u,er) (per Kirschning and Jansen (MTT) notation)
-        uold = widthToHeight;
-        widthToHeight = 2 * widthToHeight;
-        z1 = 0.434907 * ((Math.pow(EF, 0.81) + 0.26) / (Math.pow(EF, 0.81) - 0.189))
-                * (Math.pow(widthToHeight, 0.8544) + 0.236) / (Math.pow(widthToHeight, 0.8544) + 0.87);
-        z2 = 1.0 + Math.pow(widthToHeight, 0.371) / (2.358 * dielectric + 1.0);
-        z3 = 1.0 + (0.5274 * Math.atan(0.084 * (Math.pow(widthToHeight, (1.9413 / z2))))) / Math.pow(EF, 0.9236);
-        z4 = 1.0 + 0.0377 * Math.atan(0.067 * Math.pow(widthToHeight, 1.456)) * (6.0 - 5.0 * Math.exp(0.036 * (1.0 - dielectric)));
-        z5 = 1.0 - 0.218 * Math.exp(-7.5 * widthToHeight);
-        d2 = height * z1 * z3 * z5 / z4;
+        //uold = widthToHeight;
+        //widthToHeight = 2 * widthToHeight;
+        //z1 = 0.434907 * ((Math.pow(EF, 0.81) + 0.26) / (Math.pow(EF, 0.81) - 0.189))
+        //        * (Math.pow(widthToHeight, 0.8544) + 0.236) / (Math.pow(widthToHeight, 0.8544) + 0.87);
+        //z2 = 1.0 + Math.pow(widthToHeight, 0.371) / (2.358 * dielectric + 1.0);
+        //z3 = 1.0 + (0.5274 * Math.atan(0.084 * (Math.pow(widthToHeight, (1.9413 / z2))))) / Math.pow(EF, 0.9236);
+        //z4 = 1.0 + 0.0377 * Math.atan(0.067 * Math.pow(widthToHeight, 1.456)) * (6.0 - 5.0 * Math.exp(0.036 * (1.0 - dielectric)));
+        //z5 = 1.0 - 0.218 * Math.exp(-7.5 * widthToHeight);
+        //d2 = height * z1 * z3 * z5 / z4;
 
         // deltal(u,er) (per Kirschning and Jansen (MTT) notation)
-        widthToHeight = uold;
-        z1 = 0.434907 * ((Math.pow(EF, 0.81) + 0.26) / (Math.pow(EF, 0.81) - 0.189))
-                * (Math.pow(widthToHeight, 0.8544) + 0.236) / (Math.pow(widthToHeight, 0.8544) + 0.87);
-        z2 = 1 + Math.pow(widthToHeight, 0.371) / (2.358 * dielectric + 1);
-        z3 = 1 + (0.5274 * Math.atan(0.084 * (Math.pow(widthToHeight, (1.9413 / z2))))) / Math.pow(EF, 0.9236);
-        z4 = 1 + 0.0377 * Math.atan(0.067 * Math.pow(widthToHeight, 1.456)) * (6.0 - 5.0 * Math.exp(0.036 * (1.0 - dielectric)));
-        z5 = 1 - 0.218 * Math.exp(-7.5 * widthToHeight);
-        d1 = height * z1 * z3 * z5 / z4;
+        //widthToHeight = uold;
+        //z1 = 0.434907 * ((Math.pow(EF, 0.81) + 0.26) / (Math.pow(EF, 0.81) - 0.189))
+        //        * (Math.pow(widthToHeight, 0.8544) + 0.236) / (Math.pow(widthToHeight, 0.8544) + 0.87);
+        //z2 = 1 + Math.pow(widthToHeight, 0.371) / (2.358 * dielectric + 1);
+        //z3 = 1 + (0.5274 * Math.atan(0.084 * (Math.pow(widthToHeight, (1.9413 / z2))))) / Math.pow(EF, 0.9236);
+        //z4 = 1 + 0.0377 * Math.atan(0.067 * Math.pow(widthToHeight, 1.456)) * (6.0 - 5.0 * Math.exp(0.036 * (1.0 - dielectric)));
+        //z5 = 1 - 0.218 * Math.exp(-7.5 * widthToHeight);
+        //d1 = height * z1 * z3 * z5 / z4;
 
         // Even and Odd Mode End corrections (12) and (13) from Kirschning and Jansen (MTT)
-        R1 = 1.187 * (1.0 - Math.exp(-0.069 * Math.pow(widthToHeight, 2.1)));
-        R2 = 0.343 * Math.pow(widthToHeight, 0.6187) + (0.45 * dielectric / (1.0 + dielectric)) * (Math.pow(widthToHeight, (1.357 + 1.65 / (1.0 + 0.7 * dielectric))));
-        R3 = 0.2974 * (1.0 - Math.exp(-R2));
-        R4 = (0.271 + 0.0281 * dielectric) * (Math.pow(spaceToHeight, (1.167 * dielectric / (0.66 + dielectric))))
-                + (1.025 * dielectric / (0.687 + dielectric)) * (Math.pow(spaceToHeight, (0.958 * dielectric / (0.706 + dielectric))));
+        //R1 = 1.187 * (1.0 - Math.exp(-0.069 * Math.pow(widthToHeight, 2.1)));
+        //R2 = 0.343 * Math.pow(widthToHeight, 0.6187) + (0.45 * dielectric / (1.0 + dielectric)) * (Math.pow(widthToHeight, (1.357 + 1.65 / (1.0 + 0.7 * dielectric))));
+        //R3 = 0.2974 * (1.0 - Math.exp(-R2));
+        //R4 = (0.271 + 0.0281 * dielectric) * (Math.pow(spaceToHeight, (1.167 * dielectric / (0.66 + dielectric))))
+        //        + (1.025 * dielectric / (0.687 + dielectric)) * (Math.pow(spaceToHeight, (0.958 * dielectric / (0.706 + dielectric))));
 
-        deltale = (d2 - d1 + 0.0198 * height * Math.pow(spaceToHeight, R1)) * Math.exp(-0.328 * Math.pow(spaceToHeight, 2.244)) + d1;
-        deltalo = (d1 - height * R3) * (1.0 - Math.exp(-R4)) + height * R3;
+        //deltale = (d2 - d1 + 0.0198 * height * Math.pow(spaceToHeight, R1)) * Math.exp(-0.328 * Math.pow(spaceToHeight, 2.244)) + d1;
+        //deltalo = (d1 - height * R3) * (1.0 - Math.exp(-R4)) + height * R3;
 
         // copy over the results
         line.setImpedanceEven(z0ef);
         line.setImpedanceOdd(z0of);
         line.setImpedance(Math.sqrt(z0ef * z0of));
-        //line.setkEven(EFEF);
-        //line.setkOdd(EFOF);
 
         // coupling coefficient
         line.setCouplingFactor((z0ef - z0of) / (z0ef + z0of));
-        //line.setDeltalEven(deltale);
-        //line.setDeltalOdd(deltalo);
 
         // electrical length
         line.setElectricalLength(electricalLength);
@@ -540,27 +536,20 @@ public class CMLIN {
         double ze0 = 0, ze1, ze2, dedw, deds;
         double zo0 = 0, zo1, zo2, dodw, dods;
 
-        //len = line->len;
         electricalLength = line.getElectricalLength();
 
   /* Substrate dielectric thickness (m) */
-        //h = line->subs->h;
         h = line.getSubHeight();
 
   /* Substrate relative permittivity */
-        //er = line->subs->er;
         er = line.getSubEpsilon();
 
   /* impedance and coupling */
-        //z0 = line->z0;
         z0 = line.getImpedance();
-        //k = line->k;
         k = line.getCouplingFactor();
 
   /* even/odd mode impedances */
-        //z0e = line->z0e;
         z0e = line.getImpedanceEven();
-        //z0o = line->z0o;
         z0o = line.getImpedanceOdd();
 
         // TODO check z0e<z0o app crash, (k>0)
@@ -581,7 +570,6 @@ public class CMLIN {
 
   /* temp value for l used while finding w and s */
         l = 1000.0;
-        //line->l=l;
         line.setMetalLength(l, Constant.LengthUnit_m);
 
 
@@ -599,9 +587,7 @@ public class CMLIN {
 
   /* width relative convergence tolerance (mils) (set to 0.1 micron) */
         reltol = Constant.MICRON2MIL(0.1);
-
         maxiters = 50;
-
 
   /*
    * Initial guess at a solution
@@ -642,9 +628,7 @@ public class CMLIN {
             iters++;
             line.setMetalWidth(w, Constant.LengthUnit_m);
             line.setMetalSpace(s, Constant.LengthUnit_m);
-      /* don't bother with loss calculations while we are iterating */
             line = Analysis(line);
-
             ze0 = line.getImpedanceEven();
             zo0 = line.getImpedanceOdd();
 
