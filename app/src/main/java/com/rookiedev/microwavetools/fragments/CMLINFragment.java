@@ -22,11 +22,10 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CMLIN;
 import com.rookiedev.microwavetools.libs.Constant;
-import com.rookiedev.microwavetools.libs.Line;
+import com.rookiedev.microwavetools.libs.LineCMLIN;
 
 import java.math.BigDecimal;
 
@@ -71,7 +70,7 @@ public class CMLINFragment extends Fragment {
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
     //private double W, L, S, Z0, k, Z0o, Z0e, Eeff, Freq, T, H, er;
-    private Line CMLINLine;
+    private LineCMLIN line;
     private Button cmlin_syn,// button synthesize
             cmlin_ana;// button analyze
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
@@ -104,45 +103,45 @@ public class CMLINFragment extends Fragment {
                     edittext_Z0e.setText(""); //
                     edittext_k.setText("");
                 } else {
-                    CMLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());  // get the parameters
-                    CMLINLine.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
-                    CMLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
-                    CMLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                    CMLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
-                    CMLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
+                    line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());  // get the parameters
+                    line.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
+                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+                    line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                    line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+                    line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
                     if (edittext_L.length() != 0) {
-                        CMLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
+                        line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
                         CMLIN cmlin = new CMLIN();
-                        CMLINLine = cmlin.getAnaResult(CMLINLine);
+                        line = cmlin.getAnaResult(line);
 
-                        BigDecimal Eeff_temp = new BigDecimal(CMLINLine.getElectricalLength()); // cut the decimal of the Eeff
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
                         CMLIN cmlin = new CMLIN();
-                        CMLINLine = cmlin.getAnaResult(CMLINLine);
+                        line = cmlin.getAnaResult(line);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
 
                     }
-                    BigDecimal Z0_temp = new BigDecimal(CMLINLine.getImpedance());
+                    BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
                     double Z0 = Z0_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
                     // of the Z0
-                    BigDecimal k_temp = new BigDecimal(CMLINLine.getCouplingFactor());
+                    BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
                     double k = k_temp
                             .setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                             .doubleValue();
                     edittext_k.setText(String.valueOf(k));
 
-                    BigDecimal Z0o_temp = new BigDecimal(CMLINLine.getImpedanceOdd());
+                    BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
                     double Z0o = Z0o_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0o.setText(String.valueOf(Z0o));
 
-                    BigDecimal Z0e_temp = new BigDecimal(CMLINLine.getImpedanceEven());
+                    BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
                     double Z0e = Z0e_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0e.setText(String.valueOf(Z0e));
                 }
@@ -163,23 +162,23 @@ public class CMLINFragment extends Fragment {
                     if (use_z0k) {
                         double Z0e, Z0o;
 
-                        BigDecimal Z0o_temp = new BigDecimal(CMLINLine.getImpedanceOdd());
+                        BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
                         Z0o = Z0o_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0o.setText(String.valueOf(Z0o));
 
-                        BigDecimal Z0e_temp = new BigDecimal(CMLINLine.getImpedanceEven());
+                        BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
                         Z0e = Z0e_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0e.setText(String.valueOf(Z0e));
                     } else {
                         double Z0, k;
 
-                        BigDecimal Z0_temp = new BigDecimal(CMLINLine.getImpedance());
+                        BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
                         Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
-                        BigDecimal k_temp = new BigDecimal(CMLINLine.getCouplingFactor());
+                        BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
                         k = k_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_k.setText(String.valueOf(k));
@@ -217,7 +216,7 @@ public class CMLINFragment extends Fragment {
         View eeff_input_radio = rootView.findViewById(R.id.eeff_input_radio);
         eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
-        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
@@ -333,7 +332,7 @@ public class CMLINFragment extends Fragment {
 
         radioBtn_Z0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
         radioBtn_Z0o = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0o);
-        CMLINLine = new Line(Line.CMLIN);
+        line = new LineCMLIN();
     }
 
     private void setRadioBtn() {
@@ -592,30 +591,30 @@ public class CMLINFragment extends Fragment {
     private void synthesizeButton() {
         int temp;
         if (use_z0k) {
-            CMLINLine.setImpedance(Double.parseDouble(edittext_Z0.getText().toString()));
-            CMLINLine.setCouplingFactor(Double.parseDouble(edittext_k.getText().toString()));
-            CMLINLine.setImpedanceOdd(0);
-            CMLINLine.setImpedanceEven(0);
+            line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString()));
+            line.setCouplingFactor(Double.parseDouble(edittext_k.getText().toString()));
+            line.setImpedanceOdd(0);
+            line.setImpedanceEven(0);
         } else {
-            CMLINLine.setImpedanceEven(Double.parseDouble(edittext_Z0e.getText().toString()));
-            CMLINLine.setImpedanceOdd(Double.parseDouble(edittext_Z0o.getText().toString()));
-            CMLINLine.setImpedance(0);
-            CMLINLine.setCouplingFactor(0);
+            line.setImpedanceEven(Double.parseDouble(edittext_Z0e.getText().toString()));
+            line.setImpedanceOdd(Double.parseDouble(edittext_Z0o.getText().toString()));
+            line.setImpedance(0);
+            line.setCouplingFactor(0);
         }
 
-        CMLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
-        CMLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-        CMLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
-        CMLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
+        line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+        line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+        line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+        line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
         double W, S, L;
         if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
-            CMLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
+            line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
             CMLIN cmlin = new CMLIN();
-            CMLINLine = cmlin.getSynResult(CMLINLine, use_z0k);
-            L = CMLINLine.getMetalLength();
-            W = CMLINLine.getMetalWidth();
-            S = CMLINLine.getMetalSpace();
+            line = cmlin.getSynResult(line, use_z0k);
+            L = line.getMetalLength();
+            W = line.getMetalWidth();
+            S = line.getMetalSpace();
 
             temp = spinner_L.getSelectedItemPosition();
             if (temp == 0) {
@@ -631,9 +630,9 @@ public class CMLINFragment extends Fragment {
             edittext_L.setText(String.valueOf(L));
         } else {
             CMLIN cmlin = new CMLIN();
-            CMLINLine = cmlin.getSynResult(CMLINLine, use_z0k);
-            W = CMLINLine.getMetalWidth();
-            S = CMLINLine.getMetalSpace();
+            line = cmlin.getSynResult(line, use_z0k);
+            W = line.getMetalWidth();
+            S = line.getMetalSpace();
             edittext_L.setText(""); // clear the L if the Eeff input is empty
         }
 
@@ -666,10 +665,8 @@ public class CMLINFragment extends Fragment {
         edittext_S.setText(String.valueOf(S));
     }
 
-    protected void forceRippleAnimation(View view)
-    {
-        if(Build.VERSION.SDK_INT >= 23)
-        {
+    protected void forceRippleAnimation(View view) {
+        if (Build.VERSION.SDK_INT >= 23) {
             view.setClickable(true);
             Drawable background = view.getForeground();
             final RippleDrawable rippleDrawable = (RippleDrawable) background;

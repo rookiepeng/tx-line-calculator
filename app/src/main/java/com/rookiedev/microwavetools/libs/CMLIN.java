@@ -145,8 +145,7 @@ public class CMLIN {
         return z01;
     }
 
-    private Line Analysis(Line CMLINLine) {
-
+    private LineCMLIN Analysis(LineCMLIN line) {
         // input physical dimensions
         double width, length, space;
         // substrate parameters
@@ -179,14 +178,14 @@ public class CMLIN {
         double fnold;
         double frequency;
 
-        width = CMLINLine.getMetalWidth();
-        length = CMLINLine.getMetalLength();
-        space = CMLINLine.getMetalSpace();
-        frequency = CMLINLine.getFrequency();
+        width = line.getMetalWidth();
+        length = line.getMetalLength();
+        space = line.getMetalSpace();
+        frequency = line.getFrequency();
         // Substrate dielectric thickness
-        height = CMLINLine.getSubHeight();
+        height = line.getSubHeight();
         // Substrate relative permittivity
-        dielectric = CMLINLine.getSubEpsilon();
+        dielectric = line.getSubEpsilon();
 
         // Start of coupled microstrip calculations
         // Find widthToHeight and correction factor for nonzero metal thickness
@@ -468,7 +467,7 @@ public class CMLIN {
         // convert to degrees
         electricalLength = 360.0 * electricalLength;
 
-        // Single Line End correction (Kirschning, Jansen, and Koster)
+        // Single line end correction (Kirschning, Jansen, and Koster)
         // deltal(2u,er) (per Kirschning and Jansen (MTT) notation)
         uold = widthToHeight;
         widthToHeight = 2 * widthToHeight;
@@ -501,24 +500,24 @@ public class CMLIN {
         deltalo = (d1 - height * R3) * (1.0 - Math.exp(-R4)) + height * R3;
 
         // copy over the results
-        CMLINLine.setImpedanceEven(z0ef);
-        CMLINLine.setImpedanceOdd(z0of);
-        CMLINLine.setImpedance(Math.sqrt(z0ef * z0of));
-        CMLINLine.setkEven(EFEF);
-        CMLINLine.setkOdd(EFOF);
+        line.setImpedanceEven(z0ef);
+        line.setImpedanceOdd(z0of);
+        line.setImpedance(Math.sqrt(z0ef * z0of));
+        //line.setkEven(EFEF);
+        //line.setkOdd(EFOF);
 
         // coupling coefficient
-        CMLINLine.setCouplingFactor((z0ef - z0of) / (z0ef + z0of));
-        CMLINLine.setDeltalEven(deltale);
-        CMLINLine.setDeltalOdd(deltalo);
+        line.setCouplingFactor((z0ef - z0of) / (z0ef + z0of));
+        //line.setDeltalEven(deltale);
+        //line.setDeltalOdd(deltalo);
 
         // electrical length
-        CMLINLine.setElectricalLength(electricalLength);
+        line.setElectricalLength(electricalLength);
 
-        return CMLINLine;
+        return line;
     }
 
-    private Line Synthesize(Line CMLINLine, boolean use_z0k) {
+    private LineCMLIN Synthesize(LineCMLIN line, boolean use_z0k) {
 
         double h, er, l, wmin, wmax, abstol, reltol;
         int maxiters;
@@ -542,48 +541,48 @@ public class CMLIN {
         double zo0 = 0, zo1, zo2, dodw, dods;
 
         //len = line->len;
-        electricalLength = CMLINLine.getElectricalLength();
+        electricalLength = line.getElectricalLength();
 
   /* Substrate dielectric thickness (m) */
         //h = line->subs->h;
-        h = CMLINLine.getSubHeight();
+        h = line.getSubHeight();
 
   /* Substrate relative permittivity */
         //er = line->subs->er;
-        er = CMLINLine.getSubEpsilon();
+        er = line.getSubEpsilon();
 
   /* impedance and coupling */
         //z0 = line->z0;
-        z0 = CMLINLine.getImpedance();
+        z0 = line.getImpedance();
         //k = line->k;
-        k = CMLINLine.getCouplingFactor();
+        k = line.getCouplingFactor();
 
   /* even/odd mode impedances */
         //z0e = line->z0e;
-        z0e = CMLINLine.getImpedanceEven();
+        z0e = line.getImpedanceEven();
         //z0o = line->z0o;
-        z0o = CMLINLine.getImpedanceOdd();
+        z0o = line.getImpedanceOdd();
 
         // TODO check z0e<z0o app crash, (k>0)
         if (use_z0k) {
     /* use z0 and k to calculate z0e and z0o */
             z0o = z0 * Math.sqrt((1.0 - k) / (1.0 + k));
             z0e = z0 * Math.sqrt((1.0 + k) / (1.0 - k));
-            CMLINLine.setImpedanceEven(z0e);
-            CMLINLine.setImpedanceOdd(z0e);
+            line.setImpedanceEven(z0e);
+            line.setImpedanceOdd(z0e);
         } else {
     /* use z0e and z0o to calculate z0 and k */
             z0 = Math.sqrt(z0e * z0o);
             k = (z0e - z0o) / (z0e + z0o);
             Log.v("CMLIN", "k=" + Double.toString(k));
-            CMLINLine.setImpedance(z0);
-            CMLINLine.setCouplingFactor(k);
+            line.setImpedance(z0);
+            line.setCouplingFactor(k);
         }
 
   /* temp value for l used while finding w and s */
         l = 1000.0;
         //line->l=l;
-        CMLINLine.setMetalLength(l, Line.LUnitm);
+        line.setMetalLength(l, Constant.LengthUnit_m);
 
 
   /* limits on the allowed range for w */
@@ -623,11 +622,6 @@ public class CMLIN {
         w = h * Math.abs(F1 * F2);
         s = h * Math.abs(F1 * F3);
 
-        l = 100;
-        loss = 0;
-        kev = 1;
-        kodd = 1;
-
         iters = 0;
         done = false;
         if (w < s)
@@ -646,13 +640,13 @@ public class CMLIN {
    */
         while ((!done) && (iters < maxiters)) {
             iters++;
-            CMLINLine.setMetalWidth(w, Line.LUnitm);
-            CMLINLine.setMetalSpace(s, Line.LUnitm);
+            line.setMetalWidth(w, Constant.LengthUnit_m);
+            line.setMetalSpace(s, Constant.LengthUnit_m);
       /* don't bother with loss calculations while we are iterating */
-            CMLINLine = Analysis(CMLINLine);
+            line = Analysis(line);
 
-            ze0 = CMLINLine.getImpedanceEven();
-            zo0 = CMLINLine.getImpedanceOdd();
+            ze0 = line.getImpedanceEven();
+            zo0 = line.getImpedanceOdd();
 
       /* check for convergence */
             err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
@@ -660,17 +654,17 @@ public class CMLIN {
                 done = true;
             } else {
     /* approximate the first jacobian */
-                CMLINLine.setMetalWidth(w + delta, Line.LUnitm);
-                CMLINLine.setMetalSpace(s, Line.LUnitm);
-                CMLINLine = Analysis(CMLINLine);
-                ze1 = CMLINLine.getImpedanceEven();
-                zo1 = CMLINLine.getImpedanceOdd();
+                line.setMetalWidth(w + delta, Constant.LengthUnit_m);
+                line.setMetalSpace(s, Constant.LengthUnit_m);
+                line = Analysis(line);
+                ze1 = line.getImpedanceEven();
+                zo1 = line.getImpedanceOdd();
 
-                CMLINLine.setMetalWidth(w, Line.LUnitm);
-                CMLINLine.setMetalSpace(s + delta, Line.LUnitm);
-                CMLINLine = Analysis(CMLINLine);
-                ze2 = CMLINLine.getImpedanceEven();
-                zo2 = CMLINLine.getImpedanceOdd();
+                line.setMetalWidth(w, Constant.LengthUnit_m);
+                line.setMetalSpace(s + delta, Constant.LengthUnit_m);
+                line = Analysis(line);
+                ze2 = line.getImpedanceEven();
+                zo2 = line.getImpedanceOdd();
 
                 dedw = (ze1 - ze0) / delta;
                 dodw = (zo1 - zo0) / delta;
@@ -689,26 +683,26 @@ public class CMLIN {
             }
         }
 
-        CMLINLine.setMetalWidth(w, Line.LUnitm);
-        CMLINLine.setMetalSpace(s, Line.LUnitm);
-        CMLINLine = Analysis(CMLINLine);
+        line.setMetalWidth(w, Constant.LengthUnit_m);
+        line.setMetalSpace(s, Constant.LengthUnit_m);
+        line = Analysis(line);
 
   /* scale the line length to get the desired electrical length */
-        CMLINLine.setMetalLength(CMLINLine.getMetalLength() * electricalLength / CMLINLine.getElectricalLength(), Line.LUnitm);
+        line.setMetalLength(line.getMetalLength() * electricalLength / line.getElectricalLength(), Constant.LengthUnit_m);
 
   /*
    * one last calculation and this time we find the loss too.
    */
-        CMLINLine = Analysis(CMLINLine);
+        line = Analysis(line);
 
-        return CMLINLine;
+        return line;
     }
 
-    public Line getAnaResult(Line CMLINLine) {
-        return Analysis(CMLINLine);
+    public LineCMLIN getAnaResult(LineCMLIN line) {
+        return Analysis(line);
     }
 
-    public Line getSynResult(Line CMLINLine, boolean use_z0k) {
-        return Synthesize(CMLINLine, use_z0k);
+    public LineCMLIN getSynResult(LineCMLIN line, boolean use_z0k) {
+        return Synthesize(line, use_z0k);
     }
 }

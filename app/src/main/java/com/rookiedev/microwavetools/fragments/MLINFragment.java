@@ -25,10 +25,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.Constant;
-import com.rookiedev.microwavetools.libs.Line;
 import com.rookiedev.microwavetools.libs.LineMLIN;
 import com.rookiedev.microwavetools.libs.MLIN;
 
@@ -68,7 +66,7 @@ public class MLINFragment extends Fragment {
             mlin_ana;// button analyze
     private Spinner spinner_W, spinner_L, spinner_T, spinner_H, spinner_Z0,
             spinner_Eeff, spinner_Freq;// the units of each parameter
-    private LineMLIN MLINLine;
+    private LineMLIN line;
 
     public MLINFragment() {
         // Empty constructor required for fragment subclasses
@@ -89,36 +87,36 @@ public class MLINFragment extends Fragment {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
                     edittext_Eeff.setText("");
                 } else {
-                    MLINLine.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()),
+                    line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()),
                             spinner_W.getSelectedItemPosition()); // get the parameters
-                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
+                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
                             spinner_Freq.getSelectedItemPosition());
-                    MLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),
+                    line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                    line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),
                             spinner_H.getSelectedItemPosition());
-                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),
+                    line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),
                             spinner_T.getSelectedItemPosition());
 
                     if (edittext_L.length() != 0) { // check the L input
-                        MLINLine.setMetalLength(Double.parseDouble(edittext_L.getText().toString()),
+                        line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()),
                                 spinner_L.getSelectedItemPosition());
                         MLIN mlin = new MLIN();
-                        MLINLine = mlin.getAnaResult(MLINLine);
+                        line = mlin.getAnaResult(line);
 
-                        BigDecimal Z0_temp = new BigDecimal(MLINLine.getImpedance());
+                        BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
                         double Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
 
-                        BigDecimal Eeff_temp = new BigDecimal(MLINLine.getElectricalLength()); // cut the decimal of the Eeff
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
                         MLIN mlin = new MLIN();
-                        MLINLine = mlin.getAnaResult(MLINLine);
+                        line = mlin.getAnaResult(line);
 
-                        BigDecimal Z0_temp = new BigDecimal(MLINLine.getImpedance());
+                        BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
                         double Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
@@ -139,23 +137,23 @@ public class MLINFragment extends Fragment {
                     edittext_L.setText(""); // clear the L and W outputs
                     edittext_W.setText("");
                 } else {
-                    MLINLine.setImpedance(Double.parseDouble(edittext_Z0.getText().toString())); // get the parameters
-                    MLINLine.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
+                    line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString())); // get the parameters
+                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
                             spinner_Freq.getSelectedItemPosition());
-                    MLINLine.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                    MLINLine.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),
+                    line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                    line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),
                             spinner_H.getSelectedItemPosition());
-                    MLINLine.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),
+                    line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),
                             spinner_T.getSelectedItemPosition());
 
                     double W, L;
                     if (edittext_Eeff.length() != 0) {
-                        MLINLine.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
+                        line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
                         MLIN mlin = new MLIN();
-                        MLINLine = mlin.getSynResult(MLINLine, Line.SYN_W);
-                        W = MLINLine.getMetalWidth();
+                        line = mlin.getSynResult(line, Constant.Synthesize_Width);
+                        W = line.getMetalWidth();
                         //mlin.setW(W);
-                        L = MLINLine.getMetalLength();
+                        L = line.getMetalLength();
                         temp = spinner_L.getSelectedItemPosition();
                         if (temp == 0) {
                             L = L * 1000 * 39.37007874;
@@ -170,8 +168,8 @@ public class MLINFragment extends Fragment {
                         edittext_L.setText(String.valueOf(L));
                     } else {
                         MLIN mlin = new MLIN();
-                        MLINLine = mlin.getSynResult(MLINLine, Line.SYN_W);
-                        W = MLINLine.getMetalWidth();
+                        line = mlin.getSynResult(line, Constant.Synthesize_Width);
+                        W = line.getMetalWidth();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
                     temp = spinner_W.getSelectedItemPosition();
@@ -215,7 +213,7 @@ public class MLINFragment extends Fragment {
         physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
-        MLINLine = new LineMLIN();
+        line = new LineMLIN();
         error_er = new SpannableString(
                 this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));

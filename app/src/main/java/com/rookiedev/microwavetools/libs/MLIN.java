@@ -210,25 +210,25 @@ public class MLIN {
         */
 
         switch (flag) {
-            case Line.SYN_W:
+            case Constant.Synthesize_Width:
                 varmax = 100.0 * line.getSubHeight();
                 varmin = 0.01 * line.getSubHeight();
                 var = line.getSubHeight();
                 break;
 
-            case Line.SYN_H:
+            case Constant.Synthesize_Height:
                 varmax = 100.0 * line.getMetalWidth();
                 varmin = 0.01 * line.getMetalWidth();
                 var = line.getMetalWidth();
                 break;
 
-            case Line.SYN_Er:
+            case Constant.Synthesize_Er:
                 varmax = 100.0;
                 varmin = 1.0;
                 var = 5.0;
                 break;
 
-            case Line.SYN_L:
+            case Constant.Synthesize_Length:
                 varmax = 100.0;
                 varmin = 1.0;
                 var = 5.0;
@@ -254,7 +254,7 @@ public class MLIN {
 
         //temp value for l used while synthesizing the other parameters. We'll correct l later.
         length = 1000.0;
-        line.setMetalLength(length, Line.LUnitm);
+        line.setMetalLength(length, Constant.LengthUnit_m);
 
         if (!done) {
             // Initialize the various error values
@@ -356,7 +356,7 @@ public class MLIN {
         line = Analysis(line);
         v = Constant.LIGHTSPEED / Math.sqrt(effectiveEr);
         length = (electricalLength / 360) * (v / line.getFrequency());
-        line.setMetalLength(length, Line.LUnitm);
+        line.setMetalLength(length, Constant.LengthUnit_m);
 
         return line;
     }
