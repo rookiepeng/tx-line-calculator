@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -28,6 +29,7 @@ import com.google.android.gms.ads.AdView;
 import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.Constant;
+import com.rookiedev.microwavetools.libs.LineSLIN;
 import com.rookiedev.microwavetools.libs.SLIN;
 
 import java.math.BigDecimal;
@@ -62,13 +64,14 @@ public class SLINFragment extends Fragment {
             edittext_T, // the thickness of the metal
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
-    private double W, L, Z0, Eeff, Freq, T, H, er;
+    //private double W, L, Z0, Eeff, Freq, T, H, er;
     private Button button_syn,// button synthesize
             button_ana;// button analyze
     private Spinner spinner_W, spinner_L, spinner_T, spinner_H, spinner_Z0,
             spinner_Eeff, spinner_Freq;// the units of each parameter
     private int flag;
     private RadioButton radioBtn_W, radioBtn_H, radioBtn_er;
+    private LineSLIN line;
 
     public SLINFragment() {
         // Empty constructor required for fragment subclasses
@@ -91,74 +94,32 @@ public class SLINFragment extends Fragment {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
                     edittext_Eeff.setText("");
                 } else {
-                    W = Double.parseDouble(edittext_W.getText().toString()); // get the parameters
-                    Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    er = Double.parseDouble(edittext_er.getText().toString());
-                    H = Double.parseDouble(edittext_H.getText().toString());
-                    T = Double.parseDouble(edittext_T.getText().toString());
-
-                    temp = spinner_W.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        W = W / 39370.0787402;
-                    } else if (temp == 1) {
-                        W = W / 1000;
-                    } else if (temp == 2) {
-                        W = W / 100;
-                    }
-
-                    temp = spinner_Freq.getSelectedItemPosition(); // convert unit to Hz
-                    if (temp == 0) {
-                        Freq = Freq * 1e6;
-                    } else if (temp == 1) {
-                        Freq = Freq * 1e9;
-                    }
-
-                    temp = spinner_H.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        H = H / 39370.0787402;
-                    } else if (temp == 1) {
-                        H = H / 1000;
-                    } else if (temp == 2) {
-                        H = H / 100;
-                    }
-
-                    temp = spinner_T.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        T = T / 39370.0787402;
-                    } else if (temp == 1) {
-                        T = T / 1000;
-                    } else if (temp == 2) {
-                        T = T / 100;
-                    }
+                    line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
+                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+                    line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                    line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+                    line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
                     if (edittext_L.length() != 0) {
-                        L = Double.parseDouble(edittext_L.getText().toString());
-                        temp = spinner_L.getSelectedItemPosition(); // convert unit to meter
-                        if (temp == 0) {
-                            L = L / 39370.0787402;
-                        } else if (temp == 1) {
-                            L = L / 1000;
-                        } else if (temp == 2) {
-                            L = L / 100;
-                        }
+                        line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        SLIN slin = new SLIN(W, H, er, L, 0, 0, Freq, T, 0);
-                        Z0 = slin.getZ0();
+                        SLIN slin = new SLIN();
+                        line = slin.getAnaResult(line);
+                        //Eeff = slin.getEeff();
 
-                        Eeff = slin.getEeff();
-
-                        BigDecimal Eeff_temp = new BigDecimal(Eeff); // cut the decimal of the Eeff
-                        Eeff = Eeff_temp.setScale(DecimalLength,
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
+                        double Eeff = Eeff_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
 
                     } else {
-                        SLIN slin = new SLIN(W, H, er, 0, 0, 0, Freq, T, 0);
-                        Z0 = slin.getZ0();
+                        line.setMetalLength(0, spinner_L.getSelectedItemPosition());
+                        SLIN slin = new SLIN();
+                        line = slin.getAnaResult(line);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
                     }
-                    BigDecimal Z0_temp = new BigDecimal(Z0);
-                    Z0 = Z0_temp.setScale(DecimalLength,
+                    BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
+                    double Z0 = Z0_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
                 }
@@ -171,78 +132,31 @@ public class SLINFragment extends Fragment {
             public void onClick(View view) {
                 Preference_SharedPref();
                 if (!synthesizeInputCheck()) {
-                    if (flag == 0) {
+                    if (flag == Constant.Synthesize_Width) {
                         edittext_W.setText("");
-                    } else if (flag == 1) {
+                    } else if (flag == Constant.Synthesize_Height) {
                         edittext_H.setText("");
-                    } else if (flag == 2) {
+                    } else if (flag == Constant.Synthesize_Er) {
                         edittext_er.setText("");
                     }
                 } else {
                     int temp;
-                    Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
+                    line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString()));
+                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+                    line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
-                    Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    temp = spinner_Freq.getSelectedItemPosition(); // convert the unit to Hz
-                    if (temp == 0) {
-                        Freq = Freq * 1000000;
-                    } else if (temp == 1) {
-                        Freq = Freq * 1000000000;
-                    }
-                    T = Double.parseDouble(edittext_T.getText().toString());
-                    temp = spinner_T.getSelectedItemPosition(); // convert the unit to metre
-                    if (temp == 0) {
-                        T = T / 39370.0787402;
-                    } else if (temp == 1) {
-                        T = T / 1000;
-                    } else if (temp == 2) {
-                        T = T / 100;
-                    }
-
-                    if (flag == 0) {
-                        H = Double.parseDouble(edittext_H.getText().toString());
-                        temp = spinner_H.getSelectedItemPosition(); // convert the unit to metre
-                        if (temp == 0) {
-                            H = H / 39370.0787402;
-                        } else if (temp == 1) {
-                            H = H / 1000;
-                        } else if (temp == 2) {
-                            H = H / 100;
-                        }
-                        er = Double.parseDouble(edittext_er.getText().toString());
-                        W = 0;
-                    } else if (flag == 1) {
-                        W = Double.parseDouble(edittext_W.getText().toString());
-                        temp = spinner_W.getSelectedItemPosition();
-                        if (temp == 0) {
-                            W = W / 39370.0787402;
-                        } else if (temp == 1) {
-                            W = W / 1000;
-                        } else if (temp == 2) {
-                            W = W / 100;
-                        }
-                        er = Double.parseDouble(edittext_er.getText().toString());
-                        H = 0;
-                    } else if (flag == 2) {
-                        W = Double.parseDouble(edittext_W.getText().toString());
-                        temp = spinner_W.getSelectedItemPosition();
-                        if (temp == 0) {
-                            W = W / 39370.0787402;
-                        } else if (temp == 1) {
-                            W = W / 1000;
-                        } else if (temp == 2) {
-                            W = W / 100;
-                        }
-                        H = Double.parseDouble(edittext_H.getText().toString());
-                        temp = spinner_H.getSelectedItemPosition(); // convert the unit to metre
-                        if (temp == 0) {
-                            H = H / 39370.0787402;
-                        } else if (temp == 1) {
-                            H = H / 1000;
-                        } else if (temp == 2) {
-                            H = H / 100;
-                        }
-                        er = 0;
+                    if (flag == Constant.Synthesize_Width) {
+                        line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+                        line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                        line.setMetalWidth(0, Constant.LengthUnit_m);
+                    } else if (flag == Constant.Synthesize_Height) {
+                        line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
+                        line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                        line.setSubHeight(0, Constant.LengthUnit_m);
+                    } else if (flag == Constant.Synthesize_Er) {
+                        line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
+                        line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+                        line.setSubEpsilon(0);
                     }
 
                     if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
@@ -274,7 +188,7 @@ public class SLINFragment extends Fragment {
                         er = slin.geter();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
-                    if (flag == 0) {
+                    if (flag == Constant.Synthesize_Width) {
                         temp = spinner_W.getSelectedItemPosition(); // W (m)
                         if (temp == 0) {
                             W = W * 1000 * 39.37007874;
@@ -288,7 +202,7 @@ public class SLINFragment extends Fragment {
                         W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_W.setText(String.valueOf(W));
-                    } else if (flag == 1) {
+                    } else if (flag == Constant.Synthesize_Height) {
                         temp = spinner_H.getSelectedItemPosition();
                         if (temp == 0) {
                             H = H * 1000 * 39.37007874;
@@ -302,7 +216,7 @@ public class SLINFragment extends Fragment {
                         H = H_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_H.setText(String.valueOf(H));
-                    } else if (flag == 2) {
+                    } else if (flag == Constant.Synthesize_Er) {
                         BigDecimal er_temp = new BigDecimal(er);
                         er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
@@ -317,6 +231,7 @@ public class SLINFragment extends Fragment {
     }
 
     private void initUI() {
+        line = new LineSLIN();
         width_input = rootView.findViewById(R.id.width_input_radio);
         height_input = rootView.findViewById(R.id.height_input_radio);
         er_input = rootView.findViewById(R.id.epsilon_input_radio);
@@ -425,7 +340,7 @@ public class SLINFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
@@ -465,28 +380,28 @@ public class SLINFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
         // universal parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
     private void setRadioBtn() {
-        if (flag == 0) {
+        if (flag == Constant.Synthesize_Width) {
             radioBtn_W.setChecked(true);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(false);
             width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             height_input.setBackgroundColor(Color.WHITE);
             er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == 1) {
+        } else if (flag == Constant.Synthesize_Height) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(true);
             radioBtn_er.setChecked(false);
             width_input.setBackgroundColor(Color.WHITE);
             height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == 2) {
+        } else if (flag == Constant.Synthesize_Er) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(true);
@@ -503,7 +418,7 @@ public class SLINFragment extends Fragment {
                 width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 height_input.setBackgroundColor(Color.WHITE);
                 er_input.setBackgroundColor(Color.WHITE);
-                flag = 0;
+                flag = Constant.Synthesize_Width;
             }
         });
         radioBtn_H.setOnClickListener(new View.OnClickListener() {
@@ -515,7 +430,7 @@ public class SLINFragment extends Fragment {
                 width_input.setBackgroundColor(Color.WHITE);
                 height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 er_input.setBackgroundColor(Color.WHITE);
-                flag = 1;
+                flag = Constant.Synthesize_Height;
             }
         });
         radioBtn_er.setOnClickListener(new View.OnClickListener() {
@@ -527,7 +442,7 @@ public class SLINFragment extends Fragment {
                 width_input.setBackgroundColor(Color.WHITE);
                 height_input.setBackgroundColor(Color.WHITE);
                 er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                flag = 2;
+                flag = Constant.Synthesize_Er;
             }
         });
     }
@@ -540,7 +455,7 @@ public class SLINFragment extends Fragment {
         String slin_flag;
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);
+                AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         slin_W = edittext_W.getText().toString();
         slin_W_unit = Integer.toString(spinner_W.getSelectedItemPosition());
@@ -577,7 +492,7 @@ public class SLINFragment extends Fragment {
         editor.putString(SLIN_T, slin_T);
         editor.putString(SLIN_T_UNIT, slin_T_unit);
         editor.putString(SLIN_FLAG, slin_flag);
-        editor.commit();
+        editor.apply();
     }
 
     private boolean analysisInputCheck() {
