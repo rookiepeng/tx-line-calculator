@@ -8,6 +8,25 @@ public class LineCSLIN {
     private double impedanceEven, impedanceOdd, couplingFactor;
     private double frequency; // Hz
 
+    private double value2meter(double value, int lengthUnit) {
+        double l = 0;
+        switch (lengthUnit) {
+            case Constant.LengthUnit_mil:
+                l = value / 39370.0787402;
+                break;
+            case Constant.LengthUnit_mm:
+                l = value / 1000;
+                break;
+            case Constant.LengthUnit_cm:
+                l = value / 100;
+                break;
+            case Constant.LengthUnit_m:
+                l = value;
+                break;
+        }
+        return l;
+    }
+
     public LineCSLIN() {
         substrate = new Substrate();
         metal = new Metal();
@@ -53,7 +72,7 @@ public class LineCSLIN {
     }
 
     public void setMetalThick(double thick, int unit) {
-        metal.setMetalThick(Constant.value2meter(thick, unit));
+        metal.setMetalThick(value2meter(thick, unit));
     }
 
     double getMetalThick() {

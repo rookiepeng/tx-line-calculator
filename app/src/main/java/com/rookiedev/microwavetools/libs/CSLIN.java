@@ -1,5 +1,7 @@
 package com.rookiedev.microwavetools.libs;
 
+import android.util.Log;
+
 public class CSLIN {
     private boolean use_z0k;
 
@@ -75,6 +77,7 @@ public class CSLIN {
         line = impedance_zeroThickness(line);
         z0e_0t = line.getImpedanceEven();
         z0o_0t = line.getImpedanceOdd();
+        //tempMetal.setMetalThick(line.getMetalThick());
 
 
         if (line.getMetalThick() == 0.0) {
@@ -82,7 +85,10 @@ public class CSLIN {
             //line -> z0o = z0o_0t;
         } else {
             lineSlin.setSubstrate(line.getSubstrate());
-            lineSlin.setMetal(line.getMetal());
+            //lineSlin.setMetal(line.getMetal());
+            lineSlin.setMetalThick(line.getMetalThick(), Constant.LengthUnit_m);
+            lineSlin.setMetalWidth(line.getMetalWidth(), Constant.LengthUnit_m);
+            lineSlin.setMetalLength(line.getMetalLength(), Constant.LengthUnit_m);
             lineSlin.setFrequency(line.getFrequency(), Constant.FreqUnit_Hz);
 
             SLIN slin = new SLIN();
@@ -95,6 +101,7 @@ public class CSLIN {
             z0s = lineSlin.getImpedance();
 
             lineSlin.setMetalThick(0, Constant.LengthUnit_m);
+
             //single.subs->tmet = 0.0;
             //rslt = stripline_calc( & single, line -> freq);
             lineSlin = slin.getAnaResult(lineSlin);
@@ -110,8 +117,11 @@ public class CSLIN {
                             (1.0 / (1.0 - line.getMetalThick() / line.getSubHeight()) - 1.0) *
                                     Math.log((1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0));
 
+            //Log.v("Z0",Double.toString(line.getMetalThick()));
+
     /* zero thickness fringing capacitance  */
             cf_0 = (Constant.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * 2.0 * Math.log(2.0);
+            //Log.v("Z0",Double.toString(cf_0));
 
 
     /* (18) from Cohn, (4.6.5.1) in Wadell */
@@ -146,6 +156,7 @@ public class CSLIN {
    * find impedance and coupling coefficient
    */
         line.setImpedance(Math.sqrt(line.getImpedanceEven() * line.getImpedanceOdd()));
+
         //line -> z0 = sqrt(line -> z0e * line -> z0o);
 
   /* coupling coefficient */
@@ -162,7 +173,7 @@ public class CSLIN {
    *
    * 1/wavelength = freq * LIGHTSPEED/sqrt(keff)
    */
-        line.setElectricalLength(360.0 * line.getMetalLength() * line.getFrequency() * Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon()));
+        line.setElectricalLength(360.0 * line.getMetalLength() * line.getFrequency() / (Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon())));
         //line -> len = 360.0 * line -> l * line -> freq * LIGHTSPEED / sqrt(line -> subs -> er);
 
         return line;

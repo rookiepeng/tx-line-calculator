@@ -119,54 +119,49 @@ public class CSLINFragment extends Fragment {
                     //T = Double.parseDouble(edittext_T.getText().toString());
 
                     if (edittext_L.length() != 0) {
-                        L = Double.parseDouble(edittext_L.getText().toString());
-                        temp = spinner_L.getSelectedItemPosition(); // convert unit to meter
-                        if (temp == 0) {
-                            L = L / 39370.0787402;
-                        } else if (temp == 1) {
-                            L = L / 1000;
-                        } else if (temp == 2) {
-                            L = L / 100;
-                        }
-                        CSLIN cslin = new CSLIN(W, S, L, 0, 0, 0, 0, 0, Freq, er, H, T, use_z0k);
-                        Z0o = cslin.getZ0o();
-                        Z0e = cslin.getZ0e();
-                        Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
-                        k = (Z0e - Z0o) / (Z0e + Z0o);
-                        Eeff = cslin.getEeff();// calculate the Eeff
+                        line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        BigDecimal Eeff_temp = new BigDecimal(Eeff); // cut the decimal of the Eeff
-                        Eeff = Eeff_temp.setScale(DecimalLength,
+                        CSLIN cslin = new CSLIN();
+                        line = cslin.getAnaResult(line);
+                        //Z0o = cslin.getZ0o();
+                        //Z0e = cslin.getZ0e();
+                        //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
+                        //k = (Z0e - Z0o) / (Z0e + Z0o);
+                        //Eeff = cslin.getEeff();// calculate the Eeff
+
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
+                        double Eeff = Eeff_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
 
                     } else {
-                        CSLIN cslin = new CSLIN(W, S, 0, 0, 0, 0, 0, 0, Freq, er, H, T, use_z0k);
-                        Z0o = cslin.getZ0o();
-                        Z0e = cslin.getZ0e();
-                        Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
-                        k = (Z0e - Z0o) / (Z0e + Z0o);
+                        CSLIN cslin = new CSLIN();
+                        line = cslin.getAnaResult(line);
+                        //Z0o = cslin.getZ0o();
+                        //Z0e = cslin.getZ0e();
+                        //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
+                        //k = (Z0e - Z0o) / (Z0e + Z0o);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
                     }
 
-                    BigDecimal Z0_temp = new BigDecimal(Z0);
-                    Z0 = Z0_temp.setScale(DecimalLength,
+                    BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
+                    double Z0 = Z0_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
                     // of the Z0
-                    BigDecimal k_temp = new BigDecimal(k);
-                    k = k_temp
+                    BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
+                    double k = k_temp
                             .setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                             .doubleValue();
                     edittext_k.setText(String.valueOf(k));
 
-                    BigDecimal Z0o_temp = new BigDecimal(Z0o);
-                    Z0o = Z0o_temp.setScale(DecimalLength,
+                    BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
+                    double Z0o = Z0o_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0o.setText(String.valueOf(Z0o));
 
-                    BigDecimal Z0e_temp = new BigDecimal(Z0e);
-                    Z0e = Z0e_temp.setScale(DecimalLength,
+                    BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
+                    double Z0e = Z0e_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0e.setText(String.valueOf(Z0e));
                 }
@@ -185,28 +180,28 @@ public class CSLINFragment extends Fragment {
                 } else {
                     synthesizeButton();
                     if (use_z0k) {
-                        Z0o = Z0 * Math.sqrt((1.0 - k) / (1.0 + k));
-                        Z0e = Z0 * Math.sqrt((1.0 + k) / (1.0 - k));
+                        line.setImpedanceOdd(line.getImpedance() * Math.sqrt((1.0 - line.getCouplingFactor()) / (1.0 + line.getCouplingFactor())));
+                        line.setImpedanceEven(line.getImpedance() * Math.sqrt((1.0 + line.getCouplingFactor()) / (1.0 - line.getCouplingFactor())));
 
-                        BigDecimal Z0o_temp = new BigDecimal(Z0o);
-                        Z0o = Z0o_temp.setScale(DecimalLength,
+                        BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
+                        double Z0o = Z0o_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0o.setText(String.valueOf(Z0o));
 
-                        BigDecimal Z0e_temp = new BigDecimal(Z0e);
-                        Z0e = Z0e_temp.setScale(DecimalLength,
+                        BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
+                        double Z0e = Z0e_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0e.setText(String.valueOf(Z0e));
                     } else {
-                        Z0 = Math.sqrt(Z0e * Z0o);
-                        k = (Z0e - Z0o) / (Z0e + Z0o);
+                        line.setImpedance(Math.sqrt(line.getImpedanceEven() * line.getImpedanceOdd()));
+                        line.setCouplingFactor((line.getImpedanceEven() - line.getImpedanceOdd()) / (line.getImpedanceEven() + line.getImpedanceOdd()));
 
-                        BigDecimal Z0_temp = new BigDecimal(Z0);
-                        Z0 = Z0_temp.setScale(DecimalLength,
+                        BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
+                        double Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
-                        BigDecimal k_temp = new BigDecimal(k);
-                        k = k_temp.setScale(DecimalLength,
+                        BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
+                        double k = k_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_k.setText(String.valueOf(k));
                     }
@@ -219,6 +214,7 @@ public class CSLINFragment extends Fragment {
     }
 
     private void initUI() {
+        line = new LineCSLIN();
         View width_input = rootView.findViewById(R.id.width_input);
         width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
@@ -243,7 +239,7 @@ public class CSLINFragment extends Fragment {
         View eeff_input_radio = rootView.findViewById(R.id.eeff_input_radio);
         eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
-        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
@@ -615,108 +611,60 @@ public class CSLINFragment extends Fragment {
     private void synthesizeButton() {
         int temp;
         if (use_z0k) {
-            Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
-            k = Double.parseDouble(edittext_k.getText().toString());
-            Z0e = 0;
-            Z0o = 0;
+            line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString()));
+            line.setCouplingFactor(Double.parseDouble(edittext_k.getText().toString()));
+            //Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
+            //k = Double.parseDouble(edittext_k.getText().toString());
+            //Z0e = 0;
+            //Z0o = 0;
         } else {
-            Z0e = Double.parseDouble(edittext_Z0e.getText().toString());
-            Z0o = Double.parseDouble(edittext_Z0o.getText().toString());
-            Z0 = 0;
-            k = 0;
+            line.setImpedanceEven(Double.parseDouble(edittext_Z0e.getText().toString()));
+            line.setImpedanceOdd(Double.parseDouble(edittext_Z0o.getText().toString()));
+            //Z0e = Double.parseDouble(edittext_Z0e.getText().toString());
+            //Z0o = Double.parseDouble(edittext_Z0o.getText().toString());
+            //Z0 = 0;
+            //k = 0;
         }
 
-        Freq = Double.parseDouble(edittext_Freq.getText().toString());
-        er = Double.parseDouble(edittext_er.getText().toString());
-        H = Double.parseDouble(edittext_H.getText().toString());
-        T = Double.parseDouble(edittext_T.getText().toString());
-
-        temp = spinner_Freq.getSelectedItemPosition(); // convert the unit to Hz
-        if (temp == 0) {
-            Freq = Freq * 1000000;
-        } else if (temp == 1) {
-            Freq = Freq * 1000000000;
-        }
-
-        temp = spinner_H.getSelectedItemPosition(); // convert the unit to metre
-        if (temp == 0) {
-            H = H / 39370.0787402;
-        } else if (temp == 1) {
-            H = H / 1000;
-        } else if (temp == 2) {
-            H = H / 100;
-        }
-
-        temp = spinner_T.getSelectedItemPosition(); // convert the unit to metre
-        if (temp == 0) {
-            T = T / 39370.0787402;
-        } else if (temp == 1) {
-            T = T / 1000;
-        } else if (temp == 2) {
-            T = T / 100;
-        }
+        line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+        line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+        line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+        line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
         if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
-            Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-            CSLIN cslin = new CSLIN(0, 0, 0, Z0, k, Z0o, Z0e, Eeff, Freq, er, H, T, use_z0k);
-            cslin.cslin_syn();
-            L = cslin.getL();
-            W = cslin.getW();
-            S = cslin.getS();
+            line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
+            //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
+            CSLIN cslin = new CSLIN();
+            line = cslin.getSynResult(line, use_z0k);
+            //L = cslin.getL();
+            //W = cslin.getW();
+            //S = cslin.getS();
 
-            temp = spinner_L.getSelectedItemPosition();
-            if (temp == 0) {
-                L = L * 1000 * 39.37007874;
-            } else if (temp == 1) {
-                L = L * 1000;
-            } else if (temp == 2) {
-                L = L * 100;
-            }
-            BigDecimal L_temp = new BigDecimal(L); // cut the decimal of L
-            L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+            BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
+            double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                     .doubleValue();
             edittext_L.setText(String.valueOf(L));
         } else {
-            CSLIN cslin = new CSLIN(0, 0, 0, Z0, k, Z0o, Z0e, 0, Freq, er, H, T, use_z0k);
-            cslin.cslin_syn();
-            W = cslin.getW();
-            S = cslin.getS();
+            CSLIN cslin = new CSLIN();
+            line = cslin.getSynResult(line, use_z0k);
+            //W = cslin.getW();
+            //S = cslin.getS();
             edittext_L.setText(""); // clear the L if the Eeff input is empty
         }
 
-        temp = spinner_W.getSelectedItemPosition(); // W (m)
-        if (temp == 0) {
-            W = W * 1000 * 39.37007874;
-        } else if (temp == 1) {
-            W = W * 1000;
-        } else if (temp == 2) {
-            W = W * 100;
-        }
-
-        BigDecimal W_temp = new BigDecimal(W); // cut the decimal of W
-        W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+        BigDecimal W_temp = new BigDecimal(Constant.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
+        double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                 .doubleValue();
         edittext_W.setText(String.valueOf(W));
 
-        temp = spinner_S.getSelectedItemPosition();
-        if (temp == 0) {
-            S = S * 1000 * 39.37007874;
-        } else if (temp == 1) {
-            S = S * 1000;
-        } else if (temp == 2) {
-            S = S * 100;
-        }
-
-        BigDecimal S_temp = new BigDecimal(S); // cut the decimal of S
-        S = S_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+        BigDecimal S_temp = new BigDecimal(Constant.meter2others(line.getMetalSpace(), spinner_S.getSelectedItemPosition())); // cut the decimal of S
+        double S = S_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                 .doubleValue();
         edittext_S.setText(String.valueOf(S));
     }
 
-    protected void forceRippleAnimation(View view)
-    {
-        if(Build.VERSION.SDK_INT >= 23)
-        {
+    protected void forceRippleAnimation(View view) {
+        if (Build.VERSION.SDK_INT >= 23) {
             view.setClickable(true);
             Drawable background = view.getForeground();
             final RippleDrawable rippleDrawable = (RippleDrawable) background;
