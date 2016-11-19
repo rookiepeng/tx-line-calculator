@@ -7,7 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -22,12 +22,10 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CSLIN;
 import com.rookiedev.microwavetools.libs.Constant;
+import com.rookiedev.microwavetools.libs.LineCSLIN;
 
 import java.math.BigDecimal;
 
@@ -72,7 +70,6 @@ public class CSLINFragment extends Fragment {
             edittext_T, // the thickness of the metal
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
-    private double W, L, S, Z0, k, Z0o, Z0e, Eeff, Freq, T, H, er;
     private Button cslin_syn,// button synthesize
             cslin_ana;// button analyze
     private View.OnClickListener listener_ana = null;
@@ -81,6 +78,7 @@ public class CSLINFragment extends Fragment {
             spinner_Z0, spinner_Z0o, spinner_Z0e, spinner_Eeff, spinner_Freq;// the units of each parameter
     private RadioButton radioBtn_Z0, radioBtn_Z0o;
     private boolean use_z0k;
+    private LineCSLIN line;
 
     public CSLINFragment() {
         // Empty constructor required for fragment subclasses
@@ -107,55 +105,19 @@ public class CSLINFragment extends Fragment {
                     edittext_Z0e.setText(""); //
                     edittext_k.setText("");
                 } else {
-                    W = Double.parseDouble(edittext_W.getText().toString()); // get the parameters
-                    S = Double.parseDouble(edittext_S.getText().toString());
-                    Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    er = Double.parseDouble(edittext_er.getText().toString());
-                    H = Double.parseDouble(edittext_H.getText().toString());
-                    T = Double.parseDouble(edittext_T.getText().toString());
+                    line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
+                    line.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
+                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+                    line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+                    line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
+                    line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
+                    //W = Double.parseDouble(edittext_W.getText().toString()); // get the parameters
+                    //S = Double.parseDouble(edittext_S.getText().toString());
+                    //Freq = Double.parseDouble(edittext_Freq.getText().toString());
+                    //er = Double.parseDouble(edittext_er.getText().toString());
+                    //H = Double.parseDouble(edittext_H.getText().toString());
+                    //T = Double.parseDouble(edittext_T.getText().toString());
 
-                    temp = spinner_W.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        W = W / 39370.0787402;
-                    } else if (temp == 1) {
-                        W = W / 1000;
-                    } else if (temp == 2) {
-                        W = W / 100;
-                    }
-
-                    temp = spinner_S.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        S = S / 39370.0787402;
-                    } else if (temp == 1) {
-                        S = S / 1000;
-                    } else if (temp == 2) {
-                        S = S / 100;
-                    }
-
-                    temp = spinner_Freq.getSelectedItemPosition(); // convert unit to Hz
-                    if (temp == 0) {
-                        Freq = Freq * 1e6;
-                    } else if (temp == 1) {
-                        Freq = Freq * 1e9;
-                    }
-
-                    temp = spinner_H.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        H = H / 39370.0787402;
-                    } else if (temp == 1) {
-                        H = H / 1000;
-                    } else if (temp == 2) {
-                        H = H / 100;
-                    }
-
-                    temp = spinner_T.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        T = T / 39370.0787402;
-                    } else if (temp == 1) {
-                        T = T / 1000;
-                    } else if (temp == 2) {
-                        T = T / 100;
-                    }
                     if (edittext_L.length() != 0) {
                         L = Double.parseDouble(edittext_L.getText().toString());
                         temp = spinner_L.getSelectedItemPosition(); // convert unit to meter
@@ -442,7 +404,7 @@ public class CSLINFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
@@ -497,7 +459,7 @@ public class CSLINFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared Preferences in the device universal parameters
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared Preferences in the device universal parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
@@ -510,7 +472,7 @@ public class CSLINFragment extends Fragment {
         String cslin_use_z0k;
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);
+                AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         cslin_W = edittext_W.getText().toString();
         cslin_W_unit = Integer.toString(spinner_W.getSelectedItemPosition());
@@ -568,7 +530,7 @@ public class CSLINFragment extends Fragment {
         editor.putString(CSLIN_T_UNIT, cslin_T_unit);
         editor.putString(CSLIN_USEZ0k, cslin_use_z0k);
 
-        editor.commit();
+        editor.apply();
     }
 
     private boolean analysisInputCheck() {

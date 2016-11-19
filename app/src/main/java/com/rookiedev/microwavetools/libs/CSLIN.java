@@ -1,58 +1,10 @@
 package com.rookiedev.microwavetools.libs;
 
-/**
- * Created by rookie on 8/21/13.
- */
 public class CSLIN {
-    private double W, S, L, Z0, k, Z0o, Z0e, Eeff, f, er, H, T;
     private boolean use_z0k;
 
-    public CSLIN(double width, double space, double length, double impedance, double waveNumber,
-                 double impedanceOdd, double impedanceEven, double electricalLength,
-                 double frequency, double epsilon, double height, double thick, boolean usez0k) {
-        W = width;
-        S = space;
-        L = length;
-        Z0 = impedance;
-        k = waveNumber;
-        Z0o = impedanceOdd;
-        Z0e = impedanceEven;
-        Eeff = electricalLength;
-        f = frequency;
-        er = epsilon;
-        H = height;
-        T = thick;
-        use_z0k = usez0k;
+    public CSLIN() {
     }
-
-    public double getZ0e() {
-        return Z0e_calc(W, S, H, T, f);
-    }
-
-    public double getZ0o() {
-        return Z0o_calc(W, S, H, T, f);
-    }
-
-    public double getEeff() {
-        return Eeff_calc(L, f);
-    }
-
-    public double getW() {
-        return W;
-    }
-
-    public double getS() {
-        return S;
-    }
-
-    public double getL() {
-        return L;
-    }
-    /*
-     * compute K(k)/K'(k) where K is the complete elliptic integral of the first
-	 * kind, K' is the complementary complete elliptic integral of the first
-	 * kind
-	 */
 
     private double k_over_kp(double k) {
         double kp, r, kf;
@@ -68,212 +20,165 @@ public class CSLIN {
             i++;
         } while ((Math.abs(kf - 1.0) > 1e-15) && (i < 20));
 
-		/*
-         * alternate approach if( k < sqrt(0.5) ) { kp = sqrt(1.0 - k*k); r =
-		 * M_PI / log(2.0 * (1.0 + sqrt(kp)) / (1.0 - sqrt(kp)) ); } else { r =
-		 * log(2.0 * (1.0 + sqrt(k)) / (1.0 - sqrt(k)) ) / M_PI; }
-		 */
+/* alternate approach
+  if( k < sqrt(0.5) ) {
+    kp = sqrt(1.0 - k*k);
+    r = M_PI / log(2.0 * (1.0 + sqrt(kp)) / (1.0 - sqrt(kp)) );
+  } else {
+    r = log(2.0 * (1.0 + sqrt(k)) / (1.0 - sqrt(k)) ) / M_PI;
+  }
+*/
         return r;
     }
 
-    private double z0e_zerot(double W, double S, double H) {
-        double ke;
+    /* Zero thickness characteristic impedance */
+    private LineCSLIN impedance_zeroThickness(LineCSLIN line) {
+        double ke, ko;
 
-		/* (3) from Cohn */
-        ke = Math.tanh(Math.PI * W / (2.0 * H))
-                * Math.tanh(Math.PI * (W + S) / (2.0 * H));
+  /* (3) from Cohn */
+        ke = Math.tanh(Math.PI * line.getMetalWidth() / (2.0 * line.getSubHeight())) * Math.tanh(Math.PI * (line.getMetalWidth() + line.getMetalSpace()) / (2.0 * line.getSubHeight()));
 
-		/* (2) from Cohn */
-        return ((Constant.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / er) / k_over_kp(ke));
+  /* (6) from Cohn */
+        ko = Math.tanh(Math.PI * line.getMetalWidth() / (2.0 * line.getSubHeight())) / Math.tanh(Math.PI * (line.getMetalWidth() + line.getMetalSpace()) / (2.0 * line.getSubHeight()));
+
+  /* (2) from Cohn */
+        line.setImpedanceEven((Constant.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / line.getSubEpsilon()) / k_over_kp(ke));
+
+  /* (5) from Cohn */
+        line.setImpedanceOdd((Constant.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / line.getSubEpsilon()) / k_over_kp(ko));
+
+        return line;
     }
 
-    private double z0o_zerot(double W, double S, double H) {
-        double ko;
 
-		/* (6) from Cohn */
-        ko = Math.tanh(Math.PI * W / (2.0 * H))
-                / Math.tanh(Math.PI * (W + S) / (2.0 * H));
+    /*
+ * Impedance only calculation (used for incremental inductance loss
+ * calculations)
+ */
+    private LineCSLIN Analysis(LineCSLIN line) {
+  /* zero thickness even and odd impedances */
+        double z0e_0t, z0o_0t;
 
-		/* (5) from Cohn */
-        return ((Constant.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / er) / k_over_kp(ko));
-    }
-
-    private double Z0_calc(double W, double H, double T) {
-        /* calculation variables */
-        double k, kp, r, kf, z0, m, deltaW, A;
-		/*
-		 * Characteristic Impedance
-		 */
-
-        if (T < H / 1000) {
-			/*
-			 * Thin strip case:
-			 */
-            k = 1 / Math.cosh(Math.PI * W / (2 * H));
-
-			/*
-			 * compute K(k)/K'(k) where K is the complete elliptic integral of
-			 * the first kind, K' is the complementary complete elliptic
-			 * integral of the first kind
-			 */
-
-            kp = Math.sqrt(1.0 - Math.pow(k, 2.0));
-            r = 1.0;
-            kf = (1.0 + k) / (1.0 + kp);
-            while (kf != 1.0) {
-                r = r * kf;
-                k = 2.0 * Math.sqrt(k) / (1.0 + k);
-                kp = 2.0 * Math.sqrt(kp) / (1.0 + kp);
-                kf = (1.0 + k) / (1.0 + kp);
-            }
-
-            z0 = 29.976 * Math.PI * r / Math.sqrt(er);
-        } else {
-
-			/*
-			 * Finite strip case:
-			 */
-
-            m = 6.0 * (H - T) / (3.0 * H - T);
-            deltaW = (T / Math.PI)
-                    * (1.0 - 0.5 * Math.log(Math.pow((T / (2 * H - T)), 2.0)
-                    + Math.pow((0.0796 * T / (W + 1.1 * T)), m)));
-            A = 4.0 * (H - T) / (Math.PI * (W + deltaW));
-            z0 = (30 / Math.sqrt(er))
-                    * Math.log(1.0 + A
-                    * (2.0 * A + Math.sqrt(4.0 * A * A + 6.27)));
-        }
-
-		/* done with Z0 calculation */
-        return z0;
-    }
-
-    private double Z0e_calc(double W, double S, double H, double T, double f) {
-		/* zero thickness even and odd impedances */
-        double z0e_0t;
-        double z0e;
+  /* single stripline */
+        LineSLIN lineSlin = new LineSLIN();
         double z0s, z0s_0t;
+
         double cf_t, cf_0;
-        z0e_0t = z0e_zerot(W, S, H);
 
-        if (T == 0.0) {
-            z0e = z0e_0t;
-            // z0o = z0o_0t;
+        int rslt;
+
+  /*
+   * Start of coupled stripline calculations
+   */
+
+  /* zero thickness coupled line */
+        line = impedance_zeroThickness(line);
+        z0e_0t = line.getImpedanceEven();
+        z0o_0t = line.getImpedanceOdd();
+
+
+        if (line.getMetalThick() == 0.0) {
+            //line -> z0e = z0e_0t;
+            //line -> z0o = z0o_0t;
         } else {
-            // single.subs = stripline_subs_new();
-            // *(single.subs) = *(line->subs);
-            // single.w = line->w;
-            // single.l = line->l;
-            // single.freq = line->freq;
+            lineSlin.setSubstrate(line.getSubstrate());
+            lineSlin.setMetal(line.getMetal());
+            lineSlin.setFrequency(line.getFrequency(), Constant.FreqUnit_Hz);
 
-            // rslt = stripline_calc(&single, line->freq);
-            // if( rslt != 0 ) {
-            // alert ("%s():  stripline_calc failed (%d)", __FUNCTION__);
-            // }
-            z0s = Z0_calc(W, H, T);
+            SLIN slin = new SLIN();
+            lineSlin = slin.getAnaResult(lineSlin);
 
-            // single.subs->tmet = 0.0;
-            // rslt = stripline_calc(&single, line->freq);
-            // if( rslt != 0 ) {
-            // alert ("%s():  stripline_calc failed (%d)", __FUNCTION__);
-            // }
-            z0s_0t = Z0_calc(W, H, 0);
+            //rslt = stripline_calc( & single, line -> freq);
+            //if (rslt != 0) {
+            //    alert("%s():  stripline_calc failed (%d)", __FUNCTION__);
+            //}
+            z0s = lineSlin.getImpedance();
 
-			/* fringing capacitance */
-            cf_t = (Constant.FREESPACE_E0 * er / Math.PI)
-                    * ((2.0 / (1.0 - T / H))
-                    * Math.log((1.0 / (1.0 - T / H)) + 1.0) - (1.0 / (1.0 - T
-                    / H) - 1.0)
-                    * Math.log((1.0 / Math.pow(1.0 - T / H, 2.0)) - 1.0));
+            lineSlin.setMetalThick(0, Constant.LengthUnit_m);
+            //single.subs->tmet = 0.0;
+            //rslt = stripline_calc( & single, line -> freq);
+            lineSlin = slin.getAnaResult(lineSlin);
+            //if (rslt != 0) {
+            //    alert("%s():  stripline_calc failed (%d)", __FUNCTION__);
+            //}
+            z0s_0t = lineSlin.getImpedance();
 
-			/* zero thickness fringing capacitance */
-            cf_0 = (Constant.FREESPACE_E0 * er / Math.PI) * 2.0 * Math.log(2.0);
+    /* fringing capacitance */
+            cf_t = (Constant.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * (
+                    (2.0 / (1.0 - line.getMetalThick() / line.getSubHeight())) *
+                            Math.log((1.0 / (1.0 - line.getMetalThick() / line.getSubHeight())) + 1.0) -
+                            (1.0 / (1.0 - line.getMetalThick() / line.getSubHeight()) - 1.0) *
+                                    Math.log((1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0));
 
-			/* (18) from Cohn, (4.6.5.1) in Wadell */
-            z0e = 1.0 / ((1.0 / z0s) - (cf_t / cf_0)
-                    * ((1.0 / z0s_0t) - (1.0 / z0e_0t)));
-        }
-        return z0e;
-    }
+    /* zero thickness fringing capacitance  */
+            cf_0 = (Constant.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * 2.0 * Math.log(2.0);
 
-    private double Z0o_calc(double W, double S, double H, double T, double f) {
-		/* zero thickness even and odd impedances */
-        double z0o_0t;
-        double z0o;
-        double z0s, z0s_0t;
-        double cf_t, cf_0;
-        z0o_0t = z0o_zerot(W, S, H);
 
-        if (T == 0.0) {
-            // z0e = z0e_0t;
-            z0o = z0o_0t;
-        } else {
-            // single.subs = stripline_subs_new();
-            // *(single.subs) = *(line->subs);
-            // single.w = line->w;
-            // single.l = line->l;
-            // single.freq = line->freq;
+    /* (18) from Cohn, (4.6.5.1) in Wadell */
+            line.setImpedanceEven(1.0 / ((1.0 / z0s) - (cf_t / cf_0) * ((1.0 / z0s_0t) - (1.0 / z0e_0t))));
+            //line -> z0e = 1.0 / ((1.0 / z0s) - (cf_t / cf_0) * ((1.0 / z0s_0t) - (1.0 / z0e_0t)));
 
-            // rslt = stripline_calc(&single, line->freq);
-            // if( rslt != 0 ) {
-            // alert ("%s():  stripline_calc failed (%d)", __FUNCTION__);
-            // }
-            z0s = Z0_calc(W, H, T);
-
-            // single.subs->tmet = 0.0;
-            // rslt = stripline_calc(&single, line->freq);
-            // if( rslt != 0 ) {
-            // alert ("%s():  stripline_calc failed (%d)", __FUNCTION__);
-            // }
-            z0s_0t = Z0_calc(W, H, 0);
-
-			/* fringing capacitance */
-            cf_t = (Constant.FREESPACE_E0 * er / Math.PI)
-                    * ((2.0 / (1.0 - T / H))
-                    * Math.log((1.0 / (1.0 - T / H)) + 1.0) - (1.0 / (1.0 - T
-                    / H) - 1.0)
-                    * Math.log((1.0 / Math.pow(1.0 - T / H, 2.0)) - 1.0));
-
-			/* zero thickness fringing capacitance */
-            cf_0 = (Constant.FREESPACE_E0 * er / Math.PI) * 2.0 * Math.log(2.0);
-
-            if (S >= 5.0 * T) {
-				/*
-				 * (20) from Cohn, (4.6.5.2) in Wadell -- note, Wadell has a
-				 * sign error in the equation
-				 */
-                z0o = 1.0 / ((1.0 / z0s) + (cf_t / cf_0)
-                        * ((1.0 / z0o_0t) - (1.0 / z0s_0t)));
-
+            if (line.getMetalSpace() >= 5.0 * line.getMetalThick()) {
+      /*
+       * (20) from Cohn, (4.6.5.2) in Wadell -- note, Wadell has a sign
+       * error in the equation
+       */
+                line.setImpedanceOdd(1.0 / ((1.0 / z0s) + (cf_t / cf_0) * ((1.0 / z0o_0t) - (1.0 / z0s_0t))));
+                //line -> z0o = 1.0 / ((1.0 / z0s) + (cf_t / cf_0) * ((1.0 / z0o_0t) - (1.0 / z0s_0t)));
             } else {
-				/*
-				 * (22) from Cohn, (4.6.5.3) in Wadell -- note, Wadell has a
-				 * couple of errors in the transcription from the original
-				 * (Cohn)
-				 */
-                z0o = 1.0 / ((1.0 / z0o_0t) + ((1.0 / z0s) - (1.0 / z0s_0t))
-                        - (2.0 / Constant.FREESPACEZ0)
-                        * (cf_t / Constant.FREESPACE_E0 - cf_0 / Constant.FREESPACE_E0) + (2.0 * T)
-                        / (Constant.FREESPACEZ0 * S));
+      /*
+       * (22) from Cohn, (4.6.5.3) in Wadell -- note, Wadell has a
+       * couple of errors in the transcription from the original (Cohn)
+       */
+                line.setImpedanceOdd(1.0 / ((1.0 / z0o_0t) +
+                        ((1.0 / z0s) - (1.0 / z0s_0t)) -
+                        (2.0 / Constant.FREESPACEZ0) * (cf_t / Constant.FREESPACE_E0 - cf_0 / Constant.FREESPACE_E0) +
+                        (2.0 * line.getMetalThick()) / (Constant.FREESPACEZ0 * line.getMetalSpace())));
+                /*line -> z0o = 1.0 / ((1.0 / z0o_0t) +
+                        ((1.0 / z0s) - (1.0 / z0s_0t)) -
+                        (2.0 / FREESPACEZ0) * (cf_t / FREESPACE_E0 - cf_0 / FREESPACE_E0) +
+                        (2.0 * line -> subs -> tmet) / (FREESPACEZ0 *line -> s)
+              );*/
             }
         }
-        return z0o;
+
+  /*
+   * find impedance and coupling coefficient
+   */
+        line.setImpedance(Math.sqrt(line.getImpedanceEven() * line.getImpedanceOdd()));
+        //line -> z0 = sqrt(line -> z0e * line -> z0o);
+
+  /* coupling coefficient */
+        line.setCouplingFactor((line.getImpedanceEven() - line.getImpedanceOdd()) / (line.getImpedanceEven() + line.getImpedanceOdd()));
+        //line -> k = (line -> z0e - line -> z0o) / (line -> z0e + line -> z0o);
+
+        //line -> deltale = 0.0;
+        //line -> deltalo = 0.0;
+
+  /*
+   * electrical length = 360 degrees * physical length / wavelength
+   *
+   * freq * wavelength = velocity => 1/wavelength = freq / velocity
+   *
+   * 1/wavelength = freq * LIGHTSPEED/sqrt(keff)
+   */
+        line.setElectricalLength(360.0 * line.getMetalLength() * line.getFrequency() * Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon()));
+        //line -> len = 360.0 * line -> l * line -> freq * LIGHTSPEED / sqrt(line -> subs -> er);
+
+        return line;
     }
 
-    private double Eeff_calc(double L, double f) {
-        return (360.0 * L * f / Constant.LIGHTSPEED * Math.sqrt(er));
-    }
+    private LineCSLIN Synthesize(LineCSLIN line, boolean use_z0k) {
 
-    public void cslin_syn() {
-        // double wmin, wmax, abstol, reltol;
+        double h, er, l, wmin, wmax, abstol, reltol;
         int maxiters;
+        double z0, w;
         int iters;
-        int done = 0;
+        boolean done;
         double len;
 
-        // double smin, smax;
-        double delta, cval, err, d;
-        // double loss, kev, kodd;
+        double s, smin, smax, z0e, z0o, k;
+        double loss, delta, cval, err, d;
 
         double AW, F1, F2, F3;
 
@@ -285,61 +190,63 @@ public class CSLIN {
         double dw, ds;
         double ze0 = 0, ze1, ze2, dedw, deds;
         double zo0 = 0, zo1, zo2, dodw, dods;
-        double l, w, s;
 
-        len = Eeff;
+        len = line.getElectricalLength();
 
-		/* Substrate dielectric thickness (m) */
-        // h = line->subs->h;
+  /* Substrate dielectric thickness (m) */
+        h = line.getSubHeight();
 
-		/* Substrate relative permittivity */
-        // er = line->subs->er;
+  /* Substrate relative permittivity */
+        er = line.getSubEpsilon();
 
-		/* impedance and coupling */
-        // z0 = line->z0;
-        // k = line->k;
+  /* impedance and coupling */
+        z0 = line.getImpedance();
+        k = line.getCouplingFactor();
 
-		/* even/odd mode impedances */
-        // z0e = line->z0e;
-        // z0o = line->z0o;
+  /* even/odd mode impedances */
+        z0e = line.getImpedanceEven();
+        z0o = line.getImpedanceOdd();
 
         if (use_z0k) {
-			/* use z0 and k to calculate z0e and z0o */
-            Z0o = Z0 * Math.sqrt((1.0 - k) / (1.0 + k));
-            Z0e = Z0 * Math.sqrt((1.0 + k) / (1.0 - k));
+    /* use z0 and k to calculate z0e and z0o */
+            z0o = z0 * Math.sqrt((1.0 - k) / (1.0 + k));
+            z0e = z0 * Math.sqrt((1.0 + k) / (1.0 - k));
         } else {
-			/* use z0e and z0o to calculate z0 and k */
-            Z0 = Math.sqrt(Z0e * Z0o);
-            k = (Z0e - Z0o) / (Z0e + Z0o);
+    /* use z0e and z0o to calculate z0 and k */
+            z0 = Math.sqrt(z0e * z0o);
+            k = (z0e - z0o) / (z0e + z0o);
         }
 
-		/* temp value for l used while finding w and s */
+  /* temp value for l used while finding w and s */
         l = 1000.0;
-        // line->l=l;
+        //line->l = l;
+        line.setMetalLength(l, Constant.LengthUnit_m);
 
-		/* limits on the allowed range for w */
-        // wmin = MIL2M(0.5);
-        // wmax = MIL2M(1000);
 
-		/* limits on the allowed range for s */
-        // smin = MIL2M(0.5);
-        // smax = MIL2M(1000);
+  /* FIXME - change limits to be normalized to substrate thickness */
+  /* limits on the allowed range for w */
+        //wmin = MIL2M(0.5);
+        //wmax = MIL2M(1000);
 
-		/* impedance convergence tolerance (ohms) */
-        // abstol = 1e-6;
+  /* limits on the allowed range for s */
+        //smin = MIL2M(0.5);
+        //smax = MIL2M(1000);
 
-		/* width relative convergence tolerance (mils) (set to 0.1 micron) */
-        // reltol = MICRON2MIL(0.1);
+
+  /* impedance convergence tolerance (ohms) */
+        //abstol = 1e-6;
+
+  /* width relative convergence tolerance (mils) (set to 0.1 micron) */
+        //reltol = MICRON2MIL(0.1);
 
         maxiters = 50;
 
-		/*
-		 * Initial guess at a solution
-		 */
-        AW = Math.exp(Z0 * Math.sqrt(er + 1.0) / 42.4) - 1.0;
-        F1 = 8.0
-                * Math.sqrt(AW * (7.0 + 4.0 / er) / 11.0 + (1.0 + 1.0 / er)
-                / 0.81) / AW;
+  /*
+   * Initial guess at a solution -- FIXME:  This is an initial guess
+   * for coupled microstrip _not_ coupled stripline.
+   */
+        AW = Math.exp(z0 * Math.sqrt(er + 1.0) / 42.4) - 1.0;
+        F1 = 8.0 * Math.sqrt(AW * (7.0 + 4.0 / er) / 11.0 + (1.0 + 1.0 / er) / 0.81) / AW;
 
         F2 = 0;
         for (i = 0; i <= 5; i++) {
@@ -348,70 +255,80 @@ public class CSLIN {
 
         F3 = 0;
         for (i = 0; i <= 5; i++) {
-            F3 = F3 + (bi[i] - ci[i] * (9.6 - er))
-                    * Math.pow((0.6 - k), (double) (i));
+            F3 = F3 + (bi[i] - ci[i] * (9.6 - er)) * Math.pow((0.6 - k), (double) (i));
         }
 
-        w = H * Math.abs(F1 * F2);
-        s = H * Math.abs(F1 * F3);
+        w = h * Math.abs(F1 * F2);
+        s = h * Math.abs(F1 * F3);
 
-        // l = 100;
-        // loss = 0;
-        // kev = 1;
-        // kodd = 1;
+        l = 100;
+
 
         iters = 0;
-        done = 0;
+        done = false;
         if (w < s)
             delta = 1e-3 * w;
         else
             delta = 1e-3 * s;
 
-        delta = MIL2M(1e-5);
+        delta = Constant.value2meter(1e-5, Constant.LengthUnit_mil);
 
-        cval = 1e-12 * Z0e * Z0o;
+        cval = 1e-12 * z0e * z0o;
 
-		/*
-		 * We should never need anything anywhere near maxiters iterations. This
-		 * limit is just to prevent going to lala land if something breaks.
-		 */
-        while ((done == 0) && (iters < maxiters)) {
+  /*
+   * We should never need anything anywhere near maxiters iterations.
+   * This limit is just to prevent going to lala land if something
+   * breaks.
+   */
+        while ((!done) && (iters < maxiters)) {
             iters++;
-            // line->w = w;
-            // line->s = s;
-			/* don't bother with loss calculations while we are iterating */
-            // coupled_microstrip_calc_int(line, line->freq, 0);
-            ze0 = Z0e_calc(w, s, H, T, f);
-            zo0 = Z0o_calc(w, s, H, T, f);
+            line.setMetalWidth(w, Constant.LengthUnit_m);
+            line.setMetalSpace(s, Constant.LengthUnit_m);
+            line = Analysis(line);
+            //line->w = w;
+            //line->s = s;
+            //coupled_stripline_calc(line, line->freq);
 
-			/* check for convergence */
-            err = Math.pow((ze0 - Z0e), 2.0) + Math.pow((zo0 - Z0o), 2.0);
+            ze0 = line.getImpedanceEven();
+            zo0 = line.getImpedanceOdd();
+
+      /* check for convergence */
+            err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
             if (err < cval) {
-                done = 1;
+                done = true;
             } else {
-				/* approximate the first jacobian */
-                // line->w = w + delta;
-                // line->s = s;
-                // coupled_microstrip_calc_int (line, line->freq, 0);
-                ze1 = Z0e_calc(w + delta, s, H, T, f);
-                zo1 = Z0o_calc(w + delta, s, H, T, f);
+    /* approximate the first jacobian */
+                line.setMetalWidth(w + delta, Constant.LengthUnit_m);
+                line.setMetalSpace(s, Constant.LengthUnit_m);
+                line = Analysis(line);
+                //line->w = w + delta;
+                //line->s = s;
+                //coupled_stripline_calc(line, line->freq);
+                ze1 = line.getImpedanceEven();
+                zo1 = line.getImpedanceOdd();
 
-                // line->w = w;
-                // line->s = s + delta;
-                // coupled_microstrip_calc_int (line, line->freq, 0);
-                ze2 = Z0e_calc(w, s + delta, H, T, f);
-                zo2 = Z0o_calc(w, s + delta, H, T, f);
+                line.setMetalWidth(w, Constant.LengthUnit_m);
+                line.setMetalSpace(s + delta, Constant.LengthUnit_m);
+                line = Analysis(line);
+                //line -> w = w;
+                //line -> s = s + delta;
+                //coupled_stripline_calc(line, line -> freq);
+                ze2 = line.getImpedanceEven();
+                zo2 = line.getImpedanceOdd();
 
                 dedw = (ze1 - ze0) / delta;
                 dodw = (zo1 - zo0) / delta;
                 deds = (ze2 - ze0) / delta;
                 dods = (zo2 - zo0) / delta;
 
-				/* find the determinate */
+	/* find the determinate */
                 d = dedw * dods - deds * dodw;
 
-				/* estimate the new solution */
-                dw = -1.0 * ((ze0 - Z0e) * dods - (zo0 - Z0o) * deds) / d;
+	/*
+     * estimate the new solution, but don't change by more than
+	 * 10% at a time to avoid convergence problems
+	 */
+                dw = -1.0 * ((ze0 - z0e) * dods - (zo0 - z0o) * deds) / d;
                 if (Math.abs(dw) > 0.1 * w) {
                     if (dw > 0.0)
                         dw = 0.1 * w;
@@ -420,7 +337,7 @@ public class CSLIN {
                 }
                 w = Math.abs(w + dw);
 
-                ds = ((ze0 - Z0e) * dodw - (zo0 - Z0o) * dedw) / d;
+                ds = ((ze0 - z0e) * dodw - (zo0 - z0o) * dedw) / d;
                 if (Math.abs(ds) > 0.1 * s) {
                     if (ds > 0.0)
                         ds = 0.1 * s;
@@ -431,20 +348,26 @@ public class CSLIN {
             }
         }
 
-        // Z0e = Z0_e_f_calc(W, L, S, H, T, er, f);
-        // Z0o = Z0_o_f_calc(W, L, S, H, T, er, f);
+        line.setMetalWidth(w, Constant.LengthUnit_m);
+        line.setMetalSpace(s, Constant.LengthUnit_m);
+        line = Analysis(line);
+        //line -> w = w;
+        //line -> s = s;
+        //coupled_stripline_calc(line, line -> freq);
 
-        W = w;
-        S = s;
-        // coupled_microstrip_calc_int (line, line->freq, 0);
-        L = l * len / Eeff_calc(l, f);
+  /* scale the line length to get the desired electrical length */
+        line.setMetalLength(line.getMetalLength() * len / line.getElectricalLength(), Constant.LengthUnit_m);
+        //line -> l = line -> l * len / line -> len;
+        //coupled_stripline_calc(line, line -> freq);
+
+        return line;
     }
 
-    private double MIL2M(double x) {
-        return (x * 25.4e-6);
+    public LineCSLIN getAnaResult(LineCSLIN line) {
+        return Analysis(line);
     }
 
-	/*
-	 * private double MICRON2MIL(double x) { return (x / 25.4); }
-	 */
+    public LineCSLIN getSynResult(LineCSLIN line, boolean use_z0k) {
+        return Synthesize(line, use_z0k);
+    }
 }

@@ -1,12 +1,14 @@
 package com.rookiedev.microwavetools.libs;
 
-public class LineSLIN {
+public class LineCSLIN {
     private Substrate substrate;
     private Metal metal;
+    private double metalSpace;
     private double impedance, electricalLength; // ohms, degree
+    private double impedanceEven, impedanceOdd, couplingFactor;
     private double frequency; // Hz
 
-    public LineSLIN() {
+    public LineCSLIN() {
         substrate = new Substrate();
         metal = new Metal();
     }
@@ -82,7 +84,7 @@ public class LineSLIN {
         return frequency;
     }
 
-    public double getSubEpsilon() {
+    double getSubEpsilon() {
         return substrate.getSubEpsilon();
     }
 
@@ -90,12 +92,44 @@ public class LineSLIN {
         substrate.setSubEpsilon(subEpsilon);
     }
 
-    public double getSubHeight() {
+    double getSubHeight() {
         return substrate.getSubHeight();
     }
 
     public void setSubHeight(double subHeight, int unit) {
         substrate.setSubHeight(Constant.value2meter(subHeight, unit));
+    }
+
+    public double getMetalSpace() {
+        return metalSpace;
+    }
+
+    public void setMetalSpace(double metalSpace, int unit) {
+        this.metalSpace = Constant.value2meter(metalSpace, unit);
+    }
+
+    public double getImpedanceEven() {
+        return impedanceEven;
+    }
+
+    public void setImpedanceEven(double impedanceEven) {
+        this.impedanceEven = impedanceEven;
+    }
+
+    public double getImpedanceOdd() {
+        return impedanceOdd;
+    }
+
+    public void setImpedanceOdd(double impedanceOdd) {
+        this.impedanceOdd = impedanceOdd;
+    }
+
+    public double getCouplingFactor() {
+        return couplingFactor;
+    }
+
+    public void setCouplingFactor(double couplingFactor) {
+        this.couplingFactor = couplingFactor;
     }
 
     public Substrate getSubstrate() {
