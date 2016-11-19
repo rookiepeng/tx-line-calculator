@@ -54,6 +54,25 @@ public class Constant {
         return f;
     }
 
+    public static double meter2others(double value, int lengthUnit) {
+        double l = 0;
+        switch (lengthUnit) {
+            case LengthUnit_mil:
+                l = value * 1000 * 39.37007874;
+                break;
+            case LengthUnit_mm:
+                l = value * 1000;
+                break;
+            case LengthUnit_cm:
+                l = value * 100;
+                break;
+            case LengthUnit_m:
+                l = value;
+                break;
+        }
+        return l;
+    }
+
 
     public static double MIL2MICRON(double x) {
         return (x * 25.4);

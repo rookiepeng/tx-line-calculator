@@ -160,65 +160,68 @@ public class SLINFragment extends Fragment {
                     }
 
                     if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
-                        Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-                        SLIN slin = new SLIN(W, H, er, L, Z0, Eeff, Freq, T, flag);
-                        slin.stripline_syn();
-                        W = slin.getW();
-                        H = slin.getH();
-                        er = slin.geter();
-                        L = slin.getL();
+                        line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
+                        //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
+                        //SLIN slin = new SLIN(W, H, er, L, Z0, Eeff, Freq, T, flag);
+                        SLIN slin = new SLIN();
+                        line = slin.getSynResult(line, flag);
+                        //slin.stripline_syn();
+                        //W = slin.getW();
+                        //H = slin.getH();
+                        //er = slin.geter();
+                        //L = slin.getL();
                         //stripline_syn(Z0, Eeff, Freq, flag);
-                        temp = spinner_L.getSelectedItemPosition();
-                        if (temp == 0) {
-                            L = L * 1000 * 39.37007874;
-                        } else if (temp == 1) {
-                            L = L * 1000;
-                        } else if (temp == 2) {
-                            L = L * 100;
-                        }
-                        BigDecimal L_temp = new BigDecimal(L); // cut the decimal of L
-                        L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                        //temp = spinner_L.getSelectedItemPosition();
+                        //if (temp == 0) {
+                        //   L = L * 1000 * 39.37007874;
+                        //} else if (temp == 1) {
+                        //    L = L * 1000;
+                        //} else if (temp == 2) {
+                        //    L = L * 100;
+                        //}
+                        BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
+                        double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_L.setText(String.valueOf(L));
                     } else {
-                        SLIN slin = new SLIN(W, H, er, L, Z0, 0, Freq, T, flag);
-                        slin.stripline_syn();
-                        W = slin.getW();
-                        H = slin.getH();
-                        er = slin.geter();
+                        SLIN slin = new SLIN();
+                        line = slin.getSynResult(line, flag);
+                        //W = slin.getW();
+                        //H = slin.getH();
+                        //er = slin.geter();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
                     if (flag == Constant.Synthesize_Width) {
-                        temp = spinner_W.getSelectedItemPosition(); // W (m)
+                        /*temp = spinner_W.getSelectedItemPosition(); // W (m)
                         if (temp == 0) {
                             W = W * 1000 * 39.37007874;
                         } else if (temp == 1) {
                             W = W * 1000;
                         } else if (temp == 2) {
                             W = W * 100;
-                        }
+                        }*/
 
-                        BigDecimal W_temp = new BigDecimal(W); // cut the decimal of W
-                        W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                        BigDecimal W_temp = new BigDecimal(Constant.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
+                        double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_W.setText(String.valueOf(W));
                     } else if (flag == Constant.Synthesize_Height) {
-                        temp = spinner_H.getSelectedItemPosition();
+                        /*temp = spinner_H.getSelectedItemPosition();
                         if (temp == 0) {
                             H = H * 1000 * 39.37007874;
                         } else if (temp == 1) {
                             H = H * 1000;
                         } else if (temp == 2) {
                             H = H * 100;
-                        }
+                        }*/
 
-                        BigDecimal H_temp = new BigDecimal(H);
-                        H = H_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                        BigDecimal H_temp = new BigDecimal(Constant.meter2others(line.getSubHeight(), spinner_H.getSelectedItemPosition()));
+                        double H = H_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_H.setText(String.valueOf(H));
                     } else if (flag == Constant.Synthesize_Er) {
-                        BigDecimal er_temp = new BigDecimal(er);
-                        er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                        BigDecimal er_temp = new BigDecimal(line.getSubEpsilon());
+                        double er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_er.setText(String.valueOf(er));
                     }
@@ -246,7 +249,7 @@ public class SLINFragment extends Fragment {
         View eeff_input = rootView.findViewById(R.id.eeff_input);
         eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
-        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
@@ -573,10 +576,8 @@ public class SLINFragment extends Fragment {
         return checkResult;
     }
 
-    protected void forceRippleAnimation(View view)
-    {
-        if(Build.VERSION.SDK_INT >= 23)
-        {
+    protected void forceRippleAnimation(View view) {
+        if (Build.VERSION.SDK_INT >= 23) {
             view.setClickable(true);
             Drawable background = view.getForeground();
             final RippleDrawable rippleDrawable = (RippleDrawable) background;

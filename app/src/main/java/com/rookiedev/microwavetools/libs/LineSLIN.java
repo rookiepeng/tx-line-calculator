@@ -82,7 +82,7 @@ public class LineSLIN {
         return frequency;
     }
 
-    double getSubEpsilon() {
+    public double getSubEpsilon() {
         return substrate.getSubEpsilon();
     }
 
@@ -90,7 +90,7 @@ public class LineSLIN {
         substrate.setSubEpsilon(subEpsilon);
     }
 
-    double getSubHeight() {
+    public double getSubHeight() {
         return substrate.getSubHeight();
     }
 
