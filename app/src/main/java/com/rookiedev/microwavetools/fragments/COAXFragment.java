@@ -8,7 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -23,12 +23,10 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.rookiedev.microwavetools.MainActivity;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.COAX;
 import com.rookiedev.microwavetools.libs.Constant;
+import com.rookiedev.microwavetools.libs.LineCOAX;
 
 import java.math.BigDecimal;
 
@@ -65,7 +63,6 @@ public class COAXFragment extends Fragment {
             edittext_Freq, // the frequency
             edittext_T, // the thickness of the metal
             edittext_er; // the relative dielectric constant
-    private double a, height, b, L, Z0, Eeff, Freq, T, er;
     private Button button_syn,// button synthesize
             button_ana;// button analyze
     private Spinner spinner_a, spinner_h, spinner_b, spinner_L, spinner_T,
@@ -73,7 +70,7 @@ public class COAXFragment extends Fragment {
     // parameter
     private int flag;
     private RadioButton radioBtn_a, radioBtn_H, radioBtn_b, radioBtn_er;
-
+    private LineCOAX line;
 
     public COAXFragment() {
         // Empty constructor required for fragment subclasses
@@ -97,82 +94,32 @@ public class COAXFragment extends Fragment {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
                     edittext_Eeff.setText("");
                 } else {
-                    a = Double.parseDouble(edittext_a.getText().toString()); // get the parameters
-                    height = Double.parseDouble(edittext_H.getText().toString());
-                    b = Double.parseDouble(edittext_b.getText().toString());
+                    line.setCoreRadius(Double.parseDouble(edittext_a.getText().toString()), spinner_a.getSelectedItemPosition());
+                    line.setSubRadius(Double.parseDouble(edittext_H.getText().toString()), spinner_h.getSelectedItemPosition());
+                    line.setCoreOffset(Double.parseDouble(edittext_b.getText().toString()), spinner_b.getSelectedItemPosition());
+                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
+                    line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
 
-                    Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    er = Double.parseDouble(edittext_er.getText().toString());
-                    T = Double.parseDouble(edittext_T.getText().toString());
-
-                    temp = spinner_a.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        a = a / 39.37007874 / 1000;
-                    } else if (temp == 1) {
-                        a = a / 1000;
-                    } else if (temp == 2) {
-                        a = a * 100;
-                    }
-
-                    temp = spinner_h.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        height = height / 39.37007874 / 1000;
-                    } else if (temp == 1) {
-                        height = height / 1000;
-                    } else if (temp == 2) {
-                        height = height * 100;
-                    }
-
-                    temp = spinner_b.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        b = b / 39.37007874 / 1000;
-                    } else if (temp == 1) {
-                        b = b / 1000;
-                    } else if (temp == 2) {
-                        b = b * 100;
-                    }
-
-                    temp = spinner_Freq.getSelectedItemPosition(); // convert unit to Hz
-                    if (temp == 0) {
-                        Freq = Freq * 1e6;
-                    } else if (temp == 1) {
-                        Freq = Freq * 1e9;
-                    }
-
-                    temp = spinner_T.getSelectedItemPosition(); // convert unit to meter
-                    if (temp == 0) {
-                        T = T / 39.37007874 / 1000;
-                    } else if (temp == 1) {
-                        T = T / 1000;
-                    } else if (temp == 2) {
-                        T = T * 100;
-                    }
+                    //T = Double.parseDouble(edittext_T.getText().toString());
 
                     if (!edittext_L.getText().toString().equals("")) { // check the L input
-                        L = Double.parseDouble(edittext_L.getText().toString());
-                        temp = spinner_L.getSelectedItemPosition(); // convert unit to meter
-                        if (temp == 0) {
-                            L = L / 39.37007874 / 1000;
-                        } else if (temp == 1) {
-                            L = L / 1000;
-                        } else if (temp == 2) {
-                            L = L * 100;
-                        }
-                        COAX coax = new COAX(a, height, b, er, L, 0, 0, Freq, T, flag);
-                        Z0 = coax.getZ0(); // calculate the Z0
-                        Eeff = coax.getEeff(); // calculate the Eeff
+                        line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        BigDecimal Eeff_temp = new BigDecimal(Eeff); // cut the decimal of the Eeff
-                        Eeff = Eeff_temp.setScale(DecimalLength,
+                        COAX coax = new COAX();
+                        line = coax.getAnaResult(line);
+
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
+                        double Eeff = Eeff_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
-                        COAX coax = new COAX(a, height, b, er, 0, 0, 0, Freq, T, flag);
-                        Z0 = coax.getZ0(); // calculate the Z0
+                        COAX coax = new COAX();
+                        line = coax.getAnaResult(line);
+                        //Z0 = coax.getZ0(); // calculate the Z0
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
                     }
-                    BigDecimal Z0_temp = new BigDecimal(Z0);
-                    Z0 = Z0_temp.setScale(DecimalLength,
+                    BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
+                    double Z0 = Z0_temp.setScale(DecimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
                 }
@@ -196,195 +143,76 @@ public class COAXFragment extends Fragment {
                     }
                 } else {
                     int temp;
-                    Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
+                    line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString()));
+                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
 
-                    Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    temp = spinner_Freq.getSelectedItemPosition(); // convert the unit to Hz
-                    if (temp == 0) {
-                        Freq = Freq * 1000000;
-                    } else if (temp == 1) {
-                        Freq = Freq * 1000000000;
-                    }
-                    T = Double.parseDouble(edittext_T.getText().toString());
-                    temp = spinner_T.getSelectedItemPosition(); // convert the unit to metre
-                    if (temp == 0) {
-                        T = T / 39370.0787402;
-                    } else if (temp == 1) {
-                        T = T / 1000;
-                    } else if (temp == 2) {
-                        T = T / 100;
-                    }
+                    if (flag == Constant.Synthesize_CoreRadius) {
+                        line.setSubRadius(Double.parseDouble(edittext_H.getText().toString()), spinner_h.getSelectedItemPosition());
+                        line.setCoreOffset(Double.parseDouble(edittext_b.getText().toString()), spinner_b.getSelectedItemPosition());
+                        line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
 
-                    if (flag == 0) {
-                        height = Double.parseDouble(edittext_H.getText().toString());
-                        temp = spinner_h.getSelectedItemPosition(); // convert the unit to metre
-                        if (temp == 0) {
-                            height = height / 39370.0787402;
-                        } else if (temp == 1) {
-                            height = height / 1000;
-                        } else if (temp == 2) {
-                            height = height / 100;
-                        }
-                        b = Double.parseDouble(edittext_b.getText().toString());
-                        temp = spinner_b.getSelectedItemPosition();
-                        if (temp == 0) {
-                            b = b / 39370.0787402;
-                        } else if (temp == 1) {
-                            b = b / 1000;
-                        } else if (temp == 2) {
-                            b = b / 100;
-                        }
-                        er = Double.parseDouble(edittext_er.getText().toString());
-                        a = 0;
-                    } else if (flag == 1) {
-                        a = Double.parseDouble(edittext_a.getText().toString());
-                        temp = spinner_a.getSelectedItemPosition(); // convert the unit to metre
-                        if (temp == 0) {
-                            a = a / 39370.0787402;
-                        } else if (temp == 1) {
-                            a = a / 1000;
-                        } else if (temp == 2) {
-                            a = a / 100;
-                        }
-                        b = Double.parseDouble(edittext_b.getText().toString());
-                        temp = spinner_b.getSelectedItemPosition();
-                        if (temp == 0) {
-                            b = b / 39370.0787402;
-                        } else if (temp == 1) {
-                            b = b / 1000;
-                        } else if (temp == 2) {
-                            b = b / 100;
-                        }
-                        er = Double.parseDouble(edittext_er.getText().toString());
-                        height = 0;
-                    } else if (flag == 2) {
-                        a = Double.parseDouble(edittext_a.getText().toString());
-                        temp = spinner_a.getSelectedItemPosition(); // convert the unit to metre
-                        if (temp == 0) {
-                            a = a / 39370.0787402;
-                        } else if (temp == 1) {
-                            a = a / 1000;
-                        } else if (temp == 2) {
-                            a = a / 100;
-                        }
-                        height = Double.parseDouble(edittext_H.getText().toString());
-                        temp = spinner_h.getSelectedItemPosition();
-                        if (temp == 0) {
-                            height = height / 39370.0787402;
-                        } else if (temp == 1) {
-                            height = height / 1000;
-                        } else if (temp == 2) {
-                            height = height / 100;
-                        }
-                        er = Double.parseDouble(edittext_er.getText().toString());
-                        b = 0;
-                    } else if (flag == 3) {
-                        a = Double.parseDouble(edittext_a.getText().toString());
-                        temp = spinner_a.getSelectedItemPosition(); // convert the unit to metre
-                        if (temp == 0) {
-                            a = a / 39370.0787402;
-                        } else if (temp == 1) {
-                            a = a / 1000;
-                        } else if (temp == 2) {
-                            a = a / 100;
-                        }
-                        height = Double.parseDouble(edittext_H.getText().toString());
-                        temp = spinner_h.getSelectedItemPosition();
-                        if (temp == 0) {
-                            height = height / 39370.0787402;
-                        } else if (temp == 1) {
-                            height = height / 1000;
-                        } else if (temp == 2) {
-                            height = height / 100;
-                        }
-                        b = Double.parseDouble(edittext_b.getText().toString());
-                        temp = spinner_b.getSelectedItemPosition(); // convert the unit to metre
-                        if (temp == 0) {
-                            b = b / 39370.0787402;
-                        } else if (temp == 1) {
-                            b = b / 1000;
-                        } else if (temp == 2) {
-                            b = b / 100;
-                        }
-                        er = 0;
+                        //a = 0;
+                    } else if (flag == Constant.Synthesize_Height) {
+                        line.setCoreRadius(Double.parseDouble(edittext_a.getText().toString()), spinner_a.getSelectedItemPosition());
+                        line.setCoreOffset(Double.parseDouble(edittext_b.getText().toString()), spinner_b.getSelectedItemPosition());
+                        line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+
+                        //height = 0;
+                    } else if (flag == Constant.Synthesize_CoreOffset) {
+                        line.setCoreRadius(Double.parseDouble(edittext_a.getText().toString()), spinner_a.getSelectedItemPosition());
+                        line.setSubRadius(Double.parseDouble(edittext_H.getText().toString()), spinner_h.getSelectedItemPosition());
+                        line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
+
+                        //b = 0;
+                    } else if (flag == Constant.Synthesize_Er) {
+                        line.setCoreRadius(Double.parseDouble(edittext_a.getText().toString()), spinner_a.getSelectedItemPosition());
+                        line.setSubRadius(Double.parseDouble(edittext_H.getText().toString()), spinner_h.getSelectedItemPosition());
+                        line.setCoreOffset(Double.parseDouble(edittext_b.getText().toString()), spinner_b.getSelectedItemPosition());
+
+                        //er = 0;
                     }
 
                     if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
-                        Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-                        COAX coax = new COAX(a, height, b, er, 0, Z0, Eeff, Freq, T, flag);
-                        coax.coax_syn();
-                        L = coax.getL();
-                        a = coax.geta();
-                        height = coax.getb();
-                        b = coax.getc();
-                        er = coax.geter();
+                        line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
+                        COAX coax = new COAX();
+                        line = coax.getSynResult(line, flag);
+                        //coax.coax_syn();
+                        //L = coax.getL();
+                        //a = coax.geta();
+                        //height = coax.getb();
+                        //b = coax.getc();
+                        //er = coax.geter();
 
-                        temp = spinner_L.getSelectedItemPosition();
-                        if (temp == 0) {
-                            L = L * 1000 * 39.37007874;
-                        } else if (temp == 1) {
-                            L = L * 1000;
-                        } else if (temp == 2) {
-                            L = L * 100;
-                        }
-                        BigDecimal L_temp = new BigDecimal(L); // cut the decimal of L
-                        L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                        BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
+                        double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_L.setText(String.valueOf(L));
                     } else {
-                        COAX coax = new COAX(a, height, b, er, 0, Z0, 0, Freq, T, flag);
-                        coax.coax_syn();
-                        a = coax.geta();
-                        height = coax.getb();
-                        b = coax.getc();
-                        er = coax.geter();
+                        COAX coax = new COAX();
+                        line = coax.getSynResult(line, flag);
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
-                    if (flag == 0) {
-                        temp = spinner_a.getSelectedItemPosition(); // W (m)
-                        if (temp == 0) {
-                            a = a * 1000 * 39.37007874;
-                        } else if (temp == 1) {
-                            a = a * 1000;
-                        } else if (temp == 2) {
-                            a = a * 100;
-                        }
+                    if (flag == Constant.Synthesize_CoreRadius) {
 
-                        BigDecimal a_temp = new BigDecimal(a); // cut the decimal of W
-                        a = a_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                        BigDecimal a_temp = new BigDecimal(Constant.meter2others(line.getCoreRadius(), spinner_a.getSelectedItemPosition())); // cut the decimal of W
+                        double a = a_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_a.setText(String.valueOf(a));
-                    } else if (flag == 1) {
-                        temp = spinner_h.getSelectedItemPosition();
-                        if (temp == 0) {
-                            height = height * 1000 * 39.37007874;
-                        } else if (temp == 1) {
-                            height = height * 1000;
-                        } else if (temp == 2) {
-                            height = height * 100;
-                        }
+                    } else if (flag == Constant.Synthesize_Height) {
 
-                        BigDecimal b_temp = new BigDecimal(height); // cut the decimal of S
-                        height = b_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                        BigDecimal b_temp = new BigDecimal(Constant.meter2others(line.getSubRadius(), spinner_h.getSelectedItemPosition())); // cut the decimal of S
+                        double height = b_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_H.setText(String.valueOf(height));
-                    } else if (flag == 2) {
-                        temp = spinner_b.getSelectedItemPosition();
-                        if (temp == 0) {
-                            b = b * 1000 * 39.37007874;
-                        } else if (temp == 1) {
-                            b = b * 1000;
-                        } else if (temp == 2) {
-                            b = b * 100;
-                        }
+                    } else if (flag == Constant.Synthesize_CoreOffset) {
 
-                        BigDecimal c_temp = new BigDecimal(b);
-                        b = c_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                        BigDecimal c_temp = new BigDecimal(Constant.meter2others(line.getCoreOffset(), spinner_b.getSelectedItemPosition()));
+                        double b = c_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_b.setText(String.valueOf(b));
-                    } else if (flag == 3) {
-                        BigDecimal er_temp = new BigDecimal(er);
-                        er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                    } else if (flag == Constant.Synthesize_Er) {
+                        BigDecimal er_temp = new BigDecimal(line.getSubEpsilon());
+                        double er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_er.setText(String.valueOf(er));
                     }
@@ -397,6 +225,7 @@ public class COAXFragment extends Fragment {
     }
 
     private void initUI() {
+        line = new LineCOAX();
         height_input = rootView.findViewById(R.id.height_input_radio);
         er_input = rootView.findViewById(R.id.epsilon_input_radio);
         a_input = rootView.findViewById(R.id.a_input_radio);
@@ -411,7 +240,7 @@ public class COAXFragment extends Fragment {
         View eeff_input = rootView.findViewById(R.id.eeff_input);
         eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
-        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
+        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
@@ -508,7 +337,7 @@ public class COAXFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
@@ -547,19 +376,19 @@ public class COAXFragment extends Fragment {
         edittext_T.setText(prefs.getString(COAX_T, "1.40"));
         spinner_T.setSelection(Integer.parseInt(prefs.getString(COAX_T_UNIT,
                 "0")));
-        flag = Integer.parseInt(prefs.getString(COAX_Flag, "0"));
+        flag = Integer.parseInt(prefs.getString(COAX_Flag, Integer.toString(Constant.Synthesize_CoreRadius)));
     }
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         // Preferences in the device
         // universal parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
     private void setRadioBtn() {
-        if (flag == 0) {
+        if (flag == Constant.Synthesize_CoreRadius) {
             radioBtn_a.setChecked(true);
             radioBtn_H.setChecked(false);
             radioBtn_b.setChecked(false);
@@ -568,7 +397,7 @@ public class COAXFragment extends Fragment {
             height_input.setBackgroundColor(Color.WHITE);
             b_input.setBackgroundColor(Color.WHITE);
             er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == 1) {
+        } else if (flag == Constant.Synthesize_Height) {
             radioBtn_a.setChecked(false);
             radioBtn_H.setChecked(true);
             radioBtn_b.setChecked(false);
@@ -577,7 +406,7 @@ public class COAXFragment extends Fragment {
             height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             b_input.setBackgroundColor(Color.WHITE);
             er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == 2) {
+        } else if (flag == Constant.Synthesize_CoreOffset) {
             radioBtn_a.setChecked(false);
             radioBtn_H.setChecked(false);
             radioBtn_b.setChecked(true);
@@ -586,7 +415,7 @@ public class COAXFragment extends Fragment {
             height_input.setBackgroundColor(Color.WHITE);
             b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == 3) {
+        } else if (flag == Constant.Synthesize_Er) {
             radioBtn_a.setChecked(false);
             radioBtn_H.setChecked(false);
             radioBtn_b.setChecked(false);
@@ -607,7 +436,7 @@ public class COAXFragment extends Fragment {
                 height_input.setBackgroundColor(Color.WHITE);
                 b_input.setBackgroundColor(Color.WHITE);
                 er_input.setBackgroundColor(Color.WHITE);
-                flag = 0;
+                flag = Constant.Synthesize_CoreRadius;
             }
         });
         radioBtn_H.setOnClickListener(new View.OnClickListener() {
@@ -621,7 +450,7 @@ public class COAXFragment extends Fragment {
                 height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 b_input.setBackgroundColor(Color.WHITE);
                 er_input.setBackgroundColor(Color.WHITE);
-                flag = 1;
+                flag = Constant.Synthesize_Height;
             }
         });
         radioBtn_b.setOnClickListener(new View.OnClickListener() {
@@ -635,7 +464,7 @@ public class COAXFragment extends Fragment {
                 height_input.setBackgroundColor(Color.WHITE);
                 b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 er_input.setBackgroundColor(Color.WHITE);
-                flag = 2;
+                flag = Constant.Synthesize_CoreOffset;
             }
         });
         radioBtn_er.setOnClickListener(new View.OnClickListener() {
@@ -649,7 +478,7 @@ public class COAXFragment extends Fragment {
                 height_input.setBackgroundColor(Color.WHITE);
                 b_input.setBackgroundColor(Color.WHITE);
                 er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                flag = 3;
+                flag = Constant.Synthesize_Er;
             }
         });
     }
@@ -662,7 +491,7 @@ public class COAXFragment extends Fragment {
         String coax_flag;
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                ActionBarActivity.MODE_PRIVATE);
+                AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         coax_a = edittext_a.getText().toString();
         coax_a_unit = Integer.toString(spinner_a.getSelectedItemPosition());
@@ -704,7 +533,7 @@ public class COAXFragment extends Fragment {
         editor.putString(COAX_T_UNIT, coax_T_unit);
         editor.putString(COAX_Flag, coax_flag);
 
-        editor.commit();
+        editor.apply();
     }
 
     private boolean analysisInputCheck() {
@@ -816,10 +645,8 @@ public class COAXFragment extends Fragment {
         return checkResult;
     }
 
-    protected void forceRippleAnimation(View view)
-    {
-        if(Build.VERSION.SDK_INT >= 23)
-        {
+    protected void forceRippleAnimation(View view) {
+        if (Build.VERSION.SDK_INT >= 23) {
             view.setClickable(true);
             Drawable background = view.getForeground();
             final RippleDrawable rippleDrawable = (RippleDrawable) background;
