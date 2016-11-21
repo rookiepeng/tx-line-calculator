@@ -15,6 +15,7 @@ public class Constant {
 
     // flags
     public static final int Synthesize_Width = 0, Synthesize_Height = 1, Synthesize_Er = 2, Synthesize_Length = 3, Synthesize_Gap = 4, Synthesize_CoreRadius = 5, Synthesize_CoreOffset = 6;
+    public static final int Synthesize_SubRadius = Synthesize_Height;
     public static final int LengthUnit_mil = 0, LengthUnit_mm = 1, LengthUnit_cm = 2, LengthUnit_m = 3;
     public static final int FreqUnit_Hz = 10, FreqUnit_MHz = 0, FreqUnit_GHz = 1;
 

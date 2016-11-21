@@ -8,14 +8,14 @@ package com.rookiedev.microwavetools.libs;
  * loss  = insertion loss (dB)
  * kev   = even mode effective relative permitivity
  * kodd  = odd mode effective relative permitivity
- *
+ * <p>
  * from:
  * w     = microstrip line width (m)
  * l     = microstrip line length (m)
  * s     = spacing between lines (m)
  * f     = frequency (Hz)
  * subs  = substrate parameters.  See TRSUBS for details.
- *
+ * <p>
  * |<--W-->|<---S--->|<--W-->|
  * _______           _______
  * | metal |         | metal |
@@ -76,58 +76,53 @@ package com.rookiedev.microwavetools.libs;
 import android.util.Log;
 
 /**
- *  calculates:
- *    w     = microstrip line width (mils)
- *    l     = microstrip line length (mils)
- *    s     = spacing between lines (mils)
- *    loss  = insertion loss (dB)
- *    kev   = even mode effective relative permitivity
- *    kodd  = odd mode effective relative permitivity
- *
- *  from:
- *    z0e   = even mode characteristic impedance (ohms)
- *    z0o   = odd mode characteristic impedance (ohms)
- *    len   = electrical length (degrees)
- *    f     = frequency (Hz)
- *    subs  = substrate parameters.  See TRSUBS for details.
- *
- *          |<--W-->|<---S--->|<--W-->|
- *           _______           _______
- *          | metal |         | metal |
- *   ----------------------------------------------
- *  (  dielectric,er                      /|\     (
- *   )                                 H   |       )
- *  (                                     \|/     (
- *   ----------------------------------------------
- *   /////////////////ground///////////////////////
- *
- *  Part of the Filter Design Toolbox
- *  See Also:  CMLICALC, MLISYN, MLICALC, SLISYN, SLICALC, TRSUBS
- *
- *  Dan McMahill, 7/17/97
- *  Copyright (C) 1997 by Dan McMahill.
- *
+ * calculates:
+ * w     = microstrip line width (mils)
+ * l     = microstrip line length (mils)
+ * s     = spacing between lines (mils)
+ * loss  = insertion loss (dB)
+ * kev   = even mode effective relative permitivity
+ * kodd  = odd mode effective relative permitivity
+ * <p>
+ * from:
+ * z0e   = even mode characteristic impedance (ohms)
+ * z0o   = odd mode characteristic impedance (ohms)
+ * len   = electrical length (degrees)
+ * f     = frequency (Hz)
+ * subs  = substrate parameters.  See TRSUBS for details.
+ * <p>
+ * |<--W-->|<---S--->|<--W-->|
+ * _______           _______
+ * | metal |         | metal |
+ * ----------------------------------------------
+ * (  dielectric,er                      /|\     (
+ * )                                 H   |       )
+ * (                                     \|/     (
+ * ----------------------------------------------
+ * /////////////////ground///////////////////////
+ * <p>
+ * Part of the Filter Design Toolbox
+ * See Also:  CMLICALC, MLISYN, MLICALC, SLISYN, SLICALC, TRSUBS
+ * <p>
+ * Dan McMahill, 7/17/97
+ * Copyright (C) 1997 by Dan McMahill.
  */
 
 public class CMLIN {
 
-    public CMLIN() {}
+    public CMLIN() {
+    }
 
     // Effective dielectric constant from Hammerstad and Jensen
     private static double EffectiveDielectricConstant_Effer(double widthToHeight, double dielectricConstant) {
         double A, B;
-
         // (4) from Hammerstad and Jensen
         A = 1.0 + (1.0 / 49.0)
                 * Math.log((Math.pow(widthToHeight, 4.0) + Math.pow((widthToHeight / 52.0), 2.0)) / (Math.pow(widthToHeight, 4.0) + 0.432))
                 + (1.0 / 18.7) * Math.log(1.0 + Math.pow((widthToHeight / 18.1), 3.0));
-
         // (5) from Hammerstad and Jensen
         B = 0.564 * Math.pow(((dielectricConstant - 0.9) / (dielectricConstant + 3.0)), 0.053);
-
-        // zero frequency effective permitivity.  (3) from Hammerstad and
-        // Jensen.  This is ee(ur,er) thats used by (9) in Hammerstad and
-        // Jensen.
+        // zero frequency effective permitivity.  (3) from Hammerstad and Jensen.  This is ee(ur,er) thats used by (9) in Hammerstad and Jensen.
         return ((dielectricConstant + 1.0) / 2.0 + ((dielectricConstant - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / widthToHeight), (-A * B)));
     }
 
@@ -150,6 +145,7 @@ public class CMLIN {
         double width, length, space;
         // substrate parameters
         double height, dielectric;
+        double frequency;
 
         double widthToHeight, spaceToHeight, V, EFE0, AO, BO, CO, DO;
         double EFO0, frequencyToHeight;
@@ -159,7 +155,6 @@ public class CMLIN {
         double ZLF; // frequency dependent single microstrip characteristic impedance from Jansen and Kirschning.
         double z0ef, z0of; // even/odd mode impedance at the frequency of interest
         double electricalLength; // degree
-
 
         double P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15;
         double FEF, FOF, EFEF, EFOF;
@@ -171,12 +166,8 @@ public class CMLIN {
         double R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15, R16, R17;
         double RE, QE, PE, DE, CE;
 
-
-        double v, uold, z1, z2, z3, z4, z5, d1, d2;
-        // even/odd mode open end correction lengths
-        //double deltale, deltalo;
+        double v;
         double fnold;
-        double frequency;
 
         width = line.getMetalWidth();
         length = line.getMetalLength();
@@ -187,7 +178,6 @@ public class CMLIN {
         // Substrate relative permittivity
         dielectric = line.getSubEpsilon();
 
-        // Start of coupled microstrip calculations
         // Find widthToHeight and correction factor for nonzero metal thickness
         widthToHeight = width / height;
         spaceToHeight = space / height;
@@ -206,42 +196,16 @@ public class CMLIN {
             //        "For best accuracy 1.0 < er < 18.0"), er);
         }
 
-        /*
-        if (thickness > 0.0) {
-            // find normalized metal thickness
-            thicknessToHeight = thickness / height;
-
-            // (6) from Hammerstad and Jensen
-            deltau1 = (thicknessToHeight / Constant.Pi) * Math.log(1.0 + 4.0 * Math.exp(1.0) / (thicknessToHeight * Math.pow(
-                    Math.cosh(Math.sqrt(6.517 * widthToHeight))
-                            / Math.sinh(Math.sqrt(6.517 * widthToHeight)), 2.0)));
-
-            // (7) from Hammerstad and Jensen
-            deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(dielectric - 1.0))) * deltau1;
-
-            deltau = deltaur;
-        } else {
-            deltau = 0.0;
-            deltau1 = 0.0;
-            deltaur = 0.0;
-        }*/
-
-        // static even mode relative permittivity (f=0)
-        // (3) from Kirschning and Jansen (MTT).  Accurate to 0.7 % over
-        // "accurate" range
+        // static even mode relative permittivity (f=0) (3) from Kirschning and Jansen (MTT).  Accurate to 0.7 % over "accurate" range
         V = widthToHeight * (20.0 + Math.pow(spaceToHeight, 2.0)) / (10.0 + Math.pow(spaceToHeight, 2.0)) + spaceToHeight * Math.exp(-spaceToHeight);
 
-        // note:  The equations listed in (3) in Kirschning and Jansen (MTT)
-        // are the same as in Hammerstad and Jensen but with u in H&J
-        // replaced with V from K&J.
+        // note:  The equations listed in (3) in Kirschning and Jansen (MTT) are the same as in Hammerstad and Jensen but with u in H&J replaced with V from K&J.
         EFE0 = EffectiveDielectricConstant_Effer(V, dielectric);
 
-        // static single strip, T=0, relative permittivity (f=0), width=w
-        // This is from Hammerstad and Jensen.
+        // static single strip, T=0, relative permittivity (f=0), width=w from Hammerstad and Jensen.
         EF = EffectiveDielectricConstant_Effer(widthToHeight, dielectric);
 
-        // static odd mode relative permittivity (f=0)
-        // This is (4) from Kirschning and Jansen (MTT).  Accurate to 0.5%.
+        // static odd mode relative permittivity (f=0) This is (4) from Kirschning and Jansen (MTT).  Accurate to 0.5%.
         AO = 0.7287 * (EF - (dielectric + 1.0) / 2.0) * (1.0 - Math.exp(-0.179 * widthToHeight));
         BO = 0.747 * dielectric / (0.15 + dielectric);
         CO = BO - (BO - 0.207) * Math.exp(-0.414 * widthToHeight);
@@ -253,8 +217,7 @@ public class CMLIN {
         // normalized frequency (2) from Kirschning and Jansen (MTT)
         frequencyToHeight = 1e-6 * frequency * height;
 
-        // check for range of validity for the dispersion equations.  p. 85
-        // of Kirschning and Jansen (MTT) says fn <= 25 gives 1.4% accuracy.
+        // check for range of validity for the dispersion equations. p. 85 of Kirschning and Jansen (MTT) says fn <= 25 gives 1.4% accuracy.
         if (frequencyToHeight > 25.0) {
             //alert(_("Warning:  Frequency is higher (by %g %%) than the range\n"
             //        "over which the dispersion equations are accurate."), 100.0 * (fn - 25.0) / 25.0);
@@ -282,16 +245,14 @@ public class CMLIN {
         P15 = Math.abs(1.0 - 0.8928 * (1.0 + P11) * P12 * Math.exp(-P13 * (Math.pow(spaceToHeight, 1.092))) / P14);
         FOF = P1 * P2 * Math.pow(((P3 * P4 + 0.1844) * frequencyToHeight * P15), 1.5763);
 
-        // relative permittivities including dispersion via generalization
-        // of Getsinger's dispersion relation.  This is (5) in Kirschning and Jansen (MTT).
+        // relative permittivities including dispersion via generalization of Getsinger's dispersion relation.  This is (5) in Kirschning and Jansen (MTT).
         EFEF = dielectric - (dielectric - EFE0) / (1.0 + FEF);
         EFOF = dielectric - (dielectric - EFO0) / (1.0 + FOF);
 
         // static single strip, T=0, characteristic impedance (f=0) (Hammerstad and Jensen)
         ZL0 = CharacteristicImpedance_Z0(widthToHeight) / Math.sqrt(EF);
 
-        // static even mode characteristic impedance (f=0)
-        // (8) from Kirschning and Jansen (MTT) 0.6% accurate
+        // static even mode characteristic impedance (f=0) (8) from Kirschning and Jansen (MTT) 0.6% accurate
         Q1 = 0.8695 * (Math.pow(widthToHeight, 0.194));
         Q2 = 1.0 + 0.7519 * spaceToHeight + 0.189 * (Math.pow(spaceToHeight, 2.31));
         Q3 = 0.1975 + Math.pow((16.6 + Math.pow((8.4 / spaceToHeight), 6.0)), -0.387)
@@ -299,8 +260,7 @@ public class CMLIN {
         Q4 = (2.0 * Q1 / Q2) / (Math.exp(-spaceToHeight) * (Math.pow(widthToHeight, Q3)) + (2.0 - Math.exp(-spaceToHeight)) * (Math.pow(widthToHeight, -Q3)));
         z0e0 = ZL0 * Math.sqrt(EF / EFE0) / (1.0 - (ZL0 / 377.0) * Math.sqrt(EF) * Q4);
 
-        // static odd mode characteristic impedance (f=0)
-        // (9) from Kirschning and Jansen (MTT) 0.6% accurate
+        // static odd mode characteristic impedance (f=0) (9) from Kirschning and Jansen (MTT) 0.6% accurate
         Q5 = 1.794 + 1.14 * Math.log(1.0 + 0.638 / (spaceToHeight + 0.517 * (Math.pow(spaceToHeight, 2.43))));
         Q6 = 0.2305
                 + Math.log((Math.pow(spaceToHeight, 10.0)) / (1.0 + Math.pow((spaceToHeight / 5.8), 10.0))) / 281.3
@@ -311,12 +271,10 @@ public class CMLIN {
         Q10 = (Q2 * Q4 - Q5 * Math.exp(Math.log(widthToHeight) * Q6 * (Math.pow(widthToHeight, -Q9)))) / Q2;
         z0o0 = ZL0 * Math.sqrt(EF / EFO0) / (1.0 - (ZL0 / 377.0) * Math.sqrt(EF) * Q10);
 
-
         // relative permittivity including dispersion of single microstrip of width W, Tmet=0. Kirschning and Jansen (EL) **/
         // normalized frequency (GHz-cm)
         // save fn
         fnold = frequencyToHeight;
-
         frequencyToHeight = 1.0e-7 * frequency * height;
 
         // (2) from Kirschning and Jansen (EL)
@@ -362,7 +320,6 @@ public class CMLIN {
 
         // (4) from Jansen and Kirschning
         R13 = 0.9408 * (Math.pow(EFF, R8)) - 0.9603;
-
         R14 = (0.9408 - R9) * Math.pow(EF, R8) - 0.9603;
         R15 = 0.707 * R10 * (Math.pow((frequencyToHeight / 12.3), 1.097));
         R16 = 1.0 + 0.0503 * dielectric * dielectric * R11 * (1.0 - Math.exp(-(Math.pow((widthToHeight / 15), 6.0))));
@@ -377,8 +334,7 @@ public class CMLIN {
         // recall fn
         frequencyToHeight = fnold;
 
-        // even mode characteristic impedance including dispersion
-        // this is (10) from Kirschning and Jansen (MTT)
+        // even mode characteristic impedance including dispersion, this is (10) from Kirschning and Jansen (MTT)
         Q11 = 0.893 * (1.0 - 0.3 / (1.0 + 0.7 * (dielectric - 1.0)));
         Q12 = 2.121 * ((Math.pow((frequencyToHeight / 20.0), 4.91))
                 / (1 + Q11 * Math.pow((frequencyToHeight / 20.0), 4.91))) * Math.exp(-2.87 * spaceToHeight) * Math.pow(spaceToHeight, 0.902);
@@ -402,9 +358,7 @@ public class CMLIN {
         CE = 1.0 + 1.275 * (1.0 - Math.exp(-0.004625 * PE * Math.pow(dielectric, 1.674) * Math.pow((frequencyToHeight / 18.365), 2.745)))
                 - Q12 + Q16 - Q17 + Q18 + Q20;
 
-  /** Note:  This line contains one of the published corrections.
-   * The second EFF from the original paper is replaced by EF.
-   **/
+        // Note:  This line contains one of the published corrections. The second EFF from the original paper is replaced by EF.
         if (dielectric > 1.0) {
             z0ef = z0e0
                     * (Math.pow((0.9408 * Math.pow(EFF, CE) - 0.9603), Q0))
@@ -414,8 +368,7 @@ public class CMLIN {
             z0ef = z0e0;
         }
 
-        // odd mode characteristic impedance including dispersion
-        // This is (11) from Kirschning and Jansen (MTT)
+        // odd mode characteristic impedance including dispersion. This is (11) from Kirschning and Jansen (MTT)
         if (dielectric > 1.0) {
             Q29 = 15.16 / (1.0 + 0.196 * Math.pow((dielectric - 1.0), 2.0));
             Q28 = 0.149 * (Math.pow((dielectric - 1.0), 3.0)) / (94.5 + 0.038 * Math.pow((dielectric - 1.0), 3.0));
@@ -445,8 +398,7 @@ public class CMLIN {
                 (1.0 + 0.025 * widthToHeight * widthToHeight));
         Q22 = 0.925 * (Math.pow((frequencyToHeight / Q26), 1.536)) / (1.0 + 0.3 * Math.pow((frequencyToHeight / 30.0), 1.536));
 
-        // in this final expression, ZLF is the frequency dependent single
-        // microstrip characteristic impedance from Jansen and Kirschning.
+        // in this final expression, ZLF is the frequency dependent single microstrip characteristic impedance from Jansen and Kirschning.
         if (dielectric > 1.0) {
             z0of = ZLF + (z0o0 * Math.pow((EFOF / EFO0), Q22) - ZLF * Q23) / (1.0 + Q24 + (Math.pow((0.46 * spaceToHeight), 2.2)) * Q25);
         } else {
@@ -467,46 +419,12 @@ public class CMLIN {
         // convert to degrees
         electricalLength = 360.0 * electricalLength;
 
-        // Single line end correction (Kirschning, Jansen, and Koster)
-        // deltal(2u,er) (per Kirschning and Jansen (MTT) notation)
-        //uold = widthToHeight;
-        //widthToHeight = 2 * widthToHeight;
-        //z1 = 0.434907 * ((Math.pow(EF, 0.81) + 0.26) / (Math.pow(EF, 0.81) - 0.189))
-        //        * (Math.pow(widthToHeight, 0.8544) + 0.236) / (Math.pow(widthToHeight, 0.8544) + 0.87);
-        //z2 = 1.0 + Math.pow(widthToHeight, 0.371) / (2.358 * dielectric + 1.0);
-        //z3 = 1.0 + (0.5274 * Math.atan(0.084 * (Math.pow(widthToHeight, (1.9413 / z2))))) / Math.pow(EF, 0.9236);
-        //z4 = 1.0 + 0.0377 * Math.atan(0.067 * Math.pow(widthToHeight, 1.456)) * (6.0 - 5.0 * Math.exp(0.036 * (1.0 - dielectric)));
-        //z5 = 1.0 - 0.218 * Math.exp(-7.5 * widthToHeight);
-        //d2 = height * z1 * z3 * z5 / z4;
-
-        // deltal(u,er) (per Kirschning and Jansen (MTT) notation)
-        //widthToHeight = uold;
-        //z1 = 0.434907 * ((Math.pow(EF, 0.81) + 0.26) / (Math.pow(EF, 0.81) - 0.189))
-        //        * (Math.pow(widthToHeight, 0.8544) + 0.236) / (Math.pow(widthToHeight, 0.8544) + 0.87);
-        //z2 = 1 + Math.pow(widthToHeight, 0.371) / (2.358 * dielectric + 1);
-        //z3 = 1 + (0.5274 * Math.atan(0.084 * (Math.pow(widthToHeight, (1.9413 / z2))))) / Math.pow(EF, 0.9236);
-        //z4 = 1 + 0.0377 * Math.atan(0.067 * Math.pow(widthToHeight, 1.456)) * (6.0 - 5.0 * Math.exp(0.036 * (1.0 - dielectric)));
-        //z5 = 1 - 0.218 * Math.exp(-7.5 * widthToHeight);
-        //d1 = height * z1 * z3 * z5 / z4;
-
-        // Even and Odd Mode End corrections (12) and (13) from Kirschning and Jansen (MTT)
-        //R1 = 1.187 * (1.0 - Math.exp(-0.069 * Math.pow(widthToHeight, 2.1)));
-        //R2 = 0.343 * Math.pow(widthToHeight, 0.6187) + (0.45 * dielectric / (1.0 + dielectric)) * (Math.pow(widthToHeight, (1.357 + 1.65 / (1.0 + 0.7 * dielectric))));
-        //R3 = 0.2974 * (1.0 - Math.exp(-R2));
-        //R4 = (0.271 + 0.0281 * dielectric) * (Math.pow(spaceToHeight, (1.167 * dielectric / (0.66 + dielectric))))
-        //        + (1.025 * dielectric / (0.687 + dielectric)) * (Math.pow(spaceToHeight, (0.958 * dielectric / (0.706 + dielectric))));
-
-        //deltale = (d2 - d1 + 0.0198 * height * Math.pow(spaceToHeight, R1)) * Math.exp(-0.328 * Math.pow(spaceToHeight, 2.244)) + d1;
-        //deltalo = (d1 - height * R3) * (1.0 - Math.exp(-R4)) + height * R3;
-
         // copy over the results
         line.setImpedanceEven(z0ef);
         line.setImpedanceOdd(z0of);
         line.setImpedance(Math.sqrt(z0ef * z0of));
-
         // coupling coefficient
         line.setCouplingFactor((z0ef - z0of) / (z0ef + z0of));
-
         // electrical length
         line.setElectricalLength(electricalLength);
 
@@ -533,34 +451,34 @@ public class CMLIN {
 
         int i;
         double dw, ds;
-        double ze0 = 0, ze1, ze2, dedw, deds;
-        double zo0 = 0, zo1, zo2, dodw, dods;
+        double ze0, ze1, ze2, dedw, deds;
+        double zo0, zo1, zo2, dodw, dods;
 
         electricalLength = line.getElectricalLength();
 
-  /* Substrate dielectric thickness (m) */
+        // Substrate dielectric thickness (m)
         h = line.getSubHeight();
 
-  /* Substrate relative permittivity */
+        // Substrate relative permittivity
         er = line.getSubEpsilon();
 
-  /* impedance and coupling */
+        // impedance and coupling
         z0 = line.getImpedance();
         k = line.getCouplingFactor();
 
-  /* even/odd mode impedances */
+        // even/odd mode impedances
         z0e = line.getImpedanceEven();
         z0o = line.getImpedanceOdd();
 
         // TODO check z0e<z0o app crash, (k>0)
         if (use_z0k) {
-    /* use z0 and k to calculate z0e and z0o */
+            /// use z0 and k to calculate z0e and z0o
             z0o = z0 * Math.sqrt((1.0 - k) / (1.0 + k));
             z0e = z0 * Math.sqrt((1.0 + k) / (1.0 - k));
             line.setImpedanceEven(z0e);
             line.setImpedanceOdd(z0e);
         } else {
-    /* use z0e and z0o to calculate z0 and k */
+            // use z0e and z0o to calculate z0 and k
             z0 = Math.sqrt(z0e * z0o);
             k = (z0e - z0o) / (z0e + z0o);
             Log.v("CMLIN", "k=" + Double.toString(k));
@@ -568,30 +486,27 @@ public class CMLIN {
             line.setCouplingFactor(k);
         }
 
-  /* temp value for l used while finding w and s */
+        // temp value for l used while finding w and s
         l = 1000.0;
         line.setMetalLength(l, Constant.LengthUnit_m);
 
 
-  /* limits on the allowed range for w */
+        // limits on the allowed range for w
         wmin = Constant.MIL2M(0.5);
         wmax = Constant.MIL2M(1000);
 
-  /* limits on the allowed range for s */
+        // limits on the allowed range for s
         smin = Constant.MIL2M(0.5);
         smax = Constant.MIL2M(1000);
 
-
-  /* impedance convergence tolerance (ohms) */
+        // impedance convergence tolerance (ohms)
         abstol = 1e-6;
 
-  /* width relative convergence tolerance (mils) (set to 0.1 micron) */
+        // width relative convergence tolerance (mils) (set to 0.1 micron)
         reltol = Constant.MICRON2MIL(0.1);
         maxiters = 50;
 
-  /*
-   * Initial guess at a solution
-   */
+        // Initial guess at a solution
         AW = Math.exp(z0 * Math.sqrt(er + 1.0) / 42.4) - 1.0;
         F1 = 8.0 * Math.sqrt(AW * (7.0 + 4.0 / er) / 11.0 + (1.0 + 1.0 / er) / 0.81) / AW;
 
@@ -632,12 +547,12 @@ public class CMLIN {
             ze0 = line.getImpedanceEven();
             zo0 = line.getImpedanceOdd();
 
-      /* check for convergence */
+            // check for convergence
             err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
             if (err < cval) {
                 done = true;
             } else {
-    /* approximate the first jacobian */
+                // approximate the first jacobian
                 line.setMetalWidth(w + delta, Constant.LengthUnit_m);
                 line.setMetalSpace(s, Constant.LengthUnit_m);
                 line = Analysis(line);
@@ -655,10 +570,10 @@ public class CMLIN {
                 deds = (ze2 - ze0) / delta;
                 dods = (zo2 - zo0) / delta;
 
-	/* find the determinate */
+                // find the determinate
                 d = dedw * dods - deds * dodw;
 
-	/* estimate the new solution */
+                // estimate the new solution
                 dw = -1.0 * ((ze0 - z0e) * dods - (zo0 - z0o) * deds) / d;
                 w = Math.abs(w + dw);
 
@@ -671,13 +586,13 @@ public class CMLIN {
         line.setMetalSpace(s, Constant.LengthUnit_m);
         line = Analysis(line);
 
-  /* scale the line length to get the desired electrical length */
+        // scale the line length to get the desired electrical length
         line.setMetalLength(line.getMetalLength() * electricalLength / line.getElectricalLength(), Constant.LengthUnit_m);
 
   /*
    * one last calculation and this time we find the loss too.
    */
-        line = Analysis(line);
+        //line = Analysis(line);
 
         return line;
     }
