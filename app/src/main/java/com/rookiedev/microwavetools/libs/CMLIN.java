@@ -120,8 +120,10 @@ public class CMLIN {
         A = 1.0 + (1.0 / 49.0)
                 * Math.log((Math.pow(widthToHeight, 4.0) + Math.pow((widthToHeight / 52.0), 2.0)) / (Math.pow(widthToHeight, 4.0) + 0.432))
                 + (1.0 / 18.7) * Math.log(1.0 + Math.pow((widthToHeight / 18.1), 3.0));
+
         // (5) from Hammerstad and Jensen
         B = 0.564 * Math.pow(((dielectricConstant - 0.9) / (dielectricConstant + 3.0)), 0.053);
+
         // zero frequency effective permitivity.  (3) from Hammerstad and Jensen.  This is ee(ur,er) thats used by (9) in Hammerstad and Jensen.
         return ((dielectricConstant + 1.0) / 2.0 + ((dielectricConstant - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / widthToHeight), (-A * B)));
     }
@@ -492,18 +494,18 @@ public class CMLIN {
 
 
         // limits on the allowed range for w
-        wmin = Constant.MIL2M(0.5);
-        wmax = Constant.MIL2M(1000);
+        //wmin = Constant.MIL2M(0.5);
+        //wmax = Constant.MIL2M(1000);
 
         // limits on the allowed range for s
-        smin = Constant.MIL2M(0.5);
-        smax = Constant.MIL2M(1000);
+        //smin = Constant.MIL2M(0.5);
+        //smax = Constant.MIL2M(1000);
 
         // impedance convergence tolerance (ohms)
-        abstol = 1e-6;
+        //abstol = 1e-6;
 
         // width relative convergence tolerance (mils) (set to 0.1 micron)
-        reltol = Constant.MICRON2MIL(0.1);
+        //reltol = Constant.MICRON2MIL(0.1);
         maxiters = 50;
 
         // Initial guess at a solution
@@ -530,7 +532,7 @@ public class CMLIN {
         else
             delta = 1e-3 * s;
 
-        delta = Constant.MIL2M(1e-5);
+        delta = Constant.value2meter(1e-5, Constant.LengthUnit_mil);
 
         cval = 1e-12 * z0e * z0o;
 

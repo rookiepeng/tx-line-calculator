@@ -8,9 +8,7 @@ public class MLIN {
 
     private LineMLIN Analysis(LineMLIN line) {
         double width, length, height, er, thickness;
-
         double impedance, electricalLength;
-
         double thicknessToHeight, widthToHeight;
 
         double u1, ur, deltau1, deltaur;
@@ -29,8 +27,7 @@ public class MLIN {
         // Metal thickness
         thickness = line.getMetalThick();
 
-        // starting microstrip_calc_int() with %f/1.0e6 MHz and
-        // Find u and correction factor for nonzero metal thickness
+        // starting microstrip_calc_int() with %f/1.0e6 MHz and Find u and correction factor for nonzero metal thickness
         widthToHeight = width / height;
         if (thickness > 0.0) {
             // find normalized metal thickness
@@ -42,9 +39,7 @@ public class MLIN {
                     / Math.sinh(Math.sqrt(6.517 * widthToHeight)), 2.0)));
             // (7) from Hammerstad and Jensen
             deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(er - 1.0))) * deltau1;
-            //deltau = deltaur;
         } else {
-            //deltau = 0.0;
             deltau1 = 0.0;
             deltaur = 0.0;
         }
@@ -137,7 +132,6 @@ public class MLIN {
 
         //  store results
         line.setImpedance(impedance);
-
         return line;
     }
 
@@ -172,32 +166,28 @@ public class MLIN {
         double impedance;
         double v, electricalLength;
 
-        /* the optimization variables, current, min/max, and previous values */
+        // the optimization variables, current, min/max, and previous values
         double var = 0, varmax = 0, varmin = 0, varold = 0;
 
-        /* errors due to the above values for the optimization variable */
+        // errors due to the above values for the optimization variable
         double err = 0, errmax = 0, errmin = 0, errold = 0;
 
-        /* derivative */
+        // derivative
         double deriv;
 
-        /* the sign of the slope of the function being optimized */
+        // the sign of the slope of the function being optimized
         double sign = 0;
 
-        /* number of iterations so far, and max number allowed */
+        // number of iterations so far, and max number allowed
         int iters = 0;
         int maxiters = 100;
 
-        /* convergence parameters */
+        // convergence parameters
         double abstol = 0.1e-6;
         double reltol = 0.01e-6;
 
-        /* flag to end optimization */
+        // flag to end optimization
         boolean done = false;
-
-        /* permeability and permitivitty of free space (H/m and F/m) */
-        //mu0 = 4 * Constant.Pi * 1.0e-7;
-        //e0 = 1.0 / (mu0 * Constant.LIGHTSPEED * Constant.LIGHTSPEED);
 
         /*
         * figure out what parameter we're synthesizing and set up the
@@ -240,17 +230,8 @@ public class MLIN {
         }
 
         // read values from the input line structure
-
-        //Ro = MLINLine.getRo();
-        //Log.v("MLIN", "Ro=" + Double.toString(Ro));
-        //Xo = MLINLine.getXo();
         electricalLength = line.getElectricalLength();
         impedance = line.getImpedance();
-
-        // Substrate thickness, relative permitivity, and loss tangent
-        //h = MLINLine.getSubHeight();
-        //es = MLINLine.getSubEpsilon();
-        //tand = MLINLine.getTand();
 
         //temp value for l used while synthesizing the other parameters. We'll correct l later.
         length = 1000.0;
@@ -291,20 +272,20 @@ public class MLIN {
             iters = 0;
         }
 
-        /* the actual iterations */
+        // the actual iterations
         while (!done) {
 
-            /* update the interation count */
+            // update the interation count
             iters = iters + 1;
 
-            /* calculate an estimate of the derivative */
+            // calculate an estimate of the derivative
             deriv = (err - errold) / (var - varold);
 
-            /* copy over the current estimate to the previous one */
+            // copy over the current estimate to the previous one
             varold = var;
             errold = err;
 
-            /* try a quasi-newton iteration */
+            // try a quasi-newton iteration
             var = var - err / deriv;
 
             /*
@@ -312,38 +293,27 @@ public class MLIN {
             * accept the new estimate.  If not, toss it out and do a
             * bisection step to reduce the bracket.
             */
-
             if ((var > varmax) || (var < varmin)) {
-                //#ifdef DEBUG_SYN
-                //printf("microstrip_syn():  Taking a bisection step\n");
-                //#endif
                 var = (varmin + varmax) / 2.0;
             }
 
-            /* update the error value */
+            // update the error value
             line.setSynthesizeParameter(var, flag);
             line = Analysis(line);
             err = line.getImpedance() - impedance;
-            //if (rslt)
-            //    return rslt;
 
-
-            /* update our bracket of the solution. */
+            // update our bracket of the solution.
             if (sign * err > 0) {
                 varmax = var;
             } else {
                 varmin = var;
             }
 
-            /* check to see if we've converged */
+            // check to see if we've converged
             if (Math.abs(err) < abstol) {
                 done = true;
-                //printf("microstrip_syn():  abstol converged after iteration #%d\n",
-                //        iters);
             } else if (Math.abs((var - varold) / var) < reltol) {
                 done = true;
-                //printf("microstrip_syn():  reltol converged after iteration #%d\n",
-                //        iters);
             } else if (iters >= maxiters) {
                 //alert("Synthesis failed to converge in\n"
                 //        "%d iterations\n", maxiters);
@@ -380,9 +350,7 @@ public class MLIN {
         return E0;
     }
 
-    /*
-     * Characteristic impedance from (1) and (2) in Hammerstad and Jensen
-     */
+    // Characteristic impedance from (1) and (2) in Hammerstad and Jensen
     private static double CharacteristicImpedance_Z0(double widthToHeight) {
         double F, z01;
 

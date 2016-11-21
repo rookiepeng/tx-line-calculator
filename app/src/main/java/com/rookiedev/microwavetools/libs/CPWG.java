@@ -1,7 +1,6 @@
 package com.rookiedev.microwavetools.libs;
 
 public class CPWG {
-    double keff;
 
     public CPWG() {
 
@@ -34,34 +33,20 @@ public class CPWG {
 
     private LineCPW_G Analysis(LineCPW_G line, boolean withGround) {
 
-  /* calculation variables */
+        // calculation variables
         double k, k1, kt, z0, v, loss;
         double k_kp, k_kp1, k_kpt;
         double a, at, b, bt, eeff;
 
-  /* loss variables*/
-        double lambdag, q;
-        double z1, z2, lc, ld, delta;
-        double mu;
+        double keff;
 
-        //int rslt;
-        //coplanar_line tmp_line;
-
-        double L, R, C, G, delay, depth, deltal;
-
-  /*
-   * Characteristic Impedance
-   */
         if (!withGround) {
-    /*
-     * These equations are _without_ the bottom side ground plane.
-     */
-
-    /* match the notation in Wadell */
+            // These equations are _without_ the bottom side ground plane.
+            // match the notation in Wadell
             a = line.getMetalWidth();
             b = line.getMetalWidth() + 2.0 * line.getMetalSpace();
 
-    /* Wadell (3.4.1.8), (3.4.1.9) but avoid issues with tmet = 0 */
+            // Wadell (3.4.1.8), (3.4.1.9) but avoid issues with tmet = 0
             if (line.getMetalThick() > 0.0) {
                 at = a + (1.25 * line.getMetalThick() / Math.PI) * (1.0 + Math.log(4.0 * Math.PI * a / line.getMetalThick()));
                 bt = b - (1.25 * line.getMetalThick() / Math.PI) * (1.0 + Math.log(4.0 * Math.PI * a / line.getMetalThick()));
@@ -81,10 +66,10 @@ public class CPWG {
                 //alert("Warning:  bt <= at so I am reverting to zero thickness equations\n");
             }
 
-    /* Wadell (3.4.1.6) */
+            // Wadell (3.4.1.6)
             k1 = Math.sinh(Math.PI * at / (4.0 * line.getSubHeight())) / Math.sinh(Math.PI * bt / (4.0 * line.getSubHeight()));
 
-    /* Wadell (3.4.1.4), (3.4.1.5) */
+            // Wadell (3.4.1.4), (3.4.1.5)
             k = a / b;
             kt = at / bt;
 
@@ -92,13 +77,13 @@ public class CPWG {
             k_kp1 = k_over_kp(k1);
             k_kpt = k_over_kp(kt);
 
-    /* Wadell (3.4.1.3) */
+            // Wadell (3.4.1.3)
             eeff = 1.0 + 0.5 * (line.getSubEpsilon() - 1.0) * k_kp1 / k_kp;
 
-    /* Wadell (3.4.1.2) */
+            // Wadell (3.4.1.2)
             keff = eeff - (eeff - 1.0) / ((0.5 * (b - a) / (0.7 * line.getMetalThick())) * k_kp + 1.0);
 
-    /* for coplanar waveguide (ground signal ground) */
+            // for coplanar waveguide (ground signal ground)
             z0 = Constant.FREESPACEZ0 / (4.0 * Math.sqrt(keff) * k_kpt);
         } else {
     /*
@@ -107,10 +92,7 @@ public class CPWG {
      * See Wadell, eq 3.4.3.1 through 3.4.3.6 on p. 79
      */
 
-    /*
-     * FIXME -- surely these are not accurate without accounting for
-     * metal thickness...
-     */
+            // FIXME -- surely these are not accurate without accounting for metal thickness...
             k = line.getMetalWidth() / (line.getMetalWidth() + 2.0 * line.getMetalSpace());
             k1 = Math.tanh(Math.PI * line.getMetalWidth() / (4.0 * line.getSubHeight())) /
                     Math.tanh(Math.PI * (line.getMetalWidth() + 2.0 * line.getMetalSpace()) / (4.0 * line.getSubHeight()));
@@ -123,67 +105,42 @@ public class CPWG {
             z0 = (Constant.FREESPACEZ0 / (2.0 * Math.sqrt(keff))) / (k_kp + k_kp1);
         }
 
-  /*
-   * Electrical Length
-   */
-
-  /* propagation velocity (meters/sec) */
+        // Electrical Length
+        // propagation velocity (meters/sec)
         v = Constant.LIGHTSPEED / Math.sqrt(keff);
         line.setElectricalLength(360 * line.getMetalLength() * line.getFrequency() / v);
-        //line -> len = 360 * line -> l * f / v;
 
-  /* FIXME - need open circuit end correction for coplanar */
-        //deltal = 0;
-
-  /*  store results */
+        //  store results
         line.setImpedance(z0);
-        //line -> z0 = z0;
-
-  /* XXX fixme .  Ro + j Xo = sqrt((jwL + R) / (jwC + G))*/
         return line;
     }
 
     private LineCPW_G Synthesize(LineCPW_G line, int flag, boolean withGround) {
-        int rslt;
-
         double Ro, Xo;
         double v, len;
 
-  /* permeability and permitivity of free space */
-        double mu0, e0;
-
-
-  /* the optimization variables, current, min/max, and previous values */
+        // the optimization variables, current, min/max, and previous values
         double var = 0, varmax = 0, varmin = 0, varold = 0;
 
-  /* errors due to the above values for the optimization variable */
+        // errors due to the above values for the optimization variable
         double err = 0, errmax = 0, errmin = 0, errold = 0;
 
-  /* derivative */
+        // derivative
         double deriv;
 
-  /* the sign of the slope of the function being optimized */
+        // the sign of the slope of the function being optimized
         double sign = 0;
 
-  /* pointer to which parameter of the line is being optimized */
-        //double *optpar;
-
-  /* number of iterations so far, and max number allowed */
+        // number of iterations so far, and max number allowed
         int iters = 0;
         int maxiters = 100;
 
-  /* convergence parameters */
+        // convergence parameters
         double abstol = 0.1e-6;
         double reltol = 0.01e-6;
 
-  /* flag to end optimization */
+        // flag to end optimization
         boolean done = false;
-
-
-  /* permeability and permitivitty of free space (H/m and F/m) */
-        //mu0 = 4.0 * M_PI * 1.0e-7;
-        //e0  = 1.0 / (mu0 * LIGHTSPEED * LIGHTSPEED);
-
 
   /*
    * figure out what parameter we're synthesizing and set up the
@@ -197,46 +154,33 @@ public class CPWG {
 
         switch (flag) {
             case Constant.Synthesize_Width:
-                //optpar = &(line->w);
                 varmax = 100.0 * line.getSubHeight();
                 varmin = 0.01 * line.getSubHeight();
                 var = line.getSubHeight();
                 break;
-
             case Constant.Synthesize_Gap:
-                //optpar = &(line->s);
                 varmax = 100.0 * line.getSubHeight();
                 varmin = 0.01 * line.getSubHeight();
                 var = line.getSubHeight();
                 break;
-
             case Constant.Synthesize_Height:
-                //optpar = &(line->subs->h);
                 varmax = 100.0 * line.getMetalWidth();
                 varmin = 0.01 * line.getMetalWidth();
                 var = line.getMetalWidth();
                 break;
-
             case Constant.Synthesize_Er:
-                //optpar = &(line->subs->er);
                 varmax = 100.0;
                 varmin = 1.0;
                 var = 5.0;
                 break;
-
             default:
                 //fprintf(stderr,"coplanar_synth():  illegal flag=%d\n",flag);
                 //exit(1);
                 break;
         }
 
-  /*
-   * read values from the input line structure
-   */
-
+        // read values from the input line structure
         Ro = line.getImpedance();
-        //Xo = line->Xo;
-
 
   /*
    * temp value for l used while synthesizing the other parameters.
@@ -244,51 +188,34 @@ public class CPWG {
    */
         len = line.getElectricalLength();  /* remember what electrical length we want */
         line.setMetalLength(1.0, Constant.LengthUnit_m);
-        //line->l = 1.0;
 
         if (!done) {
-    /* Initialize the various error values */
-            //*optpar = varmin;
+            // Initialize the various error values
             line.setSynthesizeParameter(varmin, flag);
             line = Analysis(line, withGround);
-            //rslt = coplanar_calc_int(line,f,NOLOSS);
-            //if (rslt)
-            //   return rslt;
             errmin = line.getImpedance() - Ro;
 
-            //*optpar = varmax;
             line.setSynthesizeParameter(varmax, flag);
             line = Analysis(line, withGround);
-            //rslt = coplanar_calc_int(line,f,NOLOSS);
-            //if (rslt)
-            //    return rslt;
             errmax = line.getImpedance() - Ro;
 
-            //*optpar = var;
             line.setSynthesizeParameter(var, flag);
             line = Analysis(line, withGround);
-            //rslt = coplanar_calc_int(line,f,NOLOSS);
-            //if (rslt)
-            //    return rslt;
             err = line.getImpedance() - Ro;
 
             varold = 0.99 * var;
-            //*optpar = varold;
             line.setSynthesizeParameter(varold, flag);
             line = Analysis(line, withGround);
-            //rslt = coplanar_calc_int(line,f,NOLOSS);
-            //if (rslt)
-            //   return rslt;
             errold = line.getImpedance() - Ro;
 
-    /* see if we've actually been able to bracket the solution */
+            // see if we've actually been able to bracket the solution
             if (errmax * errmin > 0) {
                 /*alert("Could not bracket the solution.\n"
                         "Synthesis failed.\n");
                 return -1;*/
             }
 
-    /* figure out the slope of the error vs variable */
+            // figure out the slope of the error vs variable
             if (errmax > 0)
                 sign = 1.0;
             else
@@ -297,21 +224,20 @@ public class CPWG {
             iters = 0;
         }
 
-  /* the actual iterations */
+        // the actual iterations
         while (!done) {
-    /* update the interation count */
+            // update the interation count
             iters = iters + 1;
 
-    /* calculate an estimate of the derivative */
+            // calculate an estimate of the derivative
             deriv = (err - errold) / (var - varold);
 
-    /* copy over the current estimate to the previous one */
+            // copy over the current estimate to the previous one
             varold = var;
             errold = err;
 
-    /* try a quasi-newton iteration */
+            // try a quasi-newton iteration
             var = var - err / deriv;
-
 
     /*
      * see if the new guess is within our bracketed range.  If so,
@@ -323,24 +249,18 @@ public class CPWG {
                 var = (varmin + varmax) / 2.0;
             }
 
-    /* update the error value */
-            //*optpar = var;
+            // update the error value
             line.setSynthesizeParameter(var, flag);
             line = Analysis(line, withGround);
-            //rslt = coplanar_calc_int(line, f, NOLOSS);
             err = line.getImpedance() - Ro;
-            //if (rslt)
-            //    return rslt;
 
-    /* update our bracket of the solution. */
-
+            // update our bracket of the solution.
             if (sign * err > 0)
                 varmax = var;
             else
                 varmin = var;
 
-
-    /* check to see if we've converged */
+            // check to see if we've converged
             if (Math.abs(err) < abstol) {
                 done = true;
             } else if (Math.abs((var - varold) / var) < reltol) {
@@ -353,22 +273,14 @@ public class CPWG {
                         "  max = %g\n", maxiters, varmin, var, varmax);
                 return -1;*/
             }
-
-      /* done with iteration */
+            // done with iteration
         }
 
-  /* velocity on line */
+        // velocity on line
         line = Analysis(line, withGround);
 
-        v = Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
-
+        //v = Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
         line.setMetalLength(line.getMetalLength() * len / line.getElectricalLength(), Constant.LengthUnit_m);
-
-        //line->l = (len/360.0) * (v/f);
-
-
-  /* recalculate using real length to find loss  */
-        //coplanar_calc(line,f);
 
         return line;
     }
