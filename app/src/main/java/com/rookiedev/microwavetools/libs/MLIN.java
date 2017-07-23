@@ -167,7 +167,7 @@ public class MLIN {
         double v, electricalLength;
 
         // the optimization variables, current, min/max, and previous values
-        double var = 0, varmax = 0, varmin = 0, varold = 0;
+        double var = 0, varMax = 0, varMin = 0, varOld = 0;
 
         // errors due to the above values for the optimization variable
         double err = 0, errmax = 0, errmin = 0, errold = 0;
@@ -201,26 +201,26 @@ public class MLIN {
 
         switch (flag) {
             case Constant.Synthesize_Width:
-                varmax = 100.0 * line.getSubHeight();
-                varmin = 0.01 * line.getSubHeight();
+                varMax = 100.0 * line.getSubHeight();
+                varMin = 0.01 * line.getSubHeight();
                 var = line.getSubHeight();
                 break;
 
             case Constant.Synthesize_Height:
-                varmax = 100.0 * line.getMetalWidth();
-                varmin = 0.01 * line.getMetalWidth();
+                varMax = 100.0 * line.getMetalWidth();
+                varMin = 0.01 * line.getMetalWidth();
                 var = line.getMetalWidth();
                 break;
 
             case Constant.Synthesize_Er:
-                varmax = 100.0;
-                varmin = 1.0;
+                varMax = 100.0;
+                varMin = 1.0;
                 var = 5.0;
                 break;
 
             case Constant.Synthesize_Length:
-                varmax = 100.0;
-                varmin = 1.0;
+                varMax = 100.0;
+                varMin = 1.0;
                 var = 5.0;
                 done = true;
                 break;
@@ -239,11 +239,11 @@ public class MLIN {
 
         if (!done) {
             // Initialize the various error values
-            line.setSynthesizeParameter(varmin, flag);
+            line.setSynthesizeParameter(varMin, flag);
             line = Analysis(line);
             errmin = line.getImpedance() - impedance;
 
-            line.setSynthesizeParameter(varmax, flag);
+            line.setSynthesizeParameter(varMax, flag);
             line = Analysis(line);
             errmax = line.getImpedance() - impedance;
 
@@ -251,8 +251,8 @@ public class MLIN {
             line = Analysis(line);
             err = line.getImpedance() - impedance;
 
-            varold = 0.99 * var;
-            line.setSynthesizeParameter(varold, flag);
+            varOld = 0.99 * var;
+            line.setSynthesizeParameter(varOld, flag);
             line = Analysis(line);
             errold = line.getImpedance() - impedance;
 
@@ -279,10 +279,10 @@ public class MLIN {
             iters = iters + 1;
 
             // calculate an estimate of the derivative
-            deriv = (err - errold) / (var - varold);
+            deriv = (err - errold) / (var - varOld);
 
             // copy over the current estimate to the previous one
-            varold = var;
+            varOld = var;
             errold = err;
 
             // try a quasi-newton iteration
@@ -293,8 +293,8 @@ public class MLIN {
             * accept the new estimate.  If not, toss it out and do a
             * bisection step to reduce the bracket.
             */
-            if ((var > varmax) || (var < varmin)) {
-                var = (varmin + varmax) / 2.0;
+            if ((var > varMax) || (var < varMin)) {
+                var = (varMin + varMax) / 2.0;
             }
 
             // update the error value
@@ -304,15 +304,15 @@ public class MLIN {
 
             // update our bracket of the solution.
             if (sign * err > 0) {
-                varmax = var;
+                varMax = var;
             } else {
-                varmin = var;
+                varMin = var;
             }
 
             // check to see if we've converged
             if (Math.abs(err) < abstol) {
                 done = true;
-            } else if (Math.abs((var - varold) / var) < reltol) {
+            } else if (Math.abs((var - varOld) / var) < reltol) {
                 done = true;
             } else if (iters >= maxiters) {
                 //alert("Synthesis failed to converge in\n"
