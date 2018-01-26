@@ -177,8 +177,8 @@ public class MainActivity extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
 
@@ -261,7 +261,8 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 // Have we been disposed of in the meantime? If so, quit.
-                if (mHelper == null) return;
+                if (mHelper == null)
+                    return;
 
                 // Important: Dynamically register for broadcast messages about updated purchases.
                 // We register the receiver here instead of as a <receiver> in the Manifest
@@ -325,21 +326,21 @@ public class MainActivity extends AppCompatActivity
         // Handle action buttons
         Intent intent = new Intent();
         switch (item.getItemId()) {
-            case R.id.menu_ad:
-                onAdfreeButtonClicked();
-                return true;
-            case R.id.menu_preference:
-                intent.setClass(this, preferences.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            //case R.id.menu_about:
-            //    intent.setClass(this, about.class);
-            //    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //    startActivity(intent);
-            //    return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        case R.id.menu_ad:
+            onAdfreeButtonClicked();
+            return true;
+        case R.id.menu_preference:
+            intent.setClass(this, preferences.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            return true;
+        //case R.id.menu_about:
+        //    intent.setClass(this, about.class);
+        //    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //    startActivity(intent);
+        //    return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -360,8 +361,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStop() {
         super.onStop();
-        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(Constant.PREFS_POSITION, String.valueOf(pos));
@@ -370,8 +370,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
         pos = Integer.parseInt(prefs.getString(Constant.PREFS_POSITION, "0"));
     }
 
@@ -442,8 +441,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean isFirstRun() {
-        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
         if (prefs.getString(Constant.PREFS_ISFIRSTRUN, "true").equals("true")) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(Constant.PREFS_ISFIRSTRUN, "false");
@@ -484,7 +482,6 @@ public class MainActivity extends AppCompatActivity
         bld.create().show();
     }
 
-
     @Override
     public void receivedBroadcast() {
         // Received a broadcast notification that the inventory of items has changed
@@ -506,8 +503,7 @@ public class MainActivity extends AppCompatActivity
         String payload = "";
 
         try {
-            mHelper.launchPurchaseFlow(this, SKU_ADFREE, RC_REQUEST,
-                    mPurchaseFinishedListener, payload);
+            mHelper.launchPurchaseFlow(this, SKU_ADFREE, RC_REQUEST, mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {
             complain("Error launching purchase flow. Another async operation in progress.");
             //setWaitScreen(false);
@@ -517,7 +513,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
-        if (mHelper == null) return;
+        if (mHelper == null)
+            return;
 
         // Pass on the activity result to the helper for handling
         if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
