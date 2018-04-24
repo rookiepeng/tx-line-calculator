@@ -542,17 +542,17 @@ public class CPWFragment extends Fragment {
     private void setImage() {
         withGround.setChecked(hasGround);
         if (hasGround) {
-            CPW_G.setImageResource(R.drawable.cpwg);
+            CPW_G.setImageResource(R.drawable.vt_cpwg);
         } else {
-            CPW_G.setImageResource(R.drawable.cpw);
+            CPW_G.setImageResource(R.drawable.vt_cpw);
         }
         withGround.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    CPW_G.setImageResource(R.drawable.cpwg);
+                    CPW_G.setImageResource(R.drawable.vt_cpwg);
                 } else {
-                    CPW_G.setImageResource(R.drawable.cpw);
+                    CPW_G.setImageResource(R.drawable.vt_cpw);
                 }
             }
         });
