@@ -13,8 +13,7 @@
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ad_frame"
-        android:layout_alignParentStart="true" />
+        android:layout_above="@+id/ad_frame" />
 
     <FrameLayout
         android:id="@+id/ad_frame"
