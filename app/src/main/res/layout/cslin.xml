@@ -6,8 +6,8 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/windowBackground"
     android:orientation="vertical"
-    android:layout_marginTop="23dp"
-    android:layout_marginBottom="23dp"
+    android:paddingBottom="28dp"
+    android:paddingTop="28dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
