@@ -6,7 +6,7 @@
 
     <Button
         android:id="@+id/button_syn"
-        android:layout_width="120dip"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
@@ -19,7 +19,7 @@
 
     <Button
         android:id="@+id/button_ana"
-        android:layout_width="120dip"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
