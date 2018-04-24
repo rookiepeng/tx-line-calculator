@@ -37,7 +37,7 @@
                     android:layout_marginBottom="10dip"
                     android:layout_marginTop="10dip"
                     android:contentDescription="@string/cpw"
-                    android:src="@drawable/cpw" />
+                    android:src="@drawable/vt_cpw" />
 
                 <CheckBox
                     android:id="@+id/checkBoxGround"
