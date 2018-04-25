@@ -27,3 +27,4 @@ proguard/
 
 
 .idea/
+app/release/output\.json
