@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     private int pos;
     private DrawerLayout drawer;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Fragment fragment = null;
     //private Fragment adFragment = null;
     private NavigationView navigationView;
@@ -174,6 +176,8 @@ public class MainActivity extends AppCompatActivity
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
+        mCollapsingToolbarLayout=(CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+
         fragmentManager = getSupportFragmentManager();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -192,7 +196,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (fragment != null) {
-                    getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
+                    //getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
+                    mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
 
                     //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -200,7 +205,6 @@ public class MainActivity extends AppCompatActivity
                     transaction.replace(R.id.content_frame, fragment);
                     //transaction.addToBackStack(null);
                     transaction.commit();
-
                 }
             }
 
@@ -215,7 +219,8 @@ public class MainActivity extends AppCompatActivity
         readSharedPref();
 
         navigationView.getMenu().getItem(pos).setChecked(true);
-        getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
+        mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
+        //getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
         initFragment(pos);
 
         /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
