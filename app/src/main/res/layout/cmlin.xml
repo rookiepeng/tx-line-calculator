@@ -17,32 +17,6 @@
         android:padding="16dp">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/imageCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            card_view:cardElevation="3dp">
-
-            <!-- 耦合微带线结构图 -->
-
-            <ImageView
-                android:id="@+id/cmlin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dip"
-                android:layout_marginTop="10dip"
-                android:contentDescription="@string/cmlin"
-                android:src="@drawable/vt_cmlin" />
-
-        </android.support.v7.widget.CardView>
-
-        <include
-            layout="@layout/frequency_card"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <android.support.v7.widget.CardView
             android:id="@+id/physicalParaCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -181,6 +155,11 @@
                 <include
                     android:id="@+id/eeff_input_radio"
                     layout="@layout/eeff_input_radio"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    layout="@layout/frequency_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
