@@ -1,38 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <!-- L: -->
+    <RadioButton
+        android:id="@+id/radioBtn_L"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text_L"/>
 
-        <TextView
-            android:id="@+id/text_L"
-            android:layout_width="20dip"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_centerVertical="true"
-            android:text="@string/mlin_text_L" />
+    <!-- L: -->
 
-        <!-- L输入框 -->
+    <TextView
+        android:id="@+id/text_L"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_marginStart="16dp"
+        android:text="@string/mlin_text_L"
+        app:layout_constraintBottom_toBottomOf="@+id/radioBtn_L"
+        app:layout_constraintStart_toEndOf="@+id/radioBtn_L"
+        app:layout_constraintTop_toTopOf="@+id/radioBtn_L"
+        app:layout_constraintEnd_toStartOf="@+id/editText_L"/>
 
-        <EditText
-            android:id="@+id/editText_L"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="100dip"
-            android:layout_toEndOf="@+id/text_L"
-            android:inputType="numberDecimal">
+    <!-- L输入框 -->
 
-            <!-- <requestFocus /> -->
-        </EditText>
+    <EditText
+        android:id="@+id/editText_L"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/text_L"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_L"
+        app:layout_constraintStart_toEndOf="@+id/text_L"
+        app:layout_constraintTop_toTopOf="@+id/text_L">
 
-        <!-- L单位 -->
+        <!-- <requestFocus /> -->
+    </EditText>
 
-        <Spinner
-            android:id="@+id/spinner_L"
-            android:layout_width="100dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
-    </RelativeLayout>
+    <!-- L单位 -->
+
+    <Spinner
+        android:id="@+id/spinner_L"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_L"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText_L"
+        app:layout_constraintStart_toEndOf="@+id/editText_L"/>
+
+</android.support.constraint.ConstraintLayout>

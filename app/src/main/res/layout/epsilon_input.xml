@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <!-- epsilon: -->
+    <RadioButton
+        android:id="@+id/radioBtn_er"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text_er"/>
 
-        <TextView
-            android:id="@+id/text_er"
-            android:layout_width="20dip"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_centerVertical="true" />
+    <!-- epsilon: -->
 
-        <!-- epsilon输入框 -->
+    <TextView
+        android:id="@+id/text_er"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/radioBtn_er"
+        app:layout_constraintStart_toEndOf="@+id/radioBtn_er"
+        app:layout_constraintTop_toTopOf="@+id/radioBtn_er"
+        app:layout_constraintEnd_toStartOf="@+id/editText_er"/>
 
-        <EditText
-            android:id="@+id/editText_er"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="100dp"
-            android:layout_toEndOf="@+id/text_er"
-            android:inputType="numberDecimal"/>
+    <!-- epsilon输入框 -->
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/editText_er"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="116dp"
+        android:layout_toEndOf="@+id/text_er"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/text_er"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_er"
+        app:layout_constraintTop_toTopOf="@+id/text_er" />
+
+</android.support.constraint.ConstraintLayout>

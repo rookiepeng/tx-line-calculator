@@ -16,11 +16,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <include
-            layout="@layout/frequency_card"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
         <android.support.v7.widget.CardView
             android:id="@+id/physicalParaCard"
             android:layout_width="match_parent"
@@ -32,96 +27,44 @@
             card_view:cardCornerRadius="4dp"
             card_view:cardElevation="10dp">
 
-            <android.support.constraint.ConstraintLayout
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="24dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingBottom="24dp"
                 android:paddingTop="24dp">
 
-                <ImageView
-                    android:id="@+id/imageViewRuler"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:padding="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    card_view:srcCompat="@drawable/vt_ruler" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Phy"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="?android:attr/textColorPrimary"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewRuler"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Synthesize"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="?android:attr/textColorSecondary"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewRuler"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-                <LinearLayout
+                <include
+                    layout="@layout/dimensions"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="0dp"
-                    android:paddingBottom="0dp"
-                    android:paddingTop="0dp"
-                    app:layout_constraintTop_toBottomOf="@+id/imageViewRuler">
+                    android:layout_height="match_parent" />
 
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider" />
+                <include
+                    layout="@layout/height_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                    <include
-                        layout="@layout/epsilon_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
 
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider" />
+                <include
+                    layout="@layout/thickness_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                    <include
-                        layout="@layout/height_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                <include
+                    android:id="@+id/width_input"
+                    layout="@layout/width_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dip"
-                        android:background="?android:attr/listDivider" />
-
-                    <include
-                        layout="@layout/thickness_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <include
-                        android:id="@+id/width_input"
-                        layout="@layout/width_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <include
-                        android:id="@+id/length_input"
-                        layout="@layout/length_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
-            </android.support.constraint.ConstraintLayout>
+                <include
+                    android:id="@+id/length_input"
+                    layout="@layout/length_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <include
@@ -140,73 +83,43 @@
             card_view:cardCornerRadius="4dp"
             card_view:cardElevation="10dp">
 
-
-            <android.support.constraint.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingBottom="24dp"
                 android:paddingTop="24dp">
 
-                <ImageView
-                    android:id="@+id/imageViewWave"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:padding="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    card_view:srcCompat="@drawable/vt_wave" />
-
-                <TextView
-                    android:id="@+id/textViewEle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Ele"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="?android:attr/textColorPrimary"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewWave"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textViewAna"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Analyze"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="?android:attr/textColorSecondary"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewWave"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewEle" />
-
-                <LinearLayout
+                <include
+                    layout="@layout/parameters"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="0dp"
-                    android:paddingRight="0dp"
-                    android:paddingBottom="0dp"
-                    android:paddingTop="0dp"
-                    app:layout_constraintTop_toBottomOf="@+id/imageViewWave">
+                    android:layout_height="match_parent" />
 
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider" />
+                <include
+                    android:id="@+id/z0_input"
+                    layout="@layout/z0_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                    <include
-                        android:id="@+id/z0_input"
-                        layout="@layout/z0_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                <include
+                    android:id="@+id/eeff_input"
+                    layout="@layout/eeff_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                    <include
-                        android:id="@+id/eeff_input"
-                        layout="@layout/eeff_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                <include
+                    layout="@layout/epsilon_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                </LinearLayout>
-            </android.support.constraint.ConstraintLayout>
+                <include
+                    layout="@layout/frequency_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
