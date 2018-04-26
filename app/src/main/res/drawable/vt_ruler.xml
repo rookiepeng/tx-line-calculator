@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="17.31947"
+    android:viewportHeight="17.31947"
+    android:width="61.368195743983dp"
+    android:height="61.368209917211dp">
+    <group
+        android:translateX="-65.21677"
+        android:translateY="-90.32686">
+        <path
+            android:pathData="M66.980665 94.585261l0.000002 11.297179 11.297174 0z"
+            android:strokeWidth="3.527778"
+            android:strokeLineJoin="miter"
+            android:strokeLineCap="butt"
+            android:strokeMiterLimit="4"
+            android:strokeColor="#2E7D32" />
+        <group
+            android:rotation="45"
+            android:translateX="93.42551"
+            android:translateY="-18.91621">
+            <path
+                android:pathData="M61.910859 97.711444l0 2.076173"
+                android:strokeWidth="0.5291667"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M63.607699 97.711444l0 1.160948"
+                android:strokeWidth="0.5291667"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M65.304539 97.711444l0 1.160948"
+                android:strokeWidth="0.5291668"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M67.001384 97.711444l0 2.076173"
+                android:strokeWidth="0.5291668"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M68.698224 97.711444l0 1.160948"
+                android:strokeWidth="0.5291668"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M70.395057 97.711444l0 1.160948"
+                android:strokeWidth="0.5291668"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M72.091905 97.711444l0 2.076173"
+                android:strokeWidth="0.5291668"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M73.788752 97.711444l0 1.160948"
+                android:strokeWidth="0.5291668"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M75.485587 97.711444l0 1.160948"
+                android:strokeWidth="0.5291668"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+            <path
+                android:pathData="M77.182429 97.711444l0 2.076176"
+                android:strokeWidth="0.5291668"
+                android:strokeLineJoin="miter"
+                android:strokeLineCap="round"
+                android:strokeMiterLimit="4"
+                android:strokeColor="#ffffff" />
+        </group>
+    </group>
+</vector>

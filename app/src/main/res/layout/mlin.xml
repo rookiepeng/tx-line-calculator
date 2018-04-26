@@ -2,6 +2,7 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground"
@@ -15,27 +16,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/imageCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            card_view:cardElevation="3dp">
-
-            <!-- 微带线结构图 -->
-
-            <ImageView
-                android:id="@+id/mlin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dip"
-                android:layout_marginTop="10dip"
-                android:contentDescription="@string/mlin"
-                android:src="@drawable/vt_mlin" />
-
-        </android.support.v7.widget.CardView>
-
         <include
             layout="@layout/frequency_card"
             android:layout_width="match_parent"
@@ -45,63 +25,98 @@
             android:id="@+id/physicalParaCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
             android:clickable="false"
             android:foreground="@drawable/ripple_green"
+            card_view:cardCornerRadius="4dp"
             card_view:cardElevation="10dp">
 
-            <LinearLayout
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_height="match_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="24dp"
+                android:paddingTop="24dp">
+
+                <ImageView
+                    android:id="@+id/imageViewRuler"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    card_view:srcCompat="@drawable/vt_ruler" />
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/Phy"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:attr/textColorTertiary" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewRuler"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="2dip"
-                    android:background="?android:attr/listDivider" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Synthesize"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:attr/textColorSecondary"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewRuler"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-                <include
-                    layout="@layout/epsilon_input"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingBottom="0dp"
+                    android:paddingTop="0dp"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewRuler">
 
-                <include
-                    layout="@layout/height_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider" />
 
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:background="?android:attr/listDivider" />
+                    <include
+                        layout="@layout/epsilon_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-                <include
-                    layout="@layout/thickness_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    <include
+                        layout="@layout/height_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-                <include
-                    android:id="@+id/width_input"
-                    layout="@layout/width_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dip"
+                        android:background="?android:attr/listDivider" />
 
-                <include
-                    android:id="@+id/length_input"
-                    layout="@layout/length_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    <include
+                        layout="@layout/thickness_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-            </LinearLayout>
+                    <include
+                        android:id="@+id/width_input"
+                        layout="@layout/width_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <include
+                        android:id="@+id/length_input"
+                        layout="@layout/length_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
 
         <include
@@ -117,39 +132,76 @@
             android:layout_marginTop="16dp"
             android:clickable="false"
             android:foreground="@drawable/ripple_blue"
+            card_view:cardCornerRadius="4dp"
             card_view:cardElevation="10dp">
 
-            <LinearLayout
+
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_height="match_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="24dp"
+                android:paddingTop="24dp">
+
+                <ImageView
+                    android:id="@+id/imageViewWave"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    card_view:srcCompat="@drawable/vt_wave" />
 
                 <TextView
+                    android:id="@+id/textViewEle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/Ele"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:attr/textColorTertiary" />
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="?android:attr/textColorPrimary"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewWave"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="2dip"
-                    android:background="?android:attr/listDivider" />
+                <TextView
+                    android:id="@+id/textViewAna"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Analyze"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="?android:attr/textColorSecondary"
+                    app:layout_constraintStart_toEndOf="@+id/imageViewWave"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewEle" />
 
-                <include
-                    android:id="@+id/z0_input"
-                    layout="@layout/z0_input"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingBottom="0dp"
+                    android:paddingTop="0dp"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewWave">
 
-                <include
-                    android:id="@+id/eeff_input"
-                    layout="@layout/eeff_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider" />
 
-            </LinearLayout>
+                    <include
+                        android:id="@+id/z0_input"
+                        layout="@layout/z0_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <include
+                        android:id="@+id/eeff_input"
+                        layout="@layout/eeff_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+            </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

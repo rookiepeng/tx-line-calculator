@@ -10,7 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -24,15 +24,17 @@
             app:expandedTitleMarginBottom="32dp"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
+            app:expandedTitleTextAppearance="?android:attr/textAppearanceLarge"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             app:toolbarId="@+id/toolbar">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/imageViewPlot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/vt_cmlin"
-                android:layout_gravity="center"/>
+                android:src="@drawable/vt_mlin"
+                android:layout_gravity="center"
+                android:contentDescription="RF Line Plots"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
