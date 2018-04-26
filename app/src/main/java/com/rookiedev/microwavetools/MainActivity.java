@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
     private int pos;
     private DrawerLayout drawer;
     private Fragment fragment = null;
-    private Fragment adFragment = null;
+    //private Fragment adFragment = null;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private FragmentManager fragmentManager;
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity
             if (!verifyDeveloperPayload(purchase)) {
                 complain("Error purchasing. Authenticity verification failed.");
                 //setWaitScreen(false);
-                adFragment = new AdFragment();
-                fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
+                //adFragment = new AdFragment();
+                //fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
                 return;
             }
 
@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity
                 // bought 1/4 tank of gas. So consume it.
                 //Log.d(TAG, "Purchase is gas. Starting gas consumption.");
                 isAdFree = true;
-                if (adFragment != null) {
-                    fragmentManager.beginTransaction().remove(adFragment).commit();
-                }
+                //if (adFragment != null) {
+                //    fragmentManager.beginTransaction().remove(adFragment).commit();
+                //}
                 invalidateOptionsMenu();
             }
         }
@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity
             // Is it a failure?
             if (result.isFailure()) {
                 complain("Failed to query inventory: " + result);
-                adFragment = new AdFragment();
-                fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
+                //adFragment = new AdFragment();
+                //fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
                 return;
             }
 
@@ -122,8 +122,8 @@ public class MainActivity extends AppCompatActivity
             if (isAdFree) {
                 invalidateOptionsMenu();
             } else {
-                adFragment = new AdFragment();
-                fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
+                //adFragment = new AdFragment();
+                //fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
             }
             //Log.d(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
 
