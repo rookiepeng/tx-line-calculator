@@ -142,7 +142,7 @@ public class CMLIN {
         return z01;
     }
 
-    private LineCMLIN Analysis(LineCMLIN line) {
+    private CmlinModel Analysis(CmlinModel line) {
         // input physical dimensions
         double width, length, space;
         // substrate parameters
@@ -433,7 +433,7 @@ public class CMLIN {
         return line;
     }
 
-    private LineCMLIN Synthesize(LineCMLIN line, boolean use_z0k) {
+    private CmlinModel Synthesize(CmlinModel line, boolean use_z0k) {
 
         double h, er, l, wmin, wmax, abstol, reltol;
         int maxiters;
@@ -599,11 +599,11 @@ public class CMLIN {
         return line;
     }
 
-    public LineCMLIN getAnaResult(LineCMLIN line) {
+    public CmlinModel getAnaResult(CmlinModel line) {
         return Analysis(line);
     }
 
-    public LineCMLIN getSynResult(LineCMLIN line, boolean use_z0k) {
+    public CmlinModel getSynResult(CmlinModel line, boolean use_z0k) {
         return Synthesize(line, use_z0k);
     }
 }

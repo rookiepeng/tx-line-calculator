@@ -4,6 +4,7 @@
 
 package com.rookiedev.microwavetools.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
@@ -22,17 +23,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.Constant;
-import com.rookiedev.microwavetools.libs.LineMLIN;
-import com.rookiedev.microwavetools.libs.MLIN;
+import com.rookiedev.microwavetools.libs.MlinModel;
+import com.rookiedev.microwavetools.libs.MlinCalculator;
 
 import java.math.BigDecimal;
 
-public class MLINFragment extends Fragment {
+public class MlinFragment extends Fragment {
     private final static String MLIN_W = "MLIN_W";
     private final static String MLIN_W_UNIT = "MLIN_W_UNIT";
     private final static String MLIN_L = "MLIN_L";
@@ -48,27 +50,28 @@ public class MLINFragment extends Fragment {
     private final static String MLIN_H_UNIT = "MLIN_H_UNIT";
     private final static String MLIN_T = "MLIN_T";
     private final static String MLIN_T_UNIT = "MLIN_T_UNIT";
+    private Context mContext;
     private View rootView;
     private CardView electricalCard, physicalCard;
     private SpannableString error_er, error_Z0;
     private int DecimalLength; // the length of the Decimal, accurate of the result
-    private TextView text_epsilon, text_z0, text_eeff; // strings which include the subscript
+    private TextView text_epsilon; // strings which include the subscript
     private EditText edittext_W, // the width
             edittext_L, // the length
             edittext_Z0, // the impedance
-            edittext_Eeff, // the electrical length
+            edittext_Phs, // the electrical length
             edittext_Freq, // the frequency
             edittext_T, // the thickness of the metal
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
     //private double W, L, Z0, Eeff, Freq, T, H, er;
-    private Button mlin_syn,// button synthesize
-            mlin_ana;// button analyze
+    private Button mlinSynthesize,// button synthesize
+            mlinAnalyze;// button analyze
     private Spinner spinner_W, spinner_L, spinner_T, spinner_H, spinner_Z0,
             spinner_Eeff, spinner_Freq;// the units of each parameter
-    private LineMLIN line;
+    private MlinModel line;
 
-    public MLINFragment() {
+    public MlinFragment() {
         // Empty constructor required for fragment subclasses
     }
 
@@ -76,16 +79,17 @@ public class MLINFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.mlin, container, false);
+        mContext=this.getContext();
         initUI();
         readSharedPref(); // read shared preferences
 
-        mlin_ana.setOnClickListener(new View.OnClickListener() {
+        mlinAnalyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Preference_SharedPref();
                 if (!analysisInputCheck()) {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
-                    edittext_Eeff.setText("");
+                    edittext_Phs.setText("");
                 } else {
                     line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()),
                             spinner_W.getSelectedItemPosition()); // get the parameters
@@ -100,7 +104,7 @@ public class MLINFragment extends Fragment {
                     if (edittext_L.length() != 0) { // check the L input
                         line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()),
                                 spinner_L.getSelectedItemPosition());
-                        MLIN mlin = new MLIN();
+                        MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getAnaResult(line);
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
@@ -111,9 +115,9 @@ public class MLINFragment extends Fragment {
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittext_Eeff.setText(String.valueOf(Eeff));
+                        edittext_Phs.setText(String.valueOf(Eeff));
                     } else {
-                        MLIN mlin = new MLIN();
+                        MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getAnaResult(line);
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
@@ -121,14 +125,14 @@ public class MLINFragment extends Fragment {
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
 
-                        edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
+                        edittext_Phs.setText(""); // if the L input is empty, clear the Eeff
                     }
                 }
                 forceRippleAnimation(electricalCard);
             }
         });
 
-        mlin_syn.setOnClickListener(new View.OnClickListener() {
+        mlinSynthesize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int temp;
@@ -147,9 +151,9 @@ public class MLINFragment extends Fragment {
                             spinner_T.getSelectedItemPosition());
 
                     double W, L;
-                    if (edittext_Eeff.length() != 0) {
-                        line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
-                        MLIN mlin = new MLIN();
+                    if (edittext_Phs.length() != 0) {
+                        line.setElectricalLength(Double.parseDouble(edittext_Phs.getText().toString()));
+                        MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, Constant.Synthesize_Width);
                         W = line.getMetalWidth();
                         //mlin.setW(W);
@@ -167,7 +171,7 @@ public class MLINFragment extends Fragment {
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_L.setText(String.valueOf(L));
                     } else {
-                        MLIN mlin = new MLIN();
+                        MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, Constant.Synthesize_Width);
                         W = line.getMetalWidth();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
@@ -198,32 +202,37 @@ public class MLINFragment extends Fragment {
      * initialize the UI
 	 */
     private void initUI() {
-        View width_input = rootView.findViewById(R.id.width_input);
-        width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        RadioButton radioButtonW = (RadioButton) rootView.findViewById(R.id.radioBtn_W);
+        radioButtonW.setVisibility(View.VISIBLE);
+        radioButtonW.setChecked(true);
 
-        View length_input = rootView.findViewById(R.id.length_input);
-        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        RadioButton radioButtonL = (RadioButton) rootView.findViewById(R.id.radioBtn_L);
+        radioButtonL.setVisibility(View.VISIBLE);
+        radioButtonL.setChecked(true);
 
-        View z0_input = rootView.findViewById(R.id.z0_input);
-        z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        RadioButton radioButtonZ0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
+        radioButtonZ0.setVisibility(View.VISIBLE);
+        radioButtonZ0.setChecked(true);
 
-        View eeff_input = rootView.findViewById(R.id.eeff_input);
-        eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        RadioButton radioButtonPhs = (RadioButton) rootView.findViewById(R.id.radioBtn_Phs);
+        radioButtonPhs.setVisibility(View.VISIBLE);
+        radioButtonPhs.setChecked(true);
 
-        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
-        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
+        TextView textW = (TextView) rootView.findViewById(R.id.text_W);
+        textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        line = new LineMLIN();
-        error_er = new SpannableString(
-                this.getString(R.string.Error_er_empty));
-        error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
+        TextView textL = (TextView) rootView.findViewById(R.id.text_L);
+        textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        /** find the elements */
+        TextView textZ0 = (TextView) rootView.findViewById(R.id.text_Z0);
+        textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+
+        TextView textPhs = (TextView) rootView.findViewById(R.id.text_Phs);
+        textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
         // Subscript strings
         text_epsilon = (TextView) rootView.findViewById(R.id.text_er);
-        text_z0 = (TextView) rootView.findViewById(R.id.text_Z0);
-        text_eeff = (TextView) rootView.findViewById(R.id.text_Eeff);
+        //text_eeff = (TextView) rootView.findViewById(R.id.text_Eeff);
 
         SpannableString spanEpsilon = new SpannableString(
                 this.getString(R.string.text_er));
@@ -235,32 +244,34 @@ public class MLINFragment extends Fragment {
                 this.getString(R.string.text_Z0));
         spanZ0.setSpan(new SubscriptSpan(), 1, 2,
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        text_z0.append(spanZ0);
+        textZ0.append(spanZ0);
 
-        SpannableString spanEeff = new SpannableString(
-                this.getString(R.string.text_Eeff));
-        spanEeff.setSpan(new SubscriptSpan(), 1, 4,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        text_eeff.append(spanEeff);
+        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
+        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
-        // show the epsilon with html style
-        // text_epsilon.setText(Html.fromHtml(string_epsilon));
+        line = new MlinModel();
+        error_er = new SpannableString(
+                this.getString(R.string.Error_er_empty));
+        error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
 
         // edittext elements
         edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
         //edittext_W.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.green), PorterDuff.Mode.SRC_ATOP);
-        //edittext_W.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
+        edittext_W.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
+        edittext_L.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff);
+        edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittext_Phs = (EditText) rootView.findViewById(R.id.editText_Phs);
+        edittext_Phs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
         edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
         edittext_er = (EditText) rootView.findViewById(R.id.editText_er);
 
         // button elements
-        mlin_ana = (Button) rootView.findViewById(R.id.button_ana);
-        mlin_syn = (Button) rootView.findViewById(R.id.button_syn);
+        mlinAnalyze = (Button) rootView.findViewById(R.id.button_ana);
+        mlinSynthesize = (Button) rootView.findViewById(R.id.button_syn);
 
         // spinner elements
         spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W);
@@ -327,7 +338,7 @@ public class MLINFragment extends Fragment {
         spinner_Z0.setSelection(Integer.parseInt(prefs.getString(
                 MLIN_Z0_UNIT, "0")));
 
-        edittext_Eeff.setText(prefs.getString(MLIN_Eeff, "52.58"));
+        edittext_Phs.setText(prefs.getString(MLIN_Eeff, "52.58"));
         spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(
                 MLIN_Eeff_UNIT, "0")));
 
@@ -371,7 +382,7 @@ public class MLINFragment extends Fragment {
         mlin_L_unit = Integer.toString(spinner_L.getSelectedItemPosition());
         mlin_Z0 = edittext_Z0.getText().toString();
         mlin_Z0_unit = Integer.toString(spinner_Z0.getSelectedItemPosition());
-        mlin_Eeff = edittext_Eeff.getText().toString();
+        mlin_Eeff = edittext_Phs.getText().toString();
         mlin_Eeff_unit = Integer.toString(spinner_Eeff
                 .getSelectedItemPosition());
         mlin_Freq = edittext_Freq.getText().toString();

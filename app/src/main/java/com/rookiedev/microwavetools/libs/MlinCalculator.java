@@ -1,9 +1,9 @@
 package com.rookiedev.microwavetools.libs;
 
-public class MLIN {
+public class MlinCalculator {
     private double effectiveEr;
 
-    public MLIN() {
+    public MlinCalculator() {
     }
 
     private MlinModel Analysis(MlinModel line) {

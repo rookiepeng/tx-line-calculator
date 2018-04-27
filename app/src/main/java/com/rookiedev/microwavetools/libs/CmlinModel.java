@@ -1,6 +1,6 @@
 package com.rookiedev.microwavetools.libs;
 
-public class LineCMLIN {
+public class CmlinModel {
     private Substrate substrate;
     private Metal metal;
     private double metalSpace;
@@ -8,7 +8,7 @@ public class LineCMLIN {
     private double impedanceEven, impedanceOdd, couplingFactor;
     private double frequency; // Hz
 
-    public LineCMLIN() {
+    public CmlinModel() {
         substrate = new Substrate();
         metal = new Metal();
     }

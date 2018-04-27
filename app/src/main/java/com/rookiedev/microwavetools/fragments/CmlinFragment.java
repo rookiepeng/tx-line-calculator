@@ -25,11 +25,11 @@ import android.widget.TextView;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CMLIN;
 import com.rookiedev.microwavetools.libs.Constant;
-import com.rookiedev.microwavetools.libs.LineCMLIN;
+import com.rookiedev.microwavetools.libs.CmlinModel;
 
 import java.math.BigDecimal;
 
-public class CMLINFragment extends Fragment {
+public class CmlinFragment extends Fragment {
     private final static String CMLIN_W = "CMLIN_W";
     private final static String CMLIN_W_UNIT = "CMLIN_W_UNIT";
     private final static String CMLIN_S = "CMLIN_S";
@@ -70,7 +70,7 @@ public class CMLINFragment extends Fragment {
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
     //private double W, L, S, Z0, k, Z0o, Z0e, Eeff, Freq, T, H, er;
-    private LineCMLIN line;
+    private CmlinModel line;
     private Button cmlin_syn,// button synthesize
             cmlin_ana;// button analyze
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
@@ -78,7 +78,7 @@ public class CMLINFragment extends Fragment {
     private RadioButton radioBtn_Z0, radioBtn_Z0o;
     private boolean use_z0k;
 
-    public CMLINFragment() {
+    public CmlinFragment() {
         // Empty constructor required for fragment subclasses
     }
 
@@ -332,7 +332,7 @@ public class CMLINFragment extends Fragment {
 
         radioBtn_Z0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
         radioBtn_Z0o = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0o);
-        line = new LineCMLIN();
+        line = new CmlinModel();
     }
 
     private void setRadioBtn() {

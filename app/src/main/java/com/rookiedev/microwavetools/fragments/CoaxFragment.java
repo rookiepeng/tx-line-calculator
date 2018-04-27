@@ -30,7 +30,7 @@ import com.rookiedev.microwavetools.libs.LineCOAX;
 
 import java.math.BigDecimal;
 
-public class COAXFragment extends Fragment {
+public class CoaxFragment extends Fragment {
     public final static String COAX_A = "COAX_A";
     public final static String COAX_A_UNIT = "COAX_A_UNIT";
     public final static String COAX_H = "COAX_H";
@@ -72,7 +72,7 @@ public class COAXFragment extends Fragment {
     private RadioButton radioBtn_a, radioBtn_H, radioBtn_b, radioBtn_er;
     private LineCOAX line;
 
-    public COAXFragment() {
+    public CoaxFragment() {
         // Empty constructor required for fragment subclasses
     }
 
@@ -249,7 +249,7 @@ public class COAXFragment extends Fragment {
         // Subscript strings
         text_er = (TextView) rootView.findViewById(R.id.text_er_radio);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
-        text_Eeff = (TextView) rootView.findViewById(R.id.text_Eeff);
+        //text_Eeff = (TextView) rootView.findViewById(R.id.text_Phs);
 
         SpannableString spanEr = new SpannableString(
                 this.getString(R.string.text_er));
@@ -275,7 +275,7 @@ public class COAXFragment extends Fragment {
         edittext_b = (EditText) rootView.findViewById(R.id.editText_b_radio);
         edittext_L = (EditText) rootView.findViewById(R.id.editText_L_radio);
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff);
+        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Phs);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T_radio);
         edittext_er = (EditText) rootView.findViewById(R.id.editText_er_radio);

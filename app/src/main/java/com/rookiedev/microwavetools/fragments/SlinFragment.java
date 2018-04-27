@@ -30,7 +30,7 @@ import com.rookiedev.microwavetools.libs.SLIN;
 
 import java.math.BigDecimal;
 
-public class SLINFragment extends Fragment {
+public class SlinFragment extends Fragment {
     public final static String SLIN_W = "SLIN_W";
     public final static String SLIN_W_UNIT = "SLIN_W_UNIT";
     public final static String SLIN_L = "SLIN_L";
@@ -69,7 +69,7 @@ public class SLINFragment extends Fragment {
     private RadioButton radioBtn_W, radioBtn_H, radioBtn_er;
     private LineSLIN line;
 
-    public SLINFragment() {
+    public SlinFragment() {
         // Empty constructor required for fragment subclasses
     }
 
@@ -255,7 +255,7 @@ public class SLINFragment extends Fragment {
         // Subscript strings
         text_er = (TextView) rootView.findViewById(R.id.text_er_radio);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
-        text_Eeff = (TextView) rootView.findViewById(R.id.text_Eeff);
+        text_Eeff = (TextView) rootView.findViewById(R.id.text_Phs);
 
         SpannableString spanEr = new SpannableString(
                 this.getString(R.string.text_er));
@@ -279,7 +279,7 @@ public class SLINFragment extends Fragment {
         edittext_W = (EditText) rootView.findViewById(R.id.editText_W_radio);
         edittext_L = (EditText) rootView.findViewById(R.id.editText_L_radio);
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff);
+        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Phs);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T_radio);
         edittext_H = (EditText) rootView.findViewById(R.id.editText_H_radio);

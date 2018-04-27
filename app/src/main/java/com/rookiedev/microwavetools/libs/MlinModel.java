@@ -1,12 +1,12 @@
 package com.rookiedev.microwavetools.libs;
 
-public class LineMLIN {
+public class MlinModel {
     private Substrate substrate;
     private Metal metal;
     private double impedance, electricalLength; // ohms, degree
     private double frequency; // Hz
 
-    public LineMLIN() {
+    public MlinModel() {
         substrate = new Substrate();
         metal = new Metal();
     }

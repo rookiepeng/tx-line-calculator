@@ -29,7 +29,7 @@ import com.rookiedev.microwavetools.libs.LineCSLIN;
 
 import java.math.BigDecimal;
 
-public class CSLINFragment extends Fragment {
+public class CslinFragment extends Fragment {
     public final static String CSLIN_W = "CSLIN_W";
     public final static String CSLIN_W_UNIT = "CSLIN_W_UNIT";
     public final static String CSLIN_S = "CSLIN_S";
@@ -80,7 +80,7 @@ public class CSLINFragment extends Fragment {
     private boolean use_z0k;
     private LineCSLIN line;
 
-    public CSLINFragment() {
+    public CslinFragment() {
         // Empty constructor required for fragment subclasses
     }
 

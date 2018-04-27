@@ -33,7 +33,7 @@ import com.rookiedev.microwavetools.libs.LineCPW_G;
 
 import java.math.BigDecimal;
 
-public class CPWFragment extends Fragment {
+public class CpwFragment extends Fragment {
     public final static String CPW_W = "CPW_W";
     public final static String CPW_W_UNIT = "CPW_W_UNIT";
     public final static String CPW_S = "CPW_S";
@@ -78,7 +78,7 @@ public class CPWFragment extends Fragment {
     private ImageView CPW_G;
     private LineCPW_G line;
 
-    public CPWFragment() {
+    public CpwFragment() {
         // Empty constructor required for fragment subclasses
     }
 
@@ -299,7 +299,7 @@ public class CPWFragment extends Fragment {
         // Subscript strings
         text_er = (TextView) rootView.findViewById(R.id.text_er_radio);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
-        text_Eeff = (TextView) rootView.findViewById(R.id.text_Eeff);
+        text_Eeff = (TextView) rootView.findViewById(R.id.text_Phs);
 
         SpannableString spanEr = new SpannableString(
                 this.getString(R.string.text_er));
@@ -324,7 +324,7 @@ public class CPWFragment extends Fragment {
         edittext_S = (EditText) rootView.findViewById(R.id.editText_S_radio);
         edittext_L = (EditText) rootView.findViewById(R.id.editText_L_radio);
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff);
+        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Phs);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T_radio);
         edittext_H = (EditText) rootView.findViewById(R.id.editText_H_radio);

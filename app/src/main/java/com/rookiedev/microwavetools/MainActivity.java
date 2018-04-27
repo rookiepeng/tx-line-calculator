@@ -20,13 +20,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.rookiedev.microwavetools.fragments.AdFragment;
-import com.rookiedev.microwavetools.fragments.CMLINFragment;
-import com.rookiedev.microwavetools.fragments.COAXFragment;
-import com.rookiedev.microwavetools.fragments.CPWFragment;
-import com.rookiedev.microwavetools.fragments.CSLINFragment;
-import com.rookiedev.microwavetools.fragments.MLINFragment;
-import com.rookiedev.microwavetools.fragments.SLINFragment;
+import com.rookiedev.microwavetools.fragments.CmlinFragment;
+import com.rookiedev.microwavetools.fragments.CoaxFragment;
+import com.rookiedev.microwavetools.fragments.CpwFragment;
+import com.rookiedev.microwavetools.fragments.CslinFragment;
+import com.rookiedev.microwavetools.fragments.MlinFragment;
+import com.rookiedev.microwavetools.fragments.SlinFragment;
 import com.rookiedev.microwavetools.libs.Constant;
 import com.rookiedev.microwavetools.util.IabBroadcastReceiver;
 import com.rookiedev.microwavetools.util.IabHelper;
@@ -386,25 +385,25 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         //fragmentManager.beginTransaction().remove(fragment).commit();
         if (id == R.id.nav_mlin) {
-            fragment = new MLINFragment();
+            fragment = new MlinFragment();
             pos = 0;
         } else if (id == R.id.nav_cmlin) {
-            fragment = new CMLINFragment();
+            fragment = new CmlinFragment();
             pos = 1;
         } else if (id == R.id.nav_slin) {
-            fragment = new SLINFragment();
+            fragment = new SlinFragment();
             pos = 2;
         } else if (id == R.id.nav_cslin) {
-            fragment = new CSLINFragment();
+            fragment = new CslinFragment();
             pos = 3;
         } else if (id == R.id.nav_cpwg) {
-            fragment = new CPWFragment();
+            fragment = new CpwFragment();
             pos = 4;
         } else if (id == R.id.nav_coax) {
-            fragment = new COAXFragment();
+            fragment = new CoaxFragment();
             pos = 5;
         } else {
-            fragment = new MLINFragment();
+            fragment = new MlinFragment();
         }
         //Bundle args = new Bundle();
         //fragment.setArguments(args);
@@ -415,25 +414,25 @@ public class MainActivity extends AppCompatActivity
 
     private void initFragment(int item) {
         if (item == 0) {
-            fragment = new MLINFragment();
+            fragment = new MlinFragment();
             pos = 0;
         } else if (item == 1) {
-            fragment = new CMLINFragment();
+            fragment = new CmlinFragment();
             pos = 1;
         } else if (item == 2) {
-            fragment = new SLINFragment();
+            fragment = new SlinFragment();
             pos = 2;
         } else if (item == 3) {
-            fragment = new CSLINFragment();
+            fragment = new CslinFragment();
             pos = 3;
         } else if (item == 4) {
-            fragment = new CPWFragment();
+            fragment = new CpwFragment();
             pos = 4;
         } else if (item == 5) {
-            fragment = new COAXFragment();
+            fragment = new CoaxFragment();
             pos = 5;
         } else {
-            fragment = new MLINFragment();
+            fragment = new MlinFragment();
         }
         //Bundle args = new Bundle();
         //fragment.setArguments(args);
