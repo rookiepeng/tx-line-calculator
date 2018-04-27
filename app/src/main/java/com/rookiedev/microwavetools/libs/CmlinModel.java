@@ -1,16 +1,16 @@
 package com.rookiedev.microwavetools.libs;
 
 public class CmlinModel {
-    private Substrate substrate;
-    private Metal metal;
+    private SubstrateModel substrate;
+    private MetalModel metal;
     private double metalSpace;
     private double impedance, electricalLength; // ohms, degree
     private double impedanceEven, impedanceOdd, couplingFactor;
     private double frequency; // Hz
 
     public CmlinModel() {
-        substrate = new Substrate();
-        metal = new Metal();
+        substrate = new SubstrateModel();
+        metal = new MetalModel();
     }
 
     void setSynthesizeParameter(double para, int flag) {

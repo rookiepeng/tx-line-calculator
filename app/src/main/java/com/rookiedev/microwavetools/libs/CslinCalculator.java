@@ -1,8 +1,8 @@
 package com.rookiedev.microwavetools.libs;
 
-public class CSLIN {
+public class CslinCalculator {
 
-    public CSLIN() {
+    public CslinCalculator() {
     }
 
     private double k_over_kp(double k) {
@@ -31,7 +31,7 @@ public class CSLIN {
     }
 
     // Zero thickness characteristic impedance
-    private LineCSLIN impedance_zeroThickness(LineCSLIN line) {
+    private CslinModel impedance_zeroThickness(CslinModel line) {
         double ke, ko;
 
         // (3) from Cohn
@@ -45,12 +45,12 @@ public class CSLIN {
         return line;
     }
 
-    private LineCSLIN Analysis(LineCSLIN line) {
+    private CslinModel Analysis(CslinModel line) {
         // zero thickness even and odd impedances
         double z0e_0t, z0o_0t;
 
         // single stripline
-        LineSLIN lineSlin = new LineSLIN();
+        SlinModel lineSlin = new SlinModel();
 
         double z0s, z0s_0t;
         double cf_t, cf_0;
@@ -71,7 +71,7 @@ public class CSLIN {
             lineSlin.setMetalLength(line.getMetalLength(), Constant.LengthUnit_m);
             lineSlin.setFrequency(line.getFrequency(), Constant.FreqUnit_Hz);
 
-            SLIN slin = new SLIN();
+            SlinCalculator slin = new SlinCalculator();
             lineSlin = slin.getAnaResult(lineSlin);
 
             z0s = lineSlin.getImpedance();
@@ -122,7 +122,7 @@ public class CSLIN {
         return line;
     }
 
-    private LineCSLIN Synthesize(LineCSLIN line, boolean use_z0k) {
+    private CslinModel Synthesize(CslinModel line, boolean use_z0k) {
 
         double h, er, l, wmin, wmax, abstol, reltol;
         int maxiters;
@@ -147,9 +147,9 @@ public class CSLIN {
 
         len = line.getElectricalLength();
 
-        // Substrate dielectric thickness (m)
+        // SubstrateModel dielectric thickness (m)
         h = line.getSubHeight();
-        // Substrate relative permittivity
+        // SubstrateModel relative permittivity
         er = line.getSubEpsilon();
         // impedance and coupling
         z0 = line.getImpedance();
@@ -284,11 +284,11 @@ public class CSLIN {
         return line;
     }
 
-    public LineCSLIN getAnaResult(LineCSLIN line) {
+    public CslinModel getAnaResult(CslinModel line) {
         return Analysis(line);
     }
 
-    public LineCSLIN getSynResult(LineCSLIN line, boolean use_z0k) {
+    public CslinModel getSynResult(CslinModel line, boolean use_z0k) {
         return Synthesize(line, use_z0k);
     }
 }

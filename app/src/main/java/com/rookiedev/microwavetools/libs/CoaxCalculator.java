@@ -1,11 +1,11 @@
 package com.rookiedev.microwavetools.libs;
 
-public class COAX {
+public class CoaxCalculator {
 
-    public COAX() {
+    public CoaxCalculator() {
     }
 
-    private LineCOAX Analysis(LineCOAX line) {
+    private CoaxModel Analysis(CoaxModel line) {
         double x;
         double v;
 
@@ -49,7 +49,7 @@ public class COAX {
         return line;
     }
 
-    private LineCOAX Synthesize(LineCOAX line, int flag) {
+    private CoaxModel Synthesize(CoaxModel line, int flag) {
         double Ro;
         double v;
         double elen;
@@ -214,11 +214,11 @@ public class COAX {
         return line;
     }
 
-    public LineCOAX getAnaResult(LineCOAX line) {
+    public CoaxModel getAnaResult(CoaxModel line) {
         return Analysis(line);
     }
 
-    public LineCOAX getSynResult(LineCOAX line, int flag) {
+    public CoaxModel getSynResult(CoaxModel line, int flag) {
         return Synthesize(line, flag);
     }
 }

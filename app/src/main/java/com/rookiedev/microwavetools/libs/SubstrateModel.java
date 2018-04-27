@@ -1,9 +1,9 @@
 package com.rookiedev.microwavetools.libs;
 
-public class Substrate {
+public class SubstrateModel {
     private double subEpsilon, subHeight; // n/a, meter
 
-    public Substrate() {
+    public SubstrateModel() {
     }
 
     public double getSubEpsilon() {

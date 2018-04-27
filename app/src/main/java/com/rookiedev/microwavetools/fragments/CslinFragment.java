@@ -23,9 +23,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
-import com.rookiedev.microwavetools.libs.CSLIN;
+import com.rookiedev.microwavetools.libs.CslinCalculator;
 import com.rookiedev.microwavetools.libs.Constant;
-import com.rookiedev.microwavetools.libs.LineCSLIN;
+import com.rookiedev.microwavetools.libs.CslinModel;
 
 import java.math.BigDecimal;
 
@@ -78,7 +78,7 @@ public class CslinFragment extends Fragment {
             spinner_Z0, spinner_Z0o, spinner_Z0e, spinner_Eeff, spinner_Freq;// the units of each parameter
     private RadioButton radioBtn_Z0, radioBtn_Z0o;
     private boolean use_z0k;
-    private LineCSLIN line;
+    private CslinModel line;
 
     public CslinFragment() {
         // Empty constructor required for fragment subclasses
@@ -121,7 +121,7 @@ public class CslinFragment extends Fragment {
                     if (edittext_L.length() != 0) {
                         line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        CSLIN cslin = new CSLIN();
+                        CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
                         //Z0o = cslin.getZ0o();
                         //Z0e = cslin.getZ0e();
@@ -135,7 +135,7 @@ public class CslinFragment extends Fragment {
                         edittext_Eeff.setText(String.valueOf(Eeff));
 
                     } else {
-                        CSLIN cslin = new CSLIN();
+                        CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
                         //Z0o = cslin.getZ0o();
                         //Z0e = cslin.getZ0e();
@@ -214,7 +214,7 @@ public class CslinFragment extends Fragment {
     }
 
     private void initUI() {
-        line = new LineCSLIN();
+        line = new CslinModel();
         View width_input = rootView.findViewById(R.id.width_input);
         width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
@@ -405,7 +405,7 @@ public class CslinFragment extends Fragment {
 
         // read values from the shared preferences
 
-        // CSLIN parameters
+        // CslinCalculator parameters
         edittext_W.setText(prefs.getString(CSLIN_W, "50.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(CSLIN_W_UNIT,
                 "0")));
@@ -634,7 +634,7 @@ public class CslinFragment extends Fragment {
         if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
             line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
             //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-            CSLIN cslin = new CSLIN();
+            CslinCalculator cslin = new CslinCalculator();
             line = cslin.getSynResult(line, use_z0k);
             //L = cslin.getL();
             //W = cslin.getW();
@@ -645,7 +645,7 @@ public class CslinFragment extends Fragment {
                     .doubleValue();
             edittext_L.setText(String.valueOf(L));
         } else {
-            CSLIN cslin = new CSLIN();
+            CslinCalculator cslin = new CslinCalculator();
             line = cslin.getSynResult(line, use_z0k);
             //W = cslin.getW();
             //S = cslin.getS();

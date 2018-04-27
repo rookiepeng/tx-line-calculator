@@ -1,16 +1,16 @@
 package com.rookiedev.microwavetools.libs;
 
-public class LineCSLIN {
-    private Substrate substrate;
-    private Metal metal;
+
+public class CpwModel {
+    private SubstrateModel substrate;
+    private MetalModel metal;
     private double metalSpace;
     private double impedance, electricalLength; // ohms, degree
-    private double impedanceEven, impedanceOdd, couplingFactor;
     private double frequency; // Hz
 
-    public LineCSLIN() {
-        substrate = new Substrate();
-        metal = new Metal();
+    public CpwModel() {
+        substrate = new SubstrateModel();
+        metal = new MetalModel();
     }
 
     void setSynthesizeParameter(double para, int flag) {
@@ -84,7 +84,7 @@ public class LineCSLIN {
         return frequency;
     }
 
-    double getSubEpsilon() {
+    public double getSubEpsilon() {
         return substrate.getSubEpsilon();
     }
 
@@ -92,12 +92,28 @@ public class LineCSLIN {
         substrate.setSubEpsilon(subEpsilon);
     }
 
-    double getSubHeight() {
+    public double getSubHeight() {
         return substrate.getSubHeight();
     }
 
     public void setSubHeight(double subHeight, int unit) {
         substrate.setSubHeight(Constant.value2meter(subHeight, unit));
+    }
+
+    public SubstrateModel getSubstrate() {
+        return substrate;
+    }
+
+    public void setSubstrate(SubstrateModel substrate) {
+        this.substrate = substrate;
+    }
+
+    public MetalModel getMetal() {
+        return metal;
+    }
+
+    public void setMetal(MetalModel metal) {
+        this.metal = metal;
     }
 
     public double getMetalSpace() {
@@ -106,45 +122,5 @@ public class LineCSLIN {
 
     public void setMetalSpace(double metalSpace, int unit) {
         this.metalSpace = Constant.value2meter(metalSpace, unit);
-    }
-
-    public double getImpedanceEven() {
-        return impedanceEven;
-    }
-
-    public void setImpedanceEven(double impedanceEven) {
-        this.impedanceEven = impedanceEven;
-    }
-
-    public double getImpedanceOdd() {
-        return impedanceOdd;
-    }
-
-    public void setImpedanceOdd(double impedanceOdd) {
-        this.impedanceOdd = impedanceOdd;
-    }
-
-    public double getCouplingFactor() {
-        return couplingFactor;
-    }
-
-    public void setCouplingFactor(double couplingFactor) {
-        this.couplingFactor = couplingFactor;
-    }
-
-    public Substrate getSubstrate() {
-        return substrate;
-    }
-
-    public void setSubstrate(Substrate substrate) {
-        this.substrate = substrate;
-    }
-
-    public Metal getMetal() {
-        return metal;
-    }
-
-    public void setMetal(Metal metal) {
-        this.metal = metal;
     }
 }

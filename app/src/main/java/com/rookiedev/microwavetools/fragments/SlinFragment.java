@@ -25,8 +25,8 @@ import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.Constant;
-import com.rookiedev.microwavetools.libs.LineSLIN;
-import com.rookiedev.microwavetools.libs.SLIN;
+import com.rookiedev.microwavetools.libs.SlinCalculator;
+import com.rookiedev.microwavetools.libs.SlinModel;
 
 import java.math.BigDecimal;
 
@@ -67,7 +67,7 @@ public class SlinFragment extends Fragment {
             spinner_Eeff, spinner_Freq;// the units of each parameter
     private int flag;
     private RadioButton radioBtn_W, radioBtn_H, radioBtn_er;
-    private LineSLIN line;
+    private SlinModel line;
 
     public SlinFragment() {
         // Empty constructor required for fragment subclasses
@@ -99,7 +99,7 @@ public class SlinFragment extends Fragment {
                     if (edittext_L.length() != 0) {
                         line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        SLIN slin = new SLIN();
+                        SlinCalculator slin = new SlinCalculator();
                         line = slin.getAnaResult(line);
                         //Eeff = slin.getEeff();
 
@@ -110,7 +110,7 @@ public class SlinFragment extends Fragment {
 
                     } else {
                         line.setMetalLength(0, spinner_L.getSelectedItemPosition());
-                        SLIN slin = new SLIN();
+                        SlinCalculator slin = new SlinCalculator();
                         line = slin.getAnaResult(line);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
                     }
@@ -158,8 +158,8 @@ public class SlinFragment extends Fragment {
                     if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
                         line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
                         //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-                        //SLIN slin = new SLIN(W, H, er, L, Z0, Eeff, Freq, T, flag);
-                        SLIN slin = new SLIN();
+                        //SlinCalculator slin = new SlinCalculator(W, H, er, L, Z0, Eeff, Freq, T, flag);
+                        SlinCalculator slin = new SlinCalculator();
                         line = slin.getSynResult(line, flag);
                         //slin.stripline_syn();
                         //W = slin.getW();
@@ -180,7 +180,7 @@ public class SlinFragment extends Fragment {
                                 .doubleValue();
                         edittext_L.setText(String.valueOf(L));
                     } else {
-                        SLIN slin = new SLIN();
+                        SlinCalculator slin = new SlinCalculator();
                         line = slin.getSynResult(line, flag);
                         //W = slin.getW();
                         //H = slin.getH();
@@ -230,7 +230,7 @@ public class SlinFragment extends Fragment {
     }
 
     private void initUI() {
-        line = new LineSLIN();
+        line = new SlinModel();
         width_input = rootView.findViewById(R.id.width_input_radio);
         height_input = rootView.findViewById(R.id.height_input_radio);
         er_input = rootView.findViewById(R.id.epsilon_input_radio);
@@ -344,7 +344,7 @@ public class SlinFragment extends Fragment {
 
         // read values from the shared preferences
 
-        // SLIN parameters
+        // SlinCalculator parameters
         edittext_W.setText(prefs.getString(SLIN_W, "10.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(SLIN_W_UNIT,
                 "0")));

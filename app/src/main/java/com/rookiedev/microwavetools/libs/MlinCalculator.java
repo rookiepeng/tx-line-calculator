@@ -20,11 +20,11 @@ public class MlinCalculator {
 
         width = line.getMetalWidth();
         length = line.getMetalLength();
-        // Substrate dielectric thickness
+        // SubstrateModel dielectric thickness
         height = line.getSubHeight();
-        // Substrate relative permittivity
+        // SubstrateModel relative permittivity
         er = line.getSubEpsilon();
-        // Metal thickness
+        // MetalModel thickness
         thickness = line.getMetalThick();
 
         // starting microstrip_calc_int() with %f/1.0e6 MHz and Find u and correction factor for nonzero metal thickness

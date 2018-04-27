@@ -1,14 +1,16 @@
 package com.rookiedev.microwavetools.libs;
 
-public class LineSLIN {
-    private Substrate substrate;
-    private Metal metal;
+public class CslinModel {
+    private SubstrateModel substrate;
+    private MetalModel metal;
+    private double metalSpace;
     private double impedance, electricalLength; // ohms, degree
+    private double impedanceEven, impedanceOdd, couplingFactor;
     private double frequency; // Hz
 
-    public LineSLIN() {
-        substrate = new Substrate();
-        metal = new Metal();
+    public CslinModel() {
+        substrate = new SubstrateModel();
+        metal = new MetalModel();
     }
 
     void setSynthesizeParameter(double para, int flag) {
@@ -82,7 +84,7 @@ public class LineSLIN {
         return frequency;
     }
 
-    public double getSubEpsilon() {
+    double getSubEpsilon() {
         return substrate.getSubEpsilon();
     }
 
@@ -90,7 +92,7 @@ public class LineSLIN {
         substrate.setSubEpsilon(subEpsilon);
     }
 
-    public double getSubHeight() {
+    double getSubHeight() {
         return substrate.getSubHeight();
     }
 
@@ -98,19 +100,51 @@ public class LineSLIN {
         substrate.setSubHeight(Constant.value2meter(subHeight, unit));
     }
 
-    public Substrate getSubstrate() {
+    public double getMetalSpace() {
+        return metalSpace;
+    }
+
+    public void setMetalSpace(double metalSpace, int unit) {
+        this.metalSpace = Constant.value2meter(metalSpace, unit);
+    }
+
+    public double getImpedanceEven() {
+        return impedanceEven;
+    }
+
+    public void setImpedanceEven(double impedanceEven) {
+        this.impedanceEven = impedanceEven;
+    }
+
+    public double getImpedanceOdd() {
+        return impedanceOdd;
+    }
+
+    public void setImpedanceOdd(double impedanceOdd) {
+        this.impedanceOdd = impedanceOdd;
+    }
+
+    public double getCouplingFactor() {
+        return couplingFactor;
+    }
+
+    public void setCouplingFactor(double couplingFactor) {
+        this.couplingFactor = couplingFactor;
+    }
+
+    public SubstrateModel getSubstrate() {
         return substrate;
     }
 
-    public void setSubstrate(Substrate substrate) {
+    public void setSubstrate(SubstrateModel substrate) {
         this.substrate = substrate;
     }
 
-    public Metal getMetal() {
+    public MetalModel getMetal() {
         return metal;
     }
 
-    public void setMetal(Metal metal) {
+    public void setMetal(MetalModel metal) {
         this.metal = metal;
     }
 }

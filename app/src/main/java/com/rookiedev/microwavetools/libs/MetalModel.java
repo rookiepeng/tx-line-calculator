@@ -1,9 +1,9 @@
 package com.rookiedev.microwavetools.libs;
 
-public class Metal {
+public class MetalModel {
     private double metalWidth, metalLength, metalThick; // meter, meter, meter
 
-    public Metal() {
+    public MetalModel() {
 
     }
 

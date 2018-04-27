@@ -27,9 +27,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
-import com.rookiedev.microwavetools.libs.CPWG;
+import com.rookiedev.microwavetools.libs.CpwCalculator;
 import com.rookiedev.microwavetools.libs.Constant;
-import com.rookiedev.microwavetools.libs.LineCPW_G;
+import com.rookiedev.microwavetools.libs.CpwModel;
 
 import java.math.BigDecimal;
 
@@ -76,7 +76,7 @@ public class CpwFragment extends Fragment {
     private CheckBox withGround;
     private boolean hasGround;
     private ImageView CPW_G;
-    private LineCPW_G line;
+    private CpwModel line;
 
     public CpwFragment() {
         // Empty constructor required for fragment subclasses
@@ -110,11 +110,11 @@ public class CpwFragment extends Fragment {
                     if (edittext_L.length() != 0) { // check the L input
                         line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        CPWG cpwg = new CPWG();
+                        CpwCalculator cpwg = new CpwCalculator();
                         line = cpwg.getAnaResult(line, withGround.isChecked());
 
                         /*if (withGround.isChecked()) {
-                            CPWG cpwg = new CPWG(W, S, H, er, L, 0, 0, Freq, T, flag);
+                            CpwCalculator cpwg = new CpwCalculator(W, S, H, er, L, 0, 0, Freq, T, flag);
                             Z0 = cpwg.getZ0();
                             Eeff = cpwg.getEeff();
                         } else {
@@ -127,10 +127,10 @@ public class CpwFragment extends Fragment {
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
-                        CPWG cpwg = new CPWG();
+                        CpwCalculator cpwg = new CpwCalculator();
                         line = cpwg.getAnaResult(line, withGround.isChecked());
                         /*if (withGround.isChecked()) {
-                            CPWG cpwg = new CPWG(W, S, H, er, 0, 0, 0, Freq, T, flag);
+                            CpwCalculator cpwg = new CpwCalculator(W, S, H, er, 0, 0, 0, Freq, T, flag);
                             Z0 = cpwg.getZ0();
                         } else {
                             CPW cpw = new CPW(W, S, H, er, 0, 0, 0, Freq, T, flag);
@@ -196,11 +196,11 @@ public class CpwFragment extends Fragment {
 
                     if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
                         line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
-                        CPWG cpwg = new CPWG();
+                        CpwCalculator cpwg = new CpwCalculator();
                         line = cpwg.getSynResult(line, flag, withGround.isChecked());
 
                         /*if (withGround.isChecked()) {
-                            CPWG cpwg = new CPWG(W, S, H, er, 0, Z0, Eeff, Freq, T, flag);
+                            CpwCalculator cpwg = new CpwCalculator(W, S, H, er, 0, Z0, Eeff, Freq, T, flag);
                             cpwg.coplanar_syn();
                             W = cpwg.getW();
                             S = cpwg.getS();
@@ -222,10 +222,10 @@ public class CpwFragment extends Fragment {
                                 .doubleValue();
                         edittext_L.setText(String.valueOf(L));
                     } else {
-                        CPWG cpwg = new CPWG();
+                        CpwCalculator cpwg = new CpwCalculator();
                         line = cpwg.getSynResult(line, flag, withGround.isChecked());
                         /*if (withGround.isChecked()) {
-                            CPWG cpwg = new CPWG(W, S, H, er, 0, Z0, 0, Freq, T, flag);
+                            CpwCalculator cpwg = new CpwCalculator(W, S, H, er, 0, Z0, 0, Freq, T, flag);
                             cpwg.coplanar_syn();
                             W = cpwg.getW();
                             S = cpwg.getS();
@@ -273,7 +273,7 @@ public class CpwFragment extends Fragment {
     }
 
     private void initUI() {
-        line = new LineCPW_G();
+        line = new CpwModel();
         width_input = rootView.findViewById(R.id.width_input_radio);
         height_input = rootView.findViewById(R.id.height_input_radio);
         er_input = rootView.findViewById(R.id.epsilon_input_radio);

@@ -175,9 +175,9 @@ public class CmlinCalculator {
         length = line.getMetalLength();
         space = line.getMetalSpace();
         frequency = line.getFrequency();
-        // Substrate dielectric thickness
+        // SubstrateModel dielectric thickness
         height = line.getSubHeight();
-        // Substrate relative permittivity
+        // SubstrateModel relative permittivity
         dielectric = line.getSubEpsilon();
 
         // Find widthToHeight and correction factor for nonzero metal thickness
@@ -458,10 +458,10 @@ public class CmlinCalculator {
 
         electricalLength = line.getElectricalLength();
 
-        // Substrate dielectric thickness (m)
+        // SubstrateModel dielectric thickness (m)
         h = line.getSubHeight();
 
-        // Substrate relative permittivity
+        // SubstrateModel relative permittivity
         er = line.getSubEpsilon();
 
         // impedance and coupling

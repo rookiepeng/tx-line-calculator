@@ -1,11 +1,11 @@
 package com.rookiedev.microwavetools.libs;
 
-public class SLIN {
+public class SlinCalculator {
 
-    public SLIN() {
+    public SlinCalculator() {
     }
 
-    private LineSLIN Analysis(LineSLIN line) {
+    private SlinModel Analysis(SlinModel line) {
         // calculation variables
         double k, kp, r, kf, z0, m, deltaW, A, v;
 
@@ -69,7 +69,7 @@ public class SLIN {
  */
 
 
-    private LineSLIN Synthesize(LineSLIN line, int flag) {
+    private SlinModel Synthesize(SlinModel line, int flag) {
         double l;
         double v, len;
         double impedance;
@@ -238,11 +238,11 @@ public class SLIN {
         return line;
     }
 
-    public LineSLIN getAnaResult(LineSLIN line) {
+    public SlinModel getAnaResult(SlinModel line) {
         return Analysis(line);
     }
 
-    public LineSLIN getSynResult(LineSLIN line, int flag) {
+    public SlinModel getSynResult(SlinModel line, int flag) {
         return Synthesize(line, flag);
     }
 

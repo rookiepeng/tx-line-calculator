@@ -1,13 +1,13 @@
 package com.rookiedev.microwavetools.libs;
 
-public class LineCOAX {
-    private Substrate substrate;
+public class CoaxModel {
+    private SubstrateModel substrate;
     private double impedance, electricalLength; // ohms, degree
     private double frequency; // Hz
     private double coreRadius, coreOffset, metalLength;
 
-    public LineCOAX() {
-        substrate = new Substrate();
+    public CoaxModel() {
+        substrate = new SubstrateModel();
     }
 
     void setSynthesizeParameter(double para, int flag) {

@@ -1,8 +1,8 @@
 package com.rookiedev.microwavetools.libs;
 
-public class CPWG {
+public class CpwCalculator {
 
-    public CPWG() {
+    public CpwCalculator() {
 
     }
 
@@ -31,7 +31,7 @@ public class CPWG {
         return r;
     }
 
-    private LineCPW_G Analysis(LineCPW_G line, boolean withGround) {
+    private CpwModel Analysis(CpwModel line, boolean withGround) {
 
         // calculation variables
         double k, k1, kt, z0, v, loss;
@@ -115,7 +115,7 @@ public class CPWG {
         return line;
     }
 
-    private LineCPW_G Synthesize(LineCPW_G line, int flag, boolean withGround) {
+    private CpwModel Synthesize(CpwModel line, int flag, boolean withGround) {
         double Ro, Xo;
         double v, len;
 
@@ -285,11 +285,11 @@ public class CPWG {
         return line;
     }
 
-    public LineCPW_G getAnaResult(LineCPW_G line, boolean withGround) {
+    public CpwModel getAnaResult(CpwModel line, boolean withGround) {
         return Analysis(line, withGround);
     }
 
-    public LineCPW_G getSynResult(LineCPW_G line, int flag, boolean withGround) {
+    public CpwModel getSynResult(CpwModel line, int flag, boolean withGround) {
         return Synthesize(line, flag, withGround);
     }
 

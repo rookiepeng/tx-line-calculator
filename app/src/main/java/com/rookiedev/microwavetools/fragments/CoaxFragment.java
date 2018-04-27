@@ -24,9 +24,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
-import com.rookiedev.microwavetools.libs.COAX;
+import com.rookiedev.microwavetools.libs.CoaxCalculator;
 import com.rookiedev.microwavetools.libs.Constant;
-import com.rookiedev.microwavetools.libs.LineCOAX;
+import com.rookiedev.microwavetools.libs.CoaxModel;
 
 import java.math.BigDecimal;
 
@@ -70,7 +70,7 @@ public class CoaxFragment extends Fragment {
     // parameter
     private int flag;
     private RadioButton radioBtn_a, radioBtn_H, radioBtn_b, radioBtn_er;
-    private LineCOAX line;
+    private CoaxModel line;
 
     public CoaxFragment() {
         // Empty constructor required for fragment subclasses
@@ -105,7 +105,7 @@ public class CoaxFragment extends Fragment {
                     if (!edittext_L.getText().toString().equals("")) { // check the L input
                         line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
-                        COAX coax = new COAX();
+                        CoaxCalculator coax = new CoaxCalculator();
                         line = coax.getAnaResult(line);
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
@@ -113,7 +113,7 @@ public class CoaxFragment extends Fragment {
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Eeff.setText(String.valueOf(Eeff));
                     } else {
-                        COAX coax = new COAX();
+                        CoaxCalculator coax = new CoaxCalculator();
                         line = coax.getAnaResult(line);
                         //Z0 = coax.getZ0(); // calculate the Z0
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
@@ -174,7 +174,7 @@ public class CoaxFragment extends Fragment {
 
                     if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
                         line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
-                        COAX coax = new COAX();
+                        CoaxCalculator coax = new CoaxCalculator();
                         line = coax.getSynResult(line, flag);
                         //coax.coax_syn();
                         //L = coax.getL();
@@ -188,7 +188,7 @@ public class CoaxFragment extends Fragment {
                                 .doubleValue();
                         edittext_L.setText(String.valueOf(L));
                     } else {
-                        COAX coax = new COAX();
+                        CoaxCalculator coax = new CoaxCalculator();
                         line = coax.getSynResult(line, flag);
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
@@ -225,7 +225,7 @@ public class CoaxFragment extends Fragment {
     }
 
     private void initUI() {
-        line = new LineCOAX();
+        line = new CoaxModel();
         height_input = rootView.findViewById(R.id.height_input_radio);
         er_input = rootView.findViewById(R.id.epsilon_input_radio);
         a_input = rootView.findViewById(R.id.a_input_radio);
