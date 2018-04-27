@@ -252,8 +252,8 @@ public class CslinFragment extends Fragment {
         text_er = (TextView) rootView.findViewById(R.id.text_er);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0_radio);
         text_Eeff = (TextView) rootView.findViewById(R.id.text_Eeff_radio);
-        text_Z0o = (TextView) rootView.findViewById(R.id.text_Z0o_radio);
-        text_Z0e = (TextView) rootView.findViewById(R.id.text_Z0e_radio);
+        text_Z0o = (TextView) rootView.findViewById(R.id.text_Z0o);
+        text_Z0e = (TextView) rootView.findViewById(R.id.text_Z0e);
 
         SpannableString spanEr = new SpannableString(
                 this.getString(R.string.text_er));
@@ -290,9 +290,9 @@ public class CslinFragment extends Fragment {
         edittext_S = (EditText) rootView.findViewById(R.id.editText_S);
         edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0_radio);
-        edittext_k = (EditText) rootView.findViewById(R.id.editText_k_radio);
-        edittext_Z0o = (EditText) rootView.findViewById(R.id.editText_Z0o_radio);
-        edittext_Z0e = (EditText) rootView.findViewById(R.id.editText_Z0e_radio);
+        edittext_k = (EditText) rootView.findViewById(R.id.editText_k);
+        edittext_Z0o = (EditText) rootView.findViewById(R.id.editText_Z0o);
+        edittext_Z0e = (EditText) rootView.findViewById(R.id.editText_Z0e);
         edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff_radio);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
@@ -308,8 +308,8 @@ public class CslinFragment extends Fragment {
         spinner_S = (Spinner) rootView.findViewById(R.id.spinner_S);
         spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
         spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0_radio);
-        spinner_Z0o = (Spinner) rootView.findViewById(R.id.spinner_Z0o_radio);
-        spinner_Z0e = (Spinner) rootView.findViewById(R.id.spinner_Z0e_radio);
+        spinner_Z0o = (Spinner) rootView.findViewById(R.id.spinner_Z0o);
+        spinner_Z0e = (Spinner) rootView.findViewById(R.id.spinner_Z0e);
         spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Eeff_radio);
         spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
         spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);

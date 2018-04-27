@@ -1,38 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <!-- S: -->
+    <RadioButton
+        android:id="@+id/radioBtn_S"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text_S"/>
 
-        <TextView
-            android:id="@+id/text_S"
-            android:layout_width="20dip"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_centerVertical="true"
-            android:text="@string/cmlin_text_S" />
+    <!-- S: -->
 
-        <!-- S输入框 -->
+    <TextView
+        android:id="@+id/text_S"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_marginStart="16dp"
+        android:text="@string/cmlin_text_S"
+        app:layout_constraintBottom_toBottomOf="@+id/radioBtn_S"
+        app:layout_constraintEnd_toStartOf="@+id/editText_S"
+        app:layout_constraintStart_toEndOf="@+id/radioBtn_S"
+        app:layout_constraintTop_toTopOf="@+id/radioBtn_S" />
 
-        <EditText
-            android:id="@+id/editText_S"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="100dip"
-            android:layout_toEndOf="@+id/text_S"
-            android:inputType="numberDecimal">
+    <!-- S输入框 -->
 
-            <!-- <requestFocus /> -->
-        </EditText>
+    <EditText
+        android:id="@+id/editText_S"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/text_S"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/text_S"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_S"
+        app:layout_constraintTop_toTopOf="@+id/text_S"
+        app:layout_constraintStart_toEndOf="@+id/text_S">
 
-        <!-- S单位 -->
+        <!-- <requestFocus /> -->
+    </EditText>
 
-        <Spinner
-            android:id="@+id/spinner_S"
-            android:layout_width="100dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true" />
-</RelativeLayout>
+    <!-- S单位 -->
+
+    <Spinner
+        android:id="@+id/spinner_S"
+        android:layout_width="100dip"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_S"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText_S"
+        app:layout_constraintStart_toEndOf="@+id/editText_S"/>
+
+</android.support.constraint.ConstraintLayout>

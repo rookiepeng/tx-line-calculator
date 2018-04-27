@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
+    android:background="@color/viewBackground"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -24,28 +24,20 @@
             android:layout_marginTop="16dp"
             android:clickable="false"
             android:foreground="@drawable/ripple_synthesize"
-            card_view:cardElevation="10dp">
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Dim"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:attr/textColorTertiary" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="2dip"
-                    android:background="?android:attr/listDivider" />
+                android:paddingBottom="24dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="24dp">
 
                 <include
-                    layout="@layout/epsilon_input"
+                    layout="@layout/dimensions"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -53,11 +45,6 @@
                     layout="@layout/height_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:background="?android:attr/listDivider" />
 
                 <include
                     layout="@layout/thickness_input"
@@ -98,35 +85,32 @@
             android:layout_marginTop="16dp"
             android:clickable="false"
             android:foreground="@drawable/ripple_analyze"
-            card_view:cardElevation="10dp">
+            card_view:cardCornerRadius="4dp"
+            card_view:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Par"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:attr/textColorTertiary" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="2dip"
-                    android:background="?android:attr/listDivider" />
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="24dp"
+                android:paddingTop="24dp">
 
                 <include
-                    android:id="@+id/z0_input_radio"
-                    layout="@layout/z0_input_radio"
+                    layout="@layout/parameters"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/k_input_radio"
-                    layout="@layout/k_input_radio"
+                    android:id="@+id/z0_input"
+                    layout="@layout/z0_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    android:id="@+id/k_input"
+                    layout="@layout/k_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -136,14 +120,14 @@
                     android:background="?android:attr/listDivider" />
 
                 <include
-                    android:id="@+id/z0o_input_radio"
-                    layout="@layout/z0o_input_radio"
+                    android:id="@+id/z0o_input"
+                    layout="@layout/z0o_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/z0e_input_radio"
-                    layout="@layout/z0e_input_radio"
+                    android:id="@+id/z0e_input"
+                    layout="@layout/z0e_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -153,8 +137,13 @@
                     android:background="?android:attr/listDivider" />
 
                 <include
-                    android:id="@+id/eeff_input_radio"
-                    layout="@layout/eeff_input_radio"
+                    android:id="@+id/phase_input"
+                    layout="@layout/phase_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    layout="@layout/epsilon_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

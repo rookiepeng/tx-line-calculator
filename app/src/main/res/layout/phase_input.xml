@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/text_Phs"
         app:layout_constraintStart_toEndOf="@+id/text_Phs"
         app:layout_constraintTop_toTopOf="@+id/text_Phs"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_Eeff">
+        app:layout_constraintEnd_toStartOf="@+id/spinner_Phs">
 
         <!-- <requestFocus /> -->
     </EditText>
@@ -50,7 +50,7 @@
     <!-- E eff单位 -->
 
     <Spinner
-        android:id="@+id/spinner_Eeff"
+        android:id="@+id/spinner_Phs"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/editText_Phs"

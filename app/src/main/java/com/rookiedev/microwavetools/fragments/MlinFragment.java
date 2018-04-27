@@ -277,7 +277,7 @@ public class MlinFragment extends Fragment {
         spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W);
         spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
         spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0);
-        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Eeff);
+        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Phs);
         spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
         spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
         spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);

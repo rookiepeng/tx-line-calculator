@@ -108,9 +108,9 @@ import android.util.Log;
  * Copyright (C) 1997 by Dan McMahill.
  */
 
-public class CMLIN {
+public class CmlinCalculator {
 
-    public CMLIN() {
+    public CmlinCalculator() {
     }
 
     // Effective dielectric constant from Hammerstad and Jensen
@@ -483,7 +483,7 @@ public class CMLIN {
             // use z0e and z0o to calculate z0 and k
             z0 = Math.sqrt(z0e * z0o);
             k = (z0e - z0o) / (z0e + z0o);
-            Log.v("CMLIN", "k=" + Double.toString(k));
+            Log.v("CmlinCalculator", "k=" + Double.toString(k));
             line.setImpedance(z0);
             line.setCouplingFactor(k);
         }
