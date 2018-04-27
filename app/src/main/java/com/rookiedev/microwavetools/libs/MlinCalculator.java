@@ -6,7 +6,7 @@ public class MLIN {
     public MLIN() {
     }
 
-    private LineMLIN Analysis(LineMLIN line) {
+    private MlinModel Analysis(MlinModel line) {
         double width, length, height, er, thickness;
         double impedance, electricalLength;
         double thicknessToHeight, widthToHeight;
@@ -161,7 +161,7 @@ public class MLIN {
     *   /////////////////ground///////////////////////
     *
     */
-    private LineMLIN Synthesize(LineMLIN line, int flag) {
+    private MlinModel Synthesize(MlinModel line, int flag) {
         double length;
         double impedance;
         double v, electricalLength;
@@ -363,11 +363,11 @@ public class MLIN {
         return z01;
     }
 
-    public LineMLIN getAnaResult(LineMLIN MLINLine) {
+    public MlinModel getAnaResult(MlinModel MLINLine) {
         return Analysis(MLINLine);
     }
 
-    public LineMLIN getSynResult(LineMLIN MLINLine, int flag) {
+    public MlinModel getSynResult(MlinModel MLINLine, int flag) {
         return Synthesize(MLINLine, flag);
     }
 }

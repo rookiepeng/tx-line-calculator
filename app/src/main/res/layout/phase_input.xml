@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioButton
+        android:id="@+id/radioBtn_Phs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- E eff: -->
+
+    <TextView
+        android:id="@+id/text_Phs"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/mlin_text_Phs"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/radioBtn_Phs"
+        app:layout_constraintStart_toEndOf="@+id/radioBtn_Phs"
+        app:layout_constraintTop_toTopOf="@+id/radioBtn_Phs" />
+
+    <!-- E eff输入框 -->
+
+    <EditText
+        android:id="@+id/editText_Phs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/text_Phs"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/text_Phs"
+        app:layout_constraintStart_toEndOf="@+id/text_Phs"
+        app:layout_constraintTop_toTopOf="@+id/text_Phs"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_Eeff">
+
+        <!-- <requestFocus /> -->
+    </EditText>
+
+    <!-- E eff单位 -->
+
+    <Spinner
+        android:id="@+id/spinner_Eeff"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_Phs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editText_Phs"
+        app:layout_constraintTop_toTopOf="@+id/editText_Phs" />
+
+</android.support.constraint.ConstraintLayout>
