@@ -49,27 +49,27 @@ public class CoaxFragment extends Fragment {
     public final static String COAX_T = "COAX_T";
     public final static String COAX_T_UNIT = "COAX_T_UNIT";
     public final static String COAX_Flag = "COAX_Flag";
-    private View rootView, height_input, er_input, a_input, b_input;
+    private View rootView, c_input, er_input, a_input, b_input;
     private CardView electricalCard, physicalCard;
     private int DecimalLength; // the length of the Decimal,
     private SpannableString error_er, error_Z0;
     private TextView text_er, text_Z0, text_Eeff; // strings which include the subscript
     private EditText edittext_a, //
-            edittext_H, //
+            edittext_c, //
             edittext_b, //
             edittext_L, // the length
             edittext_Z0, // the impedance
             edittext_Eeff, // the electrical length
             edittext_Freq, // the frequency
-            edittext_T, // the thickness of the metal
+            //edittext_T, // the thickness of the metal
             edittext_er; // the relative dielectric constant
     private Button button_syn,// button synthesize
             button_ana;// button analyze
-    private Spinner spinner_a, spinner_h, spinner_b, spinner_L, spinner_T,
+    private Spinner spinner_a, spinner_c, spinner_b, spinner_L,
             spinner_Z0, spinner_Eeff, spinner_Freq;// the units of each
     // parameter
     private int flag;
-    private RadioButton radioBtn_a, radioBtn_H, radioBtn_b, radioBtn_er;
+    private RadioButton radioBtn_a, radioBtn_c, radioBtn_b, radioBtn_er;
     private CoaxModel line;
 
     public CoaxFragment() {
@@ -95,7 +95,7 @@ public class CoaxFragment extends Fragment {
                     edittext_Eeff.setText("");
                 } else {
                     line.setCoreRadius(Double.parseDouble(edittext_a.getText().toString()), spinner_a.getSelectedItemPosition());
-                    line.setSubRadius(Double.parseDouble(edittext_H.getText().toString()), spinner_h.getSelectedItemPosition());
+                    line.setSubRadius(Double.parseDouble(edittext_c.getText().toString()), spinner_c.getSelectedItemPosition());
                     line.setCoreOffset(Double.parseDouble(edittext_b.getText().toString()), spinner_b.getSelectedItemPosition());
                     line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
                     line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
@@ -135,7 +135,7 @@ public class CoaxFragment extends Fragment {
                     if (flag == 0) {
                         edittext_a.setText("");
                     } else if (flag == 1) {
-                        edittext_H.setText("");
+                        edittext_c.setText("");
                     } else if (flag == 2) {
                         edittext_b.setText("");
                     } else if (flag == 3) {
@@ -147,7 +147,7 @@ public class CoaxFragment extends Fragment {
                     line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
 
                     if (flag == Constant.Synthesize_CoreRadius) {
-                        line.setSubRadius(Double.parseDouble(edittext_H.getText().toString()), spinner_h.getSelectedItemPosition());
+                        line.setSubRadius(Double.parseDouble(edittext_c.getText().toString()), spinner_c.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittext_b.getText().toString()), spinner_b.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
 
@@ -160,13 +160,13 @@ public class CoaxFragment extends Fragment {
                         //height = 0;
                     } else if (flag == Constant.Synthesize_CoreOffset) {
                         line.setCoreRadius(Double.parseDouble(edittext_a.getText().toString()), spinner_a.getSelectedItemPosition());
-                        line.setSubRadius(Double.parseDouble(edittext_H.getText().toString()), spinner_h.getSelectedItemPosition());
+                        line.setSubRadius(Double.parseDouble(edittext_c.getText().toString()), spinner_c.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
 
                         //b = 0;
                     } else if (flag == Constant.Synthesize_Er) {
                         line.setCoreRadius(Double.parseDouble(edittext_a.getText().toString()), spinner_a.getSelectedItemPosition());
-                        line.setSubRadius(Double.parseDouble(edittext_H.getText().toString()), spinner_h.getSelectedItemPosition());
+                        line.setSubRadius(Double.parseDouble(edittext_c.getText().toString()), spinner_c.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittext_b.getText().toString()), spinner_b.getSelectedItemPosition());
 
                         //er = 0;
@@ -200,10 +200,10 @@ public class CoaxFragment extends Fragment {
                         edittext_a.setText(String.valueOf(a));
                     } else if (flag == Constant.Synthesize_Height) {
 
-                        BigDecimal b_temp = new BigDecimal(Constant.meter2others(line.getSubRadius(), spinner_h.getSelectedItemPosition())); // cut the decimal of S
+                        BigDecimal b_temp = new BigDecimal(Constant.meter2others(line.getSubRadius(), spinner_c.getSelectedItemPosition())); // cut the decimal of S
                         double height = b_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
-                        edittext_H.setText(String.valueOf(height));
+                        edittext_c.setText(String.valueOf(height));
                     } else if (flag == Constant.Synthesize_CoreOffset) {
 
                         BigDecimal c_temp = new BigDecimal(Constant.meter2others(line.getCoreOffset(), spinner_b.getSelectedItemPosition()));
@@ -226,19 +226,19 @@ public class CoaxFragment extends Fragment {
 
     private void initUI() {
         line = new CoaxModel();
-        height_input = rootView.findViewById(R.id.height_input_radio);
-        er_input = rootView.findViewById(R.id.epsilon_input_radio);
-        a_input = rootView.findViewById(R.id.a_input_radio);
-        b_input = rootView.findViewById(R.id.b_input_radio);
+        //c_input = rootView.findViewById(R.id.parameter_c);
+        //er_input = rootView.findViewById(R.id.parameter_epsilon);
+        //a_input = rootView.findViewById(R.id.a_input_radio);
+        //b_input = rootView.findViewById(R.id.b_input_radio);
 
-        View length_input = rootView.findViewById(R.id.length_input_radio);
-        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View length_input = rootView.findViewById(R.id.length_input_radio);
+        //length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
-        View z0_input = rootView.findViewById(R.id.z0_input);
-        z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View z0_input = rootView.findViewById(R.id.z0_input);
+        //z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
-        View eeff_input = rootView.findViewById(R.id.eeff_input);
-        eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View eeff_input = rootView.findViewById(R.id.eeff_input);
+        //eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
@@ -247,7 +247,7 @@ public class CoaxFragment extends Fragment {
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
 
         // Subscript strings
-        text_er = (TextView) rootView.findViewById(R.id.text_er_radio);
+        text_er = (TextView) rootView.findViewById(R.id.text_er);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
         //text_Eeff = (TextView) rootView.findViewById(R.id.text_Phs);
 
@@ -263,36 +263,36 @@ public class CoaxFragment extends Fragment {
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_Z0.append(spanZ0);
 
-        SpannableString spanEeff = new SpannableString(
-                this.getString(R.string.text_Eeff));
-        spanEeff.setSpan(new SubscriptSpan(), 1, 4,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        text_Eeff.append(spanEeff);
+        //SpannableString spanEeff = new SpannableString(
+        //        this.getString(R.string.text_Eeff));
+        //spanEeff.setSpan(new SubscriptSpan(), 1, 4,
+        //        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        //text_Eeff.append(spanEeff);
 
         // edittext elements
-        edittext_a = (EditText) rootView.findViewById(R.id.editText_a_radio);
-        edittext_H = (EditText) rootView.findViewById(R.id.editText_H_radio);
-        edittext_b = (EditText) rootView.findViewById(R.id.editText_b_radio);
-        edittext_L = (EditText) rootView.findViewById(R.id.editText_L_radio);
+        edittext_a = (EditText) rootView.findViewById(R.id.editText_a);
+        edittext_c = (EditText) rootView.findViewById(R.id.editText_c);
+        edittext_b = (EditText) rootView.findViewById(R.id.editText_b);
+        edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
         edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Phs);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
-        edittext_T = (EditText) rootView.findViewById(R.id.editText_T_radio);
-        edittext_er = (EditText) rootView.findViewById(R.id.editText_er_radio);
+        //edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
+        edittext_er = (EditText) rootView.findViewById(R.id.editText_er);
 
         // button elements
         button_ana = (Button) rootView.findViewById(R.id.button_ana);
         button_syn = (Button) rootView.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinner_a = (Spinner) rootView.findViewById(R.id.spinner_a_radio);
-        spinner_h = (Spinner) rootView.findViewById(R.id.spinner_H_radio);
-        spinner_b = (Spinner) rootView.findViewById(R.id.spinner_b_radio);
-        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L_radio);
+        spinner_a = (Spinner) rootView.findViewById(R.id.spinner_a);
+        spinner_c = (Spinner) rootView.findViewById(R.id.spinner_c);
+        spinner_b = (Spinner) rootView.findViewById(R.id.spinner_b);
+        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
         spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0);
         spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Phs);
         spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
-        spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T_radio);
+        //spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
 
         // configure the length units
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter
@@ -301,10 +301,10 @@ public class CoaxFragment extends Fragment {
         adapterLength
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_a.setAdapter(adapterLength);
-        spinner_h.setAdapter(adapterLength);
+        spinner_c.setAdapter(adapterLength);
         spinner_b.setAdapter(adapterLength);
         spinner_L.setAdapter(adapterLength);
-        spinner_T.setAdapter(adapterLength);
+        //spinner_T.setAdapter(adapterLength);
 
         // configure the impedance units
         ArrayAdapter<CharSequence> adapterImpedance = ArrayAdapter
@@ -330,7 +330,7 @@ public class CoaxFragment extends Fragment {
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_Freq.setAdapter(adapterFreq);
         radioBtn_a = (RadioButton) rootView.findViewById(R.id.radioBtn_a);
-        radioBtn_H = (RadioButton) rootView.findViewById(R.id.radioBtn_H);
+        radioBtn_c = (RadioButton) rootView.findViewById(R.id.radioBtn_c);
         radioBtn_b = (RadioButton) rootView.findViewById(R.id.radioBtn_b);
         radioBtn_er = (RadioButton) rootView.findViewById(R.id.radioBtn_er);
     }
@@ -347,8 +347,8 @@ public class CoaxFragment extends Fragment {
         spinner_a.setSelection(Integer.parseInt(prefs.getString(COAX_A_UNIT,
                 "2")));
 
-        edittext_H.setText(prefs.getString(COAX_H, "1.00"));
-        spinner_h.setSelection(Integer.parseInt(prefs.getString(COAX_H_UNIT,
+        edittext_c.setText(prefs.getString(COAX_H, "1.00"));
+        spinner_c.setSelection(Integer.parseInt(prefs.getString(COAX_H_UNIT,
                 "2")));
 
         edittext_b.setText(prefs.getString(COAX_B, "0.00"));
@@ -373,9 +373,9 @@ public class CoaxFragment extends Fragment {
 
         edittext_er.setText(prefs.getString(COAX_er, "1.00"));
 
-        edittext_T.setText(prefs.getString(COAX_T, "1.40"));
-        spinner_T.setSelection(Integer.parseInt(prefs.getString(COAX_T_UNIT,
-                "0")));
+        //edittext_T.setText(prefs.getString(COAX_T, "1.40"));
+        //pinner_T.setSelection(Integer.parseInt(prefs.getString(COAX_T_UNIT,
+        //        "0")));
         flag = Integer.parseInt(prefs.getString(COAX_Flag, Integer.toString(Constant.Synthesize_CoreRadius)));
     }
 
@@ -390,66 +390,66 @@ public class CoaxFragment extends Fragment {
     private void setRadioBtn() {
         if (flag == Constant.Synthesize_CoreRadius) {
             radioBtn_a.setChecked(true);
-            radioBtn_H.setChecked(false);
+            radioBtn_c.setChecked(false);
             radioBtn_b.setChecked(false);
             radioBtn_er.setChecked(false);
-            a_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-            height_input.setBackgroundColor(Color.WHITE);
-            b_input.setBackgroundColor(Color.WHITE);
-            er_input.setBackgroundColor(Color.WHITE);
+            //a_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //c_input.setBackgroundColor(Color.WHITE);
+            //b_input.setBackgroundColor(Color.WHITE);
+            //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Height) {
             radioBtn_a.setChecked(false);
-            radioBtn_H.setChecked(true);
+            radioBtn_c.setChecked(true);
             radioBtn_b.setChecked(false);
             radioBtn_er.setChecked(false);
-            a_input.setBackgroundColor(Color.WHITE);
-            height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-            b_input.setBackgroundColor(Color.WHITE);
-            er_input.setBackgroundColor(Color.WHITE);
+            //a_input.setBackgroundColor(Color.WHITE);
+            //c_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //b_input.setBackgroundColor(Color.WHITE);
+            //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_CoreOffset) {
             radioBtn_a.setChecked(false);
-            radioBtn_H.setChecked(false);
+            radioBtn_c.setChecked(false);
             radioBtn_b.setChecked(true);
             radioBtn_er.setChecked(false);
-            a_input.setBackgroundColor(Color.WHITE);
-            height_input.setBackgroundColor(Color.WHITE);
-            b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-            er_input.setBackgroundColor(Color.WHITE);
+            //a_input.setBackgroundColor(Color.WHITE);
+            //c_input.setBackgroundColor(Color.WHITE);
+            //b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Er) {
             radioBtn_a.setChecked(false);
-            radioBtn_H.setChecked(false);
+            radioBtn_c.setChecked(false);
             radioBtn_b.setChecked(false);
             radioBtn_er.setChecked(true);
-            a_input.setBackgroundColor(Color.WHITE);
-            height_input.setBackgroundColor(Color.WHITE);
-            b_input.setBackgroundColor(Color.WHITE);
-            er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //a_input.setBackgroundColor(Color.WHITE);
+            //c_input.setBackgroundColor(Color.WHITE);
+            //b_input.setBackgroundColor(Color.WHITE);
+            //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
         }
         radioBtn_a.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioBtn_a.setChecked(true);
-                radioBtn_H.setChecked(false);
+                radioBtn_c.setChecked(false);
                 radioBtn_b.setChecked(false);
                 radioBtn_er.setChecked(false);
-                a_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                height_input.setBackgroundColor(Color.WHITE);
-                b_input.setBackgroundColor(Color.WHITE);
-                er_input.setBackgroundColor(Color.WHITE);
+                //a_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //c_input.setBackgroundColor(Color.WHITE);
+                //b_input.setBackgroundColor(Color.WHITE);
+                //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_CoreRadius;
             }
         });
-        radioBtn_H.setOnClickListener(new View.OnClickListener() {
+        radioBtn_c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioBtn_a.setChecked(false);
-                radioBtn_H.setChecked(true);
+                radioBtn_c.setChecked(true);
                 radioBtn_b.setChecked(false);
                 radioBtn_er.setChecked(false);
-                a_input.setBackgroundColor(Color.WHITE);
-                height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                b_input.setBackgroundColor(Color.WHITE);
-                er_input.setBackgroundColor(Color.WHITE);
+                //a_input.setBackgroundColor(Color.WHITE);
+                //c_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //b_input.setBackgroundColor(Color.WHITE);
+                //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_Height;
             }
         });
@@ -457,13 +457,13 @@ public class CoaxFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioBtn_a.setChecked(false);
-                radioBtn_H.setChecked(false);
+                radioBtn_c.setChecked(false);
                 radioBtn_b.setChecked(true);
                 radioBtn_er.setChecked(false);
-                a_input.setBackgroundColor(Color.WHITE);
-                height_input.setBackgroundColor(Color.WHITE);
-                b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                er_input.setBackgroundColor(Color.WHITE);
+                //a_input.setBackgroundColor(Color.WHITE);
+                //c_input.setBackgroundColor(Color.WHITE);
+                //b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_CoreOffset;
             }
         });
@@ -471,13 +471,13 @@ public class CoaxFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioBtn_a.setChecked(false);
-                radioBtn_H.setChecked(false);
+                radioBtn_c.setChecked(false);
                 radioBtn_b.setChecked(false);
                 radioBtn_er.setChecked(true);
-                a_input.setBackgroundColor(Color.WHITE);
-                height_input.setBackgroundColor(Color.WHITE);
-                b_input.setBackgroundColor(Color.WHITE);
-                er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //a_input.setBackgroundColor(Color.WHITE);
+                //c_input.setBackgroundColor(Color.WHITE);
+                //b_input.setBackgroundColor(Color.WHITE);
+                //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 flag = Constant.Synthesize_Er;
             }
         });
@@ -495,8 +495,8 @@ public class CoaxFragment extends Fragment {
         SharedPreferences.Editor editor = prefs.edit();
         coax_a = edittext_a.getText().toString();
         coax_a_unit = Integer.toString(spinner_a.getSelectedItemPosition());
-        coax_H = edittext_H.getText().toString();
-        coax_H_unit = Integer.toString(spinner_h.getSelectedItemPosition());
+        coax_H = edittext_c.getText().toString();
+        coax_H_unit = Integer.toString(spinner_c.getSelectedItemPosition());
         coax_b = edittext_b.getText().toString();
         coax_b_unit = Integer.toString(spinner_b.getSelectedItemPosition());
         coax_er = edittext_er.getText().toString();
@@ -510,8 +510,8 @@ public class CoaxFragment extends Fragment {
         coax_Freq = edittext_Freq.getText().toString();
         coax_Freq_unit = Integer.toString(spinner_Freq
                 .getSelectedItemPosition());
-        coax_T = edittext_T.getText().toString();
-        coax_T_unit = Integer.toString(spinner_T.getSelectedItemPosition());
+        //coax_T = edittext_T.getText().toString();
+        //coax_T_unit = Integer.toString(spinner_T.getSelectedItemPosition());
         coax_flag = Integer.toString(flag);
 
         editor.putString(COAX_A, coax_a);
@@ -529,8 +529,8 @@ public class CoaxFragment extends Fragment {
         editor.putString(COAX_Eeff_UNIT, coax_Eeff_unit);
         editor.putString(COAX_Freq, coax_Freq);
         editor.putString(COAX_Freq_UNIT, coax_Freq_unit);
-        editor.putString(COAX_T, coax_T);
-        editor.putString(COAX_T_UNIT, coax_T_unit);
+        //editor.putString(COAX_T, coax_T);
+        //editor.putString(COAX_T_UNIT, coax_T_unit);
         editor.putString(COAX_Flag, coax_flag);
 
         editor.apply();
@@ -546,18 +546,18 @@ public class CoaxFragment extends Fragment {
             edittext_Freq.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
         }
-        if (edittext_H.length() == 0) {
-            edittext_H.setError(getText(R.string.Error_b_empty));
+        if (edittext_c.length() == 0) {
+            edittext_c.setError(getText(R.string.Error_b_empty));
             checkResult = false;
         }
         if (edittext_b.length() == 0) {
             edittext_b.setError(getText(R.string.Error_c_empty));
             checkResult = false;
         }
-        if (edittext_T.length() == 0) {
-            edittext_T.setError(getText(R.string.Error_T_empty));
-            checkResult = false;
-        }
+        //if (edittext_T.length() == 0) {
+        //    edittext_T.setError(getText(R.string.Error_T_empty));
+        //    checkResult = false;
+        //}
         if (edittext_er.length() == 0) {
             error_er.setSpan(new SubscriptSpan(), 13, 14,
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -579,13 +579,13 @@ public class CoaxFragment extends Fragment {
             edittext_Freq.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
         }
-        if (edittext_T.length() == 0) {
-            edittext_T.setError(getText(R.string.Error_T_empty));
-            checkResult = false;
-        }
+        //if (edittext_T.length() == 0) {
+        //    edittext_T.setError(getText(R.string.Error_T_empty));
+        //    checkResult = false;
+        //}
         if (flag == 0) {
-            if (edittext_H.length() == 0) {
-                edittext_H.setError(getText(R.string.Error_b_empty));
+            if (edittext_c.length() == 0) {
+                edittext_c.setError(getText(R.string.Error_b_empty));
                 checkResult = false;
             }
             if (edittext_b.length() == 0) {
@@ -618,8 +618,8 @@ public class CoaxFragment extends Fragment {
                 edittext_a.setError(getText(R.string.Error_a_empty));
                 checkResult = false;
             }
-            if (edittext_H.length() == 0) {
-                edittext_H.setError(getText(R.string.Error_b_empty));
+            if (edittext_c.length() == 0) {
+                edittext_c.setError(getText(R.string.Error_b_empty));
                 checkResult = false;
             }
             if (edittext_er.length() == 0) {
@@ -633,8 +633,8 @@ public class CoaxFragment extends Fragment {
                 edittext_a.setError(getText(R.string.Error_a_empty));
                 checkResult = false;
             }
-            if (edittext_H.length() == 0) {
-                edittext_H.setError(getText(R.string.Error_b_empty));
+            if (edittext_c.length() == 0) {
+                edittext_c.setError(getText(R.string.Error_b_empty));
                 checkResult = false;
             }
             if (edittext_b.length() == 0) {
