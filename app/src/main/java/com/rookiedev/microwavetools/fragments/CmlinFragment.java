@@ -6,7 +6,6 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
@@ -57,14 +56,14 @@ public class CmlinFragment extends Fragment {
     private View rootView;
     private CardView electricalCard, physicalCard;
     private SpannableString error_er, error_Z0, error_Z0e, error_Z0o;
-    private TextView text_er, text_Z0, text_Z0o, text_Z0e, text_Eeff; // strings which include the subscript
+    private TextView text_er, text_Z0, text_Z0o, text_Z0e, text_Phs; // strings which include the subscript
     private EditText edittext_W, // the width
             edittext_S, //
             edittext_L, // the length
             edittext_Z0, // the impedance
             edittext_k, edittext_Z0o, //
             edittext_Z0e, //
-            edittext_Eeff, // the electrical length
+            edittext_Phs, // the electrical length
             edittext_Freq, // the frequency
             edittext_T, // the thickness of the metal
             edittext_H, // the thickness of the dielectric
@@ -85,7 +84,7 @@ public class CmlinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.cmlin, container, false);
+        rootView = inflater.inflate(R.layout.cmlin_fragment, container, false);
 
         initUI();
         readSharedPref();
@@ -98,7 +97,7 @@ public class CmlinFragment extends Fragment {
                 Preference_SharedPref();
                 if (!analysisInputCheck()) {
                     edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
-                    edittext_Eeff.setText("");
+                    edittext_Phs.setText("");
                     edittext_Z0o.setText(""); //
                     edittext_Z0e.setText(""); //
                     edittext_k.setText("");
@@ -118,11 +117,11 @@ public class CmlinFragment extends Fragment {
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittext_Eeff.setText(String.valueOf(Eeff));
+                        edittext_Phs.setText(String.valueOf(Eeff));
                     } else {
                         CmlinCalculator cmlin = new CmlinCalculator();
                         line = cmlin.getAnaResult(line);
-                        edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
+                        edittext_Phs.setText(""); // if the L input is empty, clear the Eeff
 
                     }
                     BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
@@ -220,7 +219,7 @@ public class CmlinFragment extends Fragment {
         // find the elements
         text_er = (TextView) rootView.findViewById(R.id.text_er);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
-        text_Eeff = (TextView) rootView.findViewById(R.id.text_Phs);
+        text_Phs = (TextView) rootView.findViewById(R.id.text_Phs);
         text_Z0o = (TextView) rootView.findViewById(R.id.text_Z0o);
         text_Z0e = (TextView) rootView.findViewById(R.id.text_Z0e);
 
@@ -249,11 +248,11 @@ public class CmlinFragment extends Fragment {
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_Z0e.append(spanZ0e);
 
-        SpannableString spanEeff = new SpannableString(
-                this.getString(R.string.text_Eeff));
-        spanEeff.setSpan(new SubscriptSpan(), 1, 4,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        text_Eeff.append(spanEeff);
+        //SpannableString spanEeff = new SpannableString(
+        //        this.getString(R.string.text_Eeff));
+        //spanEeff.setSpan(new SubscriptSpan(), 1, 4,
+        //        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        //text_Phs.append(spanEeff);
 
         // edittext elements
         edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
@@ -263,7 +262,7 @@ public class CmlinFragment extends Fragment {
         edittext_k = (EditText) rootView.findViewById(R.id.editText_k);
         edittext_Z0o = (EditText) rootView.findViewById(R.id.editText_Z0o);
         edittext_Z0e = (EditText) rootView.findViewById(R.id.editText_Z0e);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Phs);
+        edittext_Phs = (EditText) rootView.findViewById(R.id.editText_Phs);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
         edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
@@ -353,7 +352,7 @@ public class CmlinFragment extends Fragment {
                 edittext_Z0e.setEnabled(true);
             }
         });
-        if (use_z0k == true) {
+        if (use_z0k) {
             radioBtn_Z0.setChecked(true);
             radioBtn_Z0o.setChecked(false);
             edittext_Z0.setEnabled(true);
@@ -377,7 +376,7 @@ public class CmlinFragment extends Fragment {
 
         // read values from the shared preferences
 
-        // cmlin parameters
+        // cmlin_fragment parameters
         edittext_W.setText(prefs.getString(CMLIN_W, "20.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(CMLIN_W_UNIT,
                 "0")));
@@ -404,7 +403,7 @@ public class CmlinFragment extends Fragment {
         spinner_Z0e.setSelection(Integer.parseInt(prefs.getString(
                 CMLIN_Z0e_UNIT, "0")));
 
-        edittext_Eeff.setText(prefs.getString(CMLIN_Eeff, "53.33"));
+        edittext_Phs.setText(prefs.getString(CMLIN_Eeff, "53.33"));
         spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(
                 CMLIN_Eeff_UNIT, "0")));
 
@@ -458,7 +457,7 @@ public class CmlinFragment extends Fragment {
         cmlin_Z0o = edittext_Z0o.getText().toString();
         cmlin_Z0o_unit = Integer
                 .toString(spinner_Z0o.getSelectedItemPosition());
-        cmlin_Eeff = edittext_Eeff.getText().toString();
+        cmlin_Eeff = edittext_Phs.getText().toString();
         cmlin_Eeff_unit = Integer.toString(spinner_Eeff
                 .getSelectedItemPosition());
         cmlin_Freq = edittext_Freq.getText().toString();
@@ -601,8 +600,8 @@ public class CmlinFragment extends Fragment {
         line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
         double W, S, L;
-        if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
-            line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
+        if (edittext_Phs.length() != 0) { // check if the Eeff is empty
+            line.setElectricalLength(Double.parseDouble(edittext_Phs.getText().toString()));
             CmlinCalculator cmlin = new CmlinCalculator();
             line = cmlin.getSynResult(line, use_z0k);
             L = line.getMetalLength();

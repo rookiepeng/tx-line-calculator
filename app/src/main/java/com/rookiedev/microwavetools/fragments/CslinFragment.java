@@ -87,7 +87,7 @@ public class CslinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.cslin, container, false);
+        rootView = inflater.inflate(R.layout.cslin_fragment, container, false);
 
         initUI(); // initial the UI
         readSharedPref(); // read shared preferences
@@ -123,11 +123,11 @@ public class CslinFragment extends Fragment {
 
                         CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
-                        //Z0o = cslin.getZ0o();
-                        //Z0e = cslin.getZ0e();
+                        //Z0o = cslin_fragment.getZ0o();
+                        //Z0e = cslin_fragment.getZ0e();
                         //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
                         //k = (Z0e - Z0o) / (Z0e + Z0o);
-                        //Eeff = cslin.getEeff();// calculate the Eeff
+                        //Eeff = cslin_fragment.getEeff();// calculate the Eeff
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
@@ -137,8 +137,8 @@ public class CslinFragment extends Fragment {
                     } else {
                         CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
-                        //Z0o = cslin.getZ0o();
-                        //Z0e = cslin.getZ0e();
+                        //Z0o = cslin_fragment.getZ0o();
+                        //Z0e = cslin_fragment.getZ0e();
                         //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
                         //k = (Z0e - Z0o) / (Z0e + Z0o);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
@@ -215,29 +215,22 @@ public class CslinFragment extends Fragment {
 
     private void initUI() {
         line = new CslinModel();
-        View width_input = rootView.findViewById(R.id.width_input);
-        width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-
-        View space_input = rootView.findViewById(R.id.space_input);
-        space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-
-        View length_input = rootView.findViewById(R.id.length_input);
-        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-
-        View z0_input_radio = rootView.findViewById(R.id.z0_input_radio);
-        z0_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-
-        View k_input_radio = rootView.findViewById(R.id.k_input_radio);
-        k_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-
-        View z0o_input_radio = rootView.findViewById(R.id.z0o_input_radio);
-        z0o_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-
-        View z0e_input_radio = rootView.findViewById(R.id.z0e_input_radio);
-        z0e_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-
-        View eeff_input_radio = rootView.findViewById(R.id.eeff_input_radio);
-        eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View width_input = rootView.findViewById(R.id.width_input);
+        //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View space_input = rootView.findViewById(R.id.space_input);
+        //space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View length_input = rootView.findViewById(R.id.length_input);
+        //length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View z0_input_radio = rootView.findViewById(R.id.z0_input);
+        //z0_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View k_input_radio = rootView.findViewById(R.id.k_input);
+        //k_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View z0o_input_radio = rootView.findViewById(R.id.z0o_input);
+        //z0o_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View z0e_input_radio = rootView.findViewById(R.id.z0e_input);
+        //z0e_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View eeff_input_radio = rootView.findViewById(R.id.eeff_input);
+        //eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
@@ -250,8 +243,8 @@ public class CslinFragment extends Fragment {
 
         // Subscript strings
         text_er = (TextView) rootView.findViewById(R.id.text_er);
-        text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0_radio);
-        text_Eeff = (TextView) rootView.findViewById(R.id.text_Eeff_radio);
+        text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
+        text_Eeff = (TextView) rootView.findViewById(R.id.text_Phs);
         text_Z0o = (TextView) rootView.findViewById(R.id.text_Z0o);
         text_Z0e = (TextView) rootView.findViewById(R.id.text_Z0e);
 
@@ -279,21 +272,21 @@ public class CslinFragment extends Fragment {
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_Z0e.append(spanZ0e);
 
-        SpannableString spanEeff = new SpannableString(
-                this.getString(R.string.text_Eeff));
-        spanEeff.setSpan(new SubscriptSpan(), 1, 4,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        text_Eeff.append(spanEeff);
+        //SpannableString spanEeff = new SpannableString(
+        //        this.getString(R.string.text_Eeff));
+        //spanEeff.setSpan(new SubscriptSpan(), 1, 4,
+        //        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        //text_Eeff.append(spanEeff);
 
         // edittext elements
         edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
         edittext_S = (EditText) rootView.findViewById(R.id.editText_S);
         edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
-        edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0_radio);
+        edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
         edittext_k = (EditText) rootView.findViewById(R.id.editText_k);
         edittext_Z0o = (EditText) rootView.findViewById(R.id.editText_Z0o);
         edittext_Z0e = (EditText) rootView.findViewById(R.id.editText_Z0e);
-        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Eeff_radio);
+        edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Phs);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
         edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
@@ -307,10 +300,10 @@ public class CslinFragment extends Fragment {
         spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W);
         spinner_S = (Spinner) rootView.findViewById(R.id.spinner_S);
         spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
-        spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0_radio);
+        spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0);
         spinner_Z0o = (Spinner) rootView.findViewById(R.id.spinner_Z0o);
         spinner_Z0e = (Spinner) rootView.findViewById(R.id.spinner_Z0e);
-        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Eeff_radio);
+        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Phs);
         spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
         spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
         spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);
@@ -636,9 +629,9 @@ public class CslinFragment extends Fragment {
             //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
             CslinCalculator cslin = new CslinCalculator();
             line = cslin.getSynResult(line, use_z0k);
-            //L = cslin.getL();
-            //W = cslin.getW();
-            //S = cslin.getS();
+            //L = cslin_fragment.getL();
+            //W = cslin_fragment.getW();
+            //S = cslin_fragment.getS();
 
             BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
             double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
@@ -647,8 +640,8 @@ public class CslinFragment extends Fragment {
         } else {
             CslinCalculator cslin = new CslinCalculator();
             line = cslin.getSynResult(line, use_z0k);
-            //W = cslin.getW();
-            //S = cslin.getS();
+            //W = cslin_fragment.getW();
+            //S = cslin_fragment.getS();
             edittext_L.setText(""); // clear the L if the Eeff input is empty
         }
 

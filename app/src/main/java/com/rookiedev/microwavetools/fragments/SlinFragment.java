@@ -1,13 +1,11 @@
 package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
@@ -76,7 +74,7 @@ public class SlinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.slin, container, false);
+        rootView = inflater.inflate(R.layout.slin_fragment, container, false);
         initUI();
         readSharedPref(); // read shared preferences
         setRadioBtn();
@@ -101,7 +99,7 @@ public class SlinFragment extends Fragment {
 
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getAnaResult(line);
-                        //Eeff = slin.getEeff();
+                        //Eeff = slin_fragment.getEeff();
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
@@ -158,14 +156,14 @@ public class SlinFragment extends Fragment {
                     if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
                         line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
                         //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-                        //SlinCalculator slin = new SlinCalculator(W, H, er, L, Z0, Eeff, Freq, T, flag);
+                        //SlinCalculator slin_fragment = new SlinCalculator(W, H, er, L, Z0, Eeff, Freq, T, flag);
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getSynResult(line, flag);
-                        //slin.stripline_syn();
-                        //W = slin.getW();
-                        //H = slin.getH();
-                        //er = slin.geter();
-                        //L = slin.getL();
+                        //slin_fragment.stripline_syn();
+                        //W = slin_fragment.getW();
+                        //H = slin_fragment.getH();
+                        //er = slin_fragment.geter();
+                        //L = slin_fragment.getL();
                         //stripline_syn(Z0, Eeff, Freq, flag);
                         //temp = spinner_L.getSelectedItemPosition();
                         //if (temp == 0) {
@@ -182,9 +180,9 @@ public class SlinFragment extends Fragment {
                     } else {
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getSynResult(line, flag);
-                        //W = slin.getW();
-                        //H = slin.getH();
-                        //er = slin.geter();
+                        //W = slin_fragment.getW();
+                        //H = slin_fragment.getH();
+                        //er = slin_fragment.geter();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
                     if (flag == Constant.Synthesize_Width) {
@@ -231,19 +229,19 @@ public class SlinFragment extends Fragment {
 
     private void initUI() {
         line = new SlinModel();
-        width_input = rootView.findViewById(R.id.width_input_radio);
-        height_input = rootView.findViewById(R.id.height_input_radio);
-        er_input = rootView.findViewById(R.id.epsilon_input_radio);
+        //width_input = rootView.findViewById(R.id.width_input);
+        //height_input = rootView.findViewById(R.id.height_input);
+        //er_input = rootView.findViewById(R.id.epsilon_input);
         //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
-        View length_input = rootView.findViewById(R.id.length_input_radio);
-        length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View length_input = rootView.findViewById(R.id.length_input);
+        //length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
-        View z0_input = rootView.findViewById(R.id.z0_input);
-        z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View z0_input = rootView.findViewById(R.id.z0_input);
+        //z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
-        View eeff_input = rootView.findViewById(R.id.eeff_input);
-        eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View eeff_input = rootView.findViewById(R.id.eeff_input);
+        //eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
@@ -253,7 +251,7 @@ public class SlinFragment extends Fragment {
         /** find the elements */
 
         // Subscript strings
-        text_er = (TextView) rootView.findViewById(R.id.text_er_radio);
+        text_er = (TextView) rootView.findViewById(R.id.text_er);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
         text_Eeff = (TextView) rootView.findViewById(R.id.text_Phs);
 
@@ -269,34 +267,34 @@ public class SlinFragment extends Fragment {
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_Z0.append(spanZ0);
 
-        SpannableString spanEeff = new SpannableString(
-                this.getString(R.string.text_Eeff));
-        spanEeff.setSpan(new SubscriptSpan(), 1, 4,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        text_Eeff.append(spanEeff);
+        //SpannableString spanEeff = new SpannableString(
+        //        this.getString(R.string.text_Eeff));
+        //spanEeff.setSpan(new SubscriptSpan(), 1, 4,
+        //        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        //text_Eeff.append(spanEeff);
 
         // edittext elements
-        edittext_W = (EditText) rootView.findViewById(R.id.editText_W_radio);
-        edittext_L = (EditText) rootView.findViewById(R.id.editText_L_radio);
+        edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
+        edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
         edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Phs);
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
-        edittext_T = (EditText) rootView.findViewById(R.id.editText_T_radio);
-        edittext_H = (EditText) rootView.findViewById(R.id.editText_H_radio);
-        edittext_er = (EditText) rootView.findViewById(R.id.editText_er_radio);
+        edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
+        edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
+        edittext_er = (EditText) rootView.findViewById(R.id.editText_er);
 
         // button elements
         button_ana = (Button) rootView.findViewById(R.id.button_ana);
         button_syn = (Button) rootView.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W_radio);
-        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L_radio);
+        spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W);
+        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
         spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0);
         spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Phs);
         spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
-        spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T_radio);
-        spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H_radio);
+        spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
+        spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);
 
         // configure the length units
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter
@@ -390,23 +388,23 @@ public class SlinFragment extends Fragment {
             radioBtn_W.setChecked(true);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(false);
-            width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-            height_input.setBackgroundColor(Color.WHITE);
-            er_input.setBackgroundColor(Color.WHITE);
+            //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //height_input.setBackgroundColor(Color.WHITE);
+            //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Height) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(true);
             radioBtn_er.setChecked(false);
-            width_input.setBackgroundColor(Color.WHITE);
-            height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-            er_input.setBackgroundColor(Color.WHITE);
+            //width_input.setBackgroundColor(Color.WHITE);
+            //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Er) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(true);
-            width_input.setBackgroundColor(Color.WHITE);
-            height_input.setBackgroundColor(Color.WHITE);
-            er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //width_input.setBackgroundColor(Color.WHITE);
+            //height_input.setBackgroundColor(Color.WHITE);
+            //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
         }
         radioBtn_W.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -414,9 +412,9 @@ public class SlinFragment extends Fragment {
                 radioBtn_W.setChecked(true);
                 radioBtn_H.setChecked(false);
                 radioBtn_er.setChecked(false);
-                width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                height_input.setBackgroundColor(Color.WHITE);
-                er_input.setBackgroundColor(Color.WHITE);
+                //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //height_input.setBackgroundColor(Color.WHITE);
+                //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_Width;
             }
         });
@@ -426,9 +424,9 @@ public class SlinFragment extends Fragment {
                 radioBtn_W.setChecked(false);
                 radioBtn_H.setChecked(true);
                 radioBtn_er.setChecked(false);
-                width_input.setBackgroundColor(Color.WHITE);
-                height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                er_input.setBackgroundColor(Color.WHITE);
+                //width_input.setBackgroundColor(Color.WHITE);
+                //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_Height;
             }
         });
@@ -438,9 +436,9 @@ public class SlinFragment extends Fragment {
                 radioBtn_W.setChecked(false);
                 radioBtn_H.setChecked(false);
                 radioBtn_er.setChecked(true);
-                width_input.setBackgroundColor(Color.WHITE);
-                height_input.setBackgroundColor(Color.WHITE);
-                er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //width_input.setBackgroundColor(Color.WHITE);
+                //height_input.setBackgroundColor(Color.WHITE);
+                //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 flag = Constant.Synthesize_Er;
             }
         });

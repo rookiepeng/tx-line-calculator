@@ -78,7 +78,7 @@ public class MlinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.mlin, container, false);
+        rootView = inflater.inflate(R.layout.mlin_fragment, container, false);
         mContext=this.getContext();
         initUI();
         readSharedPref(); // read shared preferences
@@ -156,7 +156,7 @@ public class MlinFragment extends Fragment {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, Constant.Synthesize_Width);
                         W = line.getMetalWidth();
-                        //mlin.setW(W);
+                        //mlin_fragment.setW(W);
                         L = line.getMetalLength();
                         temp = spinner_L.getSelectedItemPosition();
                         if (temp == 0) {
@@ -325,7 +325,7 @@ public class MlinFragment extends Fragment {
 
         // read values from the shared preferences
 
-        // mlin parameters
+        // mlin_fragment parameters
         edittext_W.setText(prefs.getString(MLIN_W, "19.23"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(MLIN_W_UNIT,
                 "0")));

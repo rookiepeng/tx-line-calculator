@@ -42,27 +42,30 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/height_input"
+                    android:id="@+id/height_input_radio"
+                    layout="@layout/height_input_radio"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/thickness_input"
+                    android:id="@+id/a_input_radio"
+                    layout="@layout/a_input_radio"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/width_input"
-                    layout="@layout/width_input"
+                    android:id="@+id/b_input_radio"
+                    layout="@layout/b_input_radio"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/length_input"
-                    layout="@layout/length_input"
+                    android:id="@+id/length_input_radio"
+                    layout="@layout/length_input_radio"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
+
         </android.support.v7.widget.CardView>
 
         <include
@@ -108,6 +111,7 @@
                     android:layout_height="match_parent" />
 
                 <include
+                    android:id="@+id/epsilon_input"
                     layout="@layout/epsilon_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

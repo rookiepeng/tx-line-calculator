@@ -79,7 +79,7 @@ public class CoaxFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.coax, container, false);
+        rootView = inflater.inflate(R.layout.coax_fragment, container, false);
 
         initUI(); // initial the UI
         readSharedPref(); // read shared preferences
@@ -115,7 +115,7 @@ public class CoaxFragment extends Fragment {
                     } else {
                         CoaxCalculator coax = new CoaxCalculator();
                         line = coax.getAnaResult(line);
-                        //Z0 = coax.getZ0(); // calculate the Z0
+                        //Z0 = coax_fragment.getZ0(); // calculate the Z0
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
                     }
                     BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
@@ -176,12 +176,12 @@ public class CoaxFragment extends Fragment {
                         line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
                         CoaxCalculator coax = new CoaxCalculator();
                         line = coax.getSynResult(line, flag);
-                        //coax.coax_syn();
-                        //L = coax.getL();
-                        //a = coax.geta();
-                        //height = coax.getb();
-                        //b = coax.getc();
-                        //er = coax.geter();
+                        //coax_fragment.coax_syn();
+                        //L = coax_fragment.getL();
+                        //a = coax_fragment.geta();
+                        //height = coax_fragment.getb();
+                        //b = coax_fragment.getc();
+                        //er = coax_fragment.geter();
 
                         BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
                         double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
@@ -342,7 +342,7 @@ public class CoaxFragment extends Fragment {
 
         // read values from the shared preferences
 
-        // coax parameters
+        // coax_fragment parameters
         edittext_a.setText(prefs.getString(COAX_A, "0.30"));
         spinner_a.setSelection(Integer.parseInt(prefs.getString(COAX_A_UNIT,
                 "2")));

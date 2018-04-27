@@ -12,12 +12,12 @@ public class CoaxCalculator {
         // qualify the inputs some
         if (line.getSubRadius() <= line.getCoreRadius()) {
             /*alert("Error: b (%g) must be > a (%g)\r\n"
-                    "for a coax line\r\n");
+                    "for a coax_fragment line\r\n");
             return -1;*/
         }
         if (line.getCoreOffset() >= line.getSubRadius() - line.getCoreRadius()) {
             /*alert("Error:  c (%g)  must be < b - a (%g)\r\n"
-                    "for a coax line\r\n",line->c,line->b-line->a);
+                    "for a coax_fragment line\r\n",line->c,line->b-line->a);
             return -1;*/
         }
 

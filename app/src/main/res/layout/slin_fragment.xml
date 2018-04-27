@@ -42,12 +42,14 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/height_input"
+                    android:id="@+id/thickness_input"
+                    layout="@layout/thickness_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/thickness_input"
+                    android:id="@+id/height_input"
+                    layout="@layout/height_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -58,18 +60,12 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/space_input"
-                    layout="@layout/space_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <include
                     android:id="@+id/length_input"
                     layout="@layout/length_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-
             </LinearLayout>
+
         </android.support.v7.widget.CardView>
 
         <include
@@ -109,40 +105,13 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/k_input"
-                    layout="@layout/k_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:background="?android:attr/listDivider" />
-
-                <include
-                    android:id="@+id/z0o_input"
-                    layout="@layout/z0o_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <include
-                    android:id="@+id/z0e_input"
-                    layout="@layout/z0e_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:background="?android:attr/listDivider" />
-
-                <include
                     android:id="@+id/phase_input"
                     layout="@layout/phase_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
+                    android:id="@+id/epsilon_input"
                     layout="@layout/epsilon_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
