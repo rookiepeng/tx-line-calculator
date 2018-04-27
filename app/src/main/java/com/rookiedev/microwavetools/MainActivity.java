@@ -374,7 +374,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         pos = Integer.parseInt(prefs.getString(Constant.PREFS_POSITION, "0"));
     }
 

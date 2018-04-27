@@ -166,7 +166,7 @@ public class CpwFragment extends Fragment {
                     line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString()));
                     line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
                     line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
-                    //Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
+                    //Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the header_parameters
 
                     if (flag == Constant.Synthesize_Width) {
                         line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
@@ -274,17 +274,17 @@ public class CpwFragment extends Fragment {
 
     private void initUI() {
         line = new CpwModel();
-        //width_input = rootView.findViewById(R.id.width_input);
-        //height_input = rootView.findViewById(R.id.height_input);
-        //er_input = rootView.findViewById(R.id.epsilon_input);
-        //space_input = rootView.findViewById(R.id.space_input);
-        //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //parameter_width = rootView.findViewById(R.id.parameter_width);
+        //parameter_height = rootView.findViewById(R.id.parameter_height);
+        //er_input = rootView.findViewById(R.id.parameter_epsilon);
+        //parameter_space = rootView.findViewById(R.id.parameter_space);
+        //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
-        //View length_input = rootView.findViewById(R.id.length_input_radio);
-        //length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View parameter_length = rootView.findViewById(R.id.length_input_radio);
+        //parameter_length.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
-        //View z0_input = rootView.findViewById(R.id.z0_input);
-        //z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View parameter_z0 = rootView.findViewById(R.id.parameter_z0);
+        //parameter_z0.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         //View eeff_input = rootView.findViewById(R.id.eeff_input);
         //eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
@@ -391,12 +391,12 @@ public class CpwFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
 
-        // cpw_fragment parameters
+        // cpw_fragment header_parameters
         edittext_W.setText(prefs.getString(CPW_W, "18.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(CPW_W_UNIT,
                 "0")));
@@ -437,9 +437,9 @@ public class CpwFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
-        // universal parameters
+        // universal header_parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
@@ -449,8 +449,8 @@ public class CpwFragment extends Fragment {
             radioBtn_S.setChecked(false);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(false);
-            //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-            //space_input.setBackgroundColor(Color.WHITE);
+            //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //parameter_space.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Gap) {
@@ -458,8 +458,8 @@ public class CpwFragment extends Fragment {
             radioBtn_S.setChecked(true);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(false);
-            //width_input.setBackgroundColor(Color.WHITE);
-            //space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //parameter_width.setBackgroundColor(Color.WHITE);
+            //parameter_space.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Height) {
@@ -467,8 +467,8 @@ public class CpwFragment extends Fragment {
             radioBtn_S.setChecked(false);
             radioBtn_H.setChecked(true);
             radioBtn_er.setChecked(false);
-            //width_input.setBackgroundColor(Color.WHITE);
-            //space_input.setBackgroundColor(Color.WHITE);
+            //parameter_width.setBackgroundColor(Color.WHITE);
+            //parameter_space.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Er) {
@@ -476,8 +476,8 @@ public class CpwFragment extends Fragment {
             radioBtn_S.setChecked(false);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(true);
-            //width_input.setBackgroundColor(Color.WHITE);
-            //space_input.setBackgroundColor(Color.WHITE);
+            //parameter_width.setBackgroundColor(Color.WHITE);
+            //parameter_space.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
         }
@@ -488,8 +488,8 @@ public class CpwFragment extends Fragment {
                 radioBtn_S.setChecked(false);
                 radioBtn_H.setChecked(false);
                 radioBtn_er.setChecked(false);
-                //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                //space_input.setBackgroundColor(Color.WHITE);
+                //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //parameter_space.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_Width;
@@ -502,8 +502,8 @@ public class CpwFragment extends Fragment {
                 radioBtn_S.setChecked(true);
                 radioBtn_H.setChecked(false);
                 radioBtn_er.setChecked(false);
-                //width_input.setBackgroundColor(Color.WHITE);
-                //space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //parameter_width.setBackgroundColor(Color.WHITE);
+                //parameter_space.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_Gap;
@@ -516,8 +516,8 @@ public class CpwFragment extends Fragment {
                 radioBtn_S.setChecked(false);
                 radioBtn_H.setChecked(true);
                 radioBtn_er.setChecked(false);
-                //width_input.setBackgroundColor(Color.WHITE);
-                //space_input.setBackgroundColor(Color.WHITE);
+                //parameter_width.setBackgroundColor(Color.WHITE);
+                //parameter_space.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_Height;
@@ -530,8 +530,8 @@ public class CpwFragment extends Fragment {
                 radioBtn_S.setChecked(false);
                 radioBtn_H.setChecked(false);
                 radioBtn_er.setChecked(true);
-                //width_input.setBackgroundColor(Color.WHITE);
-                //space_input.setBackgroundColor(Color.WHITE);
+                //parameter_width.setBackgroundColor(Color.WHITE);
+                //parameter_space.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 flag = Constant.Synthesize_Er;

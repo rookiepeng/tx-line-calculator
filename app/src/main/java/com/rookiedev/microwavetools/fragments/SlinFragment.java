@@ -229,16 +229,16 @@ public class SlinFragment extends Fragment {
 
     private void initUI() {
         line = new SlinModel();
-        //width_input = rootView.findViewById(R.id.width_input);
-        //height_input = rootView.findViewById(R.id.height_input);
-        //er_input = rootView.findViewById(R.id.epsilon_input);
-        //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //parameter_width = rootView.findViewById(R.id.parameter_width);
+        //parameter_height = rootView.findViewById(R.id.parameter_height);
+        //er_input = rootView.findViewById(R.id.parameter_epsilon);
+        //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
-        //View length_input = rootView.findViewById(R.id.length_input);
-        //length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View parameter_length = rootView.findViewById(R.id.parameter_length);
+        //parameter_length.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
-        //View z0_input = rootView.findViewById(R.id.z0_input);
-        //z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        //View parameter_z0 = rootView.findViewById(R.id.parameter_z0);
+        //parameter_z0.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         //View eeff_input = rootView.findViewById(R.id.eeff_input);
         //eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
@@ -337,12 +337,12 @@ public class SlinFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
 
-        // SlinCalculator parameters
+        // SlinCalculator header_parameters
         edittext_W.setText(prefs.getString(SLIN_W, "10.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(SLIN_W_UNIT,
                 "0")));
@@ -377,9 +377,9 @@ public class SlinFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
-        // universal parameters
+        // universal header_parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
@@ -388,21 +388,21 @@ public class SlinFragment extends Fragment {
             radioBtn_W.setChecked(true);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(false);
-            //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+            //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Height) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(true);
             radioBtn_er.setChecked(false);
-            //width_input.setBackgroundColor(Color.WHITE);
+            //parameter_width.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constant.Synthesize_Er) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(true);
-            //width_input.setBackgroundColor(Color.WHITE);
+            //parameter_width.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
         }
@@ -412,7 +412,7 @@ public class SlinFragment extends Fragment {
                 radioBtn_W.setChecked(true);
                 radioBtn_H.setChecked(false);
                 radioBtn_er.setChecked(false);
-                //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+                //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_Width;
@@ -424,7 +424,7 @@ public class SlinFragment extends Fragment {
                 radioBtn_W.setChecked(false);
                 radioBtn_H.setChecked(true);
                 radioBtn_er.setChecked(false);
-                //width_input.setBackgroundColor(Color.WHITE);
+                //parameter_width.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constant.Synthesize_Height;
@@ -436,7 +436,7 @@ public class SlinFragment extends Fragment {
                 radioBtn_W.setChecked(false);
                 radioBtn_H.setChecked(false);
                 radioBtn_er.setChecked(true);
-                //width_input.setBackgroundColor(Color.WHITE);
+                //parameter_width.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 flag = Constant.Synthesize_Er;

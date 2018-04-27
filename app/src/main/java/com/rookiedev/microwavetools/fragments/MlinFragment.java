@@ -92,7 +92,7 @@ public class MlinFragment extends Fragment {
                     edittext_Phs.setText("");
                 } else {
                     line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()),
-                            spinner_W.getSelectedItemPosition()); // get the parameters
+                            spinner_W.getSelectedItemPosition()); // get the header_parameters
                     line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
                             spinner_Freq.getSelectedItemPosition());
                     line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
@@ -141,7 +141,7 @@ public class MlinFragment extends Fragment {
                     edittext_L.setText(""); // clear the L and W outputs
                     edittext_W.setText("");
                 } else {
-                    line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString())); // get the parameters
+                    line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString())); // get the header_parameters
                     line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
                             spinner_Freq.getSelectedItemPosition());
                     line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
@@ -320,12 +320,12 @@ public class MlinFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
 
-        // mlin_fragment parameters
+        // mlin_fragment header_parameters
         edittext_W.setText(prefs.getString(MLIN_W, "19.23"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(MLIN_W_UNIT,
                 "0")));
@@ -359,9 +359,9 @@ public class MlinFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
-        // universal parameters
+        // universal header_parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 

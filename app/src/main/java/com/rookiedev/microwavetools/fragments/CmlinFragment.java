@@ -102,7 +102,7 @@ public class CmlinFragment extends Fragment {
                     edittext_Z0e.setText(""); //
                     edittext_k.setText("");
                 } else {
-                    line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());  // get the parameters
+                    line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());  // get the header_parameters
                     line.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
                     line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
                     line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
@@ -191,12 +191,12 @@ public class CmlinFragment extends Fragment {
     }
 
     private void initUI() {
-        //View width_input = rootView.findViewById(R.id.width_input);
-        //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View space_input = rootView.findViewById(R.id.space_input);
-        //space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View length_input = rootView.findViewById(R.id.length_input);
-        //length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View parameter_width = rootView.findViewById(R.id.parameter_width);
+        //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View parameter_space = rootView.findViewById(R.id.parameter_space);
+        //parameter_space.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View parameter_length = rootView.findViewById(R.id.parameter_length);
+        //parameter_length.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
         //View z0_input_radio = rootView.findViewById(R.id.z0_input_radio);
         //z0_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
         //View k_input_radio = rootView.findViewById(R.id.k_input_radio);
@@ -371,12 +371,12 @@ public class CmlinFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
 
-        // cmlin_fragment parameters
+        // cmlin_fragment header_parameters
         edittext_W.setText(prefs.getString(CMLIN_W, "20.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(CMLIN_W_UNIT,
                 "0")));
@@ -426,7 +426,7 @@ public class CmlinFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared Preferences in the device universal parameters
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared Preferences in the device universal header_parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 

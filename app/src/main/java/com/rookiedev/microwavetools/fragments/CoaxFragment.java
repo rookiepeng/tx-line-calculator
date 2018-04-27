@@ -337,12 +337,12 @@ public class CoaxFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
 
-        // coax_fragment parameters
+        // coax_fragment header_parameters
         edittext_a.setText(prefs.getString(COAX_A, "0.30"));
         spinner_a.setSelection(Integer.parseInt(prefs.getString(COAX_A_UNIT,
                 "2")));
@@ -381,9 +381,9 @@ public class CoaxFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
-        // universal parameters
+        // universal header_parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 

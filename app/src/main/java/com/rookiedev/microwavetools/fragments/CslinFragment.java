@@ -111,7 +111,7 @@ public class CslinFragment extends Fragment {
                     line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
                     line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
                     line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
-                    //W = Double.parseDouble(edittext_W.getText().toString()); // get the parameters
+                    //W = Double.parseDouble(edittext_W.getText().toString()); // get the header_parameters
                     //S = Double.parseDouble(edittext_S.getText().toString());
                     //Freq = Double.parseDouble(edittext_Freq.getText().toString());
                     //er = Double.parseDouble(edittext_er.getText().toString());
@@ -215,19 +215,19 @@ public class CslinFragment extends Fragment {
 
     private void initUI() {
         line = new CslinModel();
-        //View width_input = rootView.findViewById(R.id.width_input);
-        //width_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View space_input = rootView.findViewById(R.id.space_input);
-        //space_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View length_input = rootView.findViewById(R.id.length_input);
-        //length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View z0_input_radio = rootView.findViewById(R.id.z0_input);
+        //View parameter_width = rootView.findViewById(R.id.parameter_width);
+        //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View parameter_space = rootView.findViewById(R.id.parameter_space);
+        //parameter_space.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View parameter_length = rootView.findViewById(R.id.parameter_length);
+        //parameter_length.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
+        //View z0_input_radio = rootView.findViewById(R.id.parameter_z0);
         //z0_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View k_input_radio = rootView.findViewById(R.id.k_input);
+        //View k_input_radio = rootView.findViewById(R.id.parameter_k);
         //k_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View z0o_input_radio = rootView.findViewById(R.id.z0o_input);
+        //View z0o_input_radio = rootView.findViewById(R.id.parameter_z0o);
         //z0o_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View z0e_input_radio = rootView.findViewById(R.id.z0e_input);
+        //View z0e_input_radio = rootView.findViewById(R.id.parameter_z0e);
         //z0e_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
         //View eeff_input_radio = rootView.findViewById(R.id.eeff_input);
         //eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
@@ -393,12 +393,12 @@ public class CslinFragment extends Fragment {
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
 
-        // CslinCalculator parameters
+        // CslinCalculator header_parameters
         edittext_W.setText(prefs.getString(CSLIN_W, "50.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(CSLIN_W_UNIT,
                 "0")));
@@ -448,7 +448,7 @@ public class CslinFragment extends Fragment {
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the parameters from the Shared Preferences in the device universal parameters
+                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared Preferences in the device universal header_parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
@@ -606,7 +606,7 @@ public class CslinFragment extends Fragment {
         if (use_z0k) {
             line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString()));
             line.setCouplingFactor(Double.parseDouble(edittext_k.getText().toString()));
-            //Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the parameters
+            //Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the header_parameters
             //k = Double.parseDouble(edittext_k.getText().toString());
             //Z0e = 0;
             //Z0o = 0;

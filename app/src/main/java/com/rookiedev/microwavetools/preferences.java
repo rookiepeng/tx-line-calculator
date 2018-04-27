@@ -109,12 +109,12 @@ public class preferences extends AppCompatActivity {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME, Activity.MODE_PRIVATE);// get the parameters from the Shared
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_NAME, Activity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
         // read values from the shared preferences
 
-        // universal parameters
+        // universal header_parameters
         DecimalLength = prefs.getString("DecimalLength", "2");
     }
 

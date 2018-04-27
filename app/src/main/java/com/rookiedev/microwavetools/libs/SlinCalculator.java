@@ -90,7 +90,7 @@ public class SlinCalculator {
         int iters = 0;
         int maxiters = 100;
 
-        // convergence parameters
+        // convergence header_parameters
         double abstol = 0.1e-6;
         double reltol = 0.01e-6;
 
@@ -99,7 +99,7 @@ public class SlinCalculator {
 
   /*
    * figure out what parameter we're synthesizing and set up the
-   * various optimization parameters.
+   * various optimization header_parameters.
    *
    * Basically what we need to know are
    *    1)  min/max values for the parameter
@@ -139,7 +139,7 @@ public class SlinCalculator {
         len = line.getElectricalLength();
         impedance = line.getImpedance();
 
-        // temp value for l used while synthesizing the other parameters.
+        // temp value for l used while synthesizing the other header_parameters.
         l = 1000.0;
         line.setMetalLength(l, Constant.LengthUnit_m);
 

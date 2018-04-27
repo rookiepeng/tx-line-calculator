@@ -70,7 +70,7 @@ public class CoaxCalculator {
         int iters = 0;
         int maxiters = 100;
 
-        // convergence parameters
+        // convergence header_parameters
         double abstol = 0.1e-6;
         double reltol = 0.01e-6;
 
@@ -79,7 +79,7 @@ public class CoaxCalculator {
 
   /*
    * figure out what parameter we're synthesizing and set up the
-   * various optimization parameters.
+   * various optimization header_parameters.
    *
    * Basically what we need to know are
    *    1)  min/max values for the parameter
@@ -119,7 +119,7 @@ public class CoaxCalculator {
         Ro = line.getImpedance();
         elen = line.getElectricalLength();
 
-        // temp value for len used while synthesizing the other parameters.
+        // temp value for len used while synthesizing the other header_parameters.
         line.setMetalLength(1.0, Constant.LengthUnit_m);
 
         if (!done) {

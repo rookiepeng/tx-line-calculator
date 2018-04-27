@@ -136,7 +136,7 @@ public class MlinCalculator {
     }
 
     /*
-    *  Synthesize microstrip transmission line from electrical parameters
+    *  Synthesize microstrip transmission line from electrical header_parameters
     *
     *  calculates:
     *    w     = microstrip line width (mils)
@@ -148,7 +148,7 @@ public class MlinCalculator {
     *    z0    = characteristic impedance (ohms)
     *    len   = electrical length (degrees)
     *    f     = frequency (Hz)
-    *    subs  = substrate parameters.  See TRSUBS for details.
+    *    subs  = substrate header_parameters.  See TRSUBS for details.
     *
     *                |<--W-->|
     *                 _______
@@ -182,7 +182,7 @@ public class MlinCalculator {
         int iters = 0;
         int maxiters = 100;
 
-        // convergence parameters
+        // convergence header_parameters
         double abstol = 0.1e-6;
         double reltol = 0.01e-6;
 
@@ -191,7 +191,7 @@ public class MlinCalculator {
 
         /*
         * figure out what parameter we're synthesizing and set up the
-        * various optimization parameters.
+        * various optimization header_parameters.
         *
         * Basically what we need to know are
         *    1)  min/max values for the parameter
@@ -233,7 +233,7 @@ public class MlinCalculator {
         electricalLength = line.getElectricalLength();
         impedance = line.getImpedance();
 
-        //temp value for l used while synthesizing the other parameters. We'll correct l later.
+        //temp value for l used while synthesizing the other header_parameters. We'll correct l later.
         length = 1000.0;
         line.setMetalLength(length, Constant.LengthUnit_m);
 

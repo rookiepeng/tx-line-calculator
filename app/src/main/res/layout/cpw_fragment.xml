@@ -43,31 +43,31 @@
 
                 <include
                     android:id="@+id/thickness_input"
-                    layout="@layout/thickness_input"
+                    layout="@layout/parameter_thickness"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
                     android:id="@+id/height_input"
-                    layout="@layout/height_input"
+                    layout="@layout/parameter_height"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
                     android:id="@+id/width_input"
-                    layout="@layout/width_input"
+                    layout="@layout/parameter_width"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
                     android:id="@+id/space_input"
-                    layout="@layout/space_input"
+                    layout="@layout/parameter_space"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
                     android:id="@+id/length_input"
-                    layout="@layout/length_input"
+                    layout="@layout/parameter_length"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -100,30 +100,30 @@
                 android:paddingTop="24dp">
 
                 <include
-                    layout="@layout/parameters"
+                    layout="@layout/header_parameters"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
                     android:id="@+id/z0_input"
-                    layout="@layout/z0_input"
+                    layout="@layout/parameter_z0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/phase_input"
-                    layout="@layout/phase_input"
+                    android:id="@+id/parameter_phase"
+                    layout="@layout/parameter_phase"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
                     android:id="@+id/epsilon_input"
-                    layout="@layout/epsilon_input"
+                    layout="@layout/parameter_epsilon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/frequency_input"
+                    layout="@layout/parameter_frequency"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

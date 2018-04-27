@@ -6,47 +6,48 @@
     android:layout_height="match_parent">
 
     <RadioButton
-        android:id="@+id/radioBtn_b"
+        android:id="@+id/radioBtn_c"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/text_b"/>
+        app:layout_constraintEnd_toStartOf="@+id/text_c"/>
 
     <TextView
-        android:id="@+id/text_b"
+        android:id="@+id/text_c"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/coax_text_b"
+        android:text="@string/coax_text_c"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/radioBtn_b"
-        app:layout_constraintEnd_toStartOf="@+id/editText_b"
-        app:layout_constraintStart_toEndOf="@+id/radioBtn_b"
-        app:layout_constraintTop_toTopOf="@+id/radioBtn_b" />
+        app:layout_constraintBottom_toBottomOf="@+id/radioBtn_c"
+        app:layout_constraintEnd_toStartOf="@+id/editText_c"
+        app:layout_constraintStart_toEndOf="@+id/radioBtn_c"
+        app:layout_constraintTop_toTopOf="@+id/radioBtn_c" />
 
     <EditText
-        android:id="@+id/editText_b"
+        android:id="@+id/editText_c"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toBottomOf="@+id/text_b"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_b"
-        app:layout_constraintTop_toTopOf="@+id/text_b"
-        app:layout_constraintStart_toEndOf="@+id/text_b"/>
+        app:layout_constraintBottom_toBottomOf="@+id/text_c"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_c"
+        app:layout_constraintTop_toTopOf="@+id/text_c"
+        app:layout_constraintStart_toEndOf="@+id/text_c"/>
 
     <Spinner
-        android:id="@+id/spinner_b"
+        android:id="@+id/spinner_c"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/editText_b"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_c"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText_b"
-        app:layout_constraintStart_toEndOf="@+id/editText_b"/>
+        app:layout_constraintTop_toTopOf="@+id/editText_c"
+        app:layout_constraintStart_toEndOf="@+id/editText_c"/>
 
 </android.support.constraint.ConstraintLayout>

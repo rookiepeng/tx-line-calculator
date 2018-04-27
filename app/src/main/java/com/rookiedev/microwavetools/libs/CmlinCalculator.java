@@ -14,7 +14,7 @@ package com.rookiedev.microwavetools.libs;
  * l     = microstrip line length (m)
  * s     = spacing between lines (m)
  * f     = frequency (Hz)
- * subs  = substrate parameters.  See TRSUBS for details.
+ * subs  = substrate header_parameters.  See TRSUBS for details.
  * <p>
  * |<--W-->|<---S--->|<--W-->|
  * _______           _______
@@ -89,7 +89,7 @@ import android.util.Log;
  * z0o   = odd mode characteristic impedance (ohms)
  * len   = electrical length (degrees)
  * f     = frequency (Hz)
- * subs  = substrate parameters.  See TRSUBS for details.
+ * subs  = substrate header_parameters.  See TRSUBS for details.
  * <p>
  * |<--W-->|<---S--->|<--W-->|
  * _______           _______
@@ -145,7 +145,7 @@ public class CmlinCalculator {
     private CmlinModel Analysis(CmlinModel line) {
         // input physical dimensions
         double width, length, space;
-        // substrate parameters
+        // substrate header_parameters
         double height, dielectric;
         double frequency;
 

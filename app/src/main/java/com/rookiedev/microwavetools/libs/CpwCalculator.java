@@ -135,7 +135,7 @@ public class CpwCalculator {
         int iters = 0;
         int maxiters = 100;
 
-        // convergence parameters
+        // convergence header_parameters
         double abstol = 0.1e-6;
         double reltol = 0.01e-6;
 
@@ -144,7 +144,7 @@ public class CpwCalculator {
 
   /*
    * figure out what parameter we're synthesizing and set up the
-   * various optimization parameters.
+   * various optimization header_parameters.
    *
    * Basically what we need to know are
    *    1)  min/max values for the parameter
@@ -183,7 +183,7 @@ public class CpwCalculator {
         Ro = line.getImpedance();
 
   /*
-   * temp value for l used while synthesizing the other parameters.
+   * temp value for l used while synthesizing the other header_parameters.
    * We'll correct l later.
    */
         len = line.getElectricalLength();  /* remember what electrical length we want */
@@ -267,7 +267,7 @@ public class CpwCalculator {
                 done = true;
             } else if (iters >= maxiters) {
                 /*alert("Synthesis failed to converge in\n"
-                        "%d iterations.  Final optimization parameters:\n"
+                        "%d iterations.  Final optimization header_parameters:\n"
                         "  min = %g\n"
                         "  val = %g\n"
                         "  max = %g\n", maxiters, varmin, var, varmax);
