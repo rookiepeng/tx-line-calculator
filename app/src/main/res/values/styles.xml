@@ -18,12 +18,12 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="SynButton" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/teal</item>
-        <item name="colorButtonNormal">@color/green</item>
+        <item name="colorControlHighlight">@color/synthesizeColorDark</item>
+        <item name="colorButtonNormal">@color/synthesizeColor</item>
     </style>
 
     <style name="AnaButton" parent="Theme.AppCompat.Light">
-        <item name="colorControlHighlight">@color/indigo</item>
-        <item name="colorButtonNormal">@color/blue</item>
+        <item name="colorControlHighlight">@color/analyzeColorDark</item>
+        <item name="colorButtonNormal">@color/analyzeColor</item>
     </style>
 </resources>

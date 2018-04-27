@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
+    android:background="@color/viewBackground"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -20,12 +20,12 @@
             android:id="@+id/physicalParaCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:clickable="false"
-            android:foreground="@drawable/ripple_green"
+            android:foreground="@drawable/ripple_synthesize"
             card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="10dp">
+            card_view:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,7 +45,6 @@
                     layout="@layout/height_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-
 
                 <include
                     layout="@layout/thickness_input"
@@ -78,9 +77,9 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:clickable="false"
-            android:foreground="@drawable/ripple_blue"
+            android:foreground="@drawable/ripple_analyze"
             card_view:cardCornerRadius="4dp"
-            card_view:cardElevation="10dp">
+            card_view:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,8 +102,8 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/eeff_input"
-                    layout="@layout/eeff_input"
+                    android:id="@+id/phase_input"
+                    layout="@layout/phase_input"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

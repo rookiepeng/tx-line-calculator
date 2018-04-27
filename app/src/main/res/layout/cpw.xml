@@ -64,7 +64,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:clickable="false"
-            android:foreground="@drawable/ripple_green"
+            android:foreground="@drawable/ripple_synthesize"
             card_view:cardElevation="10dp">
 
 
@@ -143,7 +143,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="16dp"
             android:clickable="false"
-            android:foreground="@drawable/ripple_blue"
+            android:foreground="@drawable/ripple_analyze"
             card_view:cardElevation="10dp">
 
             <LinearLayout

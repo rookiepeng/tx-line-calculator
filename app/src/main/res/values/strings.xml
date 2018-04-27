@@ -48,6 +48,7 @@
     <string name="mlin_text_H">H:</string>
     <string name="mlin_text_L">L:</string>
     <string name="mlin_text_W">W:</string>
+    <string name="mlin_text_Phs">φ:</string>
 
     <!-- cmlin -->
     <string name="cmlin">Coupled Microstrip</string>
