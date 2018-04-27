@@ -6,56 +6,47 @@
     android:layout_height="match_parent">
 
     <RadioButton
-        android:id="@+id/radioBtn_Phs"
+        android:id="@+id/radioBtn_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- E eff: -->
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/text_b"/>
 
     <TextView
-        android:id="@+id/text_Phs"
-        android:layout_width="45dp"
+        android:id="@+id/text_b"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/mlin_text_Phs"
+        android:text="@string/coax_text_b"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/radioBtn_Phs"
-        app:layout_constraintStart_toEndOf="@+id/radioBtn_Phs"
-        app:layout_constraintTop_toTopOf="@+id/radioBtn_Phs" />
-
-    <!-- E eff输入框 -->
+        app:layout_constraintBottom_toBottomOf="@+id/radioBtn_b"
+        app:layout_constraintEnd_toStartOf="@+id/editText_b"
+        app:layout_constraintStart_toEndOf="@+id/radioBtn_b"
+        app:layout_constraintTop_toTopOf="@+id/radioBtn_b" />
 
     <EditText
-        android:id="@+id/editText_Phs"
+        android:id="@+id/editText_b"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/text_Phs"
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toBottomOf="@+id/text_Phs"
-        app:layout_constraintStart_toEndOf="@+id/text_Phs"
-        app:layout_constraintTop_toTopOf="@+id/text_Phs"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_Phs">
-
-        <!-- <requestFocus /> -->
-    </EditText>
-
-    <!-- E eff单位 -->
+        app:layout_constraintBottom_toBottomOf="@+id/text_b"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_b"
+        app:layout_constraintTop_toTopOf="@+id/text_b"
+        app:layout_constraintStart_toEndOf="@+id/text_b"/>
 
     <Spinner
-        android:id="@+id/spinner_Phs"
+        android:id="@+id/spinner_b"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/editText_Phs"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_b"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editText_Phs"
-        app:layout_constraintTop_toTopOf="@+id/editText_Phs" />
+        app:layout_constraintTop_toTopOf="@+id/editText_b"
+        app:layout_constraintStart_toEndOf="@+id/editText_b"/>
 
 </android.support.constraint.ConstraintLayout>
