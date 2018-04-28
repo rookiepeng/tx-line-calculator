@@ -1,11 +1,13 @@
 package com.rookiedev.microwavetools.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
@@ -29,34 +31,36 @@ import com.rookiedev.microwavetools.libs.CmlinModel;
 import java.math.BigDecimal;
 
 public class CmlinFragment extends Fragment {
-    private final static String CMLIN_W = "CMLIN_W";
-    private final static String CMLIN_W_UNIT = "CMLIN_W_UNIT";
-    private final static String CMLIN_S = "CMLIN_S";
-    private final static String CMLIN_S_UNIT = "CMLIN_S_UNIT";
-    private final static String CMLIN_L = "CMLIN_L";
-    private final static String CMLIN_L_UNIT = "CMLIN_L_UNIT";
-    private final static String CMLIN_Z0 = "CMLIN_Z0";
-    private final static String CMLIN_Z0_UNIT = "CMLIN_Z0_UNIT";
-    private final static String CMLIN_k = "CMLIN_k";
-    private final static String CMLIN_Z0o = "CMLIN_Z0o";
-    private final static String CMLIN_Z0o_UNIT = "CMLIN_Z0o_UNIT";
-    private final static String CMLIN_Z0e = "CMLIN_Z0e";
-    private final static String CMLIN_Z0e_UNIT = "CMLIN_Z0e_UNIT";
-    private final static String CMLIN_Eeff = "CMLIN_Eeff";
-    private final static String CMLIN_Eeff_UNIT = "CMLIN_Eeff_UNIT";
-    private final static String CMLIN_Freq = "CMLIN_Freq";
-    private final static String CMLIN_Freq_UNIT = "CMLIN_Freq_UNIT";
-    private final static String CMLIN_er = "CMLIN_er";
-    private final static String CMLIN_H = "CMLIN_H";
-    private final static String CMLIN_H_UNIT = "CMLIN_H_UNIT";
-    private final static String CMLIN_T = "CMLIN_T";
-    private final static String CMLIN_T_UNIT = "CMLIN_T_UNIT";
-    private final static String CMLIN_USEZ0k = "CMLIN_USEZ0k";
-    private int DecimalLength; // the length of the Decimal, accurate of the result
-    private View rootView;
+    private static final String CMLIN_W = "CMLIN_W";
+    private static final String CMLIN_W_UNIT = "CMLIN_W_UNIT";
+    private static final String CMLIN_S = "CMLIN_S";
+    private static final String CMLIN_S_UNIT = "CMLIN_S_UNIT";
+    private static final String CMLIN_L = "CMLIN_L";
+    private static final String CMLIN_L_UNIT = "CMLIN_L_UNIT";
+    private static final String CMLIN_Z0 = "CMLIN_Z0";
+    private static final String CMLIN_Z0_UNIT = "CMLIN_Z0_UNIT";
+    private static final String CMLIN_K = "CMLIN_K";
+    private static final String CMLIN_Z0O = "CMLIN_Z0O";
+    private static final String CMLIN_Z0O_UNIT = "CMLIN_Z0O_UNIT";
+    private static final String CMLIN_Z0E = "CMLIN_Z0E";
+    private static final String CMLIN_Z0E_UNIT = "CMLIN_Z0E_UNIT";
+    private static final String CMLIN_PHS = "CMLIN_PHS";
+    private static final String CMLIN_PHS_UNIT = "CMLIN_PHS_UNIT";
+    private static final String CMLIN_FREQ = "CMLIN_FREQ";
+    private static final String CMLIN_FREQ_UNIT = "CMLIN_FREQ_UNIT";
+    private static final String CMLIN_ER = "CMLIN_ER";
+    private static final String CMLIN_H = "CMLIN_H";
+    private static final String CMLIN_H_UNIT = "CMLIN_H_UNIT";
+    private static final String CMLIN_T = "CMLIN_T";
+    private static final String CMLIN_T_UNIT = "CMLIN_T_UNIT";
+    private static final String CMLIN_USEZ0K = "CMLIN_USEZ0K";
+
+    private Context mContext;
+    private int decimalLength; // the length of the Decimal, accurate of the result
+    private View viewRoot;
     private CardView electricalCard, physicalCard;
     private SpannableString error_er, error_Z0, error_Z0e, error_Z0o;
-    private TextView text_er, text_Z0, text_Z0o, text_Z0e, text_Phs; // strings which include the subscript
+    private TextView text_er, text_Z0, text_k, text_Z0o, text_Z0e, text_Phs; // strings which include the subscript
     private EditText edittext_W, // the width
             edittext_S, //
             edittext_L, // the length
@@ -74,7 +78,7 @@ public class CmlinFragment extends Fragment {
             cmlin_ana;// button analyze
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
             spinner_Z0, spinner_Z0o, spinner_Z0e, spinner_Eeff, spinner_Freq;// the units of each parameter
-    private RadioButton radioBtn_Z0, radioBtn_Z0o;
+    private RadioButton radioBtn_Z0, radioBtnK, radioBtn_Z0o,radioBtnZ0e;
     private boolean use_z0k;
 
     public CmlinFragment() {
@@ -84,8 +88,8 @@ public class CmlinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_cmlin, container, false);
-
+        viewRoot = inflater.inflate(R.layout.fragment_cmlin, container, false);
+        mContext=this.getContext();
         initUI();
         readSharedPref();
         setRadioBtn();
@@ -116,7 +120,7 @@ public class CmlinFragment extends Fragment {
                         line = cmlin.getAnaResult(line);
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Eeff = Eeff_temp.setScale(decimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Phs.setText(String.valueOf(Eeff));
                     } else {
                         CmlinCalculator cmlin = new CmlinCalculator();
@@ -125,23 +129,23 @@ public class CmlinFragment extends Fragment {
 
                     }
                     BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                    double Z0 = Z0_temp.setScale(DecimalLength,
+                    double Z0 = Z0_temp.setScale(decimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
                     // of the Z0
                     BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
                     double k = k_temp
-                            .setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+                            .setScale(decimalLength, BigDecimal.ROUND_HALF_UP)
                             .doubleValue();
                     edittext_k.setText(String.valueOf(k));
 
                     BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
-                    double Z0o = Z0o_temp.setScale(DecimalLength,
+                    double Z0o = Z0o_temp.setScale(decimalLength,
                             BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0o.setText(String.valueOf(Z0o));
 
                     BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
-                    double Z0e = Z0e_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    double Z0e = Z0e_temp.setScale(decimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittext_Z0e.setText(String.valueOf(Z0e));
                 }
                 forceRippleAnimation(electricalCard);
@@ -162,23 +166,23 @@ public class CmlinFragment extends Fragment {
                         double Z0e, Z0o;
 
                         BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
-                        Z0o = Z0o_temp.setScale(DecimalLength,
+                        Z0o = Z0o_temp.setScale(decimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0o.setText(String.valueOf(Z0o));
 
                         BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
-                        Z0e = Z0e_temp.setScale(DecimalLength,
+                        Z0e = Z0e_temp.setScale(decimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0e.setText(String.valueOf(Z0e));
                     } else {
                         double Z0, k;
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        Z0 = Z0_temp.setScale(DecimalLength,
+                        Z0 = Z0_temp.setScale(decimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
                         BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
-                        k = k_temp.setScale(DecimalLength,
+                        k = k_temp.setScale(decimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittext_k.setText(String.valueOf(k));
                     }
@@ -187,29 +191,46 @@ public class CmlinFragment extends Fragment {
             }
         });
 
-        return rootView;
+        return viewRoot;
     }
 
     private void initUI() {
-        //View parameter_width = rootView.findViewById(R.id.parameter_width);
-        //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View parameter_space = rootView.findViewById(R.id.parameter_space);
-        //parameter_space.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View parameter_length = rootView.findViewById(R.id.parameter_length);
-        //parameter_length.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View z0_input_radio = rootView.findViewById(R.id.z0_input_radio);
-        //z0_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View k_input_radio = rootView.findViewById(R.id.k_input_radio);
-        //k_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View z0o_input_radio = rootView.findViewById(R.id.z0o_input_radio);
-        //z0o_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View z0e_input_radio = rootView.findViewById(R.id.z0e_input_radio);
-        //z0e_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View eeff_input_radio = rootView.findViewById(R.id.eeff_input_radio);
-        //eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        RadioButton radioButtonW = (RadioButton) viewRoot.findViewById(R.id.radioBtn_W);
+        radioButtonW.setVisibility(View.VISIBLE);
+        radioButtonW.setChecked(true);
 
-        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
-        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
+        RadioButton radioButtonS = (RadioButton) viewRoot.findViewById(R.id.radioBtn_S);
+        radioButtonS.setVisibility(View.VISIBLE);
+        radioButtonS.setChecked(true);
+
+        RadioButton radioButtonL = (RadioButton) viewRoot.findViewById(R.id.radioBtn_L);
+        radioButtonL.setVisibility(View.VISIBLE);
+        radioButtonL.setChecked(true);
+
+        RadioButton radioButtonPhs = (RadioButton) viewRoot.findViewById(R.id.radioBtn_Phs);
+        radioButtonPhs.setVisibility(View.VISIBLE);
+        radioButtonPhs.setChecked(true);
+
+        radioBtn_Z0 = (RadioButton) viewRoot.findViewById(R.id.radioBtn_Z0);
+        radioBtn_Z0.setVisibility(View.VISIBLE);
+        radioBtnK = (RadioButton) viewRoot.findViewById(R.id.radioBtn_k);
+        radioBtnK.setVisibility(View.VISIBLE);
+        radioBtn_Z0o = (RadioButton) viewRoot.findViewById(R.id.radioBtn_Z0o);
+        radioBtn_Z0o.setVisibility(View.VISIBLE);
+        radioBtnZ0e = (RadioButton) viewRoot.findViewById(R.id.radioBtn_Z0e);
+        radioBtnZ0e.setVisibility(View.VISIBLE);
+
+        TextView textW = (TextView) viewRoot.findViewById(R.id.text_W);
+        textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+
+        TextView textS = (TextView) viewRoot.findViewById(R.id.text_S);
+        textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+
+        TextView textL = (TextView) viewRoot.findViewById(R.id.text_L);
+        textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+
+        physicalCard = (CardView) viewRoot.findViewById(R.id.physicalParaCard);
+        electricalCard = (CardView) viewRoot.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
@@ -217,11 +238,13 @@ public class CmlinFragment extends Fragment {
         error_Z0o = new SpannableString(this.getString(R.string.Error_Z0o_empty));
 
         // find the elements
-        text_er = (TextView) rootView.findViewById(R.id.text_er);
-        text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
-        text_Phs = (TextView) rootView.findViewById(R.id.text_Phs);
-        text_Z0o = (TextView) rootView.findViewById(R.id.text_Z0o);
-        text_Z0e = (TextView) rootView.findViewById(R.id.text_Z0e);
+        text_er = (TextView) viewRoot.findViewById(R.id.text_er);
+        text_Z0 = (TextView) viewRoot.findViewById(R.id.text_Z0);
+        text_k = (TextView) viewRoot.findViewById(R.id.text_k);
+        text_Phs = (TextView) viewRoot.findViewById(R.id.text_Phs);
+        text_Z0o = (TextView) viewRoot.findViewById(R.id.text_Z0o);
+        text_Z0e = (TextView) viewRoot.findViewById(R.id.text_Z0e);
+        text_Phs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
         // Subscript strings
         SpannableString spanEr = new SpannableString(
@@ -248,41 +271,43 @@ public class CmlinFragment extends Fragment {
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_Z0e.append(spanZ0e);
 
-        //SpannableString spanEeff = new SpannableString(
-        //        this.getString(R.string.text_Eeff));
-        //spanEeff.setSpan(new SubscriptSpan(), 1, 4,
-        //        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        //text_Phs.append(spanEeff);
-
         // edittext elements
-        edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
-        edittext_S = (EditText) rootView.findViewById(R.id.editText_S);
-        edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
-        edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
-        edittext_k = (EditText) rootView.findViewById(R.id.editText_k);
-        edittext_Z0o = (EditText) rootView.findViewById(R.id.editText_Z0o);
-        edittext_Z0e = (EditText) rootView.findViewById(R.id.editText_Z0e);
-        edittext_Phs = (EditText) rootView.findViewById(R.id.editText_Phs);
-        edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
-        edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
-        edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
-        edittext_er = (EditText) rootView.findViewById(R.id.editText_er);
+        edittext_W = (EditText) viewRoot.findViewById(R.id.editText_W);
+        edittext_W.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        edittext_S = (EditText) viewRoot.findViewById(R.id.editText_S);
+        edittext_S.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        edittext_L = (EditText) viewRoot.findViewById(R.id.editText_L);
+        edittext_L.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        edittext_Z0 = (EditText) viewRoot.findViewById(R.id.editText_Z0);
+        //edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittext_k = (EditText) viewRoot.findViewById(R.id.editText_k);
+        //edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittext_Z0o = (EditText) viewRoot.findViewById(R.id.editText_Z0o);
+        //edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittext_Z0e = (EditText) viewRoot.findViewById(R.id.editText_Z0e);
+        //edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittext_Phs = (EditText) viewRoot.findViewById(R.id.editText_Phs);
+        edittext_Phs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittext_Freq = (EditText) viewRoot.findViewById(R.id.editText_Freq);
+        edittext_T = (EditText) viewRoot.findViewById(R.id.editText_T);
+        edittext_H = (EditText) viewRoot.findViewById(R.id.editText_H);
+        edittext_er = (EditText) viewRoot.findViewById(R.id.editText_er);
 
         // button elements
-        cmlin_ana = (Button) rootView.findViewById(R.id.button_ana);
-        cmlin_syn = (Button) rootView.findViewById(R.id.button_syn);
+        cmlin_ana = (Button) viewRoot.findViewById(R.id.button_ana);
+        cmlin_syn = (Button) viewRoot.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W);
-        spinner_S = (Spinner) rootView.findViewById(R.id.spinner_S);
-        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
-        spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0);
-        spinner_Z0o = (Spinner) rootView.findViewById(R.id.spinner_Z0o);
-        spinner_Z0e = (Spinner) rootView.findViewById(R.id.spinner_Z0e);
-        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Phs);
-        spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
-        spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
-        spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);
+        spinner_W = (Spinner) viewRoot.findViewById(R.id.spinner_W);
+        spinner_S = (Spinner) viewRoot.findViewById(R.id.spinner_S);
+        spinner_L = (Spinner) viewRoot.findViewById(R.id.spinner_L);
+        spinner_Z0 = (Spinner) viewRoot.findViewById(R.id.spinner_Z0);
+        spinner_Z0o = (Spinner) viewRoot.findViewById(R.id.spinner_Z0o);
+        spinner_Z0e = (Spinner) viewRoot.findViewById(R.id.spinner_Z0e);
+        spinner_Eeff = (Spinner) viewRoot.findViewById(R.id.spinner_Phs);
+        spinner_Freq = (Spinner) viewRoot.findViewById(R.id.spinner_Freq);
+        spinner_T = (Spinner) viewRoot.findViewById(R.id.spinner_T);
+        spinner_H = (Spinner) viewRoot.findViewById(R.id.spinner_H);
 
         // configure the length units
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter
@@ -322,8 +347,7 @@ public class CmlinFragment extends Fragment {
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_Freq.setAdapter(adapterFreq);
 
-        radioBtn_Z0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
-        radioBtn_Z0o = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0o);
+
         line = new CmlinModel();
     }
 
@@ -332,40 +356,124 @@ public class CmlinFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioBtn_Z0.setChecked(true);
+                radioBtnK.setChecked(true);
                 radioBtn_Z0o.setChecked(false);
+                radioBtnZ0e.setChecked(false);
                 use_z0k = true;
                 edittext_Z0.setEnabled(true);
+                edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittext_k.setEnabled(true);
+                edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittext_Z0o.setEnabled(false);
+                edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittext_Z0e.setEnabled(false);
+                edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            }
+        });
+        radioBtnK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                radioBtn_Z0.setChecked(true);
+                radioBtnK.setChecked(true);
+                radioBtn_Z0o.setChecked(false);
+                radioBtnZ0e.setChecked(false);
+                use_z0k = true;
+                edittext_Z0.setEnabled(true);
+                edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                edittext_k.setEnabled(true);
+                edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                edittext_Z0o.setEnabled(false);
+                edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                edittext_Z0e.setEnabled(false);
+                edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             }
         });
         radioBtn_Z0o.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioBtn_Z0o.setChecked(true);
+                radioBtnZ0e.setChecked(true);
                 radioBtn_Z0.setChecked(false);
+                radioBtnK.setChecked(false);
                 use_z0k = false;
                 edittext_Z0.setEnabled(false);
+                edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittext_k.setEnabled(false);
+                edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittext_Z0o.setEnabled(true);
+                edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittext_Z0e.setEnabled(true);
+                edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            }
+        });
+        radioBtnZ0e.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                radioBtn_Z0o.setChecked(true);
+                radioBtnZ0e.setChecked(true);
+                radioBtn_Z0.setChecked(false);
+                radioBtnK.setChecked(false);
+                use_z0k = false;
+                edittext_Z0.setEnabled(false);
+                edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                edittext_k.setEnabled(false);
+                edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                edittext_Z0o.setEnabled(true);
+                edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                edittext_Z0e.setEnabled(true);
+                edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             }
         });
         if (use_z0k) {
             radioBtn_Z0.setChecked(true);
+            radioBtnK.setChecked(true);
             radioBtn_Z0o.setChecked(false);
+            radioBtnZ0e.setChecked(false);
             edittext_Z0.setEnabled(true);
+            edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             edittext_k.setEnabled(true);
+            edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             edittext_Z0o.setEnabled(false);
+            edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             edittext_Z0e.setEnabled(false);
+            edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
         } else {
             radioBtn_Z0.setChecked(false);
+            radioBtnK.setChecked(false);
             radioBtn_Z0o.setChecked(true);
+            radioBtnZ0e.setChecked(true);
             edittext_Z0.setEnabled(false);
+            edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             edittext_k.setEnabled(false);
+            edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             edittext_Z0o.setEnabled(true);
+            edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             edittext_Z0e.setEnabled(true);
+            edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         }
     }
 
@@ -393,25 +501,25 @@ public class CmlinFragment extends Fragment {
         spinner_Z0.setSelection(Integer.parseInt(prefs.getString(
                 CMLIN_Z0_UNIT, "0")));
 
-        edittext_k.setText(prefs.getString(CMLIN_k, "0.06"));
+        edittext_k.setText(prefs.getString(CMLIN_K, "0.06"));
 
-        edittext_Z0o.setText(prefs.getString(CMLIN_Z0o, "47.65"));
+        edittext_Z0o.setText(prefs.getString(CMLIN_Z0O, "47.65"));
         spinner_Z0o.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_Z0o_UNIT, "0")));
+                CMLIN_Z0O_UNIT, "0")));
 
-        edittext_Z0e.setText(prefs.getString(CMLIN_Z0e, "53.73"));
+        edittext_Z0e.setText(prefs.getString(CMLIN_Z0E, "53.73"));
         spinner_Z0e.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_Z0e_UNIT, "0")));
+                CMLIN_Z0E_UNIT, "0")));
 
-        edittext_Phs.setText(prefs.getString(CMLIN_Eeff, "53.33"));
+        edittext_Phs.setText(prefs.getString(CMLIN_PHS, "53.33"));
         spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_Eeff_UNIT, "0")));
+                CMLIN_PHS_UNIT, "0")));
 
-        edittext_Freq.setText(prefs.getString(CMLIN_Freq, "1.00"));
+        edittext_Freq.setText(prefs.getString(CMLIN_FREQ, "1.00"));
         spinner_Freq.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_Freq_UNIT, "1")));
+                CMLIN_FREQ_UNIT, "1")));
 
-        edittext_er.setText(prefs.getString(CMLIN_er, "4.00"));
+        edittext_er.setText(prefs.getString(CMLIN_ER, "4.00"));
 
         edittext_H.setText(prefs.getString(CMLIN_H, "10.00"));
         spinner_H.setSelection(Integer.parseInt(prefs.getString(CMLIN_H_UNIT,
@@ -421,13 +529,13 @@ public class CmlinFragment extends Fragment {
         spinner_T.setSelection(Integer.parseInt(prefs.getString(CMLIN_T_UNIT,
                 "0")));
 
-        use_z0k = prefs.getString(CMLIN_USEZ0k, "true").equals("true");
+        use_z0k = prefs.getString(CMLIN_USEZ0K, "true").equals("true");
     }
 
     private void Preference_SharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared Preferences in the device universal header_parameters
-        DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
+        decimalLength = Integer.parseInt(prefs.getString("decimalLength", "2"));
     }
 
     @Override
@@ -482,21 +590,21 @@ public class CmlinFragment extends Fragment {
         editor.putString(CMLIN_L_UNIT, cmlin_L_unit);
         editor.putString(CMLIN_Z0, cmlin_Z0);
         editor.putString(CMLIN_Z0_UNIT, cmlin_Z0_unit);
-        editor.putString(CMLIN_k, cmlin_k);
-        editor.putString(CMLIN_Z0e, cmlin_Z0e);
-        editor.putString(CMLIN_Z0e_UNIT, cmlin_Z0e_unit);
-        editor.putString(CMLIN_Z0o, cmlin_Z0o);
-        editor.putString(CMLIN_Z0o_UNIT, cmlin_Z0o_unit);
-        editor.putString(CMLIN_Eeff, cmlin_Eeff);
-        editor.putString(CMLIN_Eeff_UNIT, cmlin_Eeff_unit);
-        editor.putString(CMLIN_Freq, cmlin_Freq);
-        editor.putString(CMLIN_Freq_UNIT, cmlin_Freq_unit);
-        editor.putString(CMLIN_er, cmlin_er);
+        editor.putString(CMLIN_K, cmlin_k);
+        editor.putString(CMLIN_Z0E, cmlin_Z0e);
+        editor.putString(CMLIN_Z0E_UNIT, cmlin_Z0e_unit);
+        editor.putString(CMLIN_Z0O, cmlin_Z0o);
+        editor.putString(CMLIN_Z0O_UNIT, cmlin_Z0o_unit);
+        editor.putString(CMLIN_PHS, cmlin_Eeff);
+        editor.putString(CMLIN_PHS_UNIT, cmlin_Eeff_unit);
+        editor.putString(CMLIN_FREQ, cmlin_Freq);
+        editor.putString(CMLIN_FREQ_UNIT, cmlin_Freq_unit);
+        editor.putString(CMLIN_ER, cmlin_er);
         editor.putString(CMLIN_H, cmlin_H);
         editor.putString(CMLIN_H_UNIT, cmlin_H_unit);
         editor.putString(CMLIN_T, cmlin_T);
         editor.putString(CMLIN_T_UNIT, cmlin_T_unit);
-        editor.putString(CMLIN_USEZ0k, cmlin_use_z0k);
+        editor.putString(CMLIN_USEZ0K, cmlin_use_z0k);
 
         editor.apply();
     }
@@ -617,7 +725,7 @@ public class CmlinFragment extends Fragment {
                 L = L * 100;
             }
             BigDecimal L_temp = new BigDecimal(L); // cut the decimal of L
-            L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+            L = L_temp.setScale(decimalLength, BigDecimal.ROUND_HALF_UP)
                     .doubleValue();
             edittext_L.setText(String.valueOf(L));
         } else {
@@ -638,7 +746,7 @@ public class CmlinFragment extends Fragment {
         }
 
         BigDecimal W_temp = new BigDecimal(W); // cut the decimal of W
-        W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+        W = W_temp.setScale(decimalLength, BigDecimal.ROUND_HALF_UP)
                 .doubleValue();
         edittext_W.setText(String.valueOf(W));
 
@@ -652,7 +760,7 @@ public class CmlinFragment extends Fragment {
         }
 
         BigDecimal S_temp = new BigDecimal(S); // cut the decimal of S
-        S = S_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
+        S = S_temp.setScale(decimalLength, BigDecimal.ROUND_HALF_UP)
                 .doubleValue();
         edittext_S.setText(String.valueOf(S));
     }

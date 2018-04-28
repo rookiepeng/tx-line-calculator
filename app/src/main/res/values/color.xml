@@ -24,7 +24,9 @@
 
     <color name="synthesizeColor">#4CAF50</color>
     <color name="synthesizeColorDark">#2E7D32</color>
+    <color name="synthesizeColorLight">#A5D6A7</color>
     <color name="analyzeColor">#9C27B0</color>
     <color name="analyzeColorDark">#6A1B9A</color>
+    <color name="analyzeColorLight">#CE93D8</color>
 
 </resources>

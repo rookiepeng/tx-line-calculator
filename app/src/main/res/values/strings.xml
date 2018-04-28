@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RF Line Calculator</string>
+    <string name="app_name">Tx-Line Calculator</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -117,4 +117,7 @@
     <string name="menu_preference">preference</string>
     <string name="menu_shop">Ad free</string>
     <string name="menu_about">about</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

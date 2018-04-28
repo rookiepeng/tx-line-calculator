@@ -132,39 +132,31 @@ public class CoaxFragment extends Fragment {
                     line.setFrequency(Double.parseDouble(edittextFreq.getText().toString()),
                             spinnerFreq.getSelectedItemPosition());
 
-                    if (target == Constants.Synthesize_CoreRadius) {
+                    if (target == Constants.Synthesize_CoreRadius) { //a = 0;
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
                                 spinnerB.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
                                 spinnerC.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
-
-                        //a = 0;
-                    } else if (target == Constants.Synthesize_SubRadius) {
+                    } else if (target == Constants.Synthesize_SubRadius) { //b = 0;
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
                                 spinnerC.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
-
-                        //b = 0;
-                    } else if (target == Constants.Synthesize_CoreOffset) {
+                    } else if (target == Constants.Synthesize_CoreOffset) { //c = 0;
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
                                 spinnerB.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
-
-                        //c = 0;
-                    } else if (target == Constants.Synthesize_Er) {
+                    } else if (target == Constants.Synthesize_Er) { //er = 0;
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
                                 spinnerB.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
                                 spinnerC.getSelectedItemPosition());
-
-                        //er = 0;
                     }
 
                     if (edittextPhs.length() != 0) { // check if the Eeff is empty
@@ -214,19 +206,6 @@ public class CoaxFragment extends Fragment {
 
     private void initUI() {
         line = new CoaxModel();
-        //c_input = viewRoot.findViewById(R.id.parameter_c);
-        //er_input = viewRoot.findViewById(R.id.parameter_epsilon);
-        //a_input = viewRoot.findViewById(R.id.a_input_radio);
-        //b_input = viewRoot.findViewById(R.id.b_input_radio);
-
-        //View length_input = viewRoot.findViewById(R.id.length_input_radio);
-        //length_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-
-        //View z0_input = viewRoot.findViewById(R.id.z0_input);
-        //z0_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-
-        //View eeff_input = viewRoot.findViewById(R.id.eeff_input);
-        //eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         cardViewDimensions = (CardView) viewRoot.findViewById(R.id.physicalParaCard);
         cardViewParameters = (CardView) viewRoot.findViewById(R.id.electricalParaCard);
@@ -342,9 +321,6 @@ public class CoaxFragment extends Fragment {
 
         edittextEr.setText(prefs.getString(COAX_ER, "1.00"));
 
-        //edittext_T.setText(prefs.getString(COAX_T, "1.40"));
-        //pinner_T.setSelection(Integer.parseInt(prefs.getString(COAX_T_UNIT,
-        //        "0")));
         target = Integer.parseInt(prefs.getString(COAX_TARGET, Integer.toString(Constants.Synthesize_CoreRadius)));
     }
 

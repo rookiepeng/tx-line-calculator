@@ -29,22 +29,23 @@ import com.rookiedev.microwavetools.libs.SlinModel;
 import java.math.BigDecimal;
 
 public class SlinFragment extends Fragment {
-    public final static String SLIN_W = "SLIN_W";
-    public final static String SLIN_W_UNIT = "SLIN_W_UNIT";
-    public final static String SLIN_L = "SLIN_L";
-    public final static String SLIN_L_UNIT = "SLIN_L_UNIT";
-    public final static String SLIN_Z0 = "SLIN_Z0";
-    public final static String SLIN_Z0_UNIT = "SLIN_Z0_UNIT";
-    public final static String SLIN_Eeff = "SLIN_Eeff";
-    public final static String SLIN_Eeff_UNIT = "SLIN_Eeff_UNIT";
-    public final static String SLIN_Freq = "SLIN_Freq";
-    public final static String SLIN_Freq_UNIT = "SLIN_Freq_UNIT";
-    public final static String SLIN_er = "SLIN_er";
-    public final static String SLIN_H = "SLIN_H";
-    public final static String SLIN_H_UNIT = "SLIN_H_UNIT";
-    public final static String SLIN_T = "SLIN_T";
-    public final static String SLIN_T_UNIT = "SLIN_T_UNIT";
-    public final static String SLIN_FLAG = "SLIN_FLAG";
+    public static final String SLIN_W = "SLIN_W";
+    public static final String SLIN_W_UNIT = "SLIN_W_UNIT";
+    public static final String SLIN_L = "SLIN_L";
+    public static final String SLIN_L_UNIT = "SLIN_L_UNIT";
+    public static final String SLIN_Z0 = "SLIN_Z0";
+    public static final String SLIN_Z0_UNIT = "SLIN_Z0_UNIT";
+    public static final String SLIN_Eeff = "SLIN_Eeff";
+    public static final String SLIN_Eeff_UNIT = "SLIN_Eeff_UNIT";
+    public static final String SLIN_Freq = "SLIN_Freq";
+    public static final String SLIN_Freq_UNIT = "SLIN_Freq_UNIT";
+    public static final String SLIN_er = "SLIN_er";
+    public static final String SLIN_H = "SLIN_H";
+    public static final String SLIN_H_UNIT = "SLIN_H_UNIT";
+    public static final String SLIN_T = "SLIN_T";
+    public static final String SLIN_T_UNIT = "SLIN_T_UNIT";
+    public static final String SLIN_FLAG = "SLIN_FLAG";
+
     private View rootView, width_input, height_input, er_input;
     private CardView electricalCard, physicalCard;
     private int DecimalLength; // the length of the Decimal, accurate of the result
@@ -58,13 +59,12 @@ public class SlinFragment extends Fragment {
             edittext_T, // the thickness of the metal
             edittext_H, // the thickness of the dielectric
             edittext_er; // the relative dielectric constant
-    //private double W, L, Z0, Eeff, Freq, T, H, er;
     private Button button_syn,// button synthesize
             button_ana;// button analyze
     private Spinner spinner_W, spinner_L, spinner_T, spinner_H, spinner_Z0,
             spinner_Eeff, spinner_Freq;// the units of each parameter
     private int flag;
-    private RadioButton radioBtn_W, radioBtn_H, radioBtn_er;
+    private RadioButton radioBtn_W, radioBtn_H, radioBtn_L;
     private SlinModel line;
 
     public SlinFragment() {
@@ -159,20 +159,7 @@ public class SlinFragment extends Fragment {
                         //SlinCalculator fragment_slin = new SlinCalculator(W, H, er, L, Z0, Eeff, Freq, T, flag);
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getSynResult(line, flag);
-                        //fragment_slin.stripline_syn();
-                        //W = fragment_slin.getW();
-                        //H = fragment_slin.getH();
-                        //er = fragment_slin.geter();
-                        //L = fragment_slin.getL();
-                        //stripline_syn(Z0, Eeff, Freq, flag);
-                        //temp = spinner_L.getSelectedItemPosition();
-                        //if (temp == 0) {
-                        //   L = L * 1000 * 39.37007874;
-                        //} else if (temp == 1) {
-                        //    L = L * 1000;
-                        //} else if (temp == 2) {
-                        //    L = L * 100;
-                        //}
+
                         BigDecimal L_temp = new BigDecimal(Constants.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
                         double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
@@ -180,35 +167,15 @@ public class SlinFragment extends Fragment {
                     } else {
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getSynResult(line, flag);
-                        //W = fragment_slin.getW();
-                        //H = fragment_slin.getH();
-                        //er = fragment_slin.geter();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
                     if (flag == Constants.Synthesize_Width) {
-                        /*temp = spinner_W.getSelectedItemPosition(); // W (m)
-                        if (temp == 0) {
-                            W = W * 1000 * 39.37007874;
-                        } else if (temp == 1) {
-                            W = W * 1000;
-                        } else if (temp == 2) {
-                            W = W * 100;
-                        }*/
 
                         BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
                         double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_W.setText(String.valueOf(W));
                     } else if (flag == Constants.Synthesize_Height) {
-                        /*temp = spinner_H.getSelectedItemPosition();
-                        if (temp == 0) {
-                            H = H * 1000 * 39.37007874;
-                        } else if (temp == 1) {
-                            H = H * 1000;
-                        } else if (temp == 2) {
-                            H = H * 100;
-                        }*/
-
                         BigDecimal H_temp = new BigDecimal(Constants.meter2others(line.getSubHeight(), spinner_H.getSelectedItemPosition()));
                         double H = H_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
@@ -229,26 +196,13 @@ public class SlinFragment extends Fragment {
 
     private void initUI() {
         line = new SlinModel();
-        //parameter_width = rootView.findViewById(R.id.parameter_width);
-        //parameter_height = rootView.findViewById(R.id.parameter_height);
-        //er_input = rootView.findViewById(R.id.parameter_epsilon);
-        //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
 
-        //View parameter_length = rootView.findViewById(R.id.parameter_length);
-        //parameter_length.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-
-        //View parameter_z0 = rootView.findViewById(R.id.parameter_z0);
-        //parameter_z0.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-
-        //View eeff_input = rootView.findViewById(R.id.eeff_input);
-        //eeff_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
 
         physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
-        /** find the elements */
 
         // Subscript strings
         text_er = (TextView) rootView.findViewById(R.id.text_er);
@@ -266,12 +220,6 @@ public class SlinFragment extends Fragment {
         spanZ0.setSpan(new SubscriptSpan(), 1, 2,
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_Z0.append(spanZ0);
-
-        //SpannableString spanEeff = new SpannableString(
-        //        this.getString(R.string.text_Eeff));
-        //spanEeff.setSpan(new SubscriptSpan(), 1, 4,
-        //        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        //text_Eeff.append(spanEeff);
 
         // edittext elements
         edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
@@ -331,8 +279,12 @@ public class SlinFragment extends Fragment {
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_Freq.setAdapter(adapterFreq);
         radioBtn_W = (RadioButton) rootView.findViewById(R.id.radioBtn_W);
+        radioBtn_W.setVisibility(View.VISIBLE);
         radioBtn_H = (RadioButton) rootView.findViewById(R.id.radioBtn_H);
-        radioBtn_er = (RadioButton) rootView.findViewById(R.id.radioBtn_er);
+        radioBtn_H.setVisibility(View.VISIBLE);
+        radioBtn_L = (RadioButton) rootView.findViewById(R.id.radioBtn_L);
+        radioBtn_L.setVisibility(View.VISIBLE);
+        radioBtn_L.setChecked(true);
     }
 
     private void readSharedPref() {
@@ -387,21 +339,21 @@ public class SlinFragment extends Fragment {
         if (flag == Constants.Synthesize_Width) {
             radioBtn_W.setChecked(true);
             radioBtn_H.setChecked(false);
-            radioBtn_er.setChecked(false);
+            radioBtn_L.setChecked(false);
             //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constants.Synthesize_Height) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(true);
-            radioBtn_er.setChecked(false);
+            radioBtn_L.setChecked(false);
             //parameter_width.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //er_input.setBackgroundColor(Color.WHITE);
         } else if (flag == Constants.Synthesize_Er) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(false);
-            radioBtn_er.setChecked(true);
+            radioBtn_L.setChecked(true);
             //parameter_width.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
@@ -411,7 +363,7 @@ public class SlinFragment extends Fragment {
             public void onClick(View arg0) {
                 radioBtn_W.setChecked(true);
                 radioBtn_H.setChecked(false);
-                radioBtn_er.setChecked(false);
+                radioBtn_L.setChecked(false);
                 //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
@@ -423,19 +375,19 @@ public class SlinFragment extends Fragment {
             public void onClick(View arg0) {
                 radioBtn_W.setChecked(false);
                 radioBtn_H.setChecked(true);
-                radioBtn_er.setChecked(false);
+                radioBtn_L.setChecked(false);
                 //parameter_width.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //er_input.setBackgroundColor(Color.WHITE);
                 flag = Constants.Synthesize_Height;
             }
         });
-        radioBtn_er.setOnClickListener(new View.OnClickListener() {
+        radioBtn_L.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioBtn_W.setChecked(false);
                 radioBtn_H.setChecked(false);
-                radioBtn_er.setChecked(true);
+                radioBtn_L.setChecked(true);
                 //parameter_width.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
