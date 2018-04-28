@@ -51,7 +51,6 @@ public class CpwFragment extends Fragment {
     public static final String CPW_T = "CPW_T";
     public static final String CPW_T_UNIT = "CPW_T_UNIT";
     public static final String CPW_Flag = "CPW_Flag";
-    public static final String CPW_WITH_GROUND = "CPW_WITH_GROUND";
 
     private Context mContext;
     private View rootView, width_input, space_input, height_input, er_input;
@@ -74,13 +73,30 @@ public class CpwFragment extends Fragment {
             spinner_Z0, spinner_Eeff, spinner_Freq;// the units of each parameter
     private int flag;
     private RadioButton radioBtn_W, radioBtn_S, radioBtn_H;
-    private boolean withGround=true;
+    private boolean withGround;
     private ImageView CPW_G;
     private CpwModel line;
     private ColorStateList defaultTextColor, defaultEdittextColor;
+    public static final String CPW_TYPE_PARAM = "TYPE";
 
     public CpwFragment() {
         // Empty constructor required for fragment subclasses
+    }
+
+    public static CpwFragment newInstance(String param) {
+        CpwFragment fragment = new CpwFragment();
+        Bundle args = new Bundle();
+        args.putString(CPW_TYPE_PARAM, param);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            withGround = getArguments().getString(CPW_TYPE_PARAM) != "CPW";
+        }
     }
 
     @Override

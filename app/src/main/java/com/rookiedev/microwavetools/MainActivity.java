@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     private int imageResource;
 
     // The helper object
-    IabHelper mHelper;
+    private IabHelper mHelper;
     // Provides purchase notification while this app is running
     IabBroadcastReceiver mBroadcastReceiver;
     private final static String SKU_ADFREE = "com.rookiedev.rfline.adfree.v1";
@@ -66,22 +66,16 @@ public class MainActivity extends AppCompatActivity
 
             if (result.isFailure()) {
                 complain("Error purchasing: " + result);
-                //setWaitScreen(false);
                 return;
             }
             if (!verifyDeveloperPayload(purchase)) {
                 complain("Error purchasing. Authenticity verification failed.");
-                //setWaitScreen(false);
                 //adFragment = new AdFragment();
                 //fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
                 return;
             }
 
-            //Log.d(TAG, "Purchase successful.");
-
             if (purchase.getSku().equals(SKU_ADFREE)) {
-                // bought 1/4 tank of gas. So consume it.
-                //Log.d(TAG, "Purchase is gas. Starting gas consumption.");
                 isAdFree = true;
                 //if (adFragment != null) {
                 //    fragmentManager.beginTransaction().remove(adFragment).commit();
@@ -321,7 +315,6 @@ public class MainActivity extends AppCompatActivity
         pos = Integer.parseInt(prefs.getString(Constants.PREFS_POSITION, "0"));
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -344,11 +337,17 @@ public class MainActivity extends AppCompatActivity
             pos = 3;
             imageResource=R.drawable.vt_cslin;
         } else if (id == R.id.nav_cpw) {
+            Bundle bundle = new Bundle();
+            bundle.putString(CpwFragment.CPW_TYPE_PARAM, "CPW" );
             fragment = new CpwFragment();
+            fragment.setArguments(bundle);
             pos = 4;
             imageResource=R.drawable.vt_cpw;
         } else if (id == R.id.nav_gcpw) {
+            Bundle bundle = new Bundle();
+            bundle.putString(CpwFragment.CPW_TYPE_PARAM, "GCPW" );
             fragment = new CpwFragment();
+            fragment.setArguments(bundle);
             pos = 5;
             imageResource=R.drawable.vt_cpwg;
         }else if (id == R.id.nav_coax) {
@@ -385,11 +384,17 @@ public class MainActivity extends AppCompatActivity
             pos = 3;
             imageResource=R.drawable.vt_cslin;
         } else if (item == 4) {
+            Bundle bundle = new Bundle();
+            bundle.putString(CpwFragment.CPW_TYPE_PARAM, "CPW" );
             fragment = new CpwFragment();
+            fragment.setArguments(bundle);
             pos = 4;
             imageResource=R.drawable.vt_cpw;
         } else if (item == 5) {
+            Bundle bundle = new Bundle();
+            bundle.putString(CpwFragment.CPW_TYPE_PARAM, "GCPW" );
             fragment = new CpwFragment();
+            fragment.setArguments(bundle);
             pos = 5;
             imageResource=R.drawable.vt_cpwg;
         } else if (item == 6) {
