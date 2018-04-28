@@ -19,9 +19,13 @@
             android:icon="@drawable/ic_menu_cslin"
             android:title="Coupled Stripline" />
         <item
-            android:id="@+id/nav_cpwg"
-            android:icon="@drawable/ic_menu_cpwg"
+            android:id="@+id/nav_cpw"
+            android:icon="@drawable/ic_menu_cpw"
             android:title="Coplanar Waveguide" />
+        <item
+            android:id="@+id/nav_gcpw"
+            android:icon="@drawable/ic_menu_gcpw"
+            android:title="Grounded Coplanar Waveguide" />
         <item
             android:id="@+id/nav_coax"
             android:icon="@drawable/ic_menu_coax"

@@ -6,6 +6,7 @@
         <item>Stripline</item>
         <item>Coupled Stripline</item>
         <item>Coplanar Waveguide</item>
+        <item>Grounded Coplanar Waveguide</item>
         <item>Coaxial Line</item>
     </string-array>
 
@@ -15,6 +16,7 @@
         <item>SLIN</item>
         <item>CSLIN</item>
         <item>CPW</item>
+        <item>GCPW</item>
         <item>COAX</item>
     </string-array>
 

@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private Fragment fragment = null;
-    //private Fragment adFragment = null;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private FragmentManager fragmentManager;
@@ -57,8 +56,6 @@ public class MainActivity extends AppCompatActivity
     // Callback for when a purchase is finished
     IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            //Log.d(TAG, "Purchase finished: " + result + ", purchase: " + purchase);
-
             // if we were disposed of in the meantime, quit.
             if (mHelper == null) {
                 return;
@@ -94,8 +91,6 @@ public class MainActivity extends AppCompatActivity
     // Listener that's called when we finish querying the items and subscriptions we own
     IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-            //Log.d(TAG, "Query inventory finished.");
-
             // Have we been disposed of in the meantime? If so, quit.
             if (mHelper == null) {
                 return;
@@ -109,14 +104,6 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
 
-            //Log.d(TAG, "Query inventory was successful.");
-
-            /*
-             * Check for items we own. Notice that for each purchase, we check
-             * the developer payload to see if it's correct! See
-             * verifyDeveloperPayload().
-             */
-
             // Do we have the premium upgrade?
             Purchase premiumPurchase = inventory.getPurchase(SKU_ADFREE);
             isAdFree = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
@@ -126,41 +113,12 @@ public class MainActivity extends AppCompatActivity
                 //adFragment = new AdFragment();
                 //fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
             }
-            //Log.d(TAG, "User is " + (mIsPremium ? "PREMIUM" : "NOT PREMIUM"));
-
-            // First find out which subscription is auto renewing
         }
     };
 
-    /**
-     * Verifies the developer payload of a purchase.
-     */
+    // Verifies the developer payload of a purchase.
     boolean verifyDeveloperPayload(Purchase p) {
         String payload = p.getDeveloperPayload();
-
-        /*
-         * TODO: verify that the developer payload of the purchase is correct. It will be
-         * the same one that you sent when initiating the purchase.
-         *
-         * WARNING: Locally generating a random string when starting a purchase and
-         * verifying it here might seem like a good approach, but this will fail in the
-         * case where the user purchases an item on one device and then uses your app on
-         * a different device, because on the other device you will not have access to the
-         * random string you originally generated.
-         *
-         * So a good developer payload has these characteristics:
-         *
-         * 1. If two different users purchase an item, the payload is different between them,
-         *    so that one user's purchase can't be replayed to another user.
-         *
-         * 2. The payload must be such that you can verify it even when the app wasn't the
-         *    one who initiated the purchase flow (so that items purchased by the user on
-         *    one device work on other devices owned by the user).
-         *
-         * Using your own server to store and verify developer payloads across app
-         * installations is recommended.
-         */
-
         return true;
     }
 
@@ -184,12 +142,10 @@ public class MainActivity extends AppCompatActivity
                 R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-
             }
 
             @Override
@@ -207,7 +163,6 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         };
         drawer.addDrawerListener(toggle);
@@ -342,8 +297,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
-        //mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -380,12 +333,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_cslin) {
             fragment = new CslinFragment();
             pos = 3;
-        } else if (id == R.id.nav_cpwg) {
+        } else if (id == R.id.nav_cpw) {
             fragment = new CpwFragment();
             pos = 4;
-        } else if (id == R.id.nav_coax) {
-            fragment = new CoaxFragment();
+        } else if (id == R.id.nav_gcpw) {
+            fragment = new CpwFragment();
             pos = 5;
+        }else if (id == R.id.nav_coax) {
+            fragment = new CoaxFragment();
+            pos = 6;
         } else {
             fragment = new MlinFragment();
         }
@@ -413,8 +369,11 @@ public class MainActivity extends AppCompatActivity
             fragment = new CpwFragment();
             pos = 4;
         } else if (item == 5) {
-            fragment = new CoaxFragment();
+            fragment = new CpwFragment();
             pos = 5;
+        } else if (item == 6) {
+            fragment = new CoaxFragment();
+            pos = 6;
         } else {
             fragment = new MlinFragment();
         }
@@ -451,7 +410,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         // very important:
-        //Log.d(TAG, "Destroying helper.");
         if (mHelper != null) {
             mHelper.disposeWhenFinished();
             mHelper = null;
@@ -481,15 +439,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // User clicked the "Buy Gas" button
+    // User clicked the "Ad free" button
     public void onAdfreeButtonClicked() {
-        //Log.d(TAG, "Buy gas button clicked.");
-
-        /* TODO: for security, generate your payload here for verification. See the comments on
-         *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
-         *        an empty string, but on a production app you should carefully generate this. */
         String payload = "";
-
         try {
             mHelper.launchPurchaseFlow(this, SKU_ADFREE, RC_REQUEST, mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {

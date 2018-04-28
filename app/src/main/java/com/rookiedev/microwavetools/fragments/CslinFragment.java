@@ -1,11 +1,13 @@
 package com.rookiedev.microwavetools.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
@@ -52,12 +54,14 @@ public class CslinFragment extends Fragment {
     public static final String CSLIN_T = "CSLIN_T";
     public static final String CSLIN_T_UNIT = "CSLIN_T_UNIT";
     public static final String CSLIN_USEZ0k = "CSLIN_USEZ0k";
+
+    private Context mContext;
     private View rootView;
     private CardView electricalCard, physicalCard;
     private int DecimalLength; // the length of the Decimal,
     // accurate of the result
     private SpannableString error_er, error_Z0, error_Z0e, error_Z0o;
-    private TextView text_er, text_Z0, text_Z0o, text_Z0e, text_Eeff; // strings which include the subscript
+    private TextView text_er, text_Z0,text_k, text_Z0o, text_Z0e, text_Eeff; // strings which include the subscript
     private EditText edittext_W, // the width
             edittext_S, //
             edittext_L, // the length
@@ -75,7 +79,7 @@ public class CslinFragment extends Fragment {
     private View.OnClickListener listener_syn = null;
     private Spinner spinner_W, spinner_S, spinner_L, spinner_T, spinner_H,
             spinner_Z0, spinner_Z0o, spinner_Z0e, spinner_Eeff, spinner_Freq;// the units of each parameter
-    private RadioButton radioBtn_Z0, radioBtn_Z0o;
+    private RadioButton radioBtn_Z0, radioBtn_Z0o, radioBtnK, radioBtnZ0e;
     private boolean use_z0k;
     private CslinModel line;
 
@@ -87,7 +91,7 @@ public class CslinFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_cslin, container, false);
-
+        mContext=this.getContext();
         initUI(); // initial the UI
         readSharedPref(); // read shared preferences
         setRadioBtn();
@@ -214,22 +218,39 @@ public class CslinFragment extends Fragment {
 
     private void initUI() {
         line = new CslinModel();
-        //View parameter_width = rootView.findViewById(R.id.parameter_width);
-        //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View parameter_space = rootView.findViewById(R.id.parameter_space);
-        //parameter_space.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View parameter_length = rootView.findViewById(R.id.parameter_length);
-        //parameter_length.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-        //View z0_input_radio = rootView.findViewById(R.id.parameter_z0);
-        //z0_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View k_input_radio = rootView.findViewById(R.id.parameter_k);
-        //k_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View z0o_input_radio = rootView.findViewById(R.id.parameter_z0o);
-        //z0o_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View z0e_input_radio = rootView.findViewById(R.id.parameter_z0e);
-        //z0e_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
-        //View eeff_input_radio = rootView.findViewById(R.id.eeff_input);
-        //eeff_input_radio.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.blue_shadow));
+        RadioButton radioButtonW = (RadioButton) rootView.findViewById(R.id.radioBtn_W);
+        radioButtonW.setVisibility(View.VISIBLE);
+        radioButtonW.setChecked(true);
+
+        RadioButton radioButtonS = (RadioButton) rootView.findViewById(R.id.radioBtn_S);
+        radioButtonS.setVisibility(View.VISIBLE);
+        radioButtonS.setChecked(true);
+
+        RadioButton radioButtonL = (RadioButton) rootView.findViewById(R.id.radioBtn_L);
+        radioButtonL.setVisibility(View.VISIBLE);
+        radioButtonL.setChecked(true);
+
+        RadioButton radioButtonPhs = (RadioButton) rootView.findViewById(R.id.radioBtn_Phs);
+        radioButtonPhs.setVisibility(View.VISIBLE);
+        radioButtonPhs.setChecked(true);
+
+        radioBtn_Z0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
+        radioBtn_Z0.setVisibility(View.VISIBLE);
+        radioBtnK = (RadioButton) rootView.findViewById(R.id.radioBtn_k);
+        radioBtnK.setVisibility(View.VISIBLE);
+        radioBtn_Z0o = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0o);
+        radioBtn_Z0o.setVisibility(View.VISIBLE);
+        radioBtnZ0e = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0e);
+        radioBtnZ0e.setVisibility(View.VISIBLE);
+
+        TextView textW = (TextView) rootView.findViewById(R.id.text_W);
+        textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+
+        TextView textS = (TextView) rootView.findViewById(R.id.text_S);
+        textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+
+        TextView textL = (TextView) rootView.findViewById(R.id.text_L);
+        textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
         physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
         electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
@@ -243,9 +264,11 @@ public class CslinFragment extends Fragment {
         // Subscript strings
         text_er = (TextView) rootView.findViewById(R.id.text_er);
         text_Z0 = (TextView) rootView.findViewById(R.id.text_Z0);
+        text_k = (TextView) rootView.findViewById(R.id.text_k);
         text_Eeff = (TextView) rootView.findViewById(R.id.text_Phs);
         text_Z0o = (TextView) rootView.findViewById(R.id.text_Z0o);
         text_Z0e = (TextView) rootView.findViewById(R.id.text_Z0e);
+        text_Eeff.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
         SpannableString spanEr = new SpannableString(
                 this.getString(R.string.text_er));
@@ -279,13 +302,17 @@ public class CslinFragment extends Fragment {
 
         // edittext elements
         edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
+        edittext_W.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         edittext_S = (EditText) rootView.findViewById(R.id.editText_S);
+        edittext_S.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
+        edittext_L.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
         edittext_k = (EditText) rootView.findViewById(R.id.editText_k);
         edittext_Z0o = (EditText) rootView.findViewById(R.id.editText_Z0o);
         edittext_Z0e = (EditText) rootView.findViewById(R.id.editText_Z0e);
         edittext_Eeff = (EditText) rootView.findViewById(R.id.editText_Phs);
+        edittext_Eeff.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
         edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
         edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
@@ -344,8 +371,6 @@ public class CslinFragment extends Fragment {
         adapterFreq
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_Freq.setAdapter(adapterFreq);
-        radioBtn_Z0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
-        radioBtn_Z0o = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0o);
     }
 
     private void setRadioBtn() {
@@ -353,40 +378,124 @@ public class CslinFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioBtn_Z0.setChecked(true);
+                radioBtnK.setChecked(true);
                 radioBtn_Z0o.setChecked(false);
+                radioBtnZ0e.setChecked(false);
                 use_z0k = true;
                 edittext_Z0.setEnabled(true);
+                edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittext_k.setEnabled(true);
+                edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittext_Z0o.setEnabled(false);
+                edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittext_Z0e.setEnabled(false);
+                edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            }
+        });
+        radioBtnK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                radioBtn_Z0.setChecked(true);
+                radioBtnK.setChecked(true);
+                radioBtn_Z0o.setChecked(false);
+                radioBtnZ0e.setChecked(false);
+                use_z0k = true;
+                edittext_Z0.setEnabled(true);
+                edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                edittext_k.setEnabled(true);
+                edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                edittext_Z0o.setEnabled(false);
+                edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                edittext_Z0e.setEnabled(false);
+                edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             }
         });
         radioBtn_Z0o.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioBtn_Z0o.setChecked(true);
+                radioBtnZ0e.setChecked(true);
                 radioBtn_Z0.setChecked(false);
+                radioBtnK.setChecked(false);
                 use_z0k = false;
                 edittext_Z0.setEnabled(false);
+                edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittext_k.setEnabled(false);
+                edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittext_Z0o.setEnabled(true);
+                edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittext_Z0e.setEnabled(true);
+                edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            }
+        });
+        radioBtnZ0e.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                radioBtn_Z0o.setChecked(true);
+                radioBtnZ0e.setChecked(true);
+                radioBtn_Z0.setChecked(false);
+                radioBtnK.setChecked(false);
+                use_z0k = false;
+                edittext_Z0.setEnabled(false);
+                edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                edittext_k.setEnabled(false);
+                edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                edittext_Z0o.setEnabled(true);
+                edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                edittext_Z0e.setEnabled(true);
+                edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             }
         });
         if (use_z0k) {
             radioBtn_Z0.setChecked(true);
+            radioBtnK.setChecked(true);
             radioBtn_Z0o.setChecked(false);
+            radioBtnZ0e.setChecked(false);
             edittext_Z0.setEnabled(true);
+            edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             edittext_k.setEnabled(true);
+            edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             edittext_Z0o.setEnabled(false);
+            edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             edittext_Z0e.setEnabled(false);
+            edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
         } else {
             radioBtn_Z0.setChecked(false);
+            radioBtnK.setChecked(false);
             radioBtn_Z0o.setChecked(true);
+            radioBtnZ0e.setChecked(true);
             edittext_Z0.setEnabled(false);
+            edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             edittext_k.setEnabled(false);
+            edittext_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             edittext_Z0o.setEnabled(true);
+            edittext_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             edittext_Z0e.setEnabled(true);
+            edittext_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            text_k.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            text_Z0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            text_Z0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         }
     }
 
