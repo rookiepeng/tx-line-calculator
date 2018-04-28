@@ -54,7 +54,7 @@ package com.rookiedev.microwavetools.libs;
  * <p>
  * Kirschning and Jansen (EL):
  * M. Kirschning and R. H. Jansen, "Accurate Model for Effective Dielectric
- * Constant of Microstrip with Validity up to Millimetre-Wave Frequencies"
+ * Constants of Microstrip with Validity up to Millimetre-Wave Frequencies"
  * Electronics Letters, Vol 18, No. 6, March 18th, 1982, pp 272-273.
  * <p>
  * Kirschning and Jansen give a couple of references for where to go
@@ -133,12 +133,12 @@ public class CmlinCalculator {
         double F, z01;
 
         // (2) from Hammerstad and Jensen.  'u' is the normalized width
-        F = 6.0 + (2.0 * Constant.Pi - 6.0) * Math.exp(-Math.pow((30.666 / widthToHeight), 0.7528));
+        F = 6.0 + (2.0 * Constants.Pi - 6.0) * Math.exp(-Math.pow((30.666 / widthToHeight), 0.7528));
 
         // (1) from Hammerstad and Jensen
         // TODO XXX decide on which to use here
-        //z01 = (Constant.FREESPACEZ0 / (2 * Constant.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
-        z01 = (377.0 / (2 * Constant.Pi)) * Math.log(F / widthToHeight + Math.sqrt(1.0 + Math.pow((2 / widthToHeight), 2.0)));
+        //z01 = (Constants.FREESPACEZ0 / (2 * Constants.Pi)) * Math.log(F / u + Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
+        z01 = (377.0 / (2 * Constants.Pi)) * Math.log(F / widthToHeight + Math.sqrt(1.0 + Math.pow((2 / widthToHeight), 2.0)));
         return z01;
     }
 
@@ -415,7 +415,7 @@ public class CmlinCalculator {
 
         // electrical length
         // propagation velocity (meters/sec)
-        v = Constant.LIGHTSPEED / Math.sqrt(Math.sqrt(EFEF * EFOF));
+        v = Constants.LIGHTSPEED / Math.sqrt(Math.sqrt(EFEF * EFOF));
         // length in wavelengths
         electricalLength = length / (v / frequency);
         // convert to degrees
@@ -490,22 +490,22 @@ public class CmlinCalculator {
 
         // temp value for l used while finding w and s
         l = 1000.0;
-        line.setMetalLength(l, Constant.LengthUnit_m);
+        line.setMetalLength(l, Constants.LengthUnit_m);
 
 
         // limits on the allowed range for w
-        //wmin = Constant.MIL2M(0.5);
-        //wmax = Constant.MIL2M(1000);
+        //wmin = Constants.MIL2M(0.5);
+        //wmax = Constants.MIL2M(1000);
 
         // limits on the allowed range for s
-        //smin = Constant.MIL2M(0.5);
-        //smax = Constant.MIL2M(1000);
+        //smin = Constants.MIL2M(0.5);
+        //smax = Constants.MIL2M(1000);
 
         // impedance convergence tolerance (ohms)
         //abstol = 1e-6;
 
         // width relative convergence tolerance (mils) (set to 0.1 micron)
-        //reltol = Constant.MICRON2MIL(0.1);
+        //reltol = Constants.MICRON2MIL(0.1);
         maxiters = 50;
 
         // Initial guess at a solution
@@ -532,7 +532,7 @@ public class CmlinCalculator {
         else
             delta = 1e-3 * s;
 
-        delta = Constant.value2meter(1e-5, Constant.LengthUnit_mil);
+        delta = Constants.value2meter(1e-5, Constants.LengthUnit_mil);
 
         cval = 1e-12 * z0e * z0o;
 
@@ -543,8 +543,8 @@ public class CmlinCalculator {
    */
         while ((!done) && (iters < maxiters)) {
             iters++;
-            line.setMetalWidth(w, Constant.LengthUnit_m);
-            line.setMetalSpace(s, Constant.LengthUnit_m);
+            line.setMetalWidth(w, Constants.LengthUnit_m);
+            line.setMetalSpace(s, Constants.LengthUnit_m);
             line = Analysis(line);
             ze0 = line.getImpedanceEven();
             zo0 = line.getImpedanceOdd();
@@ -555,14 +555,14 @@ public class CmlinCalculator {
                 done = true;
             } else {
                 // approximate the first jacobian
-                line.setMetalWidth(w + delta, Constant.LengthUnit_m);
-                line.setMetalSpace(s, Constant.LengthUnit_m);
+                line.setMetalWidth(w + delta, Constants.LengthUnit_m);
+                line.setMetalSpace(s, Constants.LengthUnit_m);
                 line = Analysis(line);
                 ze1 = line.getImpedanceEven();
                 zo1 = line.getImpedanceOdd();
 
-                line.setMetalWidth(w, Constant.LengthUnit_m);
-                line.setMetalSpace(s + delta, Constant.LengthUnit_m);
+                line.setMetalWidth(w, Constants.LengthUnit_m);
+                line.setMetalSpace(s + delta, Constants.LengthUnit_m);
                 line = Analysis(line);
                 ze2 = line.getImpedanceEven();
                 zo2 = line.getImpedanceOdd();
@@ -584,12 +584,12 @@ public class CmlinCalculator {
             }
         }
 
-        line.setMetalWidth(w, Constant.LengthUnit_m);
-        line.setMetalSpace(s, Constant.LengthUnit_m);
+        line.setMetalWidth(w, Constants.LengthUnit_m);
+        line.setMetalSpace(s, Constants.LengthUnit_m);
         line = Analysis(line);
 
         // scale the line length to get the desired electrical length
-        line.setMetalLength(line.getMetalLength() * electricalLength / line.getElectricalLength(), Constant.LengthUnit_m);
+        line.setMetalLength(line.getMetalLength() * electricalLength / line.getElectricalLength(), Constants.LengthUnit_m);
 
   /*
    * one last calculation and this time we find the loss too.

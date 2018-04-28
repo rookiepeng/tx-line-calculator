@@ -13,19 +13,19 @@ public class CoaxModel {
     void setSynthesizeParameter(double para, int flag) {
         switch (flag) {
 
-            case Constant.Synthesize_Height:
+            case Constants.Synthesize_Height:
                 substrate.setSubHeight(para);
                 break;
 
-            case Constant.Synthesize_Er:
+            case Constants.Synthesize_Er:
                 substrate.setSubEpsilon(para);
                 break;
 
-            case Constant.Synthesize_CoreRadius:
+            case Constants.Synthesize_CoreRadius:
                 coreRadius = para;
                 break;
 
-            case Constant.Synthesize_CoreOffset:
+            case Constants.Synthesize_CoreOffset:
                 coreOffset = para;
                 break;
 
@@ -51,7 +51,7 @@ public class CoaxModel {
     }
 
     public void setFrequency(double frequency, int unit) {
-        this.frequency = Constant.value2Hz(frequency, unit);
+        this.frequency = Constants.value2Hz(frequency, unit);
     }
 
     public double getFrequency() {
@@ -71,7 +71,7 @@ public class CoaxModel {
     }
 
     public void setSubRadius(double subHeight, int unit) {
-        substrate.setSubHeight(Constant.value2meter(subHeight, unit));
+        substrate.setSubHeight(Constants.value2meter(subHeight, unit));
     }
 
     public double getCoreRadius() {
@@ -79,7 +79,7 @@ public class CoaxModel {
     }
 
     public void setCoreRadius(double coreRadius, int unit) {
-        this.coreRadius = Constant.value2meter(coreRadius, unit);
+        this.coreRadius = Constants.value2meter(coreRadius, unit);
     }
 
     public double getCoreOffset() {
@@ -87,7 +87,7 @@ public class CoaxModel {
     }
 
     public void setCoreOffset(double coreOffset, int unit) {
-        this.coreOffset = Constant.value2meter(coreOffset, unit);
+        this.coreOffset = Constants.value2meter(coreOffset, unit);
     }
 
     public double getMetalLength() {
@@ -95,6 +95,6 @@ public class CoaxModel {
     }
 
     public void setMetalLength(double metalLength, int unit) {
-        this.metalLength = Constant.value2meter(metalLength, unit);
+        this.metalLength = Constants.value2meter(metalLength, unit);
     }
 }

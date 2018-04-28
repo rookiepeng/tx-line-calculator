@@ -15,19 +15,19 @@ public class CpwModel {
 
     void setSynthesizeParameter(double para, int flag) {
         switch (flag) {
-            case Constant.Synthesize_Width:
+            case Constants.Synthesize_Width:
                 metal.setMetalWidth(para);
                 break;
 
-            case Constant.Synthesize_Height:
+            case Constants.Synthesize_Height:
                 substrate.setSubHeight(para);
                 break;
 
-            case Constant.Synthesize_Er:
+            case Constants.Synthesize_Er:
                 substrate.setSubEpsilon(para);
                 break;
 
-            case Constant.Synthesize_Length:
+            case Constants.Synthesize_Length:
                 metal.setMetalLength(para);
                 break;
 
@@ -37,7 +37,7 @@ public class CpwModel {
     }
 
     public void setMetalWidth(double width, int unit) {
-        metal.setMetalWidth(Constant.value2meter(width, unit));
+        metal.setMetalWidth(Constants.value2meter(width, unit));
     }
 
     public double getMetalWidth() {
@@ -45,7 +45,7 @@ public class CpwModel {
     }
 
     public void setMetalLength(double length, int unit) {
-        metal.setMetalLength(Constant.value2meter(length, unit));
+        metal.setMetalLength(Constants.value2meter(length, unit));
     }
 
     public double getMetalLength() {
@@ -53,7 +53,7 @@ public class CpwModel {
     }
 
     public void setMetalThick(double thick, int unit) {
-        metal.setMetalThick(Constant.value2meter(thick, unit));
+        metal.setMetalThick(Constants.value2meter(thick, unit));
     }
 
     double getMetalThick() {
@@ -77,7 +77,7 @@ public class CpwModel {
     }
 
     public void setFrequency(double frequency, int unit) {
-        this.frequency = Constant.value2Hz(frequency, unit);
+        this.frequency = Constants.value2Hz(frequency, unit);
     }
 
     public double getFrequency() {
@@ -97,7 +97,7 @@ public class CpwModel {
     }
 
     public void setSubHeight(double subHeight, int unit) {
-        substrate.setSubHeight(Constant.value2meter(subHeight, unit));
+        substrate.setSubHeight(Constants.value2meter(subHeight, unit));
     }
 
     public SubstrateModel getSubstrate() {
@@ -121,6 +121,6 @@ public class CpwModel {
     }
 
     public void setMetalSpace(double metalSpace, int unit) {
-        this.metalSpace = Constant.value2meter(metalSpace, unit);
+        this.metalSpace = Constants.value2meter(metalSpace, unit);
     }
 }

@@ -28,7 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
-import com.rookiedev.microwavetools.libs.Constant;
+import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.libs.MlinModel;
 import com.rookiedev.microwavetools.libs.MlinCalculator;
 
@@ -154,7 +154,7 @@ public class MlinFragment extends Fragment {
                     if (edittext_Phs.length() != 0) {
                         line.setElectricalLength(Double.parseDouble(edittext_Phs.getText().toString()));
                         MlinCalculator mlin = new MlinCalculator();
-                        line = mlin.getSynResult(line, Constant.Synthesize_Width);
+                        line = mlin.getSynResult(line, Constants.Synthesize_Width);
                         W = line.getMetalWidth();
                         //fragment_mlin.setW(W);
                         L = line.getMetalLength();
@@ -172,7 +172,7 @@ public class MlinFragment extends Fragment {
                         edittext_L.setText(String.valueOf(L));
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
-                        line = mlin.getSynResult(line, Constant.Synthesize_Width);
+                        line = mlin.getSynResult(line, Constants.Synthesize_Width);
                         W = line.getMetalWidth();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
@@ -319,7 +319,7 @@ public class MlinFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
@@ -358,7 +358,7 @@ public class MlinFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
         // universal header_parameters
@@ -372,7 +372,7 @@ public class MlinFragment extends Fragment {
         String mlin_W, mlin_T, mlin_H, mlin_epsilon, mlin_L, mlin_Z0, mlin_Eeff, mlin_Freq;
         String mlin_W_unit, mlin_L_unit, mlin_T_unit, mlin_H_unit, mlin_Z0_unit, mlin_Eeff_unit, mlin_Freq_unit;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 

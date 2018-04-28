@@ -1,6 +1,6 @@
 package com.rookiedev.microwavetools.libs;
 
-public class Constant {
+public class Constants {
     // Shared Preference values
     public static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
     public static final String PREFS_POSITION = "POSITION";

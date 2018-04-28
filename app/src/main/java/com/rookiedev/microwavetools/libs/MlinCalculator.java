@@ -33,7 +33,7 @@ public class MlinCalculator {
             // find normalized metal thickness
             thicknessToHeight = thickness / height;
             // (6) from Hammerstad and Jensen
-            deltau1 = (thicknessToHeight / Constant.Pi)
+            deltau1 = (thicknessToHeight / Constants.Pi)
                     * Math.log(1.0 + 4.0 * Math.exp(1.0)
                     / (thicknessToHeight * Math.pow(Math.cosh(Math.sqrt(6.517 * widthToHeight))
                     / Math.sinh(Math.sqrt(6.517 * widthToHeight)), 2.0)));
@@ -111,7 +111,7 @@ public class MlinCalculator {
         impedance = impedance * Math.pow((R13 / R14), R17);
 
         // propagation velocity (meters/sec)
-        v = Constant.LIGHTSPEED / Math.sqrt(EF);
+        v = Constants.LIGHTSPEED / Math.sqrt(EF);
 
         // length in wavelengths
         if (line.getFrequency() > 0.0) {
@@ -200,25 +200,25 @@ public class MlinCalculator {
         */
 
         switch (flag) {
-            case Constant.Synthesize_Width:
+            case Constants.Synthesize_Width:
                 varMax = 100.0 * line.getSubHeight();
                 varMin = 0.01 * line.getSubHeight();
                 var = line.getSubHeight();
                 break;
 
-            case Constant.Synthesize_Height:
+            case Constants.Synthesize_Height:
                 varMax = 100.0 * line.getMetalWidth();
                 varMin = 0.01 * line.getMetalWidth();
                 var = line.getMetalWidth();
                 break;
 
-            case Constant.Synthesize_Er:
+            case Constants.Synthesize_Er:
                 varMax = 100.0;
                 varMin = 1.0;
                 var = 5.0;
                 break;
 
-            case Constant.Synthesize_Length:
+            case Constants.Synthesize_Length:
                 varMax = 100.0;
                 varMin = 1.0;
                 var = 5.0;
@@ -235,7 +235,7 @@ public class MlinCalculator {
 
         //temp value for l used while synthesizing the other header_parameters. We'll correct l later.
         length = 1000.0;
-        line.setMetalLength(length, Constant.LengthUnit_m);
+        line.setMetalLength(length, Constants.LengthUnit_m);
 
         if (!done) {
             // Initialize the various error values
@@ -324,9 +324,9 @@ public class MlinCalculator {
 
         // velocity on line
         line = Analysis(line);
-        v = Constant.LIGHTSPEED / Math.sqrt(effectiveEr);
+        v = Constants.LIGHTSPEED / Math.sqrt(effectiveEr);
         length = (electricalLength / 360) * (v / line.getFrequency());
-        line.setMetalLength(length, Constant.LengthUnit_m);
+        line.setMetalLength(length, Constants.LengthUnit_m);
 
         return line;
     }
@@ -355,10 +355,10 @@ public class MlinCalculator {
         double F, z01;
 
         // (2) from Hammerstad and Jensen.  'u' is the normalized width
-        F = 6.0 + (2.0 * Constant.Pi - 6.0) * Math.exp(-Math.pow((30.666 / widthToHeight), 0.7528));
+        F = 6.0 + (2.0 * Constants.Pi - 6.0) * Math.exp(-Math.pow((30.666 / widthToHeight), 0.7528));
 
         // (1) from Hammerstad and Jensen
-        z01 = (Constant.FREESPACEZ0 / (2 * Constant.Pi)) * Math.log(F / widthToHeight + Math.sqrt(1.0 + Math.pow((2 / widthToHeight), 2.0)));
+        z01 = (Constants.FREESPACEZ0 / (2 * Constants.Pi)) * Math.log(F / widthToHeight + Math.sqrt(1.0 + Math.pow((2 / widthToHeight), 2.0)));
 
         return z01;
     }

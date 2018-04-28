@@ -22,7 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
-import com.rookiedev.microwavetools.libs.Constant;
+import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.libs.SlinCalculator;
 import com.rookiedev.microwavetools.libs.SlinModel;
 
@@ -126,11 +126,11 @@ public class SlinFragment extends Fragment {
             public void onClick(View view) {
                 Preference_SharedPref();
                 if (!synthesizeInputCheck()) {
-                    if (flag == Constant.Synthesize_Width) {
+                    if (flag == Constants.Synthesize_Width) {
                         edittext_W.setText("");
-                    } else if (flag == Constant.Synthesize_Height) {
+                    } else if (flag == Constants.Synthesize_Height) {
                         edittext_H.setText("");
-                    } else if (flag == Constant.Synthesize_Er) {
+                    } else if (flag == Constants.Synthesize_Er) {
                         edittext_er.setText("");
                     }
                 } else {
@@ -139,15 +139,15 @@ public class SlinFragment extends Fragment {
                     line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()), spinner_Freq.getSelectedItemPosition());
                     line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
 
-                    if (flag == Constant.Synthesize_Width) {
+                    if (flag == Constants.Synthesize_Width) {
                         line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                        line.setMetalWidth(0, Constant.LengthUnit_m);
-                    } else if (flag == Constant.Synthesize_Height) {
+                        line.setMetalWidth(0, Constants.LengthUnit_m);
+                    } else if (flag == Constants.Synthesize_Height) {
                         line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                        line.setSubHeight(0, Constant.LengthUnit_m);
-                    } else if (flag == Constant.Synthesize_Er) {
+                        line.setSubHeight(0, Constants.LengthUnit_m);
+                    } else if (flag == Constants.Synthesize_Er) {
                         line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
                         line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
                         line.setSubEpsilon(0);
@@ -173,7 +173,7 @@ public class SlinFragment extends Fragment {
                         //} else if (temp == 2) {
                         //    L = L * 100;
                         //}
-                        BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
+                        BigDecimal L_temp = new BigDecimal(Constants.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
                         double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_L.setText(String.valueOf(L));
@@ -185,7 +185,7 @@ public class SlinFragment extends Fragment {
                         //er = fragment_slin.geter();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
-                    if (flag == Constant.Synthesize_Width) {
+                    if (flag == Constants.Synthesize_Width) {
                         /*temp = spinner_W.getSelectedItemPosition(); // W (m)
                         if (temp == 0) {
                             W = W * 1000 * 39.37007874;
@@ -195,11 +195,11 @@ public class SlinFragment extends Fragment {
                             W = W * 100;
                         }*/
 
-                        BigDecimal W_temp = new BigDecimal(Constant.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
+                        BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
                         double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_W.setText(String.valueOf(W));
-                    } else if (flag == Constant.Synthesize_Height) {
+                    } else if (flag == Constants.Synthesize_Height) {
                         /*temp = spinner_H.getSelectedItemPosition();
                         if (temp == 0) {
                             H = H * 1000 * 39.37007874;
@@ -209,11 +209,11 @@ public class SlinFragment extends Fragment {
                             H = H * 100;
                         }*/
 
-                        BigDecimal H_temp = new BigDecimal(Constant.meter2others(line.getSubHeight(), spinner_H.getSelectedItemPosition()));
+                        BigDecimal H_temp = new BigDecimal(Constants.meter2others(line.getSubHeight(), spinner_H.getSelectedItemPosition()));
                         double H = H_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_H.setText(String.valueOf(H));
-                    } else if (flag == Constant.Synthesize_Er) {
+                    } else if (flag == Constants.Synthesize_Er) {
                         BigDecimal er_temp = new BigDecimal(line.getSubEpsilon());
                         double er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
@@ -336,7 +336,7 @@ public class SlinFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
@@ -376,7 +376,7 @@ public class SlinFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
         // universal header_parameters
@@ -384,21 +384,21 @@ public class SlinFragment extends Fragment {
     }
 
     private void setRadioBtn() {
-        if (flag == Constant.Synthesize_Width) {
+        if (flag == Constants.Synthesize_Width) {
             radioBtn_W.setChecked(true);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(false);
             //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == Constant.Synthesize_Height) {
+        } else if (flag == Constants.Synthesize_Height) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(true);
             radioBtn_er.setChecked(false);
             //parameter_width.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == Constant.Synthesize_Er) {
+        } else if (flag == Constants.Synthesize_Er) {
             radioBtn_W.setChecked(false);
             radioBtn_H.setChecked(false);
             radioBtn_er.setChecked(true);
@@ -415,7 +415,7 @@ public class SlinFragment extends Fragment {
                 //parameter_width.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
-                flag = Constant.Synthesize_Width;
+                flag = Constants.Synthesize_Width;
             }
         });
         radioBtn_H.setOnClickListener(new View.OnClickListener() {
@@ -427,7 +427,7 @@ public class SlinFragment extends Fragment {
                 //parameter_width.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //er_input.setBackgroundColor(Color.WHITE);
-                flag = Constant.Synthesize_Height;
+                flag = Constants.Synthesize_Height;
             }
         });
         radioBtn_er.setOnClickListener(new View.OnClickListener() {
@@ -439,7 +439,7 @@ public class SlinFragment extends Fragment {
                 //parameter_width.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                flag = Constant.Synthesize_Er;
+                flag = Constants.Synthesize_Er;
             }
         });
     }
@@ -451,7 +451,7 @@ public class SlinFragment extends Fragment {
         String slin_W_unit, slin_H_unit, slin_L_unit, slin_Z0_unit, slin_Eeff_unit, slin_Freq_unit, slin_T_unit;
         String slin_flag;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         slin_W = edittext_W.getText().toString();

@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CoaxCalculator;
-import com.rookiedev.microwavetools.libs.Constant;
+import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.libs.CoaxModel;
 
 import java.math.BigDecimal;
@@ -132,7 +132,7 @@ public class CoaxFragment extends Fragment {
                     line.setFrequency(Double.parseDouble(edittextFreq.getText().toString()),
                             spinnerFreq.getSelectedItemPosition());
 
-                    if (target == Constant.Synthesize_CoreRadius) {
+                    if (target == Constants.Synthesize_CoreRadius) {
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
                                 spinnerB.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
@@ -140,7 +140,7 @@ public class CoaxFragment extends Fragment {
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
 
                         //a = 0;
-                    } else if (target == Constant.Synthesize_SubRadius) {
+                    } else if (target == Constants.Synthesize_SubRadius) {
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
@@ -148,7 +148,7 @@ public class CoaxFragment extends Fragment {
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
 
                         //b = 0;
-                    } else if (target == Constant.Synthesize_CoreOffset) {
+                    } else if (target == Constants.Synthesize_CoreOffset) {
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
@@ -156,7 +156,7 @@ public class CoaxFragment extends Fragment {
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
 
                         //c = 0;
-                    } else if (target == Constant.Synthesize_Er) {
+                    } else if (target == Constants.Synthesize_Er) {
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
@@ -173,7 +173,7 @@ public class CoaxFragment extends Fragment {
                         line = coax.getSynResult(line, target);
 
                         BigDecimal L_temp = new BigDecimal(
-                                Constant.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
+                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
                         double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextL.setText(String.valueOf(L));
                     } else {
@@ -181,25 +181,25 @@ public class CoaxFragment extends Fragment {
                         line = coax.getSynResult(line, target);
                         edittextL.setText(""); // clear the L if the Eeff input is empty
                     }
-                    if (target == Constant.Synthesize_CoreRadius) {
+                    if (target == Constants.Synthesize_CoreRadius) {
 
                         BigDecimal a_temp = new BigDecimal(
-                                Constant.meter2others(line.getCoreRadius(), spinnerA.getSelectedItemPosition())); // cut the decimal of W
+                                Constants.meter2others(line.getCoreRadius(), spinnerA.getSelectedItemPosition())); // cut the decimal of W
                         double a = a_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextA.setText(String.valueOf(a));
-                    } else if (target == Constant.Synthesize_SubRadius) {
+                    } else if (target == Constants.Synthesize_SubRadius) {
 
                         BigDecimal b_temp = new BigDecimal(
-                                Constant.meter2others(line.getSubRadius(), spinnerB.getSelectedItemPosition())); // cut the decimal of S
+                                Constants.meter2others(line.getSubRadius(), spinnerB.getSelectedItemPosition())); // cut the decimal of S
                         double height = b_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextB.setText(String.valueOf(height));
-                    } else if (target == Constant.Synthesize_CoreOffset) {
+                    } else if (target == Constants.Synthesize_CoreOffset) {
 
                         BigDecimal c_temp = new BigDecimal(
-                                Constant.meter2others(line.getCoreOffset(), spinnerC.getSelectedItemPosition()));
+                                Constants.meter2others(line.getCoreOffset(), spinnerC.getSelectedItemPosition()));
                         double b = c_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextC.setText(String.valueOf(b));
-                    } else if (target == Constant.Synthesize_Er) {
+                    } else if (target == Constants.Synthesize_Er) {
                         BigDecimal er_temp = new BigDecimal(line.getSubEpsilon());
                         double er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextEr.setText(String.valueOf(er));
@@ -312,7 +312,7 @@ public class CoaxFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
@@ -345,11 +345,11 @@ public class CoaxFragment extends Fragment {
         //edittext_T.setText(prefs.getString(COAX_T, "1.40"));
         //pinner_T.setSelection(Integer.parseInt(prefs.getString(COAX_T_UNIT,
         //        "0")));
-        target = Integer.parseInt(prefs.getString(COAX_TARGET, Integer.toString(Constant.Synthesize_CoreRadius)));
+        target = Integer.parseInt(prefs.getString(COAX_TARGET, Integer.toString(Constants.Synthesize_CoreRadius)));
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
         // universal header_parameters
@@ -357,7 +357,7 @@ public class CoaxFragment extends Fragment {
     }
 
     private void setRadioBtn() {
-        if (target == Constant.Synthesize_CoreRadius) {
+        if (target == Constants.Synthesize_CoreRadius) {
             radioBtnA.setChecked(true);
             radioBtnC.setChecked(false);
             radioBtnB.setChecked(false);
@@ -366,7 +366,7 @@ public class CoaxFragment extends Fragment {
             //c_input.setBackgroundColor(Color.WHITE);
             //b_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (target == Constant.Synthesize_Height) {
+        } else if (target == Constants.Synthesize_Height) {
             radioBtnA.setChecked(false);
             radioBtnB.setChecked(true);
             radioBtnC.setChecked(false);
@@ -375,7 +375,7 @@ public class CoaxFragment extends Fragment {
             //c_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //b_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (target == Constant.Synthesize_CoreOffset) {
+        } else if (target == Constants.Synthesize_CoreOffset) {
             radioBtnA.setChecked(false);
             radioBtnB.setChecked(false);
             radioBtnC.setChecked(true);
@@ -384,7 +384,7 @@ public class CoaxFragment extends Fragment {
             //c_input.setBackgroundColor(Color.WHITE);
             //b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (target == Constant.Synthesize_Er) {
+        } else if (target == Constants.Synthesize_Er) {
             radioBtnA.setChecked(false);
             radioBtnB.setChecked(false);
             radioBtnC.setChecked(false);
@@ -405,7 +405,7 @@ public class CoaxFragment extends Fragment {
                 //c_input.setBackgroundColor(Color.WHITE);
                 //b_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
-                target = Constant.Synthesize_CoreRadius;
+                target = Constants.Synthesize_CoreRadius;
             }
         });
         radioBtnC.setOnClickListener(new View.OnClickListener() {
@@ -419,7 +419,7 @@ public class CoaxFragment extends Fragment {
                 //c_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //b_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
-                target = Constant.Synthesize_Height;
+                target = Constants.Synthesize_Height;
             }
         });
         radioBtnB.setOnClickListener(new View.OnClickListener() {
@@ -433,7 +433,7 @@ public class CoaxFragment extends Fragment {
                 //c_input.setBackgroundColor(Color.WHITE);
                 //b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //er_input.setBackgroundColor(Color.WHITE);
-                target = Constant.Synthesize_CoreOffset;
+                target = Constants.Synthesize_CoreOffset;
             }
         });
         radioBtnEr.setOnClickListener(new View.OnClickListener() {
@@ -447,7 +447,7 @@ public class CoaxFragment extends Fragment {
                 //c_input.setBackgroundColor(Color.WHITE);
                 //b_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                target = Constant.Synthesize_Er;
+                target = Constants.Synthesize_Er;
             }
         });
     }
@@ -460,7 +460,7 @@ public class CoaxFragment extends Fragment {
                 coax_T_unit;
         String coax_flag;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         coax_a = edittextA.getText().toString();

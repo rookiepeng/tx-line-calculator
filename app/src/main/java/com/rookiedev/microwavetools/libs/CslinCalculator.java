@@ -39,9 +39,9 @@ public class CslinCalculator {
         // (6) from Cohn
         ko = Math.tanh(Math.PI * line.getMetalWidth() / (2.0 * line.getSubHeight())) / Math.tanh(Math.PI * (line.getMetalWidth() + line.getMetalSpace()) / (2.0 * line.getSubHeight()));
         // (2) from Cohn
-        line.setImpedanceEven((Constant.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / line.getSubEpsilon()) / k_over_kp(ke));
+        line.setImpedanceEven((Constants.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / line.getSubEpsilon()) / k_over_kp(ke));
         // (5) from Cohn
-        line.setImpedanceOdd((Constant.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / line.getSubEpsilon()) / k_over_kp(ko));
+        line.setImpedanceOdd((Constants.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / line.getSubEpsilon()) / k_over_kp(ko));
         return line;
     }
 
@@ -66,29 +66,29 @@ public class CslinCalculator {
             //line -> z0o = z0o_0t;
         } else {
             lineSlin.setSubstrate(line.getSubstrate());
-            lineSlin.setMetalThick(line.getMetalThick(), Constant.LengthUnit_m);
-            lineSlin.setMetalWidth(line.getMetalWidth(), Constant.LengthUnit_m);
-            lineSlin.setMetalLength(line.getMetalLength(), Constant.LengthUnit_m);
-            lineSlin.setFrequency(line.getFrequency(), Constant.FreqUnit_Hz);
+            lineSlin.setMetalThick(line.getMetalThick(), Constants.LengthUnit_m);
+            lineSlin.setMetalWidth(line.getMetalWidth(), Constants.LengthUnit_m);
+            lineSlin.setMetalLength(line.getMetalLength(), Constants.LengthUnit_m);
+            lineSlin.setFrequency(line.getFrequency(), Constants.FreqUnit_Hz);
 
             SlinCalculator slin = new SlinCalculator();
             lineSlin = slin.getAnaResult(lineSlin);
 
             z0s = lineSlin.getImpedance();
 
-            lineSlin.setMetalThick(0, Constant.LengthUnit_m);
+            lineSlin.setMetalThick(0, Constants.LengthUnit_m);
             lineSlin = slin.getAnaResult(lineSlin);
             z0s_0t = lineSlin.getImpedance();
 
             // fringing capacitance
-            cf_t = (Constant.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * (
+            cf_t = (Constants.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * (
                     (2.0 / (1.0 - line.getMetalThick() / line.getSubHeight())) *
                             Math.log((1.0 / (1.0 - line.getMetalThick() / line.getSubHeight())) + 1.0) -
                             (1.0 / (1.0 - line.getMetalThick() / line.getSubHeight()) - 1.0) *
                                     Math.log((1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0));
 
             // zero thickness fringing capacitance
-            cf_0 = (Constant.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * 2.0 * Math.log(2.0);
+            cf_0 = (Constants.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * 2.0 * Math.log(2.0);
 
             // (18) from Cohn, (4.6.5.1) in Wadell
             line.setImpedanceEven(1.0 / ((1.0 / z0s) - (cf_t / cf_0) * ((1.0 / z0s_0t) - (1.0 / z0e_0t))));
@@ -100,8 +100,8 @@ public class CslinCalculator {
                 // (22) from Cohn, (4.6.5.3) in Wadell -- note, Wadell has a couple of errors in the transcription from the original (Cohn)
                 line.setImpedanceOdd(1.0 / ((1.0 / z0o_0t) +
                         ((1.0 / z0s) - (1.0 / z0s_0t)) -
-                        (2.0 / Constant.FREESPACEZ0) * (cf_t / Constant.FREESPACE_E0 - cf_0 / Constant.FREESPACE_E0) +
-                        (2.0 * line.getMetalThick()) / (Constant.FREESPACEZ0 * line.getMetalSpace())));
+                        (2.0 / Constants.FREESPACEZ0) * (cf_t / Constants.FREESPACE_E0 - cf_0 / Constants.FREESPACE_E0) +
+                        (2.0 * line.getMetalThick()) / (Constants.FREESPACEZ0 * line.getMetalSpace())));
             }
         }
 
@@ -118,7 +118,7 @@ public class CslinCalculator {
    *
    * 1/wavelength = freq * LIGHTSPEED/sqrt(keff)
    */
-        line.setElectricalLength(360.0 * line.getMetalLength() * line.getFrequency() / (Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon())));
+        line.setElectricalLength(360.0 * line.getMetalLength() * line.getFrequency() / (Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon())));
         return line;
     }
 
@@ -170,7 +170,7 @@ public class CslinCalculator {
 
         // temp value for l used while finding w and s
         l = 1000.0;
-        line.setMetalLength(l, Constant.LengthUnit_m);
+        line.setMetalLength(l, Constants.LengthUnit_m);
 
         // FIXME - change limits to be normalized to substrate thickness limits on the allowed range for w
         //wmin = MIL2M(0.5);
@@ -208,7 +208,7 @@ public class CslinCalculator {
             delta = 1e-3 * w;
         else
             delta = 1e-3 * s;
-        delta = Constant.value2meter(1e-5, Constant.LengthUnit_mil);
+        delta = Constants.value2meter(1e-5, Constants.LengthUnit_mil);
         cval = 1e-12 * z0e * z0o;
 
   /*
@@ -218,8 +218,8 @@ public class CslinCalculator {
    */
         while ((!done) && (iters < maxiters)) {
             iters++;
-            line.setMetalWidth(w, Constant.LengthUnit_m);
-            line.setMetalSpace(s, Constant.LengthUnit_m);
+            line.setMetalWidth(w, Constants.LengthUnit_m);
+            line.setMetalSpace(s, Constants.LengthUnit_m);
             line = Analysis(line);
 
             ze0 = line.getImpedanceEven();
@@ -231,14 +231,14 @@ public class CslinCalculator {
                 done = true;
             } else {
                 // approximate the first jacobian
-                line.setMetalWidth(w + delta, Constant.LengthUnit_m);
-                line.setMetalSpace(s, Constant.LengthUnit_m);
+                line.setMetalWidth(w + delta, Constants.LengthUnit_m);
+                line.setMetalSpace(s, Constants.LengthUnit_m);
                 line = Analysis(line);
                 ze1 = line.getImpedanceEven();
                 zo1 = line.getImpedanceOdd();
 
-                line.setMetalWidth(w, Constant.LengthUnit_m);
-                line.setMetalSpace(s + delta, Constant.LengthUnit_m);
+                line.setMetalWidth(w, Constants.LengthUnit_m);
+                line.setMetalSpace(s + delta, Constants.LengthUnit_m);
                 line = Analysis(line);
                 ze2 = line.getImpedanceEven();
                 zo2 = line.getImpedanceOdd();
@@ -275,12 +275,12 @@ public class CslinCalculator {
             }
         }
 
-        line.setMetalWidth(w, Constant.LengthUnit_m);
-        line.setMetalSpace(s, Constant.LengthUnit_m);
+        line.setMetalWidth(w, Constants.LengthUnit_m);
+        line.setMetalSpace(s, Constants.LengthUnit_m);
         line = Analysis(line);
 
         // scale the line length to get the desired electrical length
-        line.setMetalLength(line.getMetalLength() * len / line.getElectricalLength(), Constant.LengthUnit_m);
+        line.setMetalLength(line.getMetalLength() * len / line.getElectricalLength(), Constants.LengthUnit_m);
         return line;
     }
 

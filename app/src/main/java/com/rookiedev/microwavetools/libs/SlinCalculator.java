@@ -44,7 +44,7 @@ public class SlinCalculator {
 
         // Electrical Length
         // propagation velocity (meters/sec)
-        v = Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
+        v = Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
         line.setElectricalLength(360 * line.getMetalLength() * frequency / v);
 
         //  store results
@@ -108,22 +108,22 @@ public class SlinCalculator {
    */
 
         switch (flag) {
-            case Constant.Synthesize_Width:
+            case Constants.Synthesize_Width:
                 varmax = 100.0 * line.getSubHeight();
                 varmin = 0.01 * line.getSubHeight();
                 var = line.getSubHeight();
                 break;
-            case Constant.Synthesize_Height:
+            case Constants.Synthesize_Height:
                 varmax = 100.0 * line.getMetalWidth();
                 varmin = 0.01 * line.getMetalWidth();
                 var = line.getMetalWidth();
                 break;
-            case Constant.Synthesize_Er:
+            case Constants.Synthesize_Er:
                 varmax = 100.0;
                 varmin = 1.0;
                 var = 5.0;
                 break;
-            case Constant.Synthesize_Length:
+            case Constants.Synthesize_Length:
                 varmax = 100.0;
                 varmin = 1.0;
                 var = 5.0;
@@ -141,7 +141,7 @@ public class SlinCalculator {
 
         // temp value for l used while synthesizing the other header_parameters.
         l = 1000.0;
-        line.setMetalLength(l, Constant.LengthUnit_m);
+        line.setMetalLength(l, Constants.LengthUnit_m);
 
         if (!done) {
             // Initialize the various error values
@@ -232,8 +232,8 @@ public class SlinCalculator {
         // velocity on line
         line = Analysis(line);
 
-        v = Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
-        line.setMetalLength((len / 360) * (v / line.getFrequency()), Constant.LengthUnit_m);
+        v = Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
+        line.setMetalLength((len / 360) * (v / line.getFrequency()), Constants.LengthUnit_m);
 
         return line;
     }

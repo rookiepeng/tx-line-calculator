@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CmlinCalculator;
-import com.rookiedev.microwavetools.libs.Constant;
+import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.libs.CmlinModel;
 
 import java.math.BigDecimal;
@@ -370,7 +370,7 @@ public class CmlinFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
@@ -425,7 +425,7 @@ public class CmlinFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared Preferences in the device universal header_parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
@@ -438,7 +438,7 @@ public class CmlinFragment extends Fragment {
         String cmlin_W_unit, cmlin_S_unit, cmlin_L_unit, cmlin_Z0_unit, cmlin_Z0e_unit, cmlin_Z0o_unit, cmlin_Eeff_unit, cmlin_Freq_unit, cmlin_H_unit, cmlin_T_unit;
         String cmlin_use_z0k;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 

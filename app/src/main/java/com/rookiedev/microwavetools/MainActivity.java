@@ -26,7 +26,7 @@ import com.rookiedev.microwavetools.fragments.CpwFragment;
 import com.rookiedev.microwavetools.fragments.CslinFragment;
 import com.rookiedev.microwavetools.fragments.MlinFragment;
 import com.rookiedev.microwavetools.fragments.SlinFragment;
-import com.rookiedev.microwavetools.libs.Constant;
+import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.util.IabBroadcastReceiver;
 import com.rookiedev.microwavetools.util.IabHelper;
 import com.rookiedev.microwavetools.util.IabResult;
@@ -349,17 +349,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStop() {
         super.onStop();
-        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString(Constant.PREFS_POSITION, String.valueOf(pos));
+        editor.putString(Constants.PREFS_POSITION, String.valueOf(pos));
         editor.apply();
         // saveSharedPref();
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
-        pos = Integer.parseInt(prefs.getString(Constant.PREFS_POSITION, "0"));
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
+        pos = Integer.parseInt(prefs.getString(Constants.PREFS_POSITION, "0"));
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -429,10 +429,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean isFirstRun() {
-        SharedPreferences prefs = getSharedPreferences(Constant.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
-        if (prefs.getString(Constant.PREFS_ISFIRSTRUN, "true").equals("true")) {
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
+        if (prefs.getString(Constants.PREFS_ISFIRSTRUN, "true").equals("true")) {
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(Constant.PREFS_ISFIRSTRUN, "false");
+            editor.putString(Constants.PREFS_ISFIRSTRUN, "false");
             editor.apply();
             return true;
         } else {

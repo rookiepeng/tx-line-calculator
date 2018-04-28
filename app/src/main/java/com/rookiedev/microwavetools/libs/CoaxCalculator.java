@@ -38,10 +38,10 @@ public class CoaxCalculator {
         x = (line.getCoreRadius() + (Math.pow(line.getSubRadius(), 2.0) - Math.pow(line.getCoreOffset(), 2.0)) / line.getCoreRadius()) /
                 (2 * line.getSubRadius());
 
-        line.setImpedance((1 / (2 * Math.PI)) * Math.sqrt(Constant.FREESPACE_MU0 / (Constant.FREESPACE_E0 * line.getSubEpsilon())) * Math.log(x + Math.sqrt(x * x - 1)));
+        line.setImpedance((1 / (2 * Math.PI)) * Math.sqrt(Constants.FREESPACE_MU0 / (Constants.FREESPACE_E0 * line.getSubEpsilon())) * Math.log(x + Math.sqrt(x * x - 1)));
 
         // find velocity (meters/second)
-        v = 1.0 / Math.sqrt(Constant.FREESPACE_MU0 * Constant.FREESPACE_E0 * line.getSubEpsilon());
+        v = 1.0 / Math.sqrt(Constants.FREESPACE_MU0 * Constants.FREESPACE_E0 * line.getSubEpsilon());
 
         // electrical length 2*pi*f*(180/pi) = 360*f
         line.setElectricalLength(360.0 * line.getFrequency() * line.getMetalLength() / v);
@@ -88,22 +88,22 @@ public class CoaxCalculator {
    */
 
         switch (flag) {
-            case Constant.Synthesize_CoreRadius:
+            case Constants.Synthesize_CoreRadius:
                 varmax = 0.999 * line.getSubRadius();
                 varmin = 0.001 * line.getSubRadius();
                 var = 0.2 * line.getSubRadius();
                 break;
-            case Constant.Synthesize_Height:
+            case Constants.Synthesize_Height:
                 varmax = 1000.0 * line.getCoreRadius();
                 varmin = 1.001 * line.getCoreRadius();
                 var = 5 * line.getCoreRadius();
                 break;
-            case Constant.Synthesize_CoreOffset:
+            case Constants.Synthesize_CoreOffset:
                 varmax = 0.999 * (line.getSubRadius() - line.getCoreRadius());
                 varmin = 0;
                 var = 0.1 * varmax;
                 break;
-            case Constant.Synthesize_Er:
+            case Constants.Synthesize_Er:
                 varmax = 100.0;
                 varmin = 1.0;
                 var = 5.0;
@@ -120,7 +120,7 @@ public class CoaxCalculator {
         elen = line.getElectricalLength();
 
         // temp value for len used while synthesizing the other header_parameters.
-        line.setMetalLength(1.0, Constant.LengthUnit_m);
+        line.setMetalLength(1.0, Constants.LengthUnit_m);
 
         if (!done) {
             // Initialize the various error values
@@ -208,8 +208,8 @@ public class CoaxCalculator {
         // velocity on line
         line = Analysis(line);
 
-        v = Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
-        line.setMetalLength((elen / 360) * (v / line.getFrequency()), Constant.LengthUnit_m);
+        v = Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
+        line.setMetalLength((elen / 360) * (v / line.getFrequency()), Constants.LengthUnit_m);
 
         return line;
     }

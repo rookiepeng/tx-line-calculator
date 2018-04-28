@@ -23,8 +23,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
+import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.libs.CpwCalculator;
-import com.rookiedev.microwavetools.libs.Constant;
 import com.rookiedev.microwavetools.libs.CpwModel;
 
 import java.math.BigDecimal;
@@ -148,13 +148,13 @@ public class CpwFragment extends Fragment {
             public void onClick(View view) {
                 Preference_SharedPref();
                 if (!synthesizeInputCheck()) {
-                    if (flag == Constant.Synthesize_Width) {
+                    if (flag == Constants.Synthesize_Width) {
                         edittext_W.setText("");
-                    } else if (flag == Constant.Synthesize_Gap) {
+                    } else if (flag == Constants.Synthesize_Gap) {
                         edittext_S.setText("");
-                    } else if (flag == Constant.Synthesize_Height) {
+                    } else if (flag == Constants.Synthesize_Height) {
                         edittext_H.setText("");
-                    } else if (flag == Constant.Synthesize_Er) {
+                    } else if (flag == Constants.Synthesize_Er) {
                         edittext_er.setText("");
                     }
                 } else {
@@ -164,25 +164,25 @@ public class CpwFragment extends Fragment {
                     line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
                     //Z0 = Double.parseDouble(edittext_Z0.getText().toString()); // get the header_parameters
 
-                    if (flag == Constant.Synthesize_Width) {
+                    if (flag == Constants.Synthesize_Width) {
                         line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
                         line.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
 
                         //W = 0;
-                    } else if (flag == Constant.Synthesize_Gap) {
+                    } else if (flag == Constants.Synthesize_Gap) {
                         line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
                         line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
 
                         //S = 0;
-                    } else if (flag == Constant.Synthesize_Height) {
+                    } else if (flag == Constants.Synthesize_Height) {
                         line.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
                         line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
 
                         //H = 0;
-                    } else if (flag == Constant.Synthesize_Er) {
+                    } else if (flag == Constants.Synthesize_Er) {
                         line.setMetalSpace(Double.parseDouble(edittext_S.getText().toString()), spinner_S.getSelectedItemPosition());
                         line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()), spinner_W.getSelectedItemPosition());
                         line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
@@ -212,7 +212,7 @@ public class CpwFragment extends Fragment {
                             er = fragment_cpw.geter();
                             L = fragment_cpw.getL();
                         }*/
-                        BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the
+                        BigDecimal L_temp = new BigDecimal(Constants.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the
                         // decimal of L
                         double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
@@ -239,22 +239,22 @@ public class CpwFragment extends Fragment {
                         }*/
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
-                    if (flag == Constant.Synthesize_Width) {
-                        BigDecimal W_temp = new BigDecimal(Constant.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
+                    if (flag == Constants.Synthesize_Width) {
+                        BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
                         double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_W.setText(String.valueOf(W));
-                    } else if (flag == Constant.Synthesize_Gap) {
-                        BigDecimal S_temp = new BigDecimal(Constant.meter2others(line.getMetalSpace(), spinner_S.getSelectedItemPosition())); // cut the decimal of S
+                    } else if (flag == Constants.Synthesize_Gap) {
+                        BigDecimal S_temp = new BigDecimal(Constants.meter2others(line.getMetalSpace(), spinner_S.getSelectedItemPosition())); // cut the decimal of S
                         double S = S_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_S.setText(String.valueOf(S));
-                    } else if (flag == Constant.Synthesize_Height) {
-                        BigDecimal H_temp = new BigDecimal(Constant.meter2others(line.getSubHeight(), spinner_H.getSelectedItemPosition()));
+                    } else if (flag == Constants.Synthesize_Height) {
+                        BigDecimal H_temp = new BigDecimal(Constants.meter2others(line.getSubHeight(), spinner_H.getSelectedItemPosition()));
                         double H = H_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittext_H.setText(String.valueOf(H));
-                    } else if (flag == Constant.Synthesize_Er) {
+                    } else if (flag == Constants.Synthesize_Er) {
                         BigDecimal er_temp = new BigDecimal(line.getSubEpsilon());
                         double er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
@@ -386,7 +386,7 @@ public class CpwFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
@@ -432,7 +432,7 @@ public class CpwFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
         // universal header_parameters
@@ -440,7 +440,7 @@ public class CpwFragment extends Fragment {
     }
 
     private void setRadioBtn() {
-        if (flag == Constant.Synthesize_Width) {
+        if (flag == Constants.Synthesize_Width) {
             radioBtn_W.setChecked(true);
             radioBtn_S.setChecked(false);
             radioBtn_H.setChecked(false);
@@ -449,7 +449,7 @@ public class CpwFragment extends Fragment {
             //parameter_space.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == Constant.Synthesize_Gap) {
+        } else if (flag == Constants.Synthesize_Gap) {
             radioBtn_W.setChecked(false);
             radioBtn_S.setChecked(true);
             radioBtn_H.setChecked(false);
@@ -458,7 +458,7 @@ public class CpwFragment extends Fragment {
             //parameter_space.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //height_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == Constant.Synthesize_Height) {
+        } else if (flag == Constants.Synthesize_Height) {
             radioBtn_W.setChecked(false);
             radioBtn_S.setChecked(false);
             radioBtn_H.setChecked(true);
@@ -467,7 +467,7 @@ public class CpwFragment extends Fragment {
             //parameter_space.setBackgroundColor(Color.WHITE);
             //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (flag == Constant.Synthesize_Er) {
+        } else if (flag == Constants.Synthesize_Er) {
             radioBtn_W.setChecked(false);
             radioBtn_S.setChecked(false);
             radioBtn_H.setChecked(false);
@@ -488,7 +488,7 @@ public class CpwFragment extends Fragment {
                 //parameter_space.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
-                flag = Constant.Synthesize_Width;
+                flag = Constants.Synthesize_Width;
             }
         });
         radioBtn_S.setOnClickListener(new View.OnClickListener() {
@@ -502,7 +502,7 @@ public class CpwFragment extends Fragment {
                 //parameter_space.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(Color.WHITE);
-                flag = Constant.Synthesize_Gap;
+                flag = Constants.Synthesize_Gap;
             }
         });
         radioBtn_H.setOnClickListener(new View.OnClickListener() {
@@ -516,7 +516,7 @@ public class CpwFragment extends Fragment {
                 //parameter_space.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //er_input.setBackgroundColor(Color.WHITE);
-                flag = Constant.Synthesize_Height;
+                flag = Constants.Synthesize_Height;
             }
         });
         radioBtn_er.setOnClickListener(new View.OnClickListener() {
@@ -530,7 +530,7 @@ public class CpwFragment extends Fragment {
                 //parameter_space.setBackgroundColor(Color.WHITE);
                 //height_input.setBackgroundColor(Color.WHITE);
                 //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                flag = Constant.Synthesize_Er;
+                flag = Constants.Synthesize_Er;
             }
         });
     }
@@ -564,7 +564,7 @@ public class CpwFragment extends Fragment {
         String cpw_flag;
         String cpw_with_ground;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         cpw_W = edittext_W.getText().toString();

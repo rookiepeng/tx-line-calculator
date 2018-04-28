@@ -84,7 +84,7 @@ public class CpwCalculator {
             keff = eeff - (eeff - 1.0) / ((0.5 * (b - a) / (0.7 * line.getMetalThick())) * k_kp + 1.0);
 
             // for coplanar waveguide (ground signal ground)
-            z0 = Constant.FREESPACEZ0 / (4.0 * Math.sqrt(keff) * k_kpt);
+            z0 = Constants.FREESPACEZ0 / (4.0 * Math.sqrt(keff) * k_kpt);
         } else {
     /*
      * These equations are _with_ the bottom side ground plane.
@@ -102,12 +102,12 @@ public class CpwCalculator {
             keff = (1.0 + line.getSubEpsilon() * k_kp1 / k_kp) /
                     (1.0 + k_kp1 / k_kp);
 
-            z0 = (Constant.FREESPACEZ0 / (2.0 * Math.sqrt(keff))) / (k_kp + k_kp1);
+            z0 = (Constants.FREESPACEZ0 / (2.0 * Math.sqrt(keff))) / (k_kp + k_kp1);
         }
 
         // Electrical Length
         // propagation velocity (meters/sec)
-        v = Constant.LIGHTSPEED / Math.sqrt(keff);
+        v = Constants.LIGHTSPEED / Math.sqrt(keff);
         line.setElectricalLength(360 * line.getMetalLength() * line.getFrequency() / v);
 
         //  store results
@@ -153,22 +153,22 @@ public class CpwCalculator {
    */
 
         switch (flag) {
-            case Constant.Synthesize_Width:
+            case Constants.Synthesize_Width:
                 varmax = 100.0 * line.getSubHeight();
                 varmin = 0.01 * line.getSubHeight();
                 var = line.getSubHeight();
                 break;
-            case Constant.Synthesize_Gap:
+            case Constants.Synthesize_Gap:
                 varmax = 100.0 * line.getSubHeight();
                 varmin = 0.01 * line.getSubHeight();
                 var = line.getSubHeight();
                 break;
-            case Constant.Synthesize_Height:
+            case Constants.Synthesize_Height:
                 varmax = 100.0 * line.getMetalWidth();
                 varmin = 0.01 * line.getMetalWidth();
                 var = line.getMetalWidth();
                 break;
-            case Constant.Synthesize_Er:
+            case Constants.Synthesize_Er:
                 varmax = 100.0;
                 varmin = 1.0;
                 var = 5.0;
@@ -187,7 +187,7 @@ public class CpwCalculator {
    * We'll correct l later.
    */
         len = line.getElectricalLength();  /* remember what electrical length we want */
-        line.setMetalLength(1.0, Constant.LengthUnit_m);
+        line.setMetalLength(1.0, Constants.LengthUnit_m);
 
         if (!done) {
             // Initialize the various error values
@@ -279,8 +279,8 @@ public class CpwCalculator {
         // velocity on line
         line = Analysis(line, withGround);
 
-        //v = Constant.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
-        line.setMetalLength(line.getMetalLength() * len / line.getElectricalLength(), Constant.LengthUnit_m);
+        //v = Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
+        line.setMetalLength(line.getMetalLength() * len / line.getElectricalLength(), Constants.LengthUnit_m);
 
         return line;
     }

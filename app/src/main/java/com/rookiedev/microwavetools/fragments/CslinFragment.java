@@ -22,8 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
+import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.libs.CslinCalculator;
-import com.rookiedev.microwavetools.libs.Constant;
 import com.rookiedev.microwavetools.libs.CslinModel;
 
 import java.math.BigDecimal;
@@ -391,7 +391,7 @@ public class CslinFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
         // Preferences in the device
 
@@ -446,7 +446,7 @@ public class CslinFragment extends Fragment {
     }
 
     private void Preference_SharedPref() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared Preferences in the device universal header_parameters
         DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
@@ -459,7 +459,7 @@ public class CslinFragment extends Fragment {
         String cslin_W_unit, cslin_S_unit, cslin_L_unit, cslin_Z0_unit, cslin_Z0e_unit, cslin_Z0o_unit, cslin_Eeff_unit, cslin_Freq_unit, cslin_H_unit, cslin_T_unit;
         String cslin_use_z0k;
 
-        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.SHARED_PREFS_NAME,
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         cslin_W = edittext_W.getText().toString();
@@ -632,7 +632,7 @@ public class CslinFragment extends Fragment {
             //W = fragment_cslin.getW();
             //S = fragment_cslin.getS();
 
-            BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
+            BigDecimal L_temp = new BigDecimal(Constants.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
             double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                     .doubleValue();
             edittext_L.setText(String.valueOf(L));
@@ -644,12 +644,12 @@ public class CslinFragment extends Fragment {
             edittext_L.setText(""); // clear the L if the Eeff input is empty
         }
 
-        BigDecimal W_temp = new BigDecimal(Constant.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
+        BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(), spinner_W.getSelectedItemPosition())); // cut the decimal of W
         double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                 .doubleValue();
         edittext_W.setText(String.valueOf(W));
 
-        BigDecimal S_temp = new BigDecimal(Constant.meter2others(line.getMetalSpace(), spinner_S.getSelectedItemPosition())); // cut the decimal of S
+        BigDecimal S_temp = new BigDecimal(Constants.meter2others(line.getMetalSpace(), spinner_S.getSelectedItemPosition())); // cut the decimal of S
         double S = S_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                 .doubleValue();
         edittext_S.setText(String.valueOf(S));
