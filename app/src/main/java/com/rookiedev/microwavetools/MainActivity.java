@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.rookiedev.microwavetools.fragments.CmlinFragment;
 import com.rookiedev.microwavetools.fragments.CoaxFragment;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private FragmentManager fragmentManager;
+    private ImageView imageModel;
+    private int imageResource;
 
     // The helper object
     IabHelper mHelper;
@@ -135,6 +138,8 @@ public class MainActivity extends AppCompatActivity
 
         mCollapsingToolbarLayout=(CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
 
+        imageModel=(ImageView) findViewById(R.id.imageViewModel);
+
         fragmentManager = getSupportFragmentManager();
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -151,13 +156,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (fragment != null) {
-                    mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
-
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragment);
                     // transaction.addToBackStack(null);
                     transaction.commit();
+                    mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
+                    imageModel.setImageResource(imageResource);
                 }
             }
 
@@ -171,8 +176,9 @@ public class MainActivity extends AppCompatActivity
         readSharedPref();
 
         navigationView.getMenu().getItem(pos).setChecked(true);
-        mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
         initFragment(pos);
+        mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
+        imageModel.setImageResource(imageResource);
 
         /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
          * (that you got from the Google Play developer console). This is not your
@@ -324,26 +330,35 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_mlin) {
             fragment = new MlinFragment();
             pos = 0;
+            imageResource=R.drawable.vt_mlin;
         } else if (id == R.id.nav_cmlin) {
             fragment = new CmlinFragment();
             pos = 1;
+            imageResource=R.drawable.vt_cmlin;
         } else if (id == R.id.nav_slin) {
             fragment = new SlinFragment();
             pos = 2;
+            imageResource=R.drawable.vt_slin;
         } else if (id == R.id.nav_cslin) {
             fragment = new CslinFragment();
             pos = 3;
+            imageResource=R.drawable.vt_cslin;
         } else if (id == R.id.nav_cpw) {
             fragment = new CpwFragment();
             pos = 4;
+            imageResource=R.drawable.vt_cpw;
         } else if (id == R.id.nav_gcpw) {
             fragment = new CpwFragment();
             pos = 5;
+            imageResource=R.drawable.vt_cpwg;
         }else if (id == R.id.nav_coax) {
             fragment = new CoaxFragment();
             pos = 6;
+            imageResource=R.drawable.vt_coax;
         } else {
             fragment = new MlinFragment();
+            pos = 0;
+            imageResource=R.drawable.vt_mlin;
         }
         //Bundle args = new Bundle();
         //fragment.setArguments(args);
@@ -356,26 +371,35 @@ public class MainActivity extends AppCompatActivity
         if (item == 0) {
             fragment = new MlinFragment();
             pos = 0;
+            imageResource=R.drawable.vt_mlin;
         } else if (item == 1) {
             fragment = new CmlinFragment();
             pos = 1;
+            imageResource=R.drawable.vt_cmlin;
         } else if (item == 2) {
             fragment = new SlinFragment();
             pos = 2;
+            imageResource=R.drawable.vt_slin;
         } else if (item == 3) {
             fragment = new CslinFragment();
             pos = 3;
+            imageResource=R.drawable.vt_cslin;
         } else if (item == 4) {
             fragment = new CpwFragment();
             pos = 4;
+            imageResource=R.drawable.vt_cpw;
         } else if (item == 5) {
             fragment = new CpwFragment();
             pos = 5;
+            imageResource=R.drawable.vt_cpwg;
         } else if (item == 6) {
             fragment = new CoaxFragment();
             pos = 6;
+            imageResource=R.drawable.vt_coax;
         } else {
             fragment = new MlinFragment();
+            pos = 0;
+            imageResource=R.drawable.vt_mlin;
         }
         //Bundle args = new Bundle();
         //fragment.setArguments(args);

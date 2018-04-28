@@ -29,10 +29,9 @@
             app:toolbarId="@+id/toolbar">
 
             <ImageView
-                android:id="@+id/imageViewPlot"
+                android:id="@+id/imageViewModel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/vt_mlin"
                 android:layout_gravity="center"
                 android:contentDescription="RF Line Plots"/>
 
