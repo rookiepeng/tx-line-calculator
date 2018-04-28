@@ -37,36 +37,30 @@
                 android:paddingTop="24dp">
 
                 <include
-                    layout="@layout/dimensions"
+                    layout="@layout/header_dimensions"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/thickness_input"
-                    layout="@layout/parameter_thickness"
+                    android:id="@+id/parameter_a"
+                    layout="@layout/parameter_a"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/height_input"
-                    layout="@layout/parameter_height"
+                    android:id="@+id/parameter_b"
+                    layout="@layout/parameter_b"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/width_input"
-                    layout="@layout/parameter_width"
+                    android:id="@+id/parameter_c"
+                    layout="@layout/parameter_c"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/space_input"
-                    layout="@layout/parameter_space"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <include
-                    android:id="@+id/length_input"
+                    android:id="@+id/parameter_length"
                     layout="@layout/parameter_length"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -105,7 +99,7 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/z0_input"
+                    android:id="@+id/parameter_z0"
                     layout="@layout/parameter_z0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -117,7 +111,7 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/epsilon_input"
+                    android:id="@+id/parameter_epsilon"
                     layout="@layout/parameter_epsilon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -131,4 +125,3 @@
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
-

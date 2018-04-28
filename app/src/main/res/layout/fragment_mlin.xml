@@ -37,35 +37,32 @@
                 android:paddingTop="24dp">
 
                 <include
-                    layout="@layout/dimensions"
+                    layout="@layout/header_dimensions"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_a"
-                    layout="@layout/parameter_a"
+                    layout="@layout/parameter_thickness"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_b"
-                    layout="@layout/parameter_b"
+                    layout="@layout/parameter_height"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_c"
-                    layout="@layout/parameter_c"
+                    android:id="@+id/width_input"
+                    layout="@layout/parameter_width"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_length"
+                    android:id="@+id/length_input"
                     layout="@layout/parameter_length"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
-
         </android.support.v7.widget.CardView>
 
         <include
@@ -99,7 +96,7 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_z0"
+                    android:id="@+id/z0_input"
                     layout="@layout/parameter_z0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -111,7 +108,6 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_epsilon"
                     layout="@layout/parameter_epsilon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

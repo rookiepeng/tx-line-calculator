@@ -1,13 +1,11 @@
 package com.rookiedev.microwavetools.fragments;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
@@ -18,8 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -85,7 +81,7 @@ public class CpwFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.cpw_fragment, container, false);
+        rootView = inflater.inflate(R.layout.fragment_cpw, container, false);
         initUI(); // initial the UI
         readSharedPref(); // read shared preferences
         setRadioBtn();
@@ -118,9 +114,9 @@ public class CpwFragment extends Fragment {
                             Z0 = cpwg.getZ0();
                             Eeff = cpwg.getEeff();
                         } else {
-                            CPW cpw_fragment = new CPW(W, S, H, er, L, 0, 0, Freq, T, flag);
-                            Z0 = cpw_fragment.getZ0();
-                            Eeff = cpw_fragment.getEeff();
+                            CPW fragment_cpw = new CPW(W, S, H, er, L, 0, 0, Freq, T, flag);
+                            Z0 = fragment_cpw.getZ0();
+                            Eeff = fragment_cpw.getEeff();
                         }*/
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
@@ -133,8 +129,8 @@ public class CpwFragment extends Fragment {
                             CpwCalculator cpwg = new CpwCalculator(W, S, H, er, 0, 0, 0, Freq, T, flag);
                             Z0 = cpwg.getZ0();
                         } else {
-                            CPW cpw_fragment = new CPW(W, S, H, er, 0, 0, 0, Freq, T, flag);
-                            Z0 = cpw_fragment.getZ0();
+                            CPW fragment_cpw = new CPW(W, S, H, er, 0, 0, 0, Freq, T, flag);
+                            Z0 = fragment_cpw.getZ0();
                         }*/
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
                     }
@@ -208,13 +204,13 @@ public class CpwFragment extends Fragment {
                             er = cpwg.geter();
                             L = cpwg.getL();
                         } else {
-                            CPW cpw_fragment = new CPW(W, S, H, er, 0, Z0, Eeff, Freq, T, flag);
-                            cpw_fragment.coplanar_syn();
-                            W = cpw_fragment.getW();
-                            S = cpw_fragment.getS();
-                            H = cpw_fragment.getH();
-                            er = cpw_fragment.geter();
-                            L = cpw_fragment.getL();
+                            CPW fragment_cpw = new CPW(W, S, H, er, 0, Z0, Eeff, Freq, T, flag);
+                            fragment_cpw.coplanar_syn();
+                            W = fragment_cpw.getW();
+                            S = fragment_cpw.getS();
+                            H = fragment_cpw.getH();
+                            er = fragment_cpw.geter();
+                            L = fragment_cpw.getL();
                         }*/
                         BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the
                         // decimal of L
@@ -233,13 +229,13 @@ public class CpwFragment extends Fragment {
                             er = cpwg.geter();
                             L = cpwg.getL();
                         } else {
-                            CPW cpw_fragment = new CPW(W, S, H, er, 0, Z0, 0, Freq, T, flag);
-                            cpw_fragment.coplanar_syn();
-                            W = cpw_fragment.getW();
-                            S = cpw_fragment.getS();
-                            H = cpw_fragment.getH();
-                            er = cpw_fragment.geter();
-                            L = cpw_fragment.getL();
+                            CPW fragment_cpw = new CPW(W, S, H, er, 0, Z0, 0, Freq, T, flag);
+                            fragment_cpw.coplanar_syn();
+                            W = fragment_cpw.getW();
+                            S = fragment_cpw.getS();
+                            H = fragment_cpw.getH();
+                            er = fragment_cpw.geter();
+                            L = fragment_cpw.getL();
                         }*/
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
@@ -396,7 +392,7 @@ public class CpwFragment extends Fragment {
 
         // read values from the shared preferences
 
-        // cpw_fragment header_parameters
+        // fragment_cpw header_parameters
         edittext_W.setText(prefs.getString(CPW_W, "18.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(CPW_W_UNIT,
                 "0")));

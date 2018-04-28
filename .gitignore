@@ -28,3 +28,9 @@ proguard/
 
 .idea/
 app/release/output\.json
+
+\.project
+
+\.settings/
+
+app/\.classpath

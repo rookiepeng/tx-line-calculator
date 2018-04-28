@@ -6,7 +6,6 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
@@ -87,7 +86,7 @@ public class CslinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.cslin_fragment, container, false);
+        rootView = inflater.inflate(R.layout.fragment_cslin, container, false);
 
         initUI(); // initial the UI
         readSharedPref(); // read shared preferences
@@ -123,11 +122,11 @@ public class CslinFragment extends Fragment {
 
                         CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
-                        //Z0o = cslin_fragment.getZ0o();
-                        //Z0e = cslin_fragment.getZ0e();
+                        //Z0o = fragment_cslin.getZ0o();
+                        //Z0e = fragment_cslin.getZ0e();
                         //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
                         //k = (Z0e - Z0o) / (Z0e + Z0o);
-                        //Eeff = cslin_fragment.getEeff();// calculate the Eeff
+                        //Eeff = fragment_cslin.getEeff();// calculate the Eeff
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
@@ -137,8 +136,8 @@ public class CslinFragment extends Fragment {
                     } else {
                         CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
-                        //Z0o = cslin_fragment.getZ0o();
-                        //Z0e = cslin_fragment.getZ0e();
+                        //Z0o = fragment_cslin.getZ0o();
+                        //Z0e = fragment_cslin.getZ0e();
                         //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
                         //k = (Z0e - Z0o) / (Z0e + Z0o);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
@@ -629,9 +628,9 @@ public class CslinFragment extends Fragment {
             //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
             CslinCalculator cslin = new CslinCalculator();
             line = cslin.getSynResult(line, use_z0k);
-            //L = cslin_fragment.getL();
-            //W = cslin_fragment.getW();
-            //S = cslin_fragment.getS();
+            //L = fragment_cslin.getL();
+            //W = fragment_cslin.getW();
+            //S = fragment_cslin.getS();
 
             BigDecimal L_temp = new BigDecimal(Constant.meter2others(line.getMetalLength(), spinner_L.getSelectedItemPosition())); // cut the decimal of L
             double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
@@ -640,8 +639,8 @@ public class CslinFragment extends Fragment {
         } else {
             CslinCalculator cslin = new CslinCalculator();
             line = cslin.getSynResult(line, use_z0k);
-            //W = cslin_fragment.getW();
-            //S = cslin_fragment.getS();
+            //W = fragment_cslin.getW();
+            //S = fragment_cslin.getS();
             edittext_L.setText(""); // clear the L if the Eeff input is empty
         }
 

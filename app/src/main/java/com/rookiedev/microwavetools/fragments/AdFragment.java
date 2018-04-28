@@ -17,7 +17,7 @@ public class AdFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View adView = inflater.inflate(R.layout.banner_layout, container, false);
+        View adView = inflater.inflate(R.layout.fragment_ad_banner, container, false);
 
         AdView banner = (AdView) adView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()

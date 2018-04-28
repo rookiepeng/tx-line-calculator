@@ -195,14 +195,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (fragment != null) {
-                    //getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
                     mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
 
-                    //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
                     transaction.replace(R.id.content_frame, fragment);
-                    //transaction.addToBackStack(null);
+                    // transaction.addToBackStack(null);
                     transaction.commit();
                 }
             }
@@ -219,7 +217,6 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.getMenu().getItem(pos).setChecked(true);
         mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
-        //getSupportActionBar().setTitle(navigationView.getMenu().getItem(pos).getTitle());
         initFragment(pos);
 
         /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
@@ -235,17 +232,7 @@ public class MainActivity extends AppCompatActivity
          */
         String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs5JW1lae1XD7lDALy5eBi3G7X06jPSNVaOrdDp1ACV3vmt0LPF4nnSGDjkMxwhyCge+u8r4trnwJoOANgqxyDxq9icRXHGoZaZnjgHtUwGfZQYlwFIczpRbNkOSFe4/hiyWRDh9f4s/oSyoHO/yWtSrLHplabMQtg+CxU4IAC6Xym3gn8laPDUV6M/Fjsrv3t9ntKJIBGhX0S7ogrWTuLJU9hGTLIcPIR2WFtALYyX/AqlGKFk3KzYZ2hvoSfKnOPnFdswJYacr8aY7Y+vWG4Qz9LgPEM3iA15Lm7PxBd9r/VtcMn75cnuhMbAHKR8YEEjHk2gla4PaofedgwUstawIDAQAB";
 
-        // Some sanity checks to see if the developer (that's you!) really followed the
-        // instructions to run this sample (don't put these checks on your app!)
-        //if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) {
-        //    throw new RuntimeException("Please put your app's public key in MainActivity.java. See README.");
-        //}
-        //if (getPackageName().startsWith("com.example")) {
-        //    throw new RuntimeException("Please change the sample's package name! See README.");
-        //}
-
         // Create the helper, passing it our context and the public key to verify signatures with
-        //Log.d(TAG, "Creating IAB helper.");
         mHelper = new IabHelper(this, base64EncodedPublicKey);
 
         // enable debug logging (for a production application, you should set this to false).
@@ -256,8 +243,6 @@ public class MainActivity extends AppCompatActivity
         //Log.d(TAG, "Starting setup.");
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
-                //Log.d(TAG, "Setup finished.");
-
                 if (!result.isSuccess()) {
                     // Oh noes, there was a problem.
                     complain("Problem setting up in-app billing: " + result);
@@ -280,7 +265,6 @@ public class MainActivity extends AppCompatActivity
                 registerReceiver(mBroadcastReceiver, broadcastFilter);
 
                 // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                //Log.d(TAG, "Setup successful. Querying inventory.");
                 try {
                     mHelper.queryInventoryAsync(mGotInventoryListener);
                 } catch (IabHelper.IabAsyncInProgressException e) {
@@ -330,21 +314,21 @@ public class MainActivity extends AppCompatActivity
         // Handle action buttons
         Intent intent = new Intent();
         switch (item.getItemId()) {
-        case R.id.menu_ad:
-            onAdfreeButtonClicked();
-            return true;
-        case R.id.menu_preference:
-            intent.setClass(this, preferences.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            return true;
-        //case R.id.menu_about:
-        //    intent.setClass(this, about.class);
-        //    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        //    startActivity(intent);
-        //    return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case R.id.menu_ad:
+                onAdfreeButtonClicked();
+                return true;
+            case R.id.menu_preference:
+                intent.setClass(this, preferences.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            //case R.id.menu_about:
+            //    intent.setClass(this, about.class);
+            //    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //    startActivity(intent);
+            //    return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

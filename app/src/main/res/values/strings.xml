@@ -42,7 +42,7 @@
     <string name="unit_mm">mm</string>
     <string name="Freq">Freq:</string>
     <string name="Ground">Ground</string>
-    <!-- mlin_fragment -->
+    <!-- fragment_mlin -->
     <string name="mlin">Microstrip Line</string>
     <string name="mlin_text_T">T:</string>
     <string name="mlin_text_H">H:</string>
@@ -50,7 +50,7 @@
     <string name="mlin_text_W">W:</string>
     <string name="mlin_text_Phs">φ:</string>
 
-    <!-- cmlin_fragment -->
+    <!-- fragment_cmlin -->
     <string name="cmlin">Coupled Microstrip</string>
     <string name="cmlin_text_W">W:</string>
     <string name="cmlin_text_S">S:</string>
@@ -72,20 +72,20 @@
     <string name="cpwg_text_L">L:</string>
     <string name="cpwg_text_H">H:</string>
     <string name="cpwg_text_T">T:</string>
-    <!-- slin_fragment -->
+    <!-- fragment_slin -->
     <string name="slin">Stripline</string>
     <string name="slin_text_W">W:</string>
     <string name="slin_text_L">L:</string>
     <string name="slin_text_H">H:</string>
     <string name="slin_text_T">T:</string>
-    <!-- cslin_fragment -->
+    <!-- fragment_cslin -->
     <string name="cslin">Coupled Stripline</string>
     <string name="cslin_text_W">W:</string>
     <string name="cslin_text_S">S:</string>
     <string name="cslin_text_L">L:</string>
     <string name="cslin_text_H">H:</string>
     <string name="cslin_text_T">T:</string>
-    <!-- coax_fragment -->
+    <!-- fragment_coax -->
     <string name="coax">Coaxial Line</string>
     <string name="coax_text_a">a:</string>
     <string name="coax_text_b">b:</string>

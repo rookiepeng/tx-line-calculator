@@ -84,7 +84,7 @@ public class CmlinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.cmlin_fragment, container, false);
+        rootView = inflater.inflate(R.layout.fragment_cmlin, container, false);
 
         initUI();
         readSharedPref();
@@ -376,7 +376,7 @@ public class CmlinFragment extends Fragment {
 
         // read values from the shared preferences
 
-        // cmlin_fragment header_parameters
+        // fragment_cmlin header_parameters
         edittext_W.setText(prefs.getString(CMLIN_W, "20.00"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(CMLIN_W_UNIT,
                 "0")));

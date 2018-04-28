@@ -74,7 +74,7 @@ public class SlinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.slin_fragment, container, false);
+        rootView = inflater.inflate(R.layout.fragment_slin, container, false);
         initUI();
         readSharedPref(); // read shared preferences
         setRadioBtn();
@@ -99,7 +99,7 @@ public class SlinFragment extends Fragment {
 
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getAnaResult(line);
-                        //Eeff = slin_fragment.getEeff();
+                        //Eeff = fragment_slin.getEeff();
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
@@ -156,14 +156,14 @@ public class SlinFragment extends Fragment {
                     if (edittext_Eeff.length() != 0) { // check if the Eeff is empty
                         line.setElectricalLength(Double.parseDouble(edittext_Eeff.getText().toString()));
                         //Eeff = Double.parseDouble(edittext_Eeff.getText().toString());
-                        //SlinCalculator slin_fragment = new SlinCalculator(W, H, er, L, Z0, Eeff, Freq, T, flag);
+                        //SlinCalculator fragment_slin = new SlinCalculator(W, H, er, L, Z0, Eeff, Freq, T, flag);
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getSynResult(line, flag);
-                        //slin_fragment.stripline_syn();
-                        //W = slin_fragment.getW();
-                        //H = slin_fragment.getH();
-                        //er = slin_fragment.geter();
-                        //L = slin_fragment.getL();
+                        //fragment_slin.stripline_syn();
+                        //W = fragment_slin.getW();
+                        //H = fragment_slin.getH();
+                        //er = fragment_slin.geter();
+                        //L = fragment_slin.getL();
                         //stripline_syn(Z0, Eeff, Freq, flag);
                         //temp = spinner_L.getSelectedItemPosition();
                         //if (temp == 0) {
@@ -180,9 +180,9 @@ public class SlinFragment extends Fragment {
                     } else {
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getSynResult(line, flag);
-                        //W = slin_fragment.getW();
-                        //H = slin_fragment.getH();
-                        //er = slin_fragment.geter();
+                        //W = fragment_slin.getW();
+                        //H = fragment_slin.getH();
+                        //er = fragment_slin.geter();
                         edittext_L.setText(""); // clear the L if the Eeff input is empty
                     }
                     if (flag == Constant.Synthesize_Width) {
