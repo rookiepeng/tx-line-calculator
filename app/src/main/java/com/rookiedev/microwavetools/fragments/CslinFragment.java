@@ -114,23 +114,12 @@ public class CslinFragment extends Fragment {
                     line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
                     line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()), spinner_H.getSelectedItemPosition());
                     line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()), spinner_T.getSelectedItemPosition());
-                    //W = Double.parseDouble(edittext_W.getText().toString()); // get the header_parameters
-                    //S = Double.parseDouble(edittext_S.getText().toString());
-                    //Freq = Double.parseDouble(edittext_Freq.getText().toString());
-                    //er = Double.parseDouble(edittext_er.getText().toString());
-                    //H = Double.parseDouble(edittext_H.getText().toString());
-                    //T = Double.parseDouble(edittext_T.getText().toString());
 
                     if (edittext_L.length() != 0) {
                         line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()), spinner_L.getSelectedItemPosition());
 
                         CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
-                        //Z0o = fragment_cslin.getZ0o();
-                        //Z0e = fragment_cslin.getZ0e();
-                        //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
-                        //k = (Z0e - Z0o) / (Z0e + Z0o);
-                        //Eeff = fragment_cslin.getEeff();// calculate the Eeff
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
@@ -140,10 +129,6 @@ public class CslinFragment extends Fragment {
                     } else {
                         CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
-                        //Z0o = fragment_cslin.getZ0o();
-                        //Z0e = fragment_cslin.getZ0e();
-                        //Z0 = Math.sqrt(Z0o * Z0e); // calculate the Z0
-                        //k = (Z0e - Z0o) / (Z0e + Z0o);
                         edittext_Eeff.setText(""); // if the L input is empty, clear the Eeff
                     }
 

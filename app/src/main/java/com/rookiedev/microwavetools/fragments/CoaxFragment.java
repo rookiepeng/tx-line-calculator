@@ -1,11 +1,14 @@
 package com.rookiedev.microwavetools.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
@@ -46,17 +49,19 @@ public class CoaxFragment extends Fragment {
     public static final String COAX_FREQ_UNIT = "COAX_FREQ_UNIT";
     public static final String COAX_TARGET = "COAX_TARGET";
 
+    private Context mContext;
     private View viewRoot;
     private CardView cardViewParameters, cardViewDimensions;
     private int DecimalLength; // the length of the Decimal,
     private SpannableString error_er, error_Z0;
-    private TextView text_er, text_Z0; // strings which include the subscript
+    private TextView text_a, text_b, text_c, text_er, text_Z0; // strings which include the subscript
     private EditText edittextA, edittextB, edittextC, edittextL, edittextZ0, edittextPhs, edittextFreq, edittextEr;
     private Button buttonSynthesize, buttonAnalyze;
     private Spinner spinnerA, spinnerB, spinnerC, spinnerL, spinnerZ0, spinnerPhs, spinnerFreq;
     private int target;
-    private RadioButton radioBtnA, radioBtnB, radioBtnC, radioBtnEr;
+    private RadioButton radioBtnA, radioBtnB, radioBtnC;
     private CoaxModel line;
+    private ColorStateList defaultTextColor, defaultEdittextColor;
 
     public CoaxFragment() {
         // Empty constructor required for fragment subclasses
@@ -65,7 +70,7 @@ public class CoaxFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_coax, container, false);
-
+        mContext=this.getContext();
         initUI(); // initial the UI
         readSharedPref(); // read shared preferences
         setRadioBtn();
@@ -206,6 +211,17 @@ public class CoaxFragment extends Fragment {
 
     private void initUI() {
         line = new CoaxModel();
+        RadioButton radioButtonL = (RadioButton) viewRoot.findViewById(R.id.radioBtn_L);
+        radioButtonL.setVisibility(View.VISIBLE);
+        radioButtonL.setChecked(true);
+
+        RadioButton radioButtonPhs = (RadioButton) viewRoot.findViewById(R.id.radioBtn_Phs);
+        radioButtonPhs.setVisibility(View.VISIBLE);
+        radioButtonPhs.setChecked(true);
+
+        RadioButton radioButtonZ0 = (RadioButton) viewRoot.findViewById(R.id.radioBtn_Z0);
+        radioButtonZ0.setVisibility(View.VISIBLE);
+        radioButtonZ0.setChecked(true);
 
         cardViewDimensions = (CardView) viewRoot.findViewById(R.id.physicalParaCard);
         cardViewParameters = (CardView) viewRoot.findViewById(R.id.electricalParaCard);
@@ -215,8 +231,18 @@ public class CoaxFragment extends Fragment {
 
         // Subscript strings
         text_er = (TextView) viewRoot.findViewById(R.id.text_er);
+        defaultTextColor = text_er.getTextColors();
+
+        text_a = (TextView) viewRoot.findViewById(R.id.text_a);
+        text_b = (TextView) viewRoot.findViewById(R.id.text_b);
+        text_c = (TextView) viewRoot.findViewById(R.id.text_c);
+
         text_Z0 = (TextView) viewRoot.findViewById(R.id.text_Z0);
-        //text_Eeff = (TextView) viewRoot.findViewById(R.id.text_Phs);
+        text_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        TextView text_Eeff = (TextView) viewRoot.findViewById(R.id.text_Phs);
+        text_Eeff.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        TextView text_L = (TextView) viewRoot.findViewById(R.id.text_L);
+        text_L.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
         SpannableString spanEr = new SpannableString(this.getString(R.string.text_er));
         spanEr.setSpan(new SubscriptSpan(), 1, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -226,19 +252,17 @@ public class CoaxFragment extends Fragment {
         spanZ0.setSpan(new SubscriptSpan(), 1, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         text_Z0.append(spanZ0);
 
-        //SpannableString spanEeff = new SpannableString(
-        //        this.getString(R.string.text_Eeff));
-        //spanEeff.setSpan(new SubscriptSpan(), 1, 4,
-        //        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        //text_Eeff.append(spanEeff);
-
         // edittext elements
         edittextA = (EditText) viewRoot.findViewById(R.id.editText_a);
+        defaultEdittextColor = edittextA.getTextColors();
         edittextC = (EditText) viewRoot.findViewById(R.id.editText_c);
         edittextB = (EditText) viewRoot.findViewById(R.id.editText_b);
         edittextL = (EditText) viewRoot.findViewById(R.id.editText_L);
+        edittextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         edittextZ0 = (EditText) viewRoot.findViewById(R.id.editText_Z0);
+        edittextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         edittextPhs = (EditText) viewRoot.findViewById(R.id.editText_Phs);
+        edittextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         edittextFreq = (EditText) viewRoot.findViewById(R.id.editText_Freq);
         //edittext_T = (EditText) viewRoot.findViewById(R.id.editText_T);
         edittextEr = (EditText) viewRoot.findViewById(R.id.editText_er);
@@ -265,7 +289,6 @@ public class CoaxFragment extends Fragment {
         spinnerC.setAdapter(adapterLength);
         spinnerB.setAdapter(adapterLength);
         spinnerL.setAdapter(adapterLength);
-        //spinner_T.setAdapter(adapterLength);
 
         // configure the impedance units
         ArrayAdapter<CharSequence> adapterImpedance = ArrayAdapter.createFromResource(this.getActivity(),
@@ -285,17 +308,16 @@ public class CoaxFragment extends Fragment {
         adapterFreq.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFreq.setAdapter(adapterFreq);
         radioBtnA = (RadioButton) viewRoot.findViewById(R.id.radioBtn_a);
+        radioBtnA.setVisibility(View.VISIBLE);
         radioBtnC = (RadioButton) viewRoot.findViewById(R.id.radioBtn_c);
+        radioBtnC.setVisibility(View.VISIBLE);
         radioBtnB = (RadioButton) viewRoot.findViewById(R.id.radioBtn_b);
-        radioBtnEr = (RadioButton) viewRoot.findViewById(R.id.radioBtn_er);
+        radioBtnB.setVisibility(View.VISIBLE);
     }
 
     private void readSharedPref() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
-        // Preferences in the device
-
-        // read values from the shared preferences
 
         // fragment_coax header_parameters
         edittextA.setText(prefs.getString(COAX_A, "0.30"));
@@ -335,48 +357,59 @@ public class CoaxFragment extends Fragment {
     private void setRadioBtn() {
         if (target == Constants.Synthesize_CoreRadius) {
             radioBtnA.setChecked(true);
-            radioBtnC.setChecked(false);
+            text_a.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioBtnB.setChecked(false);
-            radioBtnEr.setChecked(false);
+            text_b.setTextColor(defaultTextColor);
+            edittextB.setTextColor(defaultEdittextColor);
+            radioBtnC.setChecked(false);
+            text_c.setTextColor(defaultTextColor);
+            edittextC.setTextColor(defaultEdittextColor);
             //a_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //c_input.setBackgroundColor(Color.WHITE);
             //b_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (target == Constants.Synthesize_Height) {
+        } else if (target == Constants.Synthesize_SubRadius) {
             radioBtnA.setChecked(false);
+            text_a.setTextColor(defaultTextColor);
+            edittextA.setTextColor(defaultEdittextColor);
             radioBtnB.setChecked(true);
+            text_b.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            edittextB.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioBtnC.setChecked(false);
-            radioBtnEr.setChecked(false);
+            text_c.setTextColor(defaultTextColor);
+            edittextC.setTextColor(defaultEdittextColor);
             //a_input.setBackgroundColor(Color.WHITE);
             //c_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //b_input.setBackgroundColor(Color.WHITE);
             //er_input.setBackgroundColor(Color.WHITE);
         } else if (target == Constants.Synthesize_CoreOffset) {
             radioBtnA.setChecked(false);
+            text_a.setTextColor(defaultTextColor);
+            edittextA.setTextColor(defaultEdittextColor);
             radioBtnB.setChecked(false);
+            text_b.setTextColor(defaultTextColor);
+            edittextB.setTextColor(defaultEdittextColor);
             radioBtnC.setChecked(true);
-            radioBtnEr.setChecked(false);
+            text_c.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            edittextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             //a_input.setBackgroundColor(Color.WHITE);
             //c_input.setBackgroundColor(Color.WHITE);
             //b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
             //er_input.setBackgroundColor(Color.WHITE);
-        } else if (target == Constants.Synthesize_Er) {
-            radioBtnA.setChecked(false);
-            radioBtnB.setChecked(false);
-            radioBtnC.setChecked(false);
-            radioBtnEr.setChecked(true);
-            //a_input.setBackgroundColor(Color.WHITE);
-            //c_input.setBackgroundColor(Color.WHITE);
-            //b_input.setBackgroundColor(Color.WHITE);
-            //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
         }
         radioBtnA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioBtnA.setChecked(true);
+                text_a.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioBtnB.setChecked(false);
+                text_b.setTextColor(defaultTextColor);
+                edittextB.setTextColor(defaultEdittextColor);
                 radioBtnC.setChecked(false);
-                radioBtnEr.setChecked(false);
+                text_c.setTextColor(defaultTextColor);
+                edittextC.setTextColor(defaultEdittextColor);
                 //a_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //c_input.setBackgroundColor(Color.WHITE);
                 //b_input.setBackgroundColor(Color.WHITE);
@@ -384,13 +417,18 @@ public class CoaxFragment extends Fragment {
                 target = Constants.Synthesize_CoreRadius;
             }
         });
-        radioBtnC.setOnClickListener(new View.OnClickListener() {
+        radioBtnB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioBtnA.setChecked(false);
+                text_a.setTextColor(defaultTextColor);
+                edittextA.setTextColor(defaultEdittextColor);
                 radioBtnB.setChecked(true);
+                text_b.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                edittextB.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioBtnC.setChecked(false);
-                radioBtnEr.setChecked(false);
+                text_c.setTextColor(defaultTextColor);
+                edittextC.setTextColor(defaultEdittextColor);
                 //a_input.setBackgroundColor(Color.WHITE);
                 //c_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
                 //b_input.setBackgroundColor(Color.WHITE);
@@ -398,32 +436,19 @@ public class CoaxFragment extends Fragment {
                 target = Constants.Synthesize_Height;
             }
         });
-        radioBtnB.setOnClickListener(new View.OnClickListener() {
+        radioBtnC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioBtnA.setChecked(false);
+                text_a.setTextColor(defaultTextColor);
+                edittextA.setTextColor(defaultEdittextColor);
                 radioBtnB.setChecked(false);
+                text_b.setTextColor(defaultTextColor);
+                edittextB.setTextColor(defaultEdittextColor);
                 radioBtnC.setChecked(true);
-                radioBtnEr.setChecked(false);
-                //a_input.setBackgroundColor(Color.WHITE);
-                //c_input.setBackgroundColor(Color.WHITE);
-                //b_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                //er_input.setBackgroundColor(Color.WHITE);
+                text_c.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                edittextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 target = Constants.Synthesize_CoreOffset;
-            }
-        });
-        radioBtnEr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                radioBtnA.setChecked(false);
-                radioBtnB.setChecked(false);
-                radioBtnC.setChecked(false);
-                radioBtnEr.setChecked(true);
-                //a_input.setBackgroundColor(Color.WHITE);
-                //c_input.setBackgroundColor(Color.WHITE);
-                //b_input.setBackgroundColor(Color.WHITE);
-                //er_input.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.green_shadow));
-                target = Constants.Synthesize_Er;
             }
         });
     }
