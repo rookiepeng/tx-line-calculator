@@ -1,6 +1,7 @@
 package com.rookiedev.microwavetools.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +16,11 @@ public class AdFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View adView = inflater.inflate(R.layout.fragment_ad_banner, container, false);
 
         AdView banner = (AdView) adView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR) // All emulators
-                .addTestDevice("g000kw0463460qxf") // Kindle Fire
-                .addTestDevice("00a1d2e725463456") // Nexus 5X
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR) // All emulators
                 .build();
         banner.loadAd(adRequest);
 
