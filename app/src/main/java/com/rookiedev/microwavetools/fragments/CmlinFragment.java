@@ -7,6 +7,7 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -58,9 +59,28 @@ public class CmlinFragment extends Fragment {
             spinner_Z0, spinner_Z0o, spinner_Z0e, spinner_Eeff, spinner_Freq;// the units of each parameter
     private RadioButton radioBtn_Z0, radioBtnK, radioBtn_Z0o,radioBtnZ0e;
     private boolean use_z0k;
+    private AdFragment adFragment=null;
+
+    private boolean isAdFree;
 
     public CmlinFragment() {
         // Empty constructor required for fragment subclasses
+    }
+
+    public static CmlinFragment newInstance(boolean param) {
+        CmlinFragment fragment = new CmlinFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Constants.IS_AD_FREE, param);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isAdFree=getArguments().getBoolean(Constants.IS_AD_FREE,true);
+        }
     }
 
     @Override
@@ -168,6 +188,15 @@ public class CmlinFragment extends Fragment {
                 forceRippleAnimation(physicalCard);
             }
         });
+
+        if(!isAdFree)
+        {
+            adFragment = new AdFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager !=null) {
+                fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+            }
+        }
 
         return viewRoot;
     }
@@ -753,6 +782,23 @@ public class CmlinFragment extends Fragment {
 
             view.setClickable(false);
             rippleDrawable.setState(new int[]{});
+        }
+    }
+
+    public void addAdFragment(){
+        AdFragment adFragment = new AdFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        if(fragmentManager !=null) {
+            fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+        }
+    }
+
+    public void removeAdFragment(){
+        if (adFragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager !=null) {
+                fragmentManager.beginTransaction().remove(adFragment).commit();
+            }
         }
     }
 }

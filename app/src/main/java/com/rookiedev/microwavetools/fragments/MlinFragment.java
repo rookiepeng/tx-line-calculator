@@ -1,6 +1,3 @@
-/**
- * Created by rookie on 8/11/13.
- */
 
 package com.rookiedev.microwavetools.fragments;
 
@@ -11,6 +8,8 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -36,35 +35,46 @@ import java.math.BigDecimal;
 
 public class MlinFragment extends Fragment {
     private Context mContext;
-    private View rootView;
+    private View viewRoot;
     private CardView electricalCard, physicalCard;
     private SpannableString error_er, error_Z0;
     private int DecimalLength; // the length of the Decimal, accurate of the result
     private TextView text_epsilon; // strings which include the subscript
-    private EditText edittext_W, // the width
-            edittext_L, // the length
-            edittext_Z0, // the impedance
-            edittext_Phs, // the electrical length
-            edittext_Freq, // the frequency
-            edittext_T, // the thickness of the metal
-            edittext_H, // the thickness of the dielectric
-            edittext_er; // the relative dielectric constant
-    //private double W, L, Z0, Eeff, Freq, T, H, er;
+    private EditText editTextW, editTextL, editTextZ0, editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
     private Button mlinSynthesize,// button synthesize
             mlinAnalyze;// button analyze
     private Spinner spinner_W, spinner_L, spinner_T, spinner_H, spinner_Z0,
             spinner_Eeff, spinner_Freq;// the units of each parameter
     private MlinModel line;
+    private AdFragment adFragment=null;
+    private boolean isAdFree;
 
     public MlinFragment() {
         // Empty constructor required for fragment subclasses
     }
 
+    public static MlinFragment newInstance(boolean param) {
+        MlinFragment fragment = new MlinFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Constants.IS_AD_FREE, param);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isAdFree=getArguments().getBoolean(Constants.IS_AD_FREE,true);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_mlin, container, false);
+        viewRoot = inflater.inflate(R.layout.fragment_mlin, container, false);
         mContext=this.getContext();
+
         initUI();
         readSharedPref(); // read shared preferences
 
@@ -73,21 +83,21 @@ public class MlinFragment extends Fragment {
             public void onClick(View view) {
                 Preference_SharedPref();
                 if (!analysisInputCheck()) {
-                    edittext_Z0.setText(""); // clear the Z0 and Eeff outputs
-                    edittext_Phs.setText("");
+                    editTextZ0.setText(""); // clear the Z0 and Eeff outputs
+                    editTextPhs.setText("");
                 } else {
-                    line.setMetalWidth(Double.parseDouble(edittext_W.getText().toString()),
+                    line.setMetalWidth(Double.parseDouble(editTextW.getText().toString()),
                             spinner_W.getSelectedItemPosition()); // get the header_parameters
-                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
+                    line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
                             spinner_Freq.getSelectedItemPosition());
-                    line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                    line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),
+                    line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
+                    line.setSubHeight(Double.parseDouble(editTextH.getText().toString()),
                             spinner_H.getSelectedItemPosition());
-                    line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),
+                    line.setMetalThick(Double.parseDouble(editTextT.getText().toString()),
                             spinner_T.getSelectedItemPosition());
 
-                    if (edittext_L.length() != 0) { // check the L input
-                        line.setMetalLength(Double.parseDouble(edittext_L.getText().toString()),
+                    if (editTextL.length() != 0) { // check the L input
+                        line.setMetalLength(Double.parseDouble(editTextL.getText().toString()),
                                 spinner_L.getSelectedItemPosition());
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getAnaResult(line);
@@ -95,12 +105,12 @@ public class MlinFragment extends Fragment {
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
                         double Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
+                        editTextZ0.setText(String.valueOf(Z0)); // cut the decimal
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
                         double Eeff = Eeff_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittext_Phs.setText(String.valueOf(Eeff));
+                        editTextPhs.setText(String.valueOf(Eeff));
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getAnaResult(line);
@@ -108,9 +118,9 @@ public class MlinFragment extends Fragment {
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
                         double Z0 = Z0_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittext_Z0.setText(String.valueOf(Z0)); // cut the decimal
+                        editTextZ0.setText(String.valueOf(Z0)); // cut the decimal
 
-                        edittext_Phs.setText(""); // if the L input is empty, clear the Eeff
+                        editTextPhs.setText(""); // if the L input is empty, clear the Eeff
                     }
                 }
                 forceRippleAnimation(electricalCard);
@@ -123,21 +133,21 @@ public class MlinFragment extends Fragment {
                 int temp;
                 Preference_SharedPref();
                 if (!synthesizeInputCheck()) {
-                    edittext_L.setText(""); // clear the L and W outputs
-                    edittext_W.setText("");
+                    editTextL.setText(""); // clear the L and W outputs
+                    editTextW.setText("");
                 } else {
-                    line.setImpedance(Double.parseDouble(edittext_Z0.getText().toString())); // get the header_parameters
-                    line.setFrequency(Double.parseDouble(edittext_Freq.getText().toString()),
+                    line.setImpedance(Double.parseDouble(editTextZ0.getText().toString())); // get the header_parameters
+                    line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
                             spinner_Freq.getSelectedItemPosition());
-                    line.setSubEpsilon(Double.parseDouble(edittext_er.getText().toString()));
-                    line.setSubHeight(Double.parseDouble(edittext_H.getText().toString()),
+                    line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
+                    line.setSubHeight(Double.parseDouble(editTextH.getText().toString()),
                             spinner_H.getSelectedItemPosition());
-                    line.setMetalThick(Double.parseDouble(edittext_T.getText().toString()),
+                    line.setMetalThick(Double.parseDouble(editTextT.getText().toString()),
                             spinner_T.getSelectedItemPosition());
 
                     double W, L;
-                    if (edittext_Phs.length() != 0) {
-                        line.setElectricalLength(Double.parseDouble(edittext_Phs.getText().toString()));
+                    if (editTextPhs.length() != 0) {
+                        line.setElectricalLength(Double.parseDouble(editTextPhs.getText().toString()));
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, Constants.Synthesize_Width);
                         W = line.getMetalWidth();
@@ -154,12 +164,12 @@ public class MlinFragment extends Fragment {
                         BigDecimal L_temp = new BigDecimal(L); // cut the decimal of L
                         L = L_temp.setScale(DecimalLength,
                                 BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittext_L.setText(String.valueOf(L));
+                        editTextL.setText(String.valueOf(L));
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, Constants.Synthesize_Width);
                         W = line.getMetalWidth();
-                        edittext_L.setText(""); // clear the L if the Eeff input is empty
+                        editTextL.setText(""); // clear the L if the Eeff input is empty
                     }
                     temp = spinner_W.getSelectedItemPosition();
                     if (temp == 0) {
@@ -174,50 +184,58 @@ public class MlinFragment extends Fragment {
                     W = W_temp
                             .setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
                             .doubleValue();
-                    edittext_W.setText(String.valueOf(W));
+                    editTextW.setText(String.valueOf(W));
                 }
                 forceRippleAnimation(physicalCard);
             }
         });
 
-        return rootView;
+        if(!isAdFree)
+        {
+            adFragment = new AdFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager !=null) {
+                fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+            }
+        }
+        return viewRoot;
     }
 
     /*
      * initialize the UI
-	 */
+     */
     private void initUI() {
-        RadioButton radioButtonW = (RadioButton) rootView.findViewById(R.id.radioBtn_W);
+        RadioButton radioButtonW = (RadioButton) viewRoot.findViewById(R.id.radioBtn_W);
         radioButtonW.setVisibility(View.VISIBLE);
         radioButtonW.setChecked(true);
 
-        RadioButton radioButtonL = (RadioButton) rootView.findViewById(R.id.radioBtn_L);
+        RadioButton radioButtonL = (RadioButton) viewRoot.findViewById(R.id.radioBtn_L);
         radioButtonL.setVisibility(View.VISIBLE);
         radioButtonL.setChecked(true);
 
-        RadioButton radioButtonZ0 = (RadioButton) rootView.findViewById(R.id.radioBtn_Z0);
+        RadioButton radioButtonZ0 = (RadioButton) viewRoot.findViewById(R.id.radioBtn_Z0);
         radioButtonZ0.setVisibility(View.VISIBLE);
         radioButtonZ0.setChecked(true);
 
-        RadioButton radioButtonPhs = (RadioButton) rootView.findViewById(R.id.radioBtn_Phs);
+        RadioButton radioButtonPhs = (RadioButton) viewRoot.findViewById(R.id.radioBtn_Phs);
         radioButtonPhs.setVisibility(View.VISIBLE);
         radioButtonPhs.setChecked(true);
 
-        TextView textW = (TextView) rootView.findViewById(R.id.text_W);
+        TextView textW = (TextView) viewRoot.findViewById(R.id.text_W);
         textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textL = (TextView) rootView.findViewById(R.id.text_L);
+        TextView textL = (TextView) viewRoot.findViewById(R.id.text_L);
         textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textZ0 = (TextView) rootView.findViewById(R.id.text_Z0);
+        TextView textZ0 = (TextView) viewRoot.findViewById(R.id.text_Z0);
         textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
-        TextView textPhs = (TextView) rootView.findViewById(R.id.text_Phs);
+        TextView textPhs = (TextView) viewRoot.findViewById(R.id.text_Phs);
         textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
         // Subscript strings
-        text_epsilon = (TextView) rootView.findViewById(R.id.text_er);
-        //text_eeff = (TextView) rootView.findViewById(R.id.text_Eeff);
+        text_epsilon = (TextView) viewRoot.findViewById(R.id.text_er);
+        //text_eeff = (TextView) viewRoot.findViewById(R.id.text_Eeff);
 
         SpannableString spanEpsilon = new SpannableString(
                 this.getString(R.string.text_er));
@@ -231,8 +249,8 @@ public class MlinFragment extends Fragment {
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         textZ0.append(spanZ0);
 
-        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
-        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
+        physicalCard = (CardView) viewRoot.findViewById(R.id.physicalParaCard);
+        electricalCard = (CardView) viewRoot.findViewById(R.id.electricalParaCard);
 
         line = new MlinModel();
         error_er = new SpannableString(
@@ -240,32 +258,32 @@ public class MlinFragment extends Fragment {
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
 
         // edittext elements
-        edittext_W = (EditText) rootView.findViewById(R.id.editText_W);
-        //edittext_W.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.green), PorterDuff.Mode.SRC_ATOP);
-        edittext_W.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        edittext_L = (EditText) rootView.findViewById(R.id.editText_L);
-        edittext_L.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        edittext_Z0 = (EditText) rootView.findViewById(R.id.editText_Z0);
-        edittext_Z0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-        edittext_Phs = (EditText) rootView.findViewById(R.id.editText_Phs);
-        edittext_Phs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-        edittext_Freq = (EditText) rootView.findViewById(R.id.editText_Freq);
-        edittext_T = (EditText) rootView.findViewById(R.id.editText_T);
-        edittext_H = (EditText) rootView.findViewById(R.id.editText_H);
-        edittext_er = (EditText) rootView.findViewById(R.id.editText_er);
+        editTextW = (EditText) viewRoot.findViewById(R.id.editText_W);
+        //editTextW.getBackground().setColorFilter(ContextCompat.getColor(getContext(), R.color.green), PorterDuff.Mode.SRC_ATOP);
+        editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        editTextL = (EditText) viewRoot.findViewById(R.id.editText_L);
+        editTextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        editTextZ0 = (EditText) viewRoot.findViewById(R.id.editText_Z0);
+        editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        editTextPhs = (EditText) viewRoot.findViewById(R.id.editText_Phs);
+        editTextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        editTextFreq = (EditText) viewRoot.findViewById(R.id.editText_Freq);
+        editTextT = (EditText) viewRoot.findViewById(R.id.editText_T);
+        editTextH = (EditText) viewRoot.findViewById(R.id.editText_H);
+        editTextEr = (EditText) viewRoot.findViewById(R.id.editText_er);
 
         // button elements
-        mlinAnalyze = (Button) rootView.findViewById(R.id.button_ana);
-        mlinSynthesize = (Button) rootView.findViewById(R.id.button_syn);
+        mlinAnalyze = (Button) viewRoot.findViewById(R.id.button_ana);
+        mlinSynthesize = (Button) viewRoot.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinner_W = (Spinner) rootView.findViewById(R.id.spinner_W);
-        spinner_L = (Spinner) rootView.findViewById(R.id.spinner_L);
-        spinner_Z0 = (Spinner) rootView.findViewById(R.id.spinner_Z0);
-        spinner_Eeff = (Spinner) rootView.findViewById(R.id.spinner_Phs);
-        spinner_Freq = (Spinner) rootView.findViewById(R.id.spinner_Freq);
-        spinner_T = (Spinner) rootView.findViewById(R.id.spinner_T);
-        spinner_H = (Spinner) rootView.findViewById(R.id.spinner_H);
+        spinner_W = (Spinner) viewRoot.findViewById(R.id.spinner_W);
+        spinner_L = (Spinner) viewRoot.findViewById(R.id.spinner_L);
+        spinner_Z0 = (Spinner) viewRoot.findViewById(R.id.spinner_Z0);
+        spinner_Eeff = (Spinner) viewRoot.findViewById(R.id.spinner_Phs);
+        spinner_Freq = (Spinner) viewRoot.findViewById(R.id.spinner_Freq);
+        spinner_T = (Spinner) viewRoot.findViewById(R.id.spinner_T);
+        spinner_H = (Spinner) viewRoot.findViewById(R.id.spinner_H);
 
         // configure the length units
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter
@@ -311,33 +329,33 @@ public class MlinFragment extends Fragment {
         // read values from the shared preferences
 
         // fragment_mlin header_parameters
-        edittext_W.setText(prefs.getString(Constants.MLIN_W, "19.23"));
+        editTextW.setText(prefs.getString(Constants.MLIN_W, "19.23"));
         spinner_W.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_W_UNIT,
                 "0")));
 
-        edittext_L.setText(prefs.getString(Constants.MLIN_L, "1000.00"));
+        editTextL.setText(prefs.getString(Constants.MLIN_L, "1000.00"));
         spinner_L.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_L_UNIT,
                 "0")));
 
-        edittext_Z0.setText(prefs.getString(Constants.MLIN_Z0, "50.0"));
+        editTextZ0.setText(prefs.getString(Constants.MLIN_Z0, "50.0"));
         spinner_Z0.setSelection(Integer.parseInt(prefs.getString(
                 Constants.MLIN_Z0_UNIT, "0")));
 
-        edittext_Phs.setText(prefs.getString(Constants.MLIN_PHS, "52.58"));
+        editTextPhs.setText(prefs.getString(Constants.MLIN_PHS, "52.58"));
         spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(
                 Constants.MLIN_PHS_UNIT, "0")));
 
-        edittext_Freq.setText(prefs.getString(Constants.MLIN_FREQ, "1.00"));
+        editTextFreq.setText(prefs.getString(Constants.MLIN_FREQ, "1.00"));
         spinner_Freq.setSelection(Integer.parseInt(prefs.getString(
                 Constants.MLIN_FREQ_UNIT, "1")));
 
-        edittext_er.setText(prefs.getString(Constants.MLIN_ER, "4.00"));
+        editTextEr.setText(prefs.getString(Constants.MLIN_ER, "4.00"));
 
-        edittext_H.setText(prefs.getString(Constants.MLIN_H, "10.00"));
+        editTextH.setText(prefs.getString(Constants.MLIN_H, "10.00"));
         spinner_H.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_H_UNIT,
                 "0")));
 
-        edittext_T.setText(prefs.getString(Constants.MLIN_T, "1.40"));
+        editTextT.setText(prefs.getString(Constants.MLIN_T, "1.40"));
         spinner_T.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT,
                 "0")));
     }
@@ -361,22 +379,22 @@ public class MlinFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        mlin_W = edittext_W.getText().toString();
+        mlin_W = editTextW.getText().toString();
         mlin_W_unit = Integer.toString(spinner_W.getSelectedItemPosition());
-        mlin_L = edittext_L.getText().toString();
+        mlin_L = editTextL.getText().toString();
         mlin_L_unit = Integer.toString(spinner_L.getSelectedItemPosition());
-        mlin_Z0 = edittext_Z0.getText().toString();
+        mlin_Z0 = editTextZ0.getText().toString();
         mlin_Z0_unit = Integer.toString(spinner_Z0.getSelectedItemPosition());
-        mlin_Eeff = edittext_Phs.getText().toString();
+        mlin_Eeff = editTextPhs.getText().toString();
         mlin_Eeff_unit = Integer.toString(spinner_Eeff
                 .getSelectedItemPosition());
-        mlin_Freq = edittext_Freq.getText().toString();
+        mlin_Freq = editTextFreq.getText().toString();
         mlin_Freq_unit = Integer.toString(spinner_Freq
                 .getSelectedItemPosition());
-        mlin_epsilon = edittext_er.getText().toString();
-        mlin_H = edittext_H.getText().toString();
+        mlin_epsilon = editTextEr.getText().toString();
+        mlin_H = editTextH.getText().toString();
         mlin_H_unit = Integer.toString(spinner_H.getSelectedItemPosition());
-        mlin_T = edittext_T.getText().toString();
+        mlin_T = editTextT.getText().toString();
         mlin_T_unit = Integer.toString(spinner_T.getSelectedItemPosition());
 
         editor.putString(Constants.MLIN_W, mlin_W);
@@ -400,26 +418,26 @@ public class MlinFragment extends Fragment {
 
     private boolean analysisInputCheck() {
         boolean checkResult = true;
-        if (edittext_W.length() == 0) {
-            edittext_W.setError(getText(R.string.Error_W_empty));
+        if (editTextW.length() == 0) {
+            editTextW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
         }
-        if (edittext_Freq.length() == 0) {
-            edittext_Freq.setError(getText(R.string.Error_Freq_empty));
+        if (editTextFreq.length() == 0) {
+            editTextFreq.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
         }
-        if (edittext_H.length() == 0) {
-            edittext_H.setError(getText(R.string.Error_H_empty));
+        if (editTextH.length() == 0) {
+            editTextH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
         }
-        if (edittext_T.length() == 0) {
-            edittext_T.setError(getText(R.string.Error_T_empty));
+        if (editTextT.length() == 0) {
+            editTextT.setError(getText(R.string.Error_T_empty));
             checkResult = false;
         }
-        if (edittext_er.length() == 0) {
+        if (editTextEr.length() == 0) {
             error_er.setSpan(new SubscriptSpan(), 13, 14,
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-            edittext_er.setError(error_er);
+            editTextEr.setError(error_er);
             checkResult = false;
         }
         return checkResult;
@@ -427,28 +445,28 @@ public class MlinFragment extends Fragment {
 
     private boolean synthesizeInputCheck() {
         boolean checkResult = true;
-        if (edittext_Z0.length() == 0) {
+        if (editTextZ0.length() == 0) {
             error_Z0.setSpan(new SubscriptSpan(), 13, 14,
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-            edittext_Z0.setError(error_Z0);
+            editTextZ0.setError(error_Z0);
             checkResult = false;
         }
-        if (edittext_Freq.length() == 0) {
-            edittext_Freq.setError(getText(R.string.Error_Freq_empty));
+        if (editTextFreq.length() == 0) {
+            editTextFreq.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
         }
-        if (edittext_H.length() == 0) {
-            edittext_H.setError(getText(R.string.Error_H_empty));
+        if (editTextH.length() == 0) {
+            editTextH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
         }
-        if (edittext_T.length() == 0) {
-            edittext_T.setError(getText(R.string.Error_T_empty));
+        if (editTextT.length() == 0) {
+            editTextT.setError(getText(R.string.Error_T_empty));
             checkResult = false;
         }
-        if (edittext_er.length() == 0) {
+        if (editTextEr.length() == 0) {
             error_er.setSpan(new SubscriptSpan(), 13, 14,
                     Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-            edittext_er.setError(error_er);
+            editTextEr.setError(error_er);
             checkResult = false;
         }
         return checkResult;
@@ -464,6 +482,23 @@ public class MlinFragment extends Fragment {
 
             view.setClickable(false);
             rippleDrawable.setState(new int[]{});
+        }
+    }
+
+    public void addAdFragment(){
+        adFragment = new AdFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        if(fragmentManager !=null) {
+            fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+        }
+    }
+
+    public void removeAdFragment(){
+        if (adFragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager !=null) {
+                fragmentManager.beginTransaction().remove(adFragment).commit();
+            }
         }
     }
 }

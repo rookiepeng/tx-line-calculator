@@ -8,6 +8,7 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -45,9 +46,28 @@ public class CoaxFragment extends Fragment {
     private RadioButton radioBtnA, radioBtnB, radioBtnC;
     private CoaxModel line;
     private ColorStateList defaultTextColor, defaultEdittextColor;
+    private AdFragment adFragment=null;
+
+    private boolean isAdFree;
 
     public CoaxFragment() {
         // Empty constructor required for fragment subclasses
+    }
+
+    public static CoaxFragment newInstance(boolean param) {
+        CoaxFragment fragment = new CoaxFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Constants.IS_AD_FREE, param);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isAdFree=getArguments().getBoolean(Constants.IS_AD_FREE,true);
+        }
     }
 
     @Override
@@ -189,6 +209,14 @@ public class CoaxFragment extends Fragment {
             }
         });
 
+        if(!isAdFree)
+        {
+            adFragment = new AdFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager !=null) {
+                fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+            }
+        }
         return viewRoot;
     }
 
@@ -596,6 +624,23 @@ public class CoaxFragment extends Fragment {
 
             view.setClickable(false);
             rippleDrawable.setState(new int[] {});
+        }
+    }
+
+    public void addAdFragment(){
+        AdFragment adFragment = new AdFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        if(fragmentManager !=null) {
+            fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+        }
+    }
+
+    public void removeAdFragment(){
+        if (adFragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager !=null) {
+                fragmentManager.beginTransaction().remove(adFragment).commit();
+            }
         }
     }
 }

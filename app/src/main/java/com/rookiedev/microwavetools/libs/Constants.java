@@ -20,6 +20,8 @@ public class Constants {
     public static final int LengthUnit_mil = 0, LengthUnit_mm = 1, LengthUnit_cm = 2, LengthUnit_m = 3;
     public static final int FreqUnit_Hz = 10, FreqUnit_MHz = 0, FreqUnit_GHz = 1;
 
+    public static final String IS_AD_FREE="IS_AD_FREE";
+
     public static final String MLIN_W = "MLIN_W";
     public static final String MLIN_W_UNIT = "MLIN_W_UNIT";
     public static final String MLIN_L = "MLIN_L";

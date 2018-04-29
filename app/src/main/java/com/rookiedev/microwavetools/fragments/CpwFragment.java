@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -59,15 +60,19 @@ public class CpwFragment extends Fragment {
     private CpwModel line;
     private ColorStateList defaultTextColor, defaultEdittextColor;
     public static final String CPW_TYPE_PARAM = "TYPE";
+    private AdFragment adFragment=null;
+
+    private boolean isAdFree;
 
     public CpwFragment() {
         // Empty constructor required for fragment subclasses
     }
 
-    public static CpwFragment newInstance(String param) {
+    public static CpwFragment newInstance(String param, boolean param2) {
         CpwFragment fragment = new CpwFragment();
         Bundle args = new Bundle();
         args.putString(CPW_TYPE_PARAM, param);
+        args.putBoolean(Constants.IS_AD_FREE, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,6 +82,7 @@ public class CpwFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             withGround = getArguments().getString(CPW_TYPE_PARAM) != "CPW";
+            isAdFree=getArguments().getBoolean(Constants.IS_AD_FREE,true);
         }
     }
 
@@ -217,6 +223,14 @@ public class CpwFragment extends Fragment {
             }
         });
 
+        if(!isAdFree)
+        {
+            adFragment = new AdFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager !=null) {
+                fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+            }
+        }
         return rootView;
     }
 
@@ -682,6 +696,23 @@ public class CpwFragment extends Fragment {
 
             view.setClickable(false);
             rippleDrawable.setState(new int[]{});
+        }
+    }
+
+    public void addAdFragment(){
+        AdFragment adFragment = new AdFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        if(fragmentManager !=null) {
+            fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+        }
+    }
+
+    public void removeAdFragment(){
+        if (adFragment != null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            if(fragmentManager !=null) {
+                fragmentManager.beginTransaction().remove(adFragment).commit();
+            }
         }
     }
 }
