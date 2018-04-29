@@ -9,10 +9,15 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Layer_1"
    data-name="Layer 1"
-   viewBox="0 0 411.56 411.56"
+   viewBox="0 0 757.3158 357.53125"
    version="1.1"
    sodipodi:docname="ic_launcher.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="C:\Users\rookie\Documents\GitHub\RF-Line-Calculator\pics\ic_launcher.png"
+   inkscape:export-xdpi="423.42999"
+   inkscape:export-ydpi="423.42999"
+   width="757.3158"
+   height="357.53125">
   <metadata
      id="metadata17">
     <rdf:RDF>
@@ -38,8 +43,8 @@
      id="namedview15"
      showgrid="false"
      inkscape:zoom="1.4432153"
-     inkscape:cx="-59.497257"
-     inkscape:cy="304.41123"
+     inkscape:cx="539.56399"
+     inkscape:cy="235.60337"
      inkscape:current-layer="Layer_1" />
   <defs
      id="defs4">
@@ -49,46 +54,58 @@
   <title
      id="title6">ic_launcher</title>
   <rect
-     id="_Rectangle_"
-     data-name="&lt;Rectangle&gt;"
-     class="cls-1"
-     width="411.56"
-     height="411.56" />
-  <rect
+     x="0"
      id="_Rectangle_2"
      data-name="&lt;Rectangle&gt;"
      class="cls-2"
-     y="327.89"
-     width="411.56"
+     y="327.70126"
+     width="757.3158"
      height="29.83"
-     style="fill:#ffcc80;fill-opacity:1" />
+     style="fill:#ffa726;fill-opacity:1;stroke-width:0.99999994" />
   <rect
+     x="0"
      id="_Rectangle_3"
      data-name="&lt;Rectangle&gt;"
      class="cls-3"
-     y="208.89"
-     width="411.56"
+     y="208.70125"
+     width="757.3158"
      height="119"
-     style="fill:#e0e0e0;fill-opacity:1" />
+     style="fill:#bdbdbd;fill-opacity:1;stroke-width:0.99999994" />
   <path
+     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
+     inkscape:connector-curvature="0"
      id="_Path_"
      data-name="&lt;Path&gt;"
      class="cls-4"
-     d="M408.75,567.49"
-     transform="translate(-100.22 -217.78)" />
+     d="M 378.6579,349.52125" />
   <path
+     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
+     inkscape:connector-curvature="0"
      id="_Path_2"
      data-name="&lt;Path&gt;"
      class="cls-4"
-     d="M389.33,396.74"
-     transform="translate(-100.22 -217.78)" />
+     d="M 378.6579,178.77125" />
   <rect
      id="_Rectangle_4"
      data-name="&lt;Rectangle&gt;"
      class="cls-2"
-     x="120.78"
-     y="179.1"
+     x="293.6579"
+     y="178.91125"
      width="170"
      height="29.67"
-     style="fill:#ffcc80;fill-opacity:1" />
+     style="fill:#ffa726;fill-opacity:1" />
+  <path
+     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
+     inkscape:connector-curvature="0"
+     id="_Path_-1"
+     data-name="&lt;Path&gt;"
+     class="cls-4"
+     d="M 378.6579,170.75" />
+  <path
+     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
+     inkscape:connector-curvature="0"
+     id="_Path_2-9"
+     data-name="&lt;Path&gt;"
+     class="cls-4"
+     d="M 378.6579,0" />
 </svg>
