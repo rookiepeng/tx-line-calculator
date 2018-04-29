@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Layer_1"
    data-name="Layer 1"
-   viewBox="0 0 757.3158 357.53125"
+   viewBox="0 0 757.3158 265.55792"
    version="1.1"
    sodipodi:docname="ic_launcher.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
@@ -17,7 +17,7 @@
    inkscape:export-xdpi="423.42999"
    inkscape:export-ydpi="423.42999"
    width="757.3158"
-   height="357.53125">
+   height="265.55792">
   <metadata
      id="metadata17">
     <rdf:RDF>
@@ -43,8 +43,8 @@
      id="namedview15"
      showgrid="false"
      inkscape:zoom="1.4432153"
-     inkscape:cx="539.56399"
-     inkscape:cy="235.60337"
+     inkscape:cx="445.17879"
+     inkscape:cy="-33.149661"
      inkscape:current-layer="Layer_1" />
   <defs
      id="defs4">
@@ -58,7 +58,7 @@
      id="_Rectangle_2"
      data-name="&lt;Rectangle&gt;"
      class="cls-2"
-     y="327.70126"
+     y="235.72791"
      width="757.3158"
      height="29.83"
      style="fill:#ffa726;fill-opacity:1;stroke-width:0.99999994" />
@@ -67,7 +67,7 @@
      id="_Rectangle_3"
      data-name="&lt;Rectangle&gt;"
      class="cls-3"
-     y="208.70125"
+     y="116.7279"
      width="757.3158"
      height="119"
      style="fill:#bdbdbd;fill-opacity:1;stroke-width:0.99999994" />
@@ -77,20 +77,20 @@
      id="_Path_"
      data-name="&lt;Path&gt;"
      class="cls-4"
-     d="M 378.6579,349.52125" />
+     d="M 378.6579,257.5479" />
   <path
      style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
      inkscape:connector-curvature="0"
      id="_Path_2"
      data-name="&lt;Path&gt;"
      class="cls-4"
-     d="M 378.6579,178.77125" />
+     d="M 378.6579,86.797898" />
   <rect
      id="_Rectangle_4"
      data-name="&lt;Rectangle&gt;"
      class="cls-2"
      x="293.6579"
-     y="178.91125"
+     y="86.937904"
      width="170"
      height="29.67"
      style="fill:#ffa726;fill-opacity:1" />
@@ -100,11 +100,25 @@
      id="_Path_-1"
      data-name="&lt;Path&gt;"
      class="cls-4"
-     d="M 378.6579,170.75" />
+     d="M 378.6579,78.776648" />
   <path
      style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
      inkscape:connector-curvature="0"
      id="_Path_2-9"
+     data-name="&lt;Path&gt;"
+     class="cls-4"
+     d="M 378.6579,-91.973352" />
+  <path
+     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
+     inkscape:connector-curvature="0"
+     id="_Path_2-7"
+     data-name="&lt;Path&gt;"
+     class="cls-4"
+     d="M 378.6579,8.02125" />
+  <path
+     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
+     inkscape:connector-curvature="0"
+     id="_Path_-1-7"
      data-name="&lt;Path&gt;"
      class="cls-4"
      d="M 378.6579,0" />
