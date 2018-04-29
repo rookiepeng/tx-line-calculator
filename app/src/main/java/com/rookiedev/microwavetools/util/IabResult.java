@@ -56,4 +56,3 @@ public class IabResult {
         return "IabResult: " + getMessage();
     }
 }
-
