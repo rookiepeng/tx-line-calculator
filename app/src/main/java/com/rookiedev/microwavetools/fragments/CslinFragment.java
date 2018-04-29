@@ -31,30 +31,6 @@ import com.rookiedev.microwavetools.libs.CslinModel;
 import java.math.BigDecimal;
 
 public class CslinFragment extends Fragment {
-    public static final String CSLIN_W = "CSLIN_W";
-    public static final String CSLIN_W_UNIT = "CSLIN_W_UNIT";
-    public static final String CSLIN_S = "CSLIN_S";
-    public static final String CSLIN_S_UNIT = "CSLIN_S_UNIT";
-    public static final String CSLIN_L = "CSLIN_L";
-    public static final String CSLIN_L_UNIT = "CSLIN_L_UNIT";
-    public static final String CSLIN_Z0 = "CSLIN_Z0";
-    public static final String CSLIN_Z0_UNIT = "CSLIN_Z0_UNIT";
-    public static final String CSLIN_k = "CSLIN_k";
-    public static final String CSLIN_Z0o = "CSLIN_Z0o";
-    public static final String CSLIN_Z0o_UNIT = "CSLIN_Z0o_UNIT";
-    public static final String CSLIN_Z0e = "CSLIN_Z0e";
-    public static final String CSLIN_Z0e_UNIT = "CSLIN_Z0e_UNIT";
-    public static final String CSLIN_Eeff = "CSLIN_Eeff";
-    public static final String CSLIN_Eeff_UNIT = "CSLIN_Eeff_UNIT";
-    public static final String CSLIN_Freq = "CSLIN_Freq";
-    public static final String CSLIN_Freq_UNIT = "CSLIN_Freq_UNIT";
-    public static final String CSLIN_er = "CSLIN_er";
-    public static final String CSLIN_H = "CSLIN_H";
-    public static final String CSLIN_H_UNIT = "CSLIN_H_UNIT";
-    public static final String CSLIN_T = "CSLIN_T";
-    public static final String CSLIN_T_UNIT = "CSLIN_T_UNIT";
-    public static final String CSLIN_USEZ0k = "CSLIN_USEZ0k";
-
     private Context mContext;
     private View rootView;
     private CardView electricalCard, physicalCard;
@@ -492,51 +468,51 @@ public class CslinFragment extends Fragment {
         // read values from the shared preferences
 
         // CslinCalculator header_parameters
-        edittext_W.setText(prefs.getString(CSLIN_W, "50.00"));
-        spinner_W.setSelection(Integer.parseInt(prefs.getString(CSLIN_W_UNIT,
+        edittext_W.setText(prefs.getString(Constants.CSLIN_W, "50.00"));
+        spinner_W.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_W_UNIT,
                 "0")));
 
-        edittext_S.setText(prefs.getString(CSLIN_S, "20.00"));
-        spinner_S.setSelection(Integer.parseInt(prefs.getString(CSLIN_S_UNIT,
+        edittext_S.setText(prefs.getString(Constants.CSLIN_S, "20.00"));
+        spinner_S.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_S_UNIT,
                 "0")));
 
-        edittext_L.setText(prefs.getString(CSLIN_L, "1000.00"));
-        spinner_L.setSelection(Integer.parseInt(prefs.getString(CSLIN_L_UNIT,
+        edittext_L.setText(prefs.getString(Constants.CSLIN_L, "1000.00"));
+        spinner_L.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_L_UNIT,
                 "0")));
 
-        edittext_Z0.setText(prefs.getString(CSLIN_Z0, "33.42"));
+        edittext_Z0.setText(prefs.getString(Constants.CSLIN_Z0, "33.42"));
         spinner_Z0.setSelection(Integer.parseInt(prefs.getString(
-                CSLIN_Z0_UNIT, "0")));
+                Constants.CSLIN_Z0_UNIT, "0")));
 
-        edittext_k.setText(prefs.getString(CSLIN_k, "0.10"));
+        edittext_k.setText(prefs.getString(Constants.CSLIN_K, "0.10"));
 
-        edittext_Z0o.setText(prefs.getString(CSLIN_Z0o, "30.35"));
+        edittext_Z0o.setText(prefs.getString(Constants.CSLIN_Z0O, "30.35"));
         spinner_Z0o.setSelection(Integer.parseInt(prefs.getString(
-                CSLIN_Z0o_UNIT, "0")));
+                Constants.CSLIN_Z0O_UNIT, "0")));
 
-        edittext_Z0e.setText(prefs.getString(CSLIN_Z0e, "36.69"));
+        edittext_Z0e.setText(prefs.getString(Constants.CSLIN_Z0E, "36.69"));
         spinner_Z0e.setSelection(Integer.parseInt(prefs.getString(
-                CSLIN_Z0e_UNIT, "0")));
+                Constants.CSLIN_Z0E_UNIT, "0")));
 
-        edittext_Eeff.setText(prefs.getString(CSLIN_Eeff, "61.00"));
+        edittext_Eeff.setText(prefs.getString(Constants.CSLIN_PHS, "61.00"));
         spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(
-                CSLIN_Eeff_UNIT, "0")));
+                Constants.CSLIN_PHS_UNIT, "0")));
 
-        edittext_Freq.setText(prefs.getString(CSLIN_Freq, "1.00"));
+        edittext_Freq.setText(prefs.getString(Constants.CSLIN_FREQ, "1.00"));
         spinner_Freq.setSelection(Integer.parseInt(prefs.getString(
-                CSLIN_Freq_UNIT, "1")));
+                Constants.CSLIN_FREQ_UNIT, "1")));
 
-        edittext_er.setText(prefs.getString(CSLIN_er, "4.00"));
+        edittext_er.setText(prefs.getString(Constants.CSLIN_ER, "4.00"));
 
-        edittext_H.setText(prefs.getString(CSLIN_H, "60.00"));
-        spinner_H.setSelection(Integer.parseInt(prefs.getString(CSLIN_H_UNIT,
+        edittext_H.setText(prefs.getString(Constants.CSLIN_H, "60.00"));
+        spinner_H.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_H_UNIT,
                 "0")));
 
-        edittext_T.setText(prefs.getString(CSLIN_T, "2.80"));
-        spinner_T.setSelection(Integer.parseInt(prefs.getString(CSLIN_T_UNIT,
+        edittext_T.setText(prefs.getString(Constants.CSLIN_T, "2.80"));
+        spinner_T.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_T_UNIT,
                 "0")));
 
-        use_z0k = prefs.getString(CSLIN_USEZ0k, "true").equals("true");
+        use_z0k = prefs.getString(Constants.CSLIN_USEZ0K, "true").equals("true");
     }
 
     private void Preference_SharedPref() {
@@ -588,29 +564,29 @@ public class CslinFragment extends Fragment {
             cslin_use_z0k = "false";
         }
 
-        editor.putString(CSLIN_W, cslin_W);
-        editor.putString(CSLIN_W_UNIT, cslin_W_unit);
-        editor.putString(CSLIN_S, cslin_S);
-        editor.putString(CSLIN_S_UNIT, cslin_S_unit);
-        editor.putString(CSLIN_L, cslin_L);
-        editor.putString(CSLIN_L_UNIT, cslin_L_unit);
-        editor.putString(CSLIN_Z0, cslin_Z0);
-        editor.putString(CSLIN_Z0_UNIT, cslin_Z0_unit);
-        editor.putString(CSLIN_k, cslin_k);
-        editor.putString(CSLIN_Z0e, cslin_Z0e);
-        editor.putString(CSLIN_Z0e_UNIT, cslin_Z0e_unit);
-        editor.putString(CSLIN_Z0o, cslin_Z0o);
-        editor.putString(CSLIN_Z0o_UNIT, cslin_Z0o_unit);
-        editor.putString(CSLIN_Eeff, cslin_Eeff);
-        editor.putString(CSLIN_Eeff_UNIT, cslin_Eeff_unit);
-        editor.putString(CSLIN_Freq, cslin_Freq);
-        editor.putString(CSLIN_Freq_UNIT, cslin_Freq_unit);
-        editor.putString(CSLIN_er, cslin_er);
-        editor.putString(CSLIN_H, cslin_H);
-        editor.putString(CSLIN_H_UNIT, cslin_H_unit);
-        editor.putString(CSLIN_T, cslin_T);
-        editor.putString(CSLIN_T_UNIT, cslin_T_unit);
-        editor.putString(CSLIN_USEZ0k, cslin_use_z0k);
+        editor.putString(Constants.CSLIN_W, cslin_W);
+        editor.putString(Constants.CSLIN_W_UNIT, cslin_W_unit);
+        editor.putString(Constants.CSLIN_S, cslin_S);
+        editor.putString(Constants.CSLIN_S_UNIT, cslin_S_unit);
+        editor.putString(Constants.CSLIN_L, cslin_L);
+        editor.putString(Constants.CSLIN_L_UNIT, cslin_L_unit);
+        editor.putString(Constants.CSLIN_Z0, cslin_Z0);
+        editor.putString(Constants.CSLIN_Z0_UNIT, cslin_Z0_unit);
+        editor.putString(Constants.CSLIN_K, cslin_k);
+        editor.putString(Constants.CSLIN_Z0E, cslin_Z0e);
+        editor.putString(Constants.CSLIN_Z0E_UNIT, cslin_Z0e_unit);
+        editor.putString(Constants.CSLIN_Z0O, cslin_Z0o);
+        editor.putString(Constants.CSLIN_Z0O_UNIT, cslin_Z0o_unit);
+        editor.putString(Constants.CSLIN_PHS, cslin_Eeff);
+        editor.putString(Constants.CSLIN_PHS_UNIT, cslin_Eeff_unit);
+        editor.putString(Constants.CSLIN_FREQ, cslin_Freq);
+        editor.putString(Constants.CSLIN_FREQ_UNIT, cslin_Freq_unit);
+        editor.putString(Constants.CSLIN_ER, cslin_er);
+        editor.putString(Constants.CSLIN_H, cslin_H);
+        editor.putString(Constants.CSLIN_H_UNIT, cslin_H_unit);
+        editor.putString(Constants.CSLIN_T, cslin_T);
+        editor.putString(Constants.CSLIN_T_UNIT, cslin_T_unit);
+        editor.putString(Constants.CSLIN_USEZ0K, cslin_use_z0k);
 
         editor.apply();
     }

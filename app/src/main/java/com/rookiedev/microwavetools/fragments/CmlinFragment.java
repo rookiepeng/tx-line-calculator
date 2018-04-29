@@ -31,29 +31,7 @@ import com.rookiedev.microwavetools.libs.CmlinModel;
 import java.math.BigDecimal;
 
 public class CmlinFragment extends Fragment {
-    private static final String CMLIN_W = "CMLIN_W";
-    private static final String CMLIN_W_UNIT = "CMLIN_W_UNIT";
-    private static final String CMLIN_S = "CMLIN_S";
-    private static final String CMLIN_S_UNIT = "CMLIN_S_UNIT";
-    private static final String CMLIN_L = "CMLIN_L";
-    private static final String CMLIN_L_UNIT = "CMLIN_L_UNIT";
-    private static final String CMLIN_Z0 = "CMLIN_Z0";
-    private static final String CMLIN_Z0_UNIT = "CMLIN_Z0_UNIT";
-    private static final String CMLIN_K = "CMLIN_K";
-    private static final String CMLIN_Z0O = "CMLIN_Z0O";
-    private static final String CMLIN_Z0O_UNIT = "CMLIN_Z0O_UNIT";
-    private static final String CMLIN_Z0E = "CMLIN_Z0E";
-    private static final String CMLIN_Z0E_UNIT = "CMLIN_Z0E_UNIT";
-    private static final String CMLIN_PHS = "CMLIN_PHS";
-    private static final String CMLIN_PHS_UNIT = "CMLIN_PHS_UNIT";
-    private static final String CMLIN_FREQ = "CMLIN_FREQ";
-    private static final String CMLIN_FREQ_UNIT = "CMLIN_FREQ_UNIT";
-    private static final String CMLIN_ER = "CMLIN_ER";
-    private static final String CMLIN_H = "CMLIN_H";
-    private static final String CMLIN_H_UNIT = "CMLIN_H_UNIT";
-    private static final String CMLIN_T = "CMLIN_T";
-    private static final String CMLIN_T_UNIT = "CMLIN_T_UNIT";
-    private static final String CMLIN_USEZ0K = "CMLIN_USEZ0K";
+
 
     private Context mContext;
     private int decimalLength; // the length of the Decimal, accurate of the result
@@ -485,51 +463,51 @@ public class CmlinFragment extends Fragment {
         // read values from the shared preferences
 
         // fragment_cmlin header_parameters
-        edittext_W.setText(prefs.getString(CMLIN_W, "20.00"));
-        spinner_W.setSelection(Integer.parseInt(prefs.getString(CMLIN_W_UNIT,
+        edittext_W.setText(prefs.getString(Constants.CMLIN_W, "20.00"));
+        spinner_W.setSelection(Integer.parseInt(prefs.getString(Constants.CMLIN_W_UNIT,
                 "0")));
 
-        edittext_S.setText(prefs.getString(CMLIN_S, "20.00"));
-        spinner_S.setSelection(Integer.parseInt(prefs.getString(CMLIN_S_UNIT,
+        edittext_S.setText(prefs.getString(Constants.CMLIN_S, "20.00"));
+        spinner_S.setSelection(Integer.parseInt(prefs.getString(Constants.CMLIN_S_UNIT,
                 "0")));
 
-        edittext_L.setText(prefs.getString(CMLIN_L, "1000.00"));
-        spinner_L.setSelection(Integer.parseInt(prefs.getString(CMLIN_L_UNIT,
+        edittext_L.setText(prefs.getString(Constants.CMLIN_L, "1000.00"));
+        spinner_L.setSelection(Integer.parseInt(prefs.getString(Constants.CMLIN_L_UNIT,
                 "0")));
 
-        edittext_Z0.setText(prefs.getString(CMLIN_Z0, "50.6"));
+        edittext_Z0.setText(prefs.getString(Constants.CMLIN_Z0, "50.6"));
         spinner_Z0.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_Z0_UNIT, "0")));
+                Constants.CMLIN_Z0_UNIT, "0")));
 
-        edittext_k.setText(prefs.getString(CMLIN_K, "0.06"));
+        edittext_k.setText(prefs.getString(Constants.CMLIN_K, "0.06"));
 
-        edittext_Z0o.setText(prefs.getString(CMLIN_Z0O, "47.65"));
+        edittext_Z0o.setText(prefs.getString(Constants.CMLIN_Z0O, "47.65"));
         spinner_Z0o.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_Z0O_UNIT, "0")));
+                Constants.CMLIN_Z0O_UNIT, "0")));
 
-        edittext_Z0e.setText(prefs.getString(CMLIN_Z0E, "53.73"));
+        edittext_Z0e.setText(prefs.getString(Constants.CMLIN_Z0E, "53.73"));
         spinner_Z0e.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_Z0E_UNIT, "0")));
+                Constants.CMLIN_Z0E_UNIT, "0")));
 
-        edittext_Phs.setText(prefs.getString(CMLIN_PHS, "53.33"));
+        edittext_Phs.setText(prefs.getString(Constants.CMLIN_PHS, "53.33"));
         spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_PHS_UNIT, "0")));
+                Constants.CMLIN_PHS_UNIT, "0")));
 
-        edittext_Freq.setText(prefs.getString(CMLIN_FREQ, "1.00"));
+        edittext_Freq.setText(prefs.getString(Constants.CMLIN_FREQ, "1.00"));
         spinner_Freq.setSelection(Integer.parseInt(prefs.getString(
-                CMLIN_FREQ_UNIT, "1")));
+                Constants.CMLIN_FREQ_UNIT, "1")));
 
-        edittext_er.setText(prefs.getString(CMLIN_ER, "4.00"));
+        edittext_er.setText(prefs.getString(Constants.CMLIN_ER, "4.00"));
 
-        edittext_H.setText(prefs.getString(CMLIN_H, "10.00"));
-        spinner_H.setSelection(Integer.parseInt(prefs.getString(CMLIN_H_UNIT,
+        edittext_H.setText(prefs.getString(Constants.CMLIN_H, "10.00"));
+        spinner_H.setSelection(Integer.parseInt(prefs.getString(Constants.CMLIN_H_UNIT,
                 "0")));
 
-        edittext_T.setText(prefs.getString(CMLIN_T, "1.40"));
-        spinner_T.setSelection(Integer.parseInt(prefs.getString(CMLIN_T_UNIT,
+        edittext_T.setText(prefs.getString(Constants.CMLIN_T, "1.40"));
+        spinner_T.setSelection(Integer.parseInt(prefs.getString(Constants.CMLIN_T_UNIT,
                 "0")));
 
-        use_z0k = prefs.getString(CMLIN_USEZ0K, "true").equals("true");
+        use_z0k = prefs.getString(Constants.CMLIN_USEZ0K, "true").equals("true");
     }
 
     private void Preference_SharedPref() {
@@ -582,29 +560,29 @@ public class CmlinFragment extends Fragment {
             cmlin_use_z0k = "false";
         }
 
-        editor.putString(CMLIN_W, cmlin_W);
-        editor.putString(CMLIN_W_UNIT, cmlin_W_unit);
-        editor.putString(CMLIN_S, cmlin_S);
-        editor.putString(CMLIN_S_UNIT, cmlin_S_unit);
-        editor.putString(CMLIN_L, cmlin_L);
-        editor.putString(CMLIN_L_UNIT, cmlin_L_unit);
-        editor.putString(CMLIN_Z0, cmlin_Z0);
-        editor.putString(CMLIN_Z0_UNIT, cmlin_Z0_unit);
-        editor.putString(CMLIN_K, cmlin_k);
-        editor.putString(CMLIN_Z0E, cmlin_Z0e);
-        editor.putString(CMLIN_Z0E_UNIT, cmlin_Z0e_unit);
-        editor.putString(CMLIN_Z0O, cmlin_Z0o);
-        editor.putString(CMLIN_Z0O_UNIT, cmlin_Z0o_unit);
-        editor.putString(CMLIN_PHS, cmlin_Eeff);
-        editor.putString(CMLIN_PHS_UNIT, cmlin_Eeff_unit);
-        editor.putString(CMLIN_FREQ, cmlin_Freq);
-        editor.putString(CMLIN_FREQ_UNIT, cmlin_Freq_unit);
-        editor.putString(CMLIN_ER, cmlin_er);
-        editor.putString(CMLIN_H, cmlin_H);
-        editor.putString(CMLIN_H_UNIT, cmlin_H_unit);
-        editor.putString(CMLIN_T, cmlin_T);
-        editor.putString(CMLIN_T_UNIT, cmlin_T_unit);
-        editor.putString(CMLIN_USEZ0K, cmlin_use_z0k);
+        editor.putString(Constants.CMLIN_W, cmlin_W);
+        editor.putString(Constants.CMLIN_W_UNIT, cmlin_W_unit);
+        editor.putString(Constants.CMLIN_S, cmlin_S);
+        editor.putString(Constants.CMLIN_S_UNIT, cmlin_S_unit);
+        editor.putString(Constants.CMLIN_L, cmlin_L);
+        editor.putString(Constants.CMLIN_L_UNIT, cmlin_L_unit);
+        editor.putString(Constants.CMLIN_Z0, cmlin_Z0);
+        editor.putString(Constants.CMLIN_Z0_UNIT, cmlin_Z0_unit);
+        editor.putString(Constants.CMLIN_K, cmlin_k);
+        editor.putString(Constants.CMLIN_Z0E, cmlin_Z0e);
+        editor.putString(Constants.CMLIN_Z0E_UNIT, cmlin_Z0e_unit);
+        editor.putString(Constants.CMLIN_Z0O, cmlin_Z0o);
+        editor.putString(Constants.CMLIN_Z0O_UNIT, cmlin_Z0o_unit);
+        editor.putString(Constants.CMLIN_PHS, cmlin_Eeff);
+        editor.putString(Constants.CMLIN_PHS_UNIT, cmlin_Eeff_unit);
+        editor.putString(Constants.CMLIN_FREQ, cmlin_Freq);
+        editor.putString(Constants.CMLIN_FREQ_UNIT, cmlin_Freq_unit);
+        editor.putString(Constants.CMLIN_ER, cmlin_er);
+        editor.putString(Constants.CMLIN_H, cmlin_H);
+        editor.putString(Constants.CMLIN_H_UNIT, cmlin_H_unit);
+        editor.putString(Constants.CMLIN_T, cmlin_T);
+        editor.putString(Constants.CMLIN_T_UNIT, cmlin_T_unit);
+        editor.putString(Constants.CMLIN_USEZ0K, cmlin_use_z0k);
 
         editor.apply();
     }
@@ -775,19 +753,6 @@ public class CmlinFragment extends Fragment {
 
             view.setClickable(false);
             rippleDrawable.setState(new int[]{});
-
-            /*
-            Handler handler = new Handler();
-
-            handler.postDelayed(new Runnable()
-            {
-                @Override public void run()
-                {
-                    rippleDrawable.setState(new int[]{});
-                    physicalCard.setClickable(false);
-                    electricalCard.setClickable(false);
-                }
-            }, 200);*/
         }
     }
 }

@@ -32,23 +32,6 @@ import com.rookiedev.microwavetools.libs.SlinModel;
 import java.math.BigDecimal;
 
 public class SlinFragment extends Fragment {
-    public static final String SLIN_W = "SLIN_W";
-    public static final String SLIN_W_UNIT = "SLIN_W_UNIT";
-    public static final String SLIN_L = "SLIN_L";
-    public static final String SLIN_L_UNIT = "SLIN_L_UNIT";
-    public static final String SLIN_Z0 = "SLIN_Z0";
-    public static final String SLIN_Z0_UNIT = "SLIN_Z0_UNIT";
-    public static final String SLIN_PHS = "SLIN_PHS";
-    public static final String SLIN_PHS_UNIT = "SLIN_PHS_UNIT";
-    public static final String SLIN_FREQ = "SLIN_FREQ";
-    public static final String SLIN_FREQ_UNIT = "SLIN_FREQ_UNIT";
-    public static final String SLIN_ER = "SLIN_ER";
-    public static final String SLIN_H = "SLIN_H";
-    public static final String SLIN_H_UNIT = "SLIN_H_UNIT";
-    public static final String SLIN_T = "SLIN_T";
-    public static final String SLIN_T_UNIT = "SLIN_T_UNIT";
-    public static final String SLIN_TARGET = "SLIN_TARGET";
-
     private Context mContext;
     private View rootView, width_input, height_input, er_input;
     private CardView electricalCard, physicalCard;
@@ -315,29 +298,29 @@ public class SlinFragment extends Fragment {
         // read values from the shared preferences
 
         // SlinCalculator header_parameters
-        edittext_W.setText(prefs.getString(SLIN_W, "10.00"));
-        spinner_W.setSelection(Integer.parseInt(prefs.getString(SLIN_W_UNIT, "0")));
+        edittext_W.setText(prefs.getString(Constants.SLIN_W, "10.00"));
+        spinner_W.setSelection(Integer.parseInt(prefs.getString(Constants.SLIN_W_UNIT, "0")));
 
-        edittext_L.setText(prefs.getString(SLIN_L, "1000.00"));
-        spinner_L.setSelection(Integer.parseInt(prefs.getString(SLIN_L_UNIT, "0")));
+        edittext_L.setText(prefs.getString(Constants.SLIN_L, "1000.00"));
+        spinner_L.setSelection(Integer.parseInt(prefs.getString(Constants.SLIN_L_UNIT, "0")));
 
-        edittext_Z0.setText(prefs.getString(SLIN_Z0, "49.76"));
-        spinner_Z0.setSelection(Integer.parseInt(prefs.getString(SLIN_Z0_UNIT, "0")));
+        edittext_Z0.setText(prefs.getString(Constants.SLIN_Z0, "49.76"));
+        spinner_Z0.setSelection(Integer.parseInt(prefs.getString(Constants.SLIN_Z0_UNIT, "0")));
 
-        edittext_Eeff.setText(prefs.getString(SLIN_PHS, "61.00"));
-        spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(SLIN_PHS_UNIT, "0")));
+        edittext_Eeff.setText(prefs.getString(Constants.SLIN_PHS, "61.00"));
+        spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(Constants.SLIN_PHS_UNIT, "0")));
 
-        edittext_Freq.setText(prefs.getString(SLIN_FREQ, "1.00"));
-        spinner_Freq.setSelection(Integer.parseInt(prefs.getString(SLIN_FREQ_UNIT, "1")));
+        edittext_Freq.setText(prefs.getString(Constants.SLIN_FREQ, "1.00"));
+        spinner_Freq.setSelection(Integer.parseInt(prefs.getString(Constants.SLIN_FREQ_UNIT, "1")));
 
-        edittext_er.setText(prefs.getString(SLIN_ER, "4.00"));
+        edittext_er.setText(prefs.getString(Constants.SLIN_ER, "4.00"));
 
-        edittext_H.setText(prefs.getString(SLIN_H, "25.00"));
-        spinner_H.setSelection(Integer.parseInt(prefs.getString(SLIN_H_UNIT, "0")));
+        edittext_H.setText(prefs.getString(Constants.SLIN_H, "25.00"));
+        spinner_H.setSelection(Integer.parseInt(prefs.getString(Constants.SLIN_H_UNIT, "0")));
 
-        edittext_T.setText(prefs.getString(SLIN_T, "1.40"));
-        spinner_T.setSelection(Integer.parseInt(prefs.getString(SLIN_T_UNIT, "0")));
-        flag = Integer.parseInt(prefs.getString(SLIN_TARGET, "0"));
+        edittext_T.setText(prefs.getString(Constants.SLIN_T, "1.40"));
+        spinner_T.setSelection(Integer.parseInt(prefs.getString(Constants.SLIN_T_UNIT, "0")));
+        flag = Integer.parseInt(prefs.getString(Constants.SLIN_TARGET, "0"));
     }
 
     private void Preference_SharedPref() {
@@ -430,22 +413,22 @@ public class SlinFragment extends Fragment {
         slin_T_unit = Integer.toString(spinner_T.getSelectedItemPosition());
         slin_flag = Integer.toString(flag);
 
-        editor.putString(SLIN_W, slin_W);
-        editor.putString(SLIN_W_UNIT, slin_W_unit);
-        editor.putString(SLIN_H, slin_H);
-        editor.putString(SLIN_H_UNIT, slin_H_unit);
-        editor.putString(SLIN_ER, slin_er);
-        editor.putString(SLIN_L, slin_L);
-        editor.putString(SLIN_L_UNIT, slin_L_unit);
-        editor.putString(SLIN_Z0, slin_Z0);
-        editor.putString(SLIN_Z0_UNIT, slin_Z0_unit);
-        editor.putString(SLIN_PHS, slin_Eeff);
-        editor.putString(SLIN_PHS_UNIT, slin_Eeff_unit);
-        editor.putString(SLIN_FREQ, slin_Freq);
-        editor.putString(SLIN_FREQ_UNIT, slin_Freq_unit);
-        editor.putString(SLIN_T, slin_T);
-        editor.putString(SLIN_T_UNIT, slin_T_unit);
-        editor.putString(SLIN_TARGET, slin_flag);
+        editor.putString(Constants.SLIN_W, slin_W);
+        editor.putString(Constants.SLIN_W_UNIT, slin_W_unit);
+        editor.putString(Constants.SLIN_H, slin_H);
+        editor.putString(Constants.SLIN_H_UNIT, slin_H_unit);
+        editor.putString(Constants.SLIN_ER, slin_er);
+        editor.putString(Constants.SLIN_L, slin_L);
+        editor.putString(Constants.SLIN_L_UNIT, slin_L_unit);
+        editor.putString(Constants.SLIN_Z0, slin_Z0);
+        editor.putString(Constants.SLIN_Z0_UNIT, slin_Z0_unit);
+        editor.putString(Constants.SLIN_PHS, slin_Eeff);
+        editor.putString(Constants.SLIN_PHS_UNIT, slin_Eeff_unit);
+        editor.putString(Constants.SLIN_FREQ, slin_Freq);
+        editor.putString(Constants.SLIN_FREQ_UNIT, slin_Freq_unit);
+        editor.putString(Constants.SLIN_T, slin_T);
+        editor.putString(Constants.SLIN_T_UNIT, slin_T_unit);
+        editor.putString(Constants.SLIN_TARGET, slin_flag);
         editor.apply();
     }
 

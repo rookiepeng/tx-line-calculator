@@ -8,7 +8,7 @@ public class MlinCalculator {
 
     private MlinModel Analysis(MlinModel line) {
         double width, length, height, er, thickness;
-        double impedance, electricalLength;
+        double impedance, phase;
         double thicknessToHeight, widthToHeight;
 
         double u1, ur, deltau1, deltaur;
@@ -115,20 +115,20 @@ public class MlinCalculator {
 
         // length in wavelengths
         if (line.getFrequency() > 0.0) {
-            electricalLength = (length) / (v / line.getFrequency());
+            phase = (length) / (v / line.getFrequency());
         } else {
-            electricalLength = 0.0;
+            phase = 0.0;
         }
 
         // convert to degrees
-        electricalLength = 360.0 * electricalLength;
+        phase = 360.0 * phase;
 
         // effective relative permittivity
         effectiveEr = EF;
 
         //this.effectiveEr = effectiveEr;
         //MLINLine.setkEff(eeff);
-        line.setElectricalLength(electricalLength);
+        line.setElectricalLength(phase);
 
         //  store results
         line.setImpedance(impedance);

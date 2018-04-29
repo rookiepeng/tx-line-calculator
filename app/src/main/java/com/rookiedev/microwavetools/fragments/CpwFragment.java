@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -33,25 +34,6 @@ import com.rookiedev.microwavetools.libs.CpwModel;
 import java.math.BigDecimal;
 
 public class CpwFragment extends Fragment {
-    public static final String CPW_W = "CPW_W";
-    public static final String CPW_W_UNIT = "CPW_W_UNIT";
-    public static final String CPW_S = "CPW_S";
-    public static final String CPW_S_UNIT = "CPW_S_UNIT";
-    public static final String CPW_L = "CPW_L";
-    public static final String CPW_L_UNIT = "CPW_L_UNIT";
-    public static final String CPW_Z0 = "CPW_Z0";
-    public static final String CPW_Z0_UNIT = "CPW_Z0_UNIT";
-    public static final String CPW_Eeff = "CPW_Eeff";
-    public static final String CPW_Eeff_UNIT = "CPW_Eeff_UNIT";
-    public static final String CPW_Freq = "CPW_Freq";
-    public static final String CPW_Freq_UNIT = "CPW_Freq_UNIT";
-    public static final String CPW_er = "CPW_er";
-    public static final String CPW_H = "CPW_H";
-    public static final String CPW_H_UNIT = "CPW_H_UNIT";
-    public static final String CPW_T = "CPW_T";
-    public static final String CPW_T_UNIT = "CPW_T_UNIT";
-    public static final String CPW_Flag = "CPW_Flag";
-
     private Context mContext;
     private View rootView, width_input, space_input, height_input, er_input;
     private CardView electricalCard, physicalCard;
@@ -74,7 +56,6 @@ public class CpwFragment extends Fragment {
     private int flag;
     private RadioButton radioBtn_W, radioBtn_S, radioBtn_H;
     private boolean withGround;
-    private ImageView CPW_G;
     private CpwModel line;
     private ColorStateList defaultTextColor, defaultEdittextColor;
     public static final String CPW_TYPE_PARAM = "TYPE";
@@ -100,7 +81,7 @@ public class CpwFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_cpw, container, false);
         mContext=this.getContext();
@@ -376,40 +357,40 @@ public class CpwFragment extends Fragment {
         // read values from the shared preferences
 
         // fragment_cpw header_parameters
-        edittext_W.setText(prefs.getString(CPW_W, "18.00"));
-        spinner_W.setSelection(Integer.parseInt(prefs.getString(CPW_W_UNIT,
+        edittext_W.setText(prefs.getString(Constants.CPW_W, "18.00"));
+        spinner_W.setSelection(Integer.parseInt(prefs.getString(Constants.CPW_W_UNIT,
                 "0")));
 
-        edittext_S.setText(prefs.getString(CPW_S, "20.00"));
+        edittext_S.setText(prefs.getString(Constants.CPW_S, "20.00"));
         spinner_S.setSelection(Integer.parseInt(prefs
-                .getString(CPW_S_UNIT, "0")));
+                .getString(Constants.CPW_S_UNIT, "0")));
 
-        edittext_L.setText(prefs.getString(CPW_L, "1000.0"));
-        spinner_L.setSelection(Integer.parseInt(prefs.getString(CPW_L_UNIT,
+        edittext_L.setText(prefs.getString(Constants.CPW_L, "1000.0"));
+        spinner_L.setSelection(Integer.parseInt(prefs.getString(Constants.CPW_L_UNIT,
                 "0")));
 
-        edittext_Z0.setText(prefs.getString(CPW_Z0, "100.00"));
-        spinner_Z0.setSelection(Integer.parseInt(prefs.getString(CPW_Z0_UNIT,
+        edittext_Z0.setText(prefs.getString(Constants.CPW_Z0, "100.00"));
+        spinner_Z0.setSelection(Integer.parseInt(prefs.getString(Constants.CPW_Z0_UNIT,
                 "0")));
 
-        edittext_Eeff.setText(prefs.getString(CPW_Eeff, "41.75"));
+        edittext_Eeff.setText(prefs.getString(Constants.CPW_PHS, "41.75"));
         spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(
-                CPW_Eeff_UNIT, "0")));
+                Constants.CPW_PHS_UNIT, "0")));
 
-        edittext_Freq.setText(prefs.getString(CPW_Freq, "1.00"));
+        edittext_Freq.setText(prefs.getString(Constants.CPW_FREQ, "1.00"));
         spinner_Freq.setSelection(Integer.parseInt(prefs.getString(
-                CPW_Freq_UNIT, "1")));
+                Constants.CPW_FREQ_UNIT, "1")));
 
-        edittext_er.setText(prefs.getString(CPW_er, "4.00"));
+        edittext_er.setText(prefs.getString(Constants.CPW_ER, "4.00"));
 
-        edittext_H.setText(prefs.getString(CPW_H, "10.00"));
-        spinner_H.setSelection(Integer.parseInt(prefs.getString(CPW_H_UNIT,
+        edittext_H.setText(prefs.getString(Constants.CPW_H, "10.00"));
+        spinner_H.setSelection(Integer.parseInt(prefs.getString(Constants.CPW_H_UNIT,
                 "0")));
 
-        edittext_T.setText(prefs.getString(CPW_T, "1.40"));
-        spinner_T.setSelection(Integer.parseInt(prefs.getString(CPW_T_UNIT,
+        edittext_T.setText(prefs.getString(Constants.CPW_T, "1.40"));
+        spinner_T.setSelection(Integer.parseInt(prefs.getString(Constants.CPW_T_UNIT,
                 "0")));
-        flag = Integer.parseInt(prefs.getString(CPW_Flag, "0"));
+        flag = Integer.parseInt(prefs.getString(Constants.CPW_FLAG, "0"));
 
     }
 
@@ -557,31 +538,25 @@ public class CpwFragment extends Fragment {
         cpw_T = edittext_T.getText().toString();
         cpw_T_unit = Integer.toString(spinner_T.getSelectedItemPosition());
         cpw_flag = Integer.toString(flag);
-        //if (withGround.isChecked()) {
-        //    cpw_with_ground = "true";
-        //} else {
-        //    cpw_with_ground = "false";
-        //}
 
-        editor.putString(CPW_W, cpw_W);
-        editor.putString(CPW_W_UNIT, cpw_W_unit);
-        editor.putString(CPW_S, cpw_S);
-        editor.putString(CPW_S_UNIT, cpw_S_unit);
-        editor.putString(CPW_H, cpw_H);
-        editor.putString(CPW_H_UNIT, cpw_H_unit);
-        editor.putString(CPW_er, cpw_er);
-        editor.putString(CPW_L, cpw_L);
-        editor.putString(CPW_L_UNIT, cpw_L_unit);
-        editor.putString(CPW_Z0, cpw_Z0);
-        editor.putString(CPW_Z0_UNIT, cpw_Z0_unit);
-        editor.putString(CPW_Eeff, cpw_Eeff);
-        editor.putString(CPW_Eeff_UNIT, cpw_Eeff_unit);
-        editor.putString(CPW_Freq, cpw_Freq);
-        editor.putString(CPW_Freq_UNIT, cpw_Freq_unit);
-        editor.putString(CPW_T, cpw_T);
-        editor.putString(CPW_T_UNIT, cpw_T_unit);
-        //editor.putString(CPW_Flag, cpw_flag);
-        //editor.putString(CPW_WITH_GROUND, cpw_with_ground);
+        editor.putString(Constants.CPW_W, cpw_W);
+        editor.putString(Constants.CPW_W_UNIT, cpw_W_unit);
+        editor.putString(Constants.CPW_S, cpw_S);
+        editor.putString(Constants.CPW_S_UNIT, cpw_S_unit);
+        editor.putString(Constants.CPW_H, cpw_H);
+        editor.putString(Constants.CPW_H_UNIT, cpw_H_unit);
+        editor.putString(Constants.CPW_ER, cpw_er);
+        editor.putString(Constants.CPW_L, cpw_L);
+        editor.putString(Constants.CPW_L_UNIT, cpw_L_unit);
+        editor.putString(Constants.CPW_Z0, cpw_Z0);
+        editor.putString(Constants.CPW_Z0_UNIT, cpw_Z0_unit);
+        editor.putString(Constants.CPW_PHS, cpw_Eeff);
+        editor.putString(Constants.CPW_PHS_UNIT, cpw_Eeff_unit);
+        editor.putString(Constants.CPW_FREQ, cpw_Freq);
+        editor.putString(Constants.CPW_FREQ_UNIT, cpw_Freq_unit);
+        editor.putString(Constants.CPW_T, cpw_T);
+        editor.putString(Constants.CPW_T_UNIT, cpw_T_unit);
+        editor.putString(Constants.CPW_FLAG, cpw_flag);
 
         editor.apply();
     }

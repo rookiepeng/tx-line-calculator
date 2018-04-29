@@ -32,23 +32,6 @@ import com.rookiedev.microwavetools.libs.CoaxModel;
 import java.math.BigDecimal;
 
 public class CoaxFragment extends Fragment {
-    public static final String COAX_A = "COAX_A";
-    public static final String COAX_A_UNIT = "COAX_A_UNIT";
-    public static final String COAX_B = "COAX_B";
-    public static final String COAX_B_UNIT = "COAX_B_UNIT";
-    public static final String COAX_C = "COAX_C";
-    public static final String COAX_C_UNIT = "COAX_C_UNIT";
-    public static final String COAX_ER = "COAX_ER";
-    public static final String COAX_L = "COAX_L";
-    public static final String COAX_L_UNIT = "COAX_L_UNIT";
-    public static final String COAX_Z0 = "COAX_Z0";
-    public static final String COAX_Z0_UNIT = "COAX_Z0_UNIT";
-    public static final String COAX_PHS = "COAX_PHS";
-    public static final String COAX_PHS_UNIT = "COAX_PHS_UNIT";
-    public static final String COAX_FREQ = "COAX_FREQ";
-    public static final String COAX_FREQ_UNIT = "COAX_FREQ_UNIT";
-    public static final String COAX_TARGET = "COAX_TARGET";
-
     private Context mContext;
     private View viewRoot;
     private CardView cardViewParameters, cardViewDimensions;
@@ -320,30 +303,30 @@ public class CoaxFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
 
         // fragment_coax header_parameters
-        edittextA.setText(prefs.getString(COAX_A, "0.30"));
-        spinnerA.setSelection(Integer.parseInt(prefs.getString(COAX_A_UNIT, "2")));
+        edittextA.setText(prefs.getString(Constants.COAX_A, "0.30"));
+        spinnerA.setSelection(Integer.parseInt(prefs.getString(Constants.COAX_A_UNIT, "2")));
 
-        edittextB.setText(prefs.getString(COAX_B, "1.00"));
-        spinnerB.setSelection(Integer.parseInt(prefs.getString(COAX_B_UNIT, "2")));
+        edittextB.setText(prefs.getString(Constants.COAX_B, "1.00"));
+        spinnerB.setSelection(Integer.parseInt(prefs.getString(Constants.COAX_B_UNIT, "2")));
 
-        edittextC.setText(prefs.getString(COAX_C, "0.00"));
-        spinnerC.setSelection(Integer.parseInt(prefs.getString(COAX_C_UNIT, "2")));
+        edittextC.setText(prefs.getString(Constants.COAX_C, "0.00"));
+        spinnerC.setSelection(Integer.parseInt(prefs.getString(Constants.COAX_C_UNIT, "2")));
 
-        edittextL.setText(prefs.getString(COAX_L, "1000"));
-        spinnerL.setSelection(Integer.parseInt(prefs.getString(COAX_L_UNIT, "0")));
+        edittextL.setText(prefs.getString(Constants.COAX_L, "1000"));
+        spinnerL.setSelection(Integer.parseInt(prefs.getString(Constants.COAX_L_UNIT, "0")));
 
-        edittextZ0.setText(prefs.getString(COAX_Z0, "72.19"));
-        spinnerZ0.setSelection(Integer.parseInt(prefs.getString(COAX_Z0_UNIT, "0")));
+        edittextZ0.setText(prefs.getString(Constants.COAX_Z0, "72.19"));
+        spinnerZ0.setSelection(Integer.parseInt(prefs.getString(Constants.COAX_Z0_UNIT, "0")));
 
-        edittextPhs.setText(prefs.getString(COAX_PHS, "30.50"));
-        spinnerPhs.setSelection(Integer.parseInt(prefs.getString(COAX_PHS_UNIT, "0")));
+        edittextPhs.setText(prefs.getString(Constants.COAX_PHS, "30.50"));
+        spinnerPhs.setSelection(Integer.parseInt(prefs.getString(Constants.COAX_PHS_UNIT, "0")));
 
-        edittextFreq.setText(prefs.getString(COAX_FREQ, "1.00"));
-        spinnerFreq.setSelection(Integer.parseInt(prefs.getString(COAX_FREQ_UNIT, "1")));
+        edittextFreq.setText(prefs.getString(Constants.COAX_FREQ, "1.00"));
+        spinnerFreq.setSelection(Integer.parseInt(prefs.getString(Constants.COAX_FREQ_UNIT, "1")));
 
-        edittextEr.setText(prefs.getString(COAX_ER, "1.00"));
+        edittextEr.setText(prefs.getString(Constants.COAX_ER, "1.00"));
 
-        target = Integer.parseInt(prefs.getString(COAX_TARGET, Integer.toString(Constants.Synthesize_CoreRadius)));
+        target = Integer.parseInt(prefs.getString(Constants.COAX_TARGET, Integer.toString(Constants.Synthesize_CoreRadius)));
     }
 
     private void Preference_SharedPref() {
@@ -483,24 +466,22 @@ public class CoaxFragment extends Fragment {
         //coax_T_unit = Integer.toString(spinner_T.getSelectedItemPosition());
         coax_flag = Integer.toString(target);
 
-        editor.putString(COAX_A, coax_a);
-        editor.putString(COAX_A_UNIT, coax_a_unit);
-        editor.putString(COAX_B, coax_H);
-        editor.putString(COAX_B_UNIT, coax_H_unit);
-        editor.putString(COAX_C, coax_b);
-        editor.putString(COAX_C_UNIT, coax_b_unit);
-        editor.putString(COAX_ER, coax_er);
-        editor.putString(COAX_L, coax_L);
-        editor.putString(COAX_L_UNIT, coax_L_unit);
-        editor.putString(COAX_Z0, coax_Z0);
-        editor.putString(COAX_Z0_UNIT, coax_Z0_unit);
-        editor.putString(COAX_PHS, coax_Eeff);
-        editor.putString(COAX_PHS_UNIT, coax_Eeff_unit);
-        editor.putString(COAX_FREQ, coax_Freq);
-        editor.putString(COAX_FREQ_UNIT, coax_Freq_unit);
-        //editor.putString(COAX_T, coax_T);
-        //editor.putString(COAX_T_UNIT, coax_T_unit);
-        editor.putString(COAX_TARGET, coax_flag);
+        editor.putString(Constants.COAX_A, coax_a);
+        editor.putString(Constants.COAX_A_UNIT, coax_a_unit);
+        editor.putString(Constants.COAX_B, coax_H);
+        editor.putString(Constants.COAX_B_UNIT, coax_H_unit);
+        editor.putString(Constants.COAX_C, coax_b);
+        editor.putString(Constants.COAX_C_UNIT, coax_b_unit);
+        editor.putString(Constants.COAX_ER, coax_er);
+        editor.putString(Constants.COAX_L, coax_L);
+        editor.putString(Constants.COAX_L_UNIT, coax_L_unit);
+        editor.putString(Constants.COAX_Z0, coax_Z0);
+        editor.putString(Constants.COAX_Z0_UNIT, coax_Z0_unit);
+        editor.putString(Constants.COAX_PHS, coax_Eeff);
+        editor.putString(Constants.COAX_PHS_UNIT, coax_Eeff_unit);
+        editor.putString(Constants.COAX_FREQ, coax_Freq);
+        editor.putString(Constants.COAX_FREQ_UNIT, coax_Freq_unit);
+        editor.putString(Constants.COAX_TARGET, coax_flag);
 
         editor.apply();
     }
@@ -523,10 +504,6 @@ public class CoaxFragment extends Fragment {
             edittextC.setError(getText(R.string.Error_c_empty));
             checkResult = false;
         }
-        //if (edittext_T.length() == 0) {
-        //    edittext_T.setError(getText(R.string.Error_T_empty));
-        //    checkResult = false;
-        //}
         if (edittextEr.length() == 0) {
             error_er.setSpan(new SubscriptSpan(), 13, 14, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             edittextEr.setError(error_er);

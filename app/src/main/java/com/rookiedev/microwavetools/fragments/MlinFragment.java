@@ -35,21 +35,6 @@ import com.rookiedev.microwavetools.libs.MlinCalculator;
 import java.math.BigDecimal;
 
 public class MlinFragment extends Fragment {
-    private static final String MLIN_W = "MLIN_W";
-    private static final String MLIN_W_UNIT = "MLIN_W_UNIT";
-    private static final String MLIN_L = "MLIN_L";
-    private static final String MLIN_L_UNIT = "MLIN_L_UNIT";
-    private static final String MLIN_Z0 = "MLIN_Z0";
-    private static final String MLIN_Z0_UNIT = "MLIN_Z0_UNIT";
-    private static final String MLIN_Eeff = "MLIN_Eeff";
-    private static final String MLIN_Eeff_UNIT = "MLIN_Eeff_UNIT";
-    private static final String MLIN_Freq = "MLIN_Freq";
-    private static final String MLIN_Freq_UNIT = "MLIN_Freq_UNIT";
-    private static final String MLIN_er = "MLIN_er";
-    private static final String MLIN_H = "MLIN_H";
-    private static final String MLIN_H_UNIT = "MLIN_H_UNIT";
-    private static final String MLIN_T = "MLIN_T";
-    private static final String MLIN_T_UNIT = "MLIN_T_UNIT";
     private Context mContext;
     private View rootView;
     private CardView electricalCard, physicalCard;
@@ -326,34 +311,34 @@ public class MlinFragment extends Fragment {
         // read values from the shared preferences
 
         // fragment_mlin header_parameters
-        edittext_W.setText(prefs.getString(MLIN_W, "19.23"));
-        spinner_W.setSelection(Integer.parseInt(prefs.getString(MLIN_W_UNIT,
+        edittext_W.setText(prefs.getString(Constants.MLIN_W, "19.23"));
+        spinner_W.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_W_UNIT,
                 "0")));
 
-        edittext_L.setText(prefs.getString(MLIN_L, "1000.00"));
-        spinner_L.setSelection(Integer.parseInt(prefs.getString(MLIN_L_UNIT,
+        edittext_L.setText(prefs.getString(Constants.MLIN_L, "1000.00"));
+        spinner_L.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_L_UNIT,
                 "0")));
 
-        edittext_Z0.setText(prefs.getString(MLIN_Z0, "50.0"));
+        edittext_Z0.setText(prefs.getString(Constants.MLIN_Z0, "50.0"));
         spinner_Z0.setSelection(Integer.parseInt(prefs.getString(
-                MLIN_Z0_UNIT, "0")));
+                Constants.MLIN_Z0_UNIT, "0")));
 
-        edittext_Phs.setText(prefs.getString(MLIN_Eeff, "52.58"));
+        edittext_Phs.setText(prefs.getString(Constants.MLIN_PHS, "52.58"));
         spinner_Eeff.setSelection(Integer.parseInt(prefs.getString(
-                MLIN_Eeff_UNIT, "0")));
+                Constants.MLIN_PHS_UNIT, "0")));
 
-        edittext_Freq.setText(prefs.getString(MLIN_Freq, "1.00"));
+        edittext_Freq.setText(prefs.getString(Constants.MLIN_FREQ, "1.00"));
         spinner_Freq.setSelection(Integer.parseInt(prefs.getString(
-                MLIN_Freq_UNIT, "1")));
+                Constants.MLIN_FREQ_UNIT, "1")));
 
-        edittext_er.setText(prefs.getString(MLIN_er, "4.00"));
+        edittext_er.setText(prefs.getString(Constants.MLIN_ER, "4.00"));
 
-        edittext_H.setText(prefs.getString(MLIN_H, "10.00"));
-        spinner_H.setSelection(Integer.parseInt(prefs.getString(MLIN_H_UNIT,
+        edittext_H.setText(prefs.getString(Constants.MLIN_H, "10.00"));
+        spinner_H.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_H_UNIT,
                 "0")));
 
-        edittext_T.setText(prefs.getString(MLIN_T, "1.40"));
-        spinner_T.setSelection(Integer.parseInt(prefs.getString(MLIN_T_UNIT,
+        edittext_T.setText(prefs.getString(Constants.MLIN_T, "1.40"));
+        spinner_T.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT,
                 "0")));
     }
 
@@ -394,21 +379,21 @@ public class MlinFragment extends Fragment {
         mlin_T = edittext_T.getText().toString();
         mlin_T_unit = Integer.toString(spinner_T.getSelectedItemPosition());
 
-        editor.putString(MLIN_W, mlin_W);
-        editor.putString(MLIN_W_UNIT, mlin_W_unit);
-        editor.putString(MLIN_L, mlin_L);
-        editor.putString(MLIN_L_UNIT, mlin_L_unit);
-        editor.putString(MLIN_Z0, mlin_Z0);
-        editor.putString(MLIN_Z0_UNIT, mlin_Z0_unit);
-        editor.putString(MLIN_Eeff, mlin_Eeff);
-        editor.putString(MLIN_Eeff_UNIT, mlin_Eeff_unit);
-        editor.putString(MLIN_Freq, mlin_Freq);
-        editor.putString(MLIN_Freq_UNIT, mlin_Freq_unit);
-        editor.putString(MLIN_er, mlin_epsilon);
-        editor.putString(MLIN_H, mlin_H);
-        editor.putString(MLIN_H_UNIT, mlin_H_unit);
-        editor.putString(MLIN_T, mlin_T);
-        editor.putString(MLIN_T_UNIT, mlin_T_unit);
+        editor.putString(Constants.MLIN_W, mlin_W);
+        editor.putString(Constants.MLIN_W_UNIT, mlin_W_unit);
+        editor.putString(Constants.MLIN_L, mlin_L);
+        editor.putString(Constants.MLIN_L_UNIT, mlin_L_unit);
+        editor.putString(Constants.MLIN_Z0, mlin_Z0);
+        editor.putString(Constants.MLIN_Z0_UNIT, mlin_Z0_unit);
+        editor.putString(Constants.MLIN_PHS, mlin_Eeff);
+        editor.putString(Constants.MLIN_PHS_UNIT, mlin_Eeff_unit);
+        editor.putString(Constants.MLIN_FREQ, mlin_Freq);
+        editor.putString(Constants.MLIN_FREQ_UNIT, mlin_Freq_unit);
+        editor.putString(Constants.MLIN_ER, mlin_epsilon);
+        editor.putString(Constants.MLIN_H, mlin_H);
+        editor.putString(Constants.MLIN_H_UNIT, mlin_H_unit);
+        editor.putString(Constants.MLIN_T, mlin_T);
+        editor.putString(Constants.MLIN_T_UNIT, mlin_T_unit);
 
         editor.apply();
     }
