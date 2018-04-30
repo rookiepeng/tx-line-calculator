@@ -129,7 +129,11 @@ public class Constants {
     public static final String CPW_H_UNIT = "CPW_H_UNIT";
     public static final String CPW_T = "CPW_T";
     public static final String CPW_T_UNIT = "CPW_T_UNIT";
-    public static final String CPW_FLAG = "CPW_FLAG";
+    public static final String CPW_TARGET = "CPW_TARGET";
+
+    public static final String PARAMS_CPW = "PARAMS_CPW";
+    public static final String GROUNDED_CPW = "GROUNDED_CPW";
+    public static final String UNGROUNDED_CPW = "UNGROUNDED_CPW";
 
     public static final String GCPW_W = "GCPW_W";
     public static final String GCPW_W_UNIT = "GCPW_W_UNIT";
@@ -148,7 +152,7 @@ public class Constants {
     public static final String GCPW_H_UNIT = "GCPW_H_UNIT";
     public static final String GCPW_T = "GCPW_T";
     public static final String GCPW_T_UNIT = "GCPW_T_UNIT";
-    public static final String GCPW_FLAG = "GCPW_FLAG";
+    public static final String GCPW_TARGET = "GCPW_TARGET";
 
     public static final String COAX_A = "COAX_A";
     public static final String COAX_A_UNIT = "COAX_A_UNIT";

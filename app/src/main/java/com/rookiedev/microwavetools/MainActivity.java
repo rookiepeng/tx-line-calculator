@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -254,7 +253,7 @@ public class MainActivity extends AppCompatActivity
                 } else if (pos == 4) {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
-                    bundle.putString(CpwFragment.CPW_TYPE_PARAM, "CPW");
+                    bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
                     fragmentCpw.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -263,7 +262,7 @@ public class MainActivity extends AppCompatActivity
                 } else if (pos == 5) {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
-                    bundle.putString(CpwFragment.CPW_TYPE_PARAM, "GCPW");
+                    bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
                     fragmentGcpw.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -478,7 +477,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_cpw) {
             if(fragmentCpw==null) {
                 Bundle bundle = new Bundle();
-                bundle.putString(CpwFragment.CPW_TYPE_PARAM, "CPW");
+                bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
                 fragmentCpw = new CpwFragment();
                 fragmentCpw.setArguments(bundle);
             }
@@ -487,7 +486,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gcpw) {
             if(fragmentGcpw==null) {
                 Bundle bundle = new Bundle();
-                bundle.putString(CpwFragment.CPW_TYPE_PARAM, "GCPW");
+                bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
                 fragmentGcpw = new CpwFragment();
                 fragmentGcpw.setArguments(bundle);
             }
@@ -548,7 +547,7 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCslin).commit();
         } else if (item == 4) {
             Bundle bundle = new Bundle();
-            bundle.putString(CpwFragment.CPW_TYPE_PARAM, "CPW" );
+            bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW );
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
             fragmentCpw = new CpwFragment();
             fragmentCpw.setArguments(bundle);
@@ -557,7 +556,7 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCpw).commit();
         } else if (item == 5) {
             Bundle bundle = new Bundle();
-            bundle.putString(CpwFragment.CPW_TYPE_PARAM, "GCPW" );
+            bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW );
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
             fragmentGcpw = new CpwFragment();
             fragmentGcpw.setArguments(bundle);

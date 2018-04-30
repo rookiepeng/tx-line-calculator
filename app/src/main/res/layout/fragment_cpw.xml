@@ -42,31 +42,31 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/thickness_input"
+                    android:id="@+id/parameter_thickness"
                     layout="@layout/parameter_thickness"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/height_input"
+                    android:id="@+id/parameter_height"
                     layout="@layout/parameter_height"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/width_input"
+                    android:id="@+id/parameter_width"
                     layout="@layout/parameter_width"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/space_input"
+                    android:id="@+id/parameter_space"
                     layout="@layout/parameter_space"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/length_input"
+                    android:id="@+id/parameter_length"
                     layout="@layout/parameter_length"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -110,7 +110,7 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/z0_input"
+                    android:id="@+id/parameter_z0"
                     layout="@layout/parameter_z0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -122,7 +122,7 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/epsilon_input"
+                    android:id="@+id/parameter_epsilon"
                     layout="@layout/parameter_epsilon"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
