@@ -167,6 +167,11 @@ public class Constants {
     public static final String COAX_FREQ_UNIT = "COAX_FREQ_UNIT";
     public static final String COAX_TARGET = "COAX_TARGET";
 
+    /**
+     * TextViews with subscripts
+     * @param mContext context
+     * @return string with subscript
+     */
     public static SpannableString stringZ0(Context mContext) {
         SpannableString spanZ0 = new SpannableString(mContext.getString(R.string.text_Z0));
         spanZ0.setSpan(new SubscriptSpan(), 1, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -179,6 +184,23 @@ public class Constants {
         return spanEr;
     }
 
+    public static SpannableString stringZ0o(Context mContext) {
+        SpannableString spanZ0o = new SpannableString(mContext.getString(R.string.text_Z0o));
+        spanZ0o.setSpan(new SubscriptSpan(), 1, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return spanZ0o;
+    }
+
+    public static SpannableString stringZ0e(Context mContext) {
+        SpannableString spanZ0e = new SpannableString(mContext.getString(R.string.text_Z0e));
+        spanZ0e.setSpan(new SubscriptSpan(), 1, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return spanZ0e;
+    }
+
+    /**
+     * Error messages
+     * @param mContext context
+     * @return string with subscript
+     */
     public static SpannableString errorErEmpty(Context mContext) {
         SpannableString error_er = new SpannableString(mContext.getString(R.string.Error_er_empty));
         error_er.setSpan(new SubscriptSpan(), 13, 14, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -191,6 +213,23 @@ public class Constants {
         return error_Z0;
     }
 
+    public static SpannableString errorZ0eEmpty(Context mContext) {
+        SpannableString error_Z0e = new SpannableString(mContext.getString(R.string.Error_Z0e_empty));
+        error_Z0e.setSpan(new SubscriptSpan(), 13, 15, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return error_Z0e;
+    }
+
+    public static SpannableString errorZ0oEmpty(Context mContext) {
+        SpannableString error_Z0o = new SpannableString(mContext.getString(R.string.Error_Z0o_empty));
+        error_Z0o.setSpan(new SubscriptSpan(), 13, 15, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return error_Z0o;
+    }
+
+    /**
+     * Array adapters for spinners
+     * @param mContext context
+     * @return adapters
+     */
     public static ArrayAdapter<CharSequence> adapterDimensionUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter.createFromResource(mContext, R.array.list_units_Length,
                 android.R.layout.simple_spinner_item);
