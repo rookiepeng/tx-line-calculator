@@ -5,19 +5,20 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Layer_1"
    data-name="Layer 1"
-   viewBox="0 0 757.3158 265.55792"
+   viewBox="0 0 600 600.00001"
    version="1.1"
    sodipodi:docname="ic_launcher.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    inkscape:export-filename="C:\Users\rookie\Documents\GitHub\RF-Line-Calculator\pics\ic_launcher.png"
    inkscape:export-xdpi="423.42999"
    inkscape:export-ydpi="423.42999"
-   width="757.3158"
-   height="265.55792">
+   width="600"
+   height="600">
   <metadata
      id="metadata17">
     <rdf:RDF>
@@ -42,84 +43,115 @@
      inkscape:window-height="480"
      id="namedview15"
      showgrid="false"
-     inkscape:zoom="1.4432153"
-     inkscape:cx="275.41895"
-     inkscape:cy="-33.149661"
-     inkscape:current-layer="Layer_1" />
+     inkscape:zoom="0.72160763"
+     inkscape:cx="443.20648"
+     inkscape:cy="262.61242"
+     inkscape:current-layer="Layer_1"
+     inkscape:snap-bbox="true"
+     inkscape:object-paths="true"
+     inkscape:snap-global="true" />
   <defs
      id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1192">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop1188" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop1190" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1184">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop1180" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop1182" />
+    </linearGradient>
     <style
        id="style2">.cls-1,.cls-4{fill:#fff;}.cls-2{fill:#679f42;}.cls-3{fill:#c6e0a6;}.cls-4{stroke:#231f20;stroke-miterlimit:10;}</style>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1184"
+       id="linearGradient1186"
+       x1="367.91098"
+       y1="215.99432"
+       x2="420.07751"
+       y2="268.16086"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-5.7781289,-4.6955309)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1192"
+       id="linearGradient1194"
+       x1="145.92043"
+       y1="378.05334"
+       x2="367.29721"
+       y2="599.43011"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-5.7781289,-4.6955309)" />
   </defs>
   <title
      id="title6">ic_launcher</title>
-  <rect
-     x="0"
-     id="_Rectangle_2"
-     data-name="&lt;Rectangle&gt;"
-     class="cls-2"
-     y="235.72791"
-     width="757.3158"
-     height="29.83"
-     style="fill:#0277bd;fill-opacity:1;stroke-width:0.99999994" />
-  <rect
-     x="0"
-     id="_Rectangle_3"
-     data-name="&lt;Rectangle&gt;"
-     class="cls-3"
-     y="116.7279"
-     width="757.3158"
-     height="119"
-     style="fill:#58a5f0;fill-opacity:1;stroke-width:0.99999994" />
-  <path
-     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
-     inkscape:connector-curvature="0"
-     id="_Path_"
-     data-name="&lt;Path&gt;"
-     class="cls-4"
-     d="M 378.6579,257.5479" />
-  <path
-     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
-     inkscape:connector-curvature="0"
-     id="_Path_2"
-     data-name="&lt;Path&gt;"
-     class="cls-4"
-     d="M 378.6579,86.797898" />
-  <rect
-     id="_Rectangle_4"
-     data-name="&lt;Rectangle&gt;"
-     class="cls-2"
-     x="293.6579"
-     y="86.937904"
-     width="170"
-     height="29.67"
-     style="fill:#0277bd;fill-opacity:1" />
-  <path
-     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
-     inkscape:connector-curvature="0"
-     id="_Path_-1"
-     data-name="&lt;Path&gt;"
-     class="cls-4"
-     d="M 378.6579,78.776648" />
-  <path
-     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
-     inkscape:connector-curvature="0"
-     id="_Path_2-9"
-     data-name="&lt;Path&gt;"
-     class="cls-4"
-     d="M 378.6579,-91.973352" />
-  <path
-     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
-     inkscape:connector-curvature="0"
-     id="_Path_2-7"
-     data-name="&lt;Path&gt;"
-     class="cls-4"
-     d="M 378.6579,8.02125" />
-  <path
-     style="fill:#ffffff;stroke:#231f20;stroke-miterlimit:10"
-     inkscape:connector-curvature="0"
-     id="_Path_-1-7"
-     data-name="&lt;Path&gt;"
-     class="cls-4"
-     d="M 378.6579,0" />
+  <g
+     id="g1240"
+     transform="translate(5.7781289,4.6955309)">
+    <path
+       inkscape:connector-curvature="0"
+       id="path1176"
+       d="M 145.76895,375.42779 442.9023,242.70937 707.99409,507.7871 493.0647,722.70506 Z"
+       style="opacity:0.25;fill:url(#linearGradient1194);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       id="path1178"
+       d="M 367.91098,215.99433 683.85557,531.92351 426.54656,402.58649 289.52246,301.61 Z"
+       style="opacity:0.25;fill:url(#linearGradient1186);fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
+  <g
+     id="g1075"
+     transform="matrix(0.63888124,0,0,0.63885049,112.03606,63.267893)"
+     style="stroke-width:1.56527376">
+    <rect
+       ry="15.653114"
+       rx="15.652361"
+       style="fill:#0277bd;fill-opacity:1;stroke-width:1.56527376"
+       height="43.356438"
+       width="475.9906"
+       y="456.92352"
+       class="cls-2"
+       data-name="&lt;Rectangle&gt;"
+       id="_Rectangle_2"
+       x="56.212643" />
+    <rect
+       ry="15.653114"
+       rx="15.652361"
+       style="fill:#81d4fa;fill-opacity:1;stroke-width:1.56527376"
+       height="172.96063"
+       width="475.9906"
+       y="283.96289"
+       class="cls-3"
+       data-name="&lt;Rectangle&gt;"
+       id="_Rectangle_3"
+       x="56.212643" />
+    <rect
+       ry="15.653114"
+       rx="15.652361"
+       style="fill:#0277bd;fill-opacity:1;stroke-width:1.56527376"
+       height="43.123886"
+       width="237.9955"
+       y="240.839"
+       x="175.21019"
+       class="cls-2"
+       data-name="&lt;Rectangle&gt;"
+       id="_Rectangle_4" />
+  </g>
 </svg>
