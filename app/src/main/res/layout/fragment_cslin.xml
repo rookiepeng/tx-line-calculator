@@ -52,19 +52,19 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/width_input"
+                    android:id="@+id/parameter_width"
                     layout="@layout/parameter_width"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/space_input"
+                    android:id="@+id/parameter_space"
                     layout="@layout/parameter_space"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/length_input"
+                    android:id="@+id/parameter_length"
                     layout="@layout/parameter_length"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -108,13 +108,13 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/z0_input"
+                    android:id="@+id/parameter_z0"
                     layout="@layout/parameter_z0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/k_input"
+                    android:id="@+id/parameter_k"
                     layout="@layout/parameter_k"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -125,13 +125,13 @@
                     android:background="?android:attr/listDivider" />
 
                 <include
-                    android:id="@+id/z0o_input"
+                    android:id="@+id/parameter_z0o"
                     layout="@layout/parameter_z0o"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/z0e_input"
+                    android:id="@+id/parameter_z0e"
                     layout="@layout/parameter_z0e"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

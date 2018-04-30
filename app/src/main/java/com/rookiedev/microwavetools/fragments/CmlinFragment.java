@@ -460,12 +460,6 @@ public class CmlinFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        String cmlin_use_z0k;
-        if (useZ0k) {
-            cmlin_use_z0k = "true";
-        } else {
-            cmlin_use_z0k = "false";
-        }
         editor.putString(Constants.CMLIN_W, edittextW.getText().toString());
         editor.putString(Constants.CMLIN_W_UNIT, Integer.toString(spinnerW.getSelectedItemPosition()));
         editor.putString(Constants.CMLIN_S, edittextS.getText().toString());
@@ -487,8 +481,11 @@ public class CmlinFragment extends Fragment {
         editor.putString(Constants.CMLIN_H_UNIT, Integer.toString(spinnerH.getSelectedItemPosition()));
         editor.putString(Constants.CMLIN_T, edittextT.getText().toString());
         editor.putString(Constants.CMLIN_T_UNIT, Integer.toString(spinnerT.getSelectedItemPosition()));
-        editor.putString(Constants.CMLIN_USEZ0K, cmlin_use_z0k);
-
+        if (useZ0k) {
+            editor.putString(Constants.CMLIN_USEZ0K, "true");
+        }else{
+            editor.putString(Constants.CMLIN_USEZ0K, "false");
+        }
         editor.apply();
     }
 
