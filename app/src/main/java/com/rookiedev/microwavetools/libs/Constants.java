@@ -1,5 +1,13 @@
 package com.rookiedev.microwavetools.libs;
 
+import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.SubscriptSpan;
+import android.widget.ArrayAdapter;
+
+import com.rookiedev.microwavetools.R;
+
 public class Constants {
     // Shared Preference values
     public static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
@@ -37,6 +45,7 @@ public class Constants {
     public static final String MLIN_H_UNIT = "MLIN_H_UNIT";
     public static final String MLIN_T = "MLIN_T";
     public static final String MLIN_T_UNIT = "MLIN_T_UNIT";
+    public static final String MLIN_TARGET = "MLIN_TARGET";
 
     public static final String CMLIN_W = "CMLIN_W";
     public static final String CMLIN_W_UNIT = "CMLIN_W_UNIT";
@@ -157,6 +166,73 @@ public class Constants {
     public static final String COAX_FREQ = "COAX_FREQ";
     public static final String COAX_FREQ_UNIT = "COAX_FREQ_UNIT";
     public static final String COAX_TARGET = "COAX_TARGET";
+
+    public static SpannableString stringZ0(Context mContext){
+        SpannableString spanZ0 = new SpannableString(
+                mContext.getString(R.string.text_Z0));
+        spanZ0.setSpan(new SubscriptSpan(), 1, 2,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return  spanZ0;
+    }
+
+    public static SpannableString stringEr(Context mContext){
+        SpannableString spanEr = new SpannableString(
+                mContext.getString(R.string.text_er));
+        spanEr.setSpan(new SubscriptSpan(), 1, 2,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return spanEr;
+    }
+
+    public static SpannableString errorErEmpty(Context mContext){
+        SpannableString error_er = new SpannableString(
+                mContext.getString(R.string.Error_er_empty));
+        error_er.setSpan(new SubscriptSpan(), 13, 14,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return error_er;
+    }
+
+    public static SpannableString errorZ0Empty(Context mContext){
+        SpannableString error_Z0 = new SpannableString(mContext.getString(R.string.Error_Z0_empty));
+        error_Z0.setSpan(new SubscriptSpan(), 13, 14,
+                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return error_Z0;
+    }
+
+    public static ArrayAdapter<CharSequence> adapterDimensionUnits(Context mContext){
+        ArrayAdapter<CharSequence> adapterLength = ArrayAdapter
+                .createFromResource(mContext, R.array.list_units_Length,
+                        android.R.layout.simple_spinner_item);
+        adapterLength
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return adapterLength;
+    }
+
+    public static ArrayAdapter<CharSequence> adapterImpedanceUnits(Context mContext){
+        ArrayAdapter<CharSequence> adapterImpedance = ArrayAdapter
+                .createFromResource(mContext, R.array.list_units_Impedance,
+                        android.R.layout.simple_spinner_item);
+        adapterImpedance
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return adapterImpedance;
+    }
+
+    public static ArrayAdapter<CharSequence> adapterPhaseUnits(Context mContext){
+        ArrayAdapter<CharSequence> adapterPhase = ArrayAdapter
+                .createFromResource(mContext, R.array.list_units_Ele_length,
+                        android.R.layout.simple_spinner_item);
+        adapterPhase
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return adapterPhase;
+    }
+
+    public static ArrayAdapter<CharSequence> adapterFrequencyUnits(Context mContext){
+        ArrayAdapter<CharSequence> adapterFreq = ArrayAdapter
+                .createFromResource(mContext, R.array.list_units_Frequency,
+                        android.R.layout.simple_spinner_item);
+        adapterFreq
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return adapterFreq;
+    }
 
     // unit conversion
     public static double value2meter(double value, int lengthUnit) {
