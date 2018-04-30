@@ -15,7 +15,6 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -24,8 +23,8 @@ import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CmlinCalculator;
-import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.libs.CmlinModel;
+import com.rookiedev.microwavetools.libs.Constants;
 
 import java.math.BigDecimal;
 
