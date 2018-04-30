@@ -5,6 +5,5 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
-    android:layout_alignParentBottom="true"
     ads:adSize="BANNER"
     ads:adUnitId="ca-app-pub-6523245757541965/4597430937" />
