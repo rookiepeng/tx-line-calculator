@@ -21,6 +21,7 @@ public class AdFragment extends Fragment {
 
         AdView banner = (AdView) adView.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR) // All emulators
+                .addTestDevice("2D302053F176402A9C59EB67575E6977")
                 .build();
         banner.loadAd(adRequest);
 

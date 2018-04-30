@@ -786,9 +786,9 @@ public class CmlinFragment extends Fragment {
     }
 
     public void addAdFragment(){
-        AdFragment adFragment = new AdFragment();
+        adFragment = new AdFragment();
         FragmentManager fragmentManager = getFragmentManager();
-        if(fragmentManager !=null) {
+        if(fragmentManager !=null&& viewRoot != null) {
             fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
         }
     }
