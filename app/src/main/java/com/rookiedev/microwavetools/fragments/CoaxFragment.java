@@ -358,6 +358,17 @@ public class CoaxFragment extends Fragment {
             radioButtonC.setChecked(true);
             textC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             edittextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        }else{
+            target = Constants.Synthesize_CoreRadius;
+            radioButtonA.setChecked(true);
+            textA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            radioButtonB.setChecked(false);
+            textB.setTextColor(defaultTextColor);
+            edittextB.setTextColor(defaultEdittextColor);
+            radioButtonC.setChecked(false);
+            textC.setTextColor(defaultTextColor);
+            edittextC.setTextColor(defaultEdittextColor);
         }
         radioButtonA.setOnClickListener(new View.OnClickListener() {
             @Override
