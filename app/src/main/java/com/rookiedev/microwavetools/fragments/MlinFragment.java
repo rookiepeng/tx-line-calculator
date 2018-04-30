@@ -489,7 +489,7 @@ public class MlinFragment extends Fragment {
         adFragment = new AdFragment();
         FragmentManager fragmentManager = getFragmentManager();
         if(fragmentManager !=null) {
-            fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
         }
     }
 

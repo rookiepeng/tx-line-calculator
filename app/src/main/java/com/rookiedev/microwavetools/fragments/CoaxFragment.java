@@ -631,7 +631,7 @@ public class CoaxFragment extends Fragment {
         AdFragment adFragment = new AdFragment();
         FragmentManager fragmentManager = getFragmentManager();
         if(fragmentManager !=null) {
-            fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
         }
     }
 
