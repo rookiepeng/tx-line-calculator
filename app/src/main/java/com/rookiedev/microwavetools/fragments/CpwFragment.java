@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -248,8 +247,8 @@ public class CpwFragment extends Fragment {
         radioButtonZ0.setVisibility(View.VISIBLE);
         radioButtonZ0.setChecked(true);
 
-        physicalCard=(CardView) rootView.findViewById(R.id.physicalParaCard);
-        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
+        physicalCard=(CardView) rootView.findViewById(R.id.card_dimensions);
+        electricalCard = (CardView) rootView.findViewById(R.id.card_parameters);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));

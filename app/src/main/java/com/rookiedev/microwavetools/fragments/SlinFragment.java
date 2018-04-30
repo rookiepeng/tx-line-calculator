@@ -236,8 +236,8 @@ public class SlinFragment extends Fragment {
         defaultTextColor = text_W.getTextColors();
         text_H = (TextView) rootView.findViewById(R.id.text_H);
 
-        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
-        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
+        physicalCard = (CardView) rootView.findViewById(R.id.card_dimensions);
+        electricalCard = (CardView) rootView.findViewById(R.id.card_parameters);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));

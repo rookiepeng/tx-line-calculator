@@ -169,8 +169,8 @@ public class MlinFragment extends Fragment {
     private void initUI() {
         line = new MlinModel();
 
-        cardViewDimensions = viewRoot.findViewById(R.id.physicalParaCard);
-        cardViewParameters = viewRoot.findViewById(R.id.electricalParaCard);
+        cardViewDimensions = viewRoot.findViewById(R.id.card_dimensions);
+        cardViewParameters = viewRoot.findViewById(R.id.card_parameters);
 
         RadioButton radioButtonW = viewRoot.findViewById(R.id.radioBtn_W);
         radioButtonW.setVisibility(View.VISIBLE);

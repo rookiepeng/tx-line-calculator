@@ -241,8 +241,8 @@ public class CslinFragment extends Fragment {
         TextView textL = (TextView) rootView.findViewById(R.id.text_L);
         textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        physicalCard = (CardView) rootView.findViewById(R.id.physicalParaCard);
-        electricalCard = (CardView) rootView.findViewById(R.id.electricalParaCard);
+        physicalCard = (CardView) rootView.findViewById(R.id.card_dimensions);
+        electricalCard = (CardView) rootView.findViewById(R.id.card_parameters);
 
         error_er = new SpannableString(this.getString(R.string.Error_er_empty));
         error_Z0 = new SpannableString(this.getString(R.string.Error_Z0_empty));
