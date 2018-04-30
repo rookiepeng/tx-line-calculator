@@ -93,7 +93,7 @@ public class CoaxCalculator {
                 varmin = 0.001 * line.getSubRadius();
                 var = 0.2 * line.getSubRadius();
                 break;
-            case Constants.Synthesize_Height:
+            case Constants.Synthesize_SubRadius:
                 varmax = 1000.0 * line.getCoreRadius();
                 varmin = 1.001 * line.getCoreRadius();
                 var = 5 * line.getCoreRadius();

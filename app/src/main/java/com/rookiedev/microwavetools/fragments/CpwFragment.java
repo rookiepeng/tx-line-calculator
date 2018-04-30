@@ -319,7 +319,7 @@ public class CpwFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);
 
         if (withGround) {
-            edittextW.setText(prefs.getString(Constants.GCPW_W, "18.00"));
+            edittextW.setText(prefs.getString(Constants.GCPW_W, "21.04"));
             spinnerW.setSelection(Integer.parseInt(prefs.getString(Constants.GCPW_W_UNIT, "0")));
 
             edittextS.setText(prefs.getString(Constants.GCPW_S, "20.00"));
@@ -328,10 +328,10 @@ public class CpwFragment extends Fragment {
             edittextL.setText(prefs.getString(Constants.GCPW_L, "1000.0"));
             spinnerL.setSelection(Integer.parseInt(prefs.getString(Constants.GCPW_L_UNIT, "0")));
 
-            edittextZ0.setText(prefs.getString(Constants.GCPW_Z0, "100.00"));
+            edittextZ0.setText(prefs.getString(Constants.GCPW_Z0, "50.00"));
             spinnerZ0.setSelection(Integer.parseInt(prefs.getString(Constants.GCPW_Z0_UNIT, "0")));
 
-            edittextPhs.setText(prefs.getString(Constants.GCPW_PHS, "41.75"));
+            edittextPhs.setText(prefs.getString(Constants.GCPW_PHS, "90.00"));
             spinnerPhs.setSelection(Integer.parseInt(prefs.getString(Constants.GCPW_PHS_UNIT, "0")));
 
             edittextFreq.setText(prefs.getString(Constants.GCPW_FREQ, "1.00"));
