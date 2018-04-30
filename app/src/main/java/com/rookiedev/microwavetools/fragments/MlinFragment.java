@@ -38,7 +38,7 @@ public class MlinFragment extends Fragment {
     private Button buttonSynthesize, buttonAnalyze;
     private Spinner spinnerW, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerPhs, spinnerFreq;
     private MlinModel line;
-    private AdFragment adFragment=null;
+    private AdFragment adFragment = null;
     private boolean isAdFree;
 
     public MlinFragment() {
@@ -49,15 +49,14 @@ public class MlinFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            isAdFree=getArguments().getBoolean(Constants.IS_AD_FREE,true);
+            isAdFree = getArguments().getBoolean(Constants.IS_AD_FREE, true);
         }
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_mlin, container, false);
-        mContext=this.getContext();
+        mContext = this.getContext();
 
         initUI();
         readSharedPref(); // read shared preferences
@@ -87,21 +86,18 @@ public class MlinFragment extends Fragment {
                         line = mlin.getAnaResult(line);
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        double Z0 = Z0_temp.setScale(DecimalLength,
-                                BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Z0 = Z0_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextZ0.setText(String.valueOf(Z0)); // cut the decimal
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(DecimalLength,
-                                BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextPhs.setText(String.valueOf(Eeff));
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getAnaResult(line);
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        double Z0 = Z0_temp.setScale(DecimalLength,
-                                BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Z0 = Z0_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextZ0.setText(String.valueOf(Z0)); // cut the decimal
 
                         editTextPhs.setText(""); // if the L input is empty, clear the Eeff
@@ -133,25 +129,23 @@ public class MlinFragment extends Fragment {
                         line.setElectricalLength(Double.parseDouble(editTextPhs.getText().toString()));
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, Constants.Synthesize_Width);
-                        BigDecimal L_temp = new BigDecimal(Constants.meter2others(line.getMetalLength(),spinnerL.getSelectedItemPosition())); // cut the decimal of L
-                        L = L_temp.setScale(DecimalLength,
-                                BigDecimal.ROUND_HALF_UP).doubleValue();
+                        BigDecimal L_temp = new BigDecimal(
+                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
+                        L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextL.setText(String.valueOf(L));
 
-                        BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(),spinnerW.getSelectedItemPosition())); // cut the decimal of W
-                        W = W_temp
-                                .setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
-                                .doubleValue();
+                        BigDecimal W_temp = new BigDecimal(
+                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
+                        W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextW.setText(String.valueOf(W));
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, Constants.Synthesize_Width);
                         editTextL.setText(""); // clear the L if the Eeff input is empty
 
-                        BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(),spinnerW.getSelectedItemPosition())); // cut the decimal of W
-                        W = W_temp
-                                .setScale(DecimalLength, BigDecimal.ROUND_HALF_UP)
-                                .doubleValue();
+                        BigDecimal W_temp = new BigDecimal(
+                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
+                        W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextW.setText(String.valueOf(W));
                     }
                 }
@@ -159,11 +153,10 @@ public class MlinFragment extends Fragment {
             }
         });
 
-        if(!isAdFree)
-        {
+        if (!isAdFree) {
             adFragment = new AdFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            if(fragmentManager !=null) {
+            if (fragmentManager != null) {
                 fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
             }
         }
@@ -187,56 +180,56 @@ public class MlinFragment extends Fragment {
         radioButtonL.setVisibility(View.VISIBLE);
         radioButtonL.setChecked(true);
 
-        RadioButton radioButtonZ0 =  viewRoot.findViewById(R.id.radioBtn_Z0);
+        RadioButton radioButtonZ0 = viewRoot.findViewById(R.id.radioBtn_Z0);
         radioButtonZ0.setVisibility(View.VISIBLE);
         radioButtonZ0.setChecked(true);
 
-        RadioButton radioButtonPhs =  viewRoot.findViewById(R.id.radioBtn_Phs);
+        RadioButton radioButtonPhs = viewRoot.findViewById(R.id.radioBtn_Phs);
         radioButtonPhs.setVisibility(View.VISIBLE);
         radioButtonPhs.setChecked(true);
 
-        TextView textW =  viewRoot.findViewById(R.id.text_W);
+        TextView textW = viewRoot.findViewById(R.id.text_W);
         textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textL =  viewRoot.findViewById(R.id.text_L);
+        TextView textL = viewRoot.findViewById(R.id.text_L);
         textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textPhs =  viewRoot.findViewById(R.id.text_Phs);
+        TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
         textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
-        TextView textZ0 =  viewRoot.findViewById(R.id.text_Z0);
+        TextView textZ0 = viewRoot.findViewById(R.id.text_Z0);
         textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         textZ0.append(Constants.stringZ0(mContext));
 
-        TextView textEr =  viewRoot.findViewById(R.id.text_er);
+        TextView textEr = viewRoot.findViewById(R.id.text_er);
         textEr.append(Constants.stringEr(mContext));
 
         // edittext elements
-        editTextW =  viewRoot.findViewById(R.id.editText_W);
+        editTextW = viewRoot.findViewById(R.id.editText_W);
         editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        editTextL =  viewRoot.findViewById(R.id.editText_L);
+        editTextL = viewRoot.findViewById(R.id.editText_L);
         editTextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        editTextZ0 =  viewRoot.findViewById(R.id.editText_Z0);
+        editTextZ0 = viewRoot.findViewById(R.id.editText_Z0);
         editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-        editTextPhs =  viewRoot.findViewById(R.id.editText_Phs);
+        editTextPhs = viewRoot.findViewById(R.id.editText_Phs);
         editTextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-        editTextFreq =  viewRoot.findViewById(R.id.editText_Freq);
-        editTextT =  viewRoot.findViewById(R.id.editText_T);
-        editTextH =  viewRoot.findViewById(R.id.editText_H);
-        editTextEr =  viewRoot.findViewById(R.id.editText_er);
+        editTextFreq = viewRoot.findViewById(R.id.editText_Freq);
+        editTextT = viewRoot.findViewById(R.id.editText_T);
+        editTextH = viewRoot.findViewById(R.id.editText_H);
+        editTextEr = viewRoot.findViewById(R.id.editText_er);
 
         // button elements
-        buttonAnalyze =  viewRoot.findViewById(R.id.button_ana);
-        buttonSynthesize =  viewRoot.findViewById(R.id.button_syn);
+        buttonAnalyze = viewRoot.findViewById(R.id.button_ana);
+        buttonSynthesize = viewRoot.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinnerW =  viewRoot.findViewById(R.id.spinner_W);
-        spinnerL =  viewRoot.findViewById(R.id.spinner_L);
-        spinnerZ0 =  viewRoot.findViewById(R.id.spinner_Z0);
-        spinnerPhs =  viewRoot.findViewById(R.id.spinner_Phs);
-        spinnerFreq =  viewRoot.findViewById(R.id.spinner_Freq);
-        spinnerT =  viewRoot.findViewById(R.id.spinner_T);
-        spinnerH =  viewRoot.findViewById(R.id.spinner_H);
+        spinnerW = viewRoot.findViewById(R.id.spinner_W);
+        spinnerL = viewRoot.findViewById(R.id.spinner_L);
+        spinnerZ0 = viewRoot.findViewById(R.id.spinner_Z0);
+        spinnerPhs = viewRoot.findViewById(R.id.spinner_Phs);
+        spinnerFreq = viewRoot.findViewById(R.id.spinner_Freq);
+        spinnerT = viewRoot.findViewById(R.id.spinner_T);
+        spinnerH = viewRoot.findViewById(R.id.spinner_H);
 
         // configure the dimension units
         spinnerW.setAdapter(Constants.adapterDimensionUnits(mContext));
@@ -262,34 +255,27 @@ public class MlinFragment extends Fragment {
 
         // fragment_mlin header_parameters
         editTextW.setText(prefs.getString(Constants.MLIN_W, "19.23"));
-        spinnerW.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_W_UNIT,
-                "0")));
+        spinnerW.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_W_UNIT, "0")));
 
         editTextL.setText(prefs.getString(Constants.MLIN_L, "1000.00"));
-        spinnerL.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_L_UNIT,
-                "0")));
+        spinnerL.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_L_UNIT, "0")));
 
         editTextZ0.setText(prefs.getString(Constants.MLIN_Z0, "50.0"));
-        spinnerZ0.setSelection(Integer.parseInt(prefs.getString(
-                Constants.MLIN_Z0_UNIT, "0")));
+        spinnerZ0.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_Z0_UNIT, "0")));
 
         editTextPhs.setText(prefs.getString(Constants.MLIN_PHS, "52.58"));
-        spinnerPhs.setSelection(Integer.parseInt(prefs.getString(
-                Constants.MLIN_PHS_UNIT, "0")));
+        spinnerPhs.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_PHS_UNIT, "0")));
 
         editTextFreq.setText(prefs.getString(Constants.MLIN_FREQ, "1.00"));
-        spinnerFreq.setSelection(Integer.parseInt(prefs.getString(
-                Constants.MLIN_FREQ_UNIT, "1")));
+        spinnerFreq.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_FREQ_UNIT, "1")));
 
         editTextEr.setText(prefs.getString(Constants.MLIN_ER, "4.00"));
 
         editTextH.setText(prefs.getString(Constants.MLIN_H, "10.00"));
-        spinnerH.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_H_UNIT,
-                "0")));
+        spinnerH.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_H_UNIT, "0")));
 
         editTextT.setText(prefs.getString(Constants.MLIN_T, "1.40"));
-        spinnerT.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT,
-                "0")));
+        spinnerT.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT, "0")));
     }
 
     private void Preference_SharedPref() {
@@ -382,25 +368,25 @@ public class MlinFragment extends Fragment {
             Drawable background = view.getForeground();
             final RippleDrawable rippleDrawable = (RippleDrawable) background;
 
-            rippleDrawable.setState(new int[]{android.R.attr.state_pressed, android.R.attr.state_enabled});
+            rippleDrawable.setState(new int[] { android.R.attr.state_pressed, android.R.attr.state_enabled });
 
             view.setClickable(false);
-            rippleDrawable.setState(new int[]{});
+            rippleDrawable.setState(new int[] {});
         }
     }
 
-    public void addAdFragment(){
+    public void addAdFragment() {
         adFragment = new AdFragment();
         FragmentManager fragmentManager = getFragmentManager();
-        if(fragmentManager !=null && viewRoot != null) {
+        if (fragmentManager != null && viewRoot != null) {
             fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
         }
     }
 
-    public void removeAdFragment(){
+    public void removeAdFragment() {
         if (adFragment != null) {
             FragmentManager fragmentManager = getFragmentManager();
-            if(fragmentManager !=null) {
+            if (fragmentManager != null) {
                 fragmentManager.beginTransaction().remove(adFragment).commit();
             }
         }

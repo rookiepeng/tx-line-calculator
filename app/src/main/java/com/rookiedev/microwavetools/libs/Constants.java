@@ -28,7 +28,7 @@ public class Constants {
     public static final int LengthUnit_mil = 0, LengthUnit_mm = 1, LengthUnit_cm = 2, LengthUnit_m = 3;
     public static final int FreqUnit_Hz = 10, FreqUnit_MHz = 0, FreqUnit_GHz = 1;
 
-    public static final String IS_AD_FREE="IS_AD_FREE";
+    public static final String IS_AD_FREE = "IS_AD_FREE";
 
     public static final String MLIN_W = "MLIN_W";
     public static final String MLIN_W_UNIT = "MLIN_W_UNIT";
@@ -167,70 +167,55 @@ public class Constants {
     public static final String COAX_FREQ_UNIT = "COAX_FREQ_UNIT";
     public static final String COAX_TARGET = "COAX_TARGET";
 
-    public static SpannableString stringZ0(Context mContext){
-        SpannableString spanZ0 = new SpannableString(
-                mContext.getString(R.string.text_Z0));
-        spanZ0.setSpan(new SubscriptSpan(), 1, 2,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        return  spanZ0;
+    public static SpannableString stringZ0(Context mContext) {
+        SpannableString spanZ0 = new SpannableString(mContext.getString(R.string.text_Z0));
+        spanZ0.setSpan(new SubscriptSpan(), 1, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        return spanZ0;
     }
 
-    public static SpannableString stringEr(Context mContext){
-        SpannableString spanEr = new SpannableString(
-                mContext.getString(R.string.text_er));
-        spanEr.setSpan(new SubscriptSpan(), 1, 2,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+    public static SpannableString stringEr(Context mContext) {
+        SpannableString spanEr = new SpannableString(mContext.getString(R.string.text_er));
+        spanEr.setSpan(new SubscriptSpan(), 1, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         return spanEr;
     }
 
-    public static SpannableString errorErEmpty(Context mContext){
-        SpannableString error_er = new SpannableString(
-                mContext.getString(R.string.Error_er_empty));
-        error_er.setSpan(new SubscriptSpan(), 13, 14,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+    public static SpannableString errorErEmpty(Context mContext) {
+        SpannableString error_er = new SpannableString(mContext.getString(R.string.Error_er_empty));
+        error_er.setSpan(new SubscriptSpan(), 13, 14, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         return error_er;
     }
 
-    public static SpannableString errorZ0Empty(Context mContext){
+    public static SpannableString errorZ0Empty(Context mContext) {
         SpannableString error_Z0 = new SpannableString(mContext.getString(R.string.Error_Z0_empty));
-        error_Z0.setSpan(new SubscriptSpan(), 13, 14,
-                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_Z0.setSpan(new SubscriptSpan(), 13, 14, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         return error_Z0;
     }
 
-    public static ArrayAdapter<CharSequence> adapterDimensionUnits(Context mContext){
-        ArrayAdapter<CharSequence> adapterLength = ArrayAdapter
-                .createFromResource(mContext, R.array.list_units_Length,
-                        android.R.layout.simple_spinner_item);
-        adapterLength
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    public static ArrayAdapter<CharSequence> adapterDimensionUnits(Context mContext) {
+        ArrayAdapter<CharSequence> adapterLength = ArrayAdapter.createFromResource(mContext, R.array.list_units_Length,
+                android.R.layout.simple_spinner_item);
+        adapterLength.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterLength;
     }
 
-    public static ArrayAdapter<CharSequence> adapterImpedanceUnits(Context mContext){
-        ArrayAdapter<CharSequence> adapterImpedance = ArrayAdapter
-                .createFromResource(mContext, R.array.list_units_Impedance,
-                        android.R.layout.simple_spinner_item);
-        adapterImpedance
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    public static ArrayAdapter<CharSequence> adapterImpedanceUnits(Context mContext) {
+        ArrayAdapter<CharSequence> adapterImpedance = ArrayAdapter.createFromResource(mContext,
+                R.array.list_units_Impedance, android.R.layout.simple_spinner_item);
+        adapterImpedance.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterImpedance;
     }
 
-    public static ArrayAdapter<CharSequence> adapterPhaseUnits(Context mContext){
-        ArrayAdapter<CharSequence> adapterPhase = ArrayAdapter
-                .createFromResource(mContext, R.array.list_units_Ele_length,
-                        android.R.layout.simple_spinner_item);
-        adapterPhase
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    public static ArrayAdapter<CharSequence> adapterPhaseUnits(Context mContext) {
+        ArrayAdapter<CharSequence> adapterPhase = ArrayAdapter.createFromResource(mContext,
+                R.array.list_units_Ele_length, android.R.layout.simple_spinner_item);
+        adapterPhase.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterPhase;
     }
 
-    public static ArrayAdapter<CharSequence> adapterFrequencyUnits(Context mContext){
-        ArrayAdapter<CharSequence> adapterFreq = ArrayAdapter
-                .createFromResource(mContext, R.array.list_units_Frequency,
-                        android.R.layout.simple_spinner_item);
-        adapterFreq
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    public static ArrayAdapter<CharSequence> adapterFrequencyUnits(Context mContext) {
+        ArrayAdapter<CharSequence> adapterFreq = ArrayAdapter.createFromResource(mContext, R.array.list_units_Frequency,
+                android.R.layout.simple_spinner_item);
+        adapterFreq.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterFreq;
     }
 
