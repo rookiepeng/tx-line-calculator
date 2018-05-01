@@ -5,51 +5,44 @@
     "project_id": "zpeng-tools",
     "storage_bucket": "zpeng-tools.appspot.com"
   },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:586296604950:android:b23a184f54f2e8ca",
-        "android_client_info": {
-          "package_name": "com.rookiedev.microwavetools"
+  "client": [{
+    "client_info": {
+      "mobilesdk_app_id": "1:586296604950:android:b23a184f54f2e8ca",
+      "android_client_info": {
+        "package_name": "com.rookiedev.microwavetools"
+      }
+    },
+    "oauth_client": [{
+        "client_id": "586296604950-spi1b29caask0d0simkjfa1n0s4oa4v8.apps.googleusercontent.com",
+        "client_type": 1,
+        "android_info": {
+          "package_name": "com.rookiedev.microwavetools",
+          "certificate_hash": "089b56f0ce9ef30744b37003103c1a6c702c233d"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "586296604950-spi1b29caask0d0simkjfa1n0s4oa4v8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.rookiedev.microwavetools",
-            "certificate_hash": "089b56f0ce9ef30744b37003103c1a6c702c233d"
-          }
-        },
-        {
+      {
+        "client_id": "586296604950-htvt03fb18sckrdbnalhcqi0hdrs6078.apps.googleusercontent.com",
+        "client_type": 3
+      }
+    ],
+    "api_key": [{
+      "current_key": "AIzaSyCfCXAoJ8wrjdMFS3XiPt_I1KsJc27NCZo"
+    }],
+    "services": {
+      "analytics_service": {
+        "status": 1
+      },
+      "appinvite_service": {
+        "status": 2,
+        "other_platform_oauth_client": [{
           "client_id": "586296604950-htvt03fb18sckrdbnalhcqi0hdrs6078.apps.googleusercontent.com",
           "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCfCXAoJ8wrjdMFS3XiPt_I1KsJc27NCZo"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "586296604950-htvt03fb18sckrdbnalhcqi0hdrs6078.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
+        }]
+      },
+      "ads_service": {
+        "status": 2
       }
     }
-  ],
+  }],
   "configuration_version": "1"
 }

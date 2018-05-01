@@ -21,7 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.firebase.crash.FirebaseCrash;
+import com.crashlytics.android.Crashlytics;
 import com.rookiedev.microwavetools.fragments.CmlinFragment;
 import com.rookiedev.microwavetools.fragments.CoaxFragment;
 import com.rookiedev.microwavetools.fragments.CpwFragment;
@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity
                 }
                 return;
             }
-
             if (purchase.getSku().equals(SKU_ADFREE)) {
                 isChecked = true;
                 isAdFree = true;
@@ -125,7 +124,6 @@ public class MainActivity extends AppCompatActivity
             if (mHelper == null) {
                 return;
             }
-
             // Is it a failure?
             if (result.isFailure()) {
                 isChecked = true;
@@ -147,7 +145,6 @@ public class MainActivity extends AppCompatActivity
                 }
                 return;
             }
-
             // Do we have the premium upgrade?
             Purchase premiumPurchase = inventory.getPurchase(SKU_ADFREE);
             isChecked = true;
@@ -370,7 +367,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.action_menu, menu);
-        // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -585,12 +581,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         // very important:
         if (mBroadcastReceiver != null) {
             unregisterReceiver(mBroadcastReceiver);
         }
-
         // very important:
         if (mHelper != null) {
             mHelper.disposeWhenFinished();
@@ -599,7 +593,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void complain(String message) {
-        FirebaseCrash.logcat(Log.ERROR, "PURCHASE", message);
+        Crashlytics.log(Log.ERROR, "PURCHASE", message);
     }
 
     @Override
@@ -637,8 +631,7 @@ public class MainActivity extends AppCompatActivity
             // billing...
             super.onActivityResult(requestCode, resultCode, data);
         } else {
-            FirebaseCrash.logcat(Log.VERBOSE, "PURCHASE", "onActivityResult handled by IABUtil.");
-            //Log.d(TAG, "onActivityResult handled by IABUtil.");
+            Crashlytics.log(Log.VERBOSE, "PURCHASE", "onActivityResult handled by IABUtil.");
         }
     }
 

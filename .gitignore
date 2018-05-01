@@ -34,3 +34,5 @@ app/release/output\.json
 \.settings/
 
 app/\.classpath
+
+\.vscode/
