@@ -3,6 +3,10 @@ Tx-Line Calculator
 
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
+
+
+![icon](https://raw.githubusercontent.com/rookiepeng/Tx-Line-Calculator/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+
 A transmission line calculator for RF/microwave engineers.  
 
 Supported transmission lines:
