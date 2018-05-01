@@ -43,6 +43,7 @@ public class CslinFragment extends Fragment {
     private boolean useZ0k; // calculate with Z0, k, or Z0e, Z0o
     private CslinModel line;
     private AdFragment adFragment = null;
+    private FragmentManager fragmentManager = null;
 
     private boolean isAdFree;
 
@@ -62,6 +63,8 @@ public class CslinFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_cslin, container, false);
         mContext = this.getContext();
+        fragmentManager = getFragmentManager();
+
         initUI(); // initial the UI
         readSharedPref(); // read shared preferences
         setRadioBtn();
@@ -620,15 +623,13 @@ public class CslinFragment extends Fragment {
 
     public void addAdFragment() {
         adFragment = new AdFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null && viewRoot != null) {
+        if (fragmentManager != null) {
             fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
         }
     }
 
     public void removeAdFragment() {
         if (adFragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
             if (fragmentManager != null) {
                 fragmentManager.beginTransaction().remove(adFragment).commit();
             }

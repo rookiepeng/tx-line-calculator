@@ -40,6 +40,7 @@ public class MlinFragment extends Fragment {
     private MlinModel line;
     private AdFragment adFragment = null;
     private boolean isAdFree;
+    private FragmentManager fragmentManager = null;
 
     public MlinFragment() {
         // Empty constructor required for fragment subclasses
@@ -57,6 +58,7 @@ public class MlinFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_mlin, container, false);
         mContext = this.getContext();
+        fragmentManager = getFragmentManager();
 
         initUI();
         readSharedPref(); // read shared preferences
@@ -377,15 +379,13 @@ public class MlinFragment extends Fragment {
 
     public void addAdFragment() {
         adFragment = new AdFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null && viewRoot != null) {
+        if (fragmentManager != null) {
             fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
         }
     }
 
     public void removeAdFragment() {
         if (adFragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
             if (fragmentManager != null) {
                 fragmentManager.beginTransaction().remove(adFragment).commit();
             }

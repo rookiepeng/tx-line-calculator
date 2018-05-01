@@ -43,6 +43,7 @@ public class CmlinFragment extends Fragment {
     private RadioButton radioButtonZ0, radioButtonK, radioButtonZ0o, radioButtonZ0e;
     private boolean useZ0k; // calculate with Z0, k, or Z0e, Z0o
     private AdFragment adFragment = null;
+    private FragmentManager fragmentManager = null;
 
     private boolean isAdFree;
 
@@ -62,6 +63,7 @@ public class CmlinFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_cmlin, container, false);
         mContext = this.getContext();
+        fragmentManager = getFragmentManager();
 
         initUI();
         readSharedPref();
@@ -559,7 +561,6 @@ public class CmlinFragment extends Fragment {
     }
 
     private void synthesizeButton() {
-        int temp;
         if (useZ0k) {
             line.setImpedance(Double.parseDouble(edittextZ0.getText().toString()));
             line.setCouplingFactor(Double.parseDouble(edittextK.getText().toString()));
@@ -629,15 +630,13 @@ public class CmlinFragment extends Fragment {
 
     public void addAdFragment() {
         adFragment = new AdFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragmentManager != null && viewRoot != null) {
+        if (fragmentManager != null) {
             fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
         }
     }
 
     public void removeAdFragment() {
         if (adFragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
             if (fragmentManager != null) {
                 fragmentManager.beginTransaction().remove(adFragment).commit();
             }
