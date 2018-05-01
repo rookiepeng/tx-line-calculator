@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -12,15 +13,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.rookiedev.microwavetools.fragments.AdFragment;
+import com.google.firebase.crash.FirebaseCrash;
 import com.rookiedev.microwavetools.fragments.CmlinFragment;
 import com.rookiedev.microwavetools.fragments.CoaxFragment;
 import com.rookiedev.microwavetools.fragments.CpwFragment;
@@ -37,6 +38,11 @@ import com.rookiedev.microwavetools.util.Purchase;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IabBroadcastReceiver.IabBroadcastListener {
 
+    // (arbitrary) request code for the purchase flow
+    static final int RC_REQUEST = 10001;
+    private final static String SKU_ADFREE = "com.rookiedev.rfline.adfree.v1";
+    // Provides purchase notification while this app is running
+    IabBroadcastReceiver mBroadcastReceiver;
     private int pos;
     private DrawerLayout drawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -47,23 +53,15 @@ public class MainActivity extends AppCompatActivity
     private CpwFragment fragmentCpw = null;
     private CpwFragment fragmentGcpw = null;
     private CoaxFragment fragmentCoax = null;
-    private AdFragment adFragment=null;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private FragmentManager fragmentManager;
     private ImageView imageModel;
     private int imageResource;
-
     // The helper object
     private IabHelper mHelper;
-    // Provides purchase notification while this app is running
-    IabBroadcastReceiver mBroadcastReceiver;
-    private final static String SKU_ADFREE = "com.rookiedev.rfline.adfree.v1";
     private boolean isAdFree = false;
     private boolean isChecked = false;
-    // (arbitrary) request code for the purchase flow
-    static final int RC_REQUEST = 10001;
-
     // Callback for when a purchase is finished
     IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
@@ -77,44 +75,42 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
             if (!verifyDeveloperPayload(purchase)) {
-                isChecked=true;
+                isChecked = true;
                 complain("Error purchasing. Authenticity verification failed.");
-                if(pos==0){
+                if (pos == 0) {
                     fragmentMlin.addAdFragment();
-                }else if(pos==1){
+                } else if (pos == 1) {
                     fragmentCmlin.addAdFragment();
-                }else if(pos==2){
+                } else if (pos == 2) {
                     fragmentSlin.addAdFragment();
-                }else if(pos==3){
+                } else if (pos == 3) {
                     fragmentCslin.addAdFragment();
-                }else if(pos==4){
+                } else if (pos == 4) {
                     fragmentCpw.addAdFragment();
-                }else if(pos==5){
+                } else if (pos == 5) {
                     fragmentGcpw.addAdFragment();
-                }else if(pos==6){
+                } else if (pos == 6) {
                     fragmentCoax.addAdFragment();
                 }
-                //adFragment = new AdFragment();
-                //fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
                 return;
             }
 
             if (purchase.getSku().equals(SKU_ADFREE)) {
-                isChecked=true;
+                isChecked = true;
                 isAdFree = true;
-                if(pos==0){
+                if (pos == 0) {
                     fragmentMlin.removeAdFragment();
-                }else if(pos==1){
+                } else if (pos == 1) {
                     fragmentCmlin.removeAdFragment();
-                }else if(pos==2){
+                } else if (pos == 2) {
                     fragmentSlin.removeAdFragment();
-                }else if(pos==3){
+                } else if (pos == 3) {
                     fragmentCslin.removeAdFragment();
-                }else if(pos==4){
+                } else if (pos == 4) {
                     fragmentCpw.removeAdFragment();
-                }else if(pos==5){
+                } else if (pos == 5) {
                     fragmentGcpw.removeAdFragment();
-                }else if(pos==6){
+                } else if (pos == 6) {
                     fragmentCoax.removeAdFragment();
                 }
                 invalidateOptionsMenu();
@@ -132,52 +128,48 @@ public class MainActivity extends AppCompatActivity
 
             // Is it a failure?
             if (result.isFailure()) {
-                isChecked=true;
+                isChecked = true;
                 complain("Failed to query inventory: " + result);
-                if(pos==0){
+                if (pos == 0) {
                     fragmentMlin.addAdFragment();
-                }else if(pos==1){
+                } else if (pos == 1) {
                     fragmentCmlin.addAdFragment();
-                }else if(pos==2){
+                } else if (pos == 2) {
                     fragmentSlin.addAdFragment();
-                }else if(pos==3){
+                } else if (pos == 3) {
                     fragmentCslin.addAdFragment();
-                }else if(pos==4){
+                } else if (pos == 4) {
                     fragmentCpw.addAdFragment();
-                }else if(pos==5){
+                } else if (pos == 5) {
                     fragmentGcpw.addAdFragment();
-                }else if(pos==6){
+                } else if (pos == 6) {
                     fragmentCoax.addAdFragment();
                 }
-                //adFragment = new AdFragment();
-                //fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
                 return;
             }
 
             // Do we have the premium upgrade?
             Purchase premiumPurchase = inventory.getPurchase(SKU_ADFREE);
-            isChecked=true;
+            isChecked = true;
             isAdFree = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
             if (isAdFree) {
                 invalidateOptionsMenu();
             } else {
-                if(pos==0){
+                if (pos == 0) {
                     fragmentMlin.addAdFragment();
-                }else if(pos==1){
+                } else if (pos == 1) {
                     fragmentCmlin.addAdFragment();
-                }else if(pos==2){
+                } else if (pos == 2) {
                     fragmentSlin.addAdFragment();
-                }else if(pos==3){
+                } else if (pos == 3) {
                     fragmentCslin.addAdFragment();
-                }else if(pos==4){
+                } else if (pos == 4) {
                     fragmentCpw.addAdFragment();
-                }else if(pos==5){
+                } else if (pos == 5) {
                     fragmentGcpw.addAdFragment();
-                }else if(pos==6){
+                } else if (pos == 6) {
                     fragmentCoax.addAdFragment();
                 }
-                //adFragment = new AdFragment();
-                //fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
             }
         }
     };
@@ -192,20 +184,20 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
-        mCollapsingToolbarLayout=(CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        mCollapsingToolbarLayout = findViewById(R.id.toolbar_layout);
 
-        imageModel=(ImageView) findViewById(R.id.imageViewModel);
+        imageModel = findViewById(R.id.imageViewModel);
 
         fragmentManager = getSupportFragmentManager();
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close) {
             @Override
@@ -220,7 +212,7 @@ public class MainActivity extends AppCompatActivity
             public void onDrawerClosed(View drawerView) {
                 if (pos == 0) {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentMlin.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -228,7 +220,7 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                 } else if (pos == 1) {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCmlin.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -236,7 +228,7 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                 } else if (pos == 2) {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentSlin.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -244,7 +236,7 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                 } else if (pos == 3) {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCslin.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -252,7 +244,7 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                 } else if (pos == 4) {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
                     fragmentCpw.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -261,7 +253,7 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                 } else if (pos == 5) {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
                     fragmentGcpw.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -270,7 +262,7 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                 } else if (pos == 6) {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCoax.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -278,7 +270,7 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                 } else {
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentMlin.setArguments(bundle);
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -366,7 +358,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -378,7 +370,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.action_menu, menu);
-        //getMenuInflater().inflate(R.menu.main, menu);
+        // getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -399,21 +391,16 @@ public class MainActivity extends AppCompatActivity
         // Handle action buttons
         Intent intent = new Intent();
         switch (item.getItemId()) {
-            case R.id.menu_ad:
-                onAdfreeButtonClicked();
-                return true;
-            case R.id.menu_preference:
-                intent.setClass(this, preferences.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            //case R.id.menu_about:
-            //    intent.setClass(this, about.class);
-            //    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //    startActivity(intent);
-            //    return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        case R.id.menu_ad:
+            onAdfreeButtonClicked();
+            return true;
+        case R.id.menu_preference:
+            intent.setClass(this, preferences.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -437,7 +424,6 @@ public class MainActivity extends AppCompatActivity
 
         editor.putString(Constants.PREFS_POSITION, String.valueOf(pos));
         editor.apply();
-        // saveSharedPref();
     }
 
     private void readSharedPref() {
@@ -446,69 +432,65 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        //fragmentManager.beginTransaction().remove(fragment).commit();
         if (id == R.id.nav_mlin) {
-            if(fragmentMlin==null) {
+            if (fragmentMlin == null) {
                 fragmentMlin = new MlinFragment();
             }
             pos = 0;
-            imageResource=R.drawable.vt_mlin;
+            imageResource = R.drawable.vt_mlin;
         } else if (id == R.id.nav_cmlin) {
-            if(fragmentCmlin==null) {
+            if (fragmentCmlin == null) {
                 fragmentCmlin = new CmlinFragment();
             }
             pos = 1;
-            imageResource=R.drawable.vt_cmlin;
+            imageResource = R.drawable.vt_cmlin;
         } else if (id == R.id.nav_slin) {
-            if(fragmentSlin==null) {
+            if (fragmentSlin == null) {
                 fragmentSlin = new SlinFragment();
             }
             pos = 2;
-            imageResource=R.drawable.vt_slin;
+            imageResource = R.drawable.vt_slin;
         } else if (id == R.id.nav_cslin) {
-            if(fragmentCslin==null) {
+            if (fragmentCslin == null) {
                 fragmentCslin = new CslinFragment();
             }
             pos = 3;
-            imageResource=R.drawable.vt_cslin;
+            imageResource = R.drawable.vt_cslin;
         } else if (id == R.id.nav_cpw) {
-            if(fragmentCpw==null) {
+            if (fragmentCpw == null) {
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
                 fragmentCpw = new CpwFragment();
                 fragmentCpw.setArguments(bundle);
             }
             pos = 4;
-            imageResource=R.drawable.vt_cpw;
+            imageResource = R.drawable.vt_cpw;
         } else if (id == R.id.nav_gcpw) {
-            if(fragmentGcpw==null) {
+            if (fragmentGcpw == null) {
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
                 fragmentGcpw = new CpwFragment();
                 fragmentGcpw.setArguments(bundle);
             }
             pos = 5;
-            imageResource=R.drawable.vt_cpwg;
-        }else if (id == R.id.nav_coax) {
-            if(fragmentCoax==null) {
+            imageResource = R.drawable.vt_cpwg;
+        } else if (id == R.id.nav_coax) {
+            if (fragmentCoax == null) {
                 fragmentCoax = new CoaxFragment();
             }
             pos = 6;
-            imageResource=R.drawable.vt_coax;
+            imageResource = R.drawable.vt_coax;
         } else {
-            if(fragmentMlin==null) {
+            if (fragmentMlin == null) {
                 fragmentMlin = new MlinFragment();
             }
             pos = 0;
-            imageResource=R.drawable.vt_mlin;
+            imageResource = R.drawable.vt_mlin;
         }
-        //Bundle args = new Bundle();
-        //fragment.setArguments(args);
         drawer.closeDrawer(GravityCompat.START);
-
         return true;
     }
 
@@ -516,73 +498,70 @@ public class MainActivity extends AppCompatActivity
         if (item == 0) {
             fragmentMlin = new MlinFragment();
             pos = 0;
-            imageResource=R.drawable.vt_mlin;
+            imageResource = R.drawable.vt_mlin;
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentMlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
         } else if (item == 1) {
             fragmentCmlin = new CmlinFragment();
             pos = 1;
-            imageResource=R.drawable.vt_cmlin;
+            imageResource = R.drawable.vt_cmlin;
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCmlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCmlin).commit();
         } else if (item == 2) {
             fragmentSlin = new SlinFragment();
             pos = 2;
-            imageResource=R.drawable.vt_slin;
+            imageResource = R.drawable.vt_slin;
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentSlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentSlin).commit();
         } else if (item == 3) {
             fragmentCslin = new CslinFragment();
             pos = 3;
-            imageResource=R.drawable.vt_cslin;
+            imageResource = R.drawable.vt_cslin;
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCslin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCslin).commit();
         } else if (item == 4) {
             Bundle bundle = new Bundle();
-            bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW );
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+            bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
+            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCpw = new CpwFragment();
             fragmentCpw.setArguments(bundle);
             pos = 4;
-            imageResource=R.drawable.vt_cpw;
+            imageResource = R.drawable.vt_cpw;
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCpw).commit();
         } else if (item == 5) {
             Bundle bundle = new Bundle();
-            bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW );
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+            bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
+            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentGcpw = new CpwFragment();
             fragmentGcpw.setArguments(bundle);
             pos = 5;
-            imageResource=R.drawable.vt_cpwg;
+            imageResource = R.drawable.vt_cpwg;
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentGcpw).commit();
         } else if (item == 6) {
             fragmentCoax = new CoaxFragment();
             pos = 6;
-            imageResource=R.drawable.vt_coax;
+            imageResource = R.drawable.vt_coax;
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCoax.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCoax).commit();
         } else {
             fragmentMlin = new MlinFragment();
             pos = 0;
-            imageResource=R.drawable.vt_mlin;
+            imageResource = R.drawable.vt_mlin;
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked&&(!isAdFree)));
+            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentMlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
         }
-        //Bundle args = new Bundle();
-        //fragment.setArguments(args);
-        //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 
     @Override
@@ -620,21 +599,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     void complain(String message) {
-        //Log.e(TAG, "**** TrivialDrive Error: " + message);
-        alert("Error: " + message);
-    }
-
-    void alert(String message) {
-        AlertDialog.Builder bld = new AlertDialog.Builder(this);
-        bld.setMessage(message);
-        bld.setNeutralButton("OK", null);
-        bld.create().show();
+        FirebaseCrash.logcat(Log.ERROR, "PURCHASE", message);
     }
 
     @Override
     public void receivedBroadcast() {
         // Received a broadcast notification that the inventory of items has changed
-        //Log.d(TAG, "Received broadcast notification. Querying inventory.");
         try {
             mHelper.queryInventoryAsync(mGotInventoryListener);
         } catch (IabHelper.IabAsyncInProgressException e) {
@@ -644,8 +614,7 @@ public class MainActivity extends AppCompatActivity
 
     // User clicked the "Ad free" button
     public void onAdfreeButtonClicked() {
-
-        if(pos==0){
+        if (pos == 0) {
             fragmentMlin.addAdFragment();
         }
         String payload = "";
@@ -653,13 +622,11 @@ public class MainActivity extends AppCompatActivity
             mHelper.launchPurchaseFlow(this, SKU_ADFREE, RC_REQUEST, mPurchaseFinishedListener, payload);
         } catch (IabHelper.IabAsyncInProgressException e) {
             complain("Error launching purchase flow. Another async operation in progress.");
-            //setWaitScreen(false);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Log.d(TAG, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
         if (mHelper == null)
             return;
 
@@ -670,6 +637,7 @@ public class MainActivity extends AppCompatActivity
             // billing...
             super.onActivityResult(requestCode, resultCode, data);
         } else {
+            FirebaseCrash.logcat(Log.VERBOSE, "PURCHASE", "onActivityResult handled by IABUtil.");
             //Log.d(TAG, "onActivityResult handled by IABUtil.");
         }
     }
