@@ -28,4 +28,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.firebase:firebase-ads:15.0.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
