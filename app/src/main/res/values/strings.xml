@@ -30,8 +30,8 @@
     <!-- global -->
     <string name="Dim">Dimensions</string>
     <string name="Par">Parameters</string>
-    <string name="Syn_button">⬆Synthesize</string>
-    <string name="Ana_button">Analyze⬇</string>
+    <string name="Syn_button">Synthesize</string>
+    <string name="Ana_button">Analyze</string>
     <string name="text_er">εr:</string>
     <string name="text_Z0">Z0:</string>
     <string name="text_Z0o">Z0o:</string>
@@ -102,22 +102,10 @@
     <string name="version">Version:</string>
     <string name="changelog">Changelog:</string>
 
-    <string name="changelogLatest">Rename to RF Line Calculator\nUse the left drawer\nPolish the
-        UI\nCombine CPW and CPWG into one view\nFix bugs
-    </string>
-    <string name="changelog1_0">> Microstrip Line\n> Coupled Microstrip Line\n> Coplanar
-        Waveguide\n> Coplanar Waveguide with Ground\n> Stripline\n> Coupled Stripline\n> Coaxial
-        Line
-    </string>
-    <string name="dev">rookiepeng</string>
-
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
     <string name="menu_preference">preference</string>
     <string name="menu_shop">Ad free</string>
     <string name="menu_about">about</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

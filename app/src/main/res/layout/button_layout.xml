@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false">
+    android:fitsSystemWindows="true" >
 
     <Button
         android:id="@+id/button_syn"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
         android:text="@string/Syn_button"
         android:textAppearance="?android:attr/textAppearanceInverse"
-        android:theme="@style/SynButton" />
+        android:theme="@style/SynButton"
+        android:drawableTop="@drawable/ic_arrow_upward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_ana"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_ana"
@@ -28,5 +34,11 @@
         android:paddingTop="20dp"
         android:text="@string/Ana_button"
         android:textAppearance="?android:attr/textAppearanceInverse"
-        android:theme="@style/AnaButton" />
-</RelativeLayout>
+        android:theme="@style/AnaButton"
+        android:drawableBottom="@drawable/ic_arrow_downward"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_syn"/>
+
+</android.support.constraint.ConstraintLayout>
