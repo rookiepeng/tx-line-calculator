@@ -1,5 +1,6 @@
 package com.rookiedev.microwavetools;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -21,7 +22,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.android.billingclient.api.BillingClient;
 import com.crashlytics.android.Crashlytics;
+import com.rookiedev.microwavetools.billing.BillingManager;
+import com.rookiedev.microwavetools.billing.BillingProvider;
 import com.rookiedev.microwavetools.fragments.CmlinFragment;
 import com.rookiedev.microwavetools.fragments.CoaxFragment;
 import com.rookiedev.microwavetools.fragments.CpwFragment;
@@ -29,20 +33,19 @@ import com.rookiedev.microwavetools.fragments.CslinFragment;
 import com.rookiedev.microwavetools.fragments.MlinFragment;
 import com.rookiedev.microwavetools.fragments.SlinFragment;
 import com.rookiedev.microwavetools.libs.Constants;
-import com.rookiedev.microwavetools.util.IabBroadcastReceiver;
-import com.rookiedev.microwavetools.util.IabHelper;
-import com.rookiedev.microwavetools.util.IabResult;
-import com.rookiedev.microwavetools.util.Inventory;
-import com.rookiedev.microwavetools.util.Purchase;
+
+import java.util.List;
+
+import static com.rookiedev.microwavetools.billing.BillingManager.BILLING_MANAGER_NOT_INITIALIZED;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, IabBroadcastReceiver.IabBroadcastListener {
+        implements NavigationView.OnNavigationItemSelectedListener, BillingProvider {
 
     // (arbitrary) request code for the purchase flow
     static final int RC_REQUEST = 10001;
     private final static String SKU_ADFREE = "com.rookiedev.rfline.adfree.v1";
     // Provides purchase notification while this app is running
-    IabBroadcastReceiver mBroadcastReceiver;
+    //IabBroadcastReceiver mBroadcastReceiver;
     private int pos;
     private DrawerLayout drawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -59,11 +62,17 @@ public class MainActivity extends AppCompatActivity
     private ImageView imageModel;
     private int imageResource;
     // The helper object
-    private IabHelper mHelper;
+    //private IabHelper mHelper;
     private boolean isAdFree = false;
     private boolean isChecked = false;
+
+    private static final String TAG = "BillingManager";
+
+    private BillingManager mBillingManager;
+    private final UpdateListener mUpdateListener =new UpdateListener();
+
     // Callback for when a purchase is finished
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+    /*IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             // if we were disposed of in the meantime, quit.
             if (mHelper == null) {
@@ -115,10 +124,10 @@ public class MainActivity extends AppCompatActivity
                 invalidateOptionsMenu();
             }
         }
-    };
+    };*/
 
     // Listener that's called when we finish querying the items and subscriptions we own
-    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+    /*IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
             // Have we been disposed of in the meantime? If so, quit.
             if (mHelper == null) {
@@ -169,13 +178,13 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
-    };
+    };*/
 
     // Verifies the developer payload of a purchase.
-    boolean verifyDeveloperPayload(Purchase p) {
+    /*boolean verifyDeveloperPayload(Purchase p) {
         String payload = p.getDeveloperPayload();
         return true;
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,59 +302,8 @@ public class MainActivity extends AppCompatActivity
         mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
         imageModel.setImageResource(imageResource);
 
-        /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
-         * (that you got from the Google Play developer console). This is not your
-         * developer public key, it's the *app-specific* public key.
-         *
-         * Instead of just storing the entire literal string here embedded in the
-         * program,  construct the key at runtime from pieces or
-         * use bit manipulation (for example, XOR with some other string) to hide
-         * the actual key.  The key itself is not secret information, but we don't
-         * want to make it easy for an attacker to replace the public key with one
-         * of their own and then fake messages from the server.
-         */
-        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs5JW1lae1XD7lDALy5eBi3G7X06jPSNVaOrdDp1ACV3vmt0LPF4nnSGDjkMxwhyCge+u8r4trnwJoOANgqxyDxq9icRXHGoZaZnjgHtUwGfZQYlwFIczpRbNkOSFe4/hiyWRDh9f4s/oSyoHO/yWtSrLHplabMQtg+CxU4IAC6Xym3gn8laPDUV6M/Fjsrv3t9ntKJIBGhX0S7ogrWTuLJU9hGTLIcPIR2WFtALYyX/AqlGKFk3KzYZ2hvoSfKnOPnFdswJYacr8aY7Y+vWG4Qz9LgPEM3iA15Lm7PxBd9r/VtcMn75cnuhMbAHKR8YEEjHk2gla4PaofedgwUstawIDAQAB";
-
-        // Create the helper, passing it our context and the public key to verify signatures with
-        mHelper = new IabHelper(this, base64EncodedPublicKey);
-
-        // enable debug logging (for a production application, you should set this to false).
-        mHelper.enableDebugLogging(false);
-
-        // Start setup. This is asynchronous and the specified listener
-        // will be called once setup completes.
-        //Log.d(TAG, "Starting setup.");
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            public void onIabSetupFinished(IabResult result) {
-                if (!result.isSuccess()) {
-                    // Oh noes, there was a problem.
-                    complain("Problem setting up in-app billing: " + result);
-                    return;
-                }
-
-                // Have we been disposed of in the meantime? If so, quit.
-                if (mHelper == null)
-                    return;
-
-                // Important: Dynamically register for broadcast messages about updated purchases.
-                // We register the receiver here instead of as a <receiver> in the Manifest
-                // because we always call getPurchases() at startup, so therefore we can ignore
-                // any broadcasts sent while the app isn't running.
-                // Note: registering this listener in an Activity is a bad idea, but is done here
-                // because this is a SAMPLE. Regardless, the receiver must be registered after
-                // IabHelper is setup, but before first call to getPurchases().
-                mBroadcastReceiver = new IabBroadcastReceiver(MainActivity.this);
-                IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
-                registerReceiver(mBroadcastReceiver, broadcastFilter);
-
-                // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                try {
-                    mHelper.queryInventoryAsync(mGotInventoryListener);
-                } catch (IabHelper.IabAsyncInProgressException e) {
-                    complain("Error querying inventory. Another async operation in progress.");
-                }
-            }
-        });
+        // Create and initialize BillingManager which talks to BillingLibrary
+        mBillingManager = new BillingManager(this, mUpdateListener);
 
         if (isFirstRun()) {
             drawer.openDrawer(GravityCompat.START);
@@ -387,16 +345,16 @@ public class MainActivity extends AppCompatActivity
         // Handle action buttons
         Intent intent = new Intent();
         switch (item.getItemId()) {
-        case R.id.menu_ad:
-            onAdfreeButtonClicked();
-            return true;
-        case R.id.menu_preference:
-            intent.setClass(this, preferences.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case R.id.menu_ad:
+                onAdfreeButtonClicked();
+                return true;
+            case R.id.menu_preference:
+                intent.setClass(this, preferences.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -577,25 +535,43 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Note: We query purchases in onResume() to handle purchases completed while the activity
+        // is inactive. For example, this can happen if the activity is destroyed during the
+        // purchase flow. This ensures that when the activity is resumed it reflects the user's
+        // current purchases.
+        if (mBillingManager != null
+                && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
+            mBillingManager.queryPurchases();
+            Log.v(TAG, "Query purchase");
+        }
+    }
+
     // We're being destroyed. It's important to dispose of the helper here!
     @Override
     public void onDestroy() {
+        if (mBillingManager != null) {
+            mBillingManager.destroy();
+        }
         super.onDestroy();
         // very important:
-        if (mBroadcastReceiver != null) {
-            unregisterReceiver(mBroadcastReceiver);
-        }
+        //if (mBroadcastReceiver != null) {
+        //    unregisterReceiver(mBroadcastReceiver);
+        //}
         // very important:
-        if (mHelper != null) {
-            mHelper.disposeWhenFinished();
-            mHelper = null;
-        }
+        //if (mHelper != null) {
+        //    mHelper.disposeWhenFinished();
+        //    mHelper = null;
+        //}
     }
 
     void complain(String message) {
         Crashlytics.log(Log.ERROR, "PURCHASE", message);
     }
 
+    /*
     @Override
     public void receivedBroadcast() {
         // Received a broadcast notification that the inventory of items has changed
@@ -604,22 +580,92 @@ public class MainActivity extends AppCompatActivity
         } catch (IabHelper.IabAsyncInProgressException e) {
             complain("Error querying inventory. Another async operation in progress.");
         }
-    }
+    }*/
 
     // User clicked the "Ad free" button
     public void onAdfreeButtonClicked() {
-        if (pos == 0) {
-            fragmentMlin.addAdFragment();
+        //Log.d(TAG, "Purchase button clicked.");
+
+        if (mBillingManager != null
+                && mBillingManager.getBillingClientResponseCode()
+                > BILLING_MANAGER_NOT_INITIALIZED) {
+
+            mBillingManager.initiatePurchaseFlow(SKU_ADFREE,
+                    BillingClient.SkuType.INAPP);
+
+            //long startTime = System.currentTimeMillis();
         }
-        String payload = "";
-        try {
-            mHelper.launchPurchaseFlow(this, SKU_ADFREE, RC_REQUEST, mPurchaseFinishedListener, payload);
-        } catch (IabHelper.IabAsyncInProgressException e) {
-            complain("Error launching purchase flow. Another async operation in progress.");
+
+        //}
+    }
+
+    /**
+     * Handler to billing updates
+     */
+    private class UpdateListener implements BillingManager.BillingUpdatesListener {
+        @Override
+        public void onBillingClientSetupFinished() {
+            //mActivity.onBillingManagerSetupFinished();
+        }
+
+        @Override
+        public void onConsumeFinished(String token, @BillingClient.BillingResponse int result) {
+
+        }
+
+        @Override
+        public void onPurchasesUpdated(List<com.android.billingclient.api.Purchase> purchases) {
+            //mGoldMonthly = false;
+            //mGoldYearly = false;
+            Log.v(TAG, "Purchase Updated");
+            if(purchases.isEmpty()){
+                Log.v(TAG, "empty");
+                isChecked = true;
+                if (pos == 0) {
+                    fragmentMlin.addAdFragment();
+                } else if (pos == 1) {
+                    fragmentCmlin.addAdFragment();
+                } else if (pos == 2) {
+                    fragmentSlin.addAdFragment();
+                } else if (pos == 3) {
+                    fragmentCslin.addAdFragment();
+                } else if (pos == 4) {
+                    fragmentCpw.addAdFragment();
+                } else if (pos == 5) {
+                    fragmentGcpw.addAdFragment();
+                } else if (pos == 6) {
+                    fragmentCoax.addAdFragment();
+                }
+            }
+            for (com.android.billingclient.api.Purchase purchase : purchases) {
+                if (purchase.getSku().equals(SKU_ADFREE)) {
+                    Log.v(TAG, "ad free");
+                    isChecked = true;
+                    isAdFree = true;
+                    if (pos == 0) {
+                        fragmentMlin.removeAdFragment();
+                    } else if (pos == 1) {
+                        fragmentCmlin.removeAdFragment();
+                    } else if (pos == 2) {
+                        fragmentSlin.removeAdFragment();
+                    } else if (pos == 3) {
+                        fragmentCslin.removeAdFragment();
+                    } else if (pos == 4) {
+                        fragmentCpw.removeAdFragment();
+                    } else if (pos == 5) {
+                        fragmentGcpw.removeAdFragment();
+                    } else if (pos == 6) {
+                        fragmentCoax.removeAdFragment();
+                    }
+                    invalidateOptionsMenu();
+                }
+            }
+
+            //mActivity.showRefreshedUi();
         }
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mHelper == null)
             return;
@@ -633,6 +679,30 @@ public class MainActivity extends AppCompatActivity
         } else {
             Crashlytics.log(Log.VERBOSE, "PURCHASE", "onActivityResult handled by IABUtil.");
         }
+    }*/
+
+    @Override
+    public BillingManager getBillingManager() {
+        return null;
     }
 
+    @Override
+    public boolean isPremiumPurchased() {
+        return false;
+    }
+
+    @Override
+    public boolean isGoldMonthlySubscribed() {
+        return false;
+    }
+
+    @Override
+    public boolean isTankFull() {
+        return false;
+    }
+
+    @Override
+    public boolean isGoldYearlySubscribed() {
+        return false;
+    }
 }
