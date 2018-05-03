@@ -17,7 +17,8 @@ public class Constants {
     // constant values
     public static final double LIGHTSPEED = 2.99792458e8; // free space speed of light, m/s
     public static final double FREESPACE_MU0 = 4.0 * Math.PI * 1.0e-7; // free space permitivitty, H/m
-    public static final double FREESPACE_E0 = 1.0 / (LIGHTSPEED * LIGHTSPEED * FREESPACE_MU0); // free space permitivitty, F/m
+    public static final double FREESPACE_E0 = 1.0 / (LIGHTSPEED * LIGHTSPEED * FREESPACE_MU0); // free space
+                                                                                               // permitivitty, F/m
     public static final double FREESPACEZ0 = FREESPACE_MU0 * LIGHTSPEED; // free space impedance, Ohms
     public static final double Pi = Math.PI;
 
@@ -27,6 +28,9 @@ public class Constants {
     public static final int Synthesize_SubRadius = Synthesize_Height;
     public static final int LengthUnit_mil = 0, LengthUnit_mm = 1, LengthUnit_cm = 2, LengthUnit_m = 3;
     public static final int FreqUnit_Hz = 10, FreqUnit_MHz = 0, FreqUnit_GHz = 1;
+
+    public static final int PositionMlin = 0, PositionCmlin = 1, PositionSlin = 2, PositionCslin = 3, PositionCpw = 4,
+            PositionGcpw = 5, PositionCoax = 6;
 
     public static final String IS_AD_FREE = "IS_AD_FREE";
 
@@ -173,6 +177,7 @@ public class Constants {
 
     /**
      * TextViews with subscripts
+     * 
      * @param mContext context
      * @return string with subscript
      */
@@ -202,6 +207,7 @@ public class Constants {
 
     /**
      * Error messages
+     * 
      * @param mContext context
      * @return string with subscript
      */
@@ -231,6 +237,7 @@ public class Constants {
 
     /**
      * Array adapters for spinners
+     * 
      * @param mContext context
      * @return adapters
      */

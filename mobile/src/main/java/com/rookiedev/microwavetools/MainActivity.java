@@ -90,72 +90,75 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                if (pos == 0) {
-                    Bundle bundle = new Bundle();
+                Bundle bundle = new Bundle();
+                FragmentTransaction transaction;
+                switch (pos) {
+                case Constants.PositionMlin:
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentMlin.setArguments(bundle);
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragmentMlin);
                     transaction.commit();
-                } else if (pos == 1) {
-                    Bundle bundle = new Bundle();
+                    break;
+                case Constants.PositionCmlin:
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCmlin.setArguments(bundle);
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragmentCmlin);
                     transaction.commit();
-                } else if (pos == 2) {
-                    Bundle bundle = new Bundle();
+                    break;
+                case Constants.PositionSlin:
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentSlin.setArguments(bundle);
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragmentSlin);
                     transaction.commit();
-                } else if (pos == 3) {
-                    Bundle bundle = new Bundle();
+                    break;
+                case Constants.PositionCslin:
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCslin.setArguments(bundle);
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragmentCslin);
                     transaction.commit();
-                } else if (pos == 4) {
-                    Bundle bundle = new Bundle();
+                    break;
+                case Constants.PositionCpw:
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
                     fragmentCpw.setArguments(bundle);
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragmentCpw);
                     transaction.commit();
-                } else if (pos == 5) {
-                    Bundle bundle = new Bundle();
+                    break;
+                case Constants.PositionGcpw:
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
                     fragmentGcpw.setArguments(bundle);
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragmentGcpw);
                     transaction.commit();
-                } else if (pos == 6) {
-                    Bundle bundle = new Bundle();
+                    break;
+                case Constants.PositionCoax:
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCoax.setArguments(bundle);
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragmentCoax);
                     transaction.commit();
-                } else {
-                    Bundle bundle = new Bundle();
+                    break;
+                default:
                     bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentMlin.setArguments(bundle);
-                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.replace(R.id.content_frame, fragmentMlin);
                     transaction.commit();
+                    break;
                 }
 
                 mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
@@ -255,145 +258,151 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get
-                                                                                                                    // the
-                                                                                                                    // header_parameters
-                                                                                                                    // from
-                                                                                                                    // the
-                                                                                                                    // Shared
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
         pos = Integer.parseInt(prefs.getString(Constants.PREFS_POSITION, "0"));
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        if (id == R.id.nav_mlin) {
+        switch (item.getItemId()) {
+        case R.id.nav_mlin:
             if (fragmentMlin == null) {
                 fragmentMlin = new MlinFragment();
             }
-            pos = 0;
+            pos = Constants.PositionMlin;
             imageResource = R.drawable.vt_mlin;
-        } else if (id == R.id.nav_cmlin) {
+            break;
+        case R.id.nav_cmlin:
             if (fragmentCmlin == null) {
                 fragmentCmlin = new CmlinFragment();
             }
-            pos = 1;
+            pos = Constants.PositionCmlin;
             imageResource = R.drawable.vt_cmlin;
-        } else if (id == R.id.nav_slin) {
+            break;
+        case R.id.nav_slin:
             if (fragmentSlin == null) {
                 fragmentSlin = new SlinFragment();
             }
-            pos = 2;
+            pos = Constants.PositionSlin;
             imageResource = R.drawable.vt_slin;
-        } else if (id == R.id.nav_cslin) {
+            break;
+        case R.id.nav_cslin:
             if (fragmentCslin == null) {
                 fragmentCslin = new CslinFragment();
             }
-            pos = 3;
+            pos = Constants.PositionCslin;
             imageResource = R.drawable.vt_cslin;
-        } else if (id == R.id.nav_cpw) {
+            break;
+        case R.id.nav_cpw:
             if (fragmentCpw == null) {
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
                 fragmentCpw = new CpwFragment();
                 fragmentCpw.setArguments(bundle);
             }
-            pos = 4;
+            pos = Constants.PositionCpw;
             imageResource = R.drawable.vt_cpw;
-        } else if (id == R.id.nav_gcpw) {
+            break;
+        case R.id.nav_gcpw:
             if (fragmentGcpw == null) {
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
                 fragmentGcpw = new CpwFragment();
                 fragmentGcpw.setArguments(bundle);
             }
-            pos = 5;
+            pos = Constants.PositionGcpw;
             imageResource = R.drawable.vt_cpwg;
-        } else if (id == R.id.nav_coax) {
+            break;
+        case R.id.nav_coax:
             if (fragmentCoax == null) {
                 fragmentCoax = new CoaxFragment();
             }
-            pos = 6;
+            pos = Constants.PositionCoax;
             imageResource = R.drawable.vt_coax;
-        } else {
+            break;
+        default:
             if (fragmentMlin == null) {
                 fragmentMlin = new MlinFragment();
             }
-            pos = 0;
+            pos = Constants.PositionMlin;
             imageResource = R.drawable.vt_mlin;
+            break;
         }
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     private void initFragment(int item) {
-        if (item == 0) {
+        Bundle bundle = new Bundle();
+        switch (item) {
+        case Constants.PositionMlin:
             fragmentMlin = new MlinFragment();
-            pos = 0;
+            pos = Constants.PositionMlin;
             imageResource = R.drawable.vt_mlin;
-            Bundle bundle = new Bundle();
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentMlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
-        } else if (item == 1) {
+            break;
+        case Constants.PositionCmlin:
             fragmentCmlin = new CmlinFragment();
-            pos = 1;
+            pos = Constants.PositionCmlin;
             imageResource = R.drawable.vt_cmlin;
-            Bundle bundle = new Bundle();
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCmlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCmlin).commit();
-        } else if (item == 2) {
+            break;
+        case Constants.PositionSlin:
             fragmentSlin = new SlinFragment();
-            pos = 2;
+            pos = Constants.PositionSlin;
             imageResource = R.drawable.vt_slin;
-            Bundle bundle = new Bundle();
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentSlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentSlin).commit();
-        } else if (item == 3) {
+            break;
+        case Constants.PositionCslin:
             fragmentCslin = new CslinFragment();
-            pos = 3;
+            pos = Constants.PositionCslin;
             imageResource = R.drawable.vt_cslin;
-            Bundle bundle = new Bundle();
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCslin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCslin).commit();
-        } else if (item == 4) {
-            Bundle bundle = new Bundle();
+            break;
+        case Constants.PositionCpw:
             bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCpw = new CpwFragment();
             fragmentCpw.setArguments(bundle);
-            pos = 4;
+            pos = Constants.PositionCpw;
             imageResource = R.drawable.vt_cpw;
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCpw).commit();
-        } else if (item == 5) {
-            Bundle bundle = new Bundle();
+            break;
+        case Constants.PositionGcpw:
             bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentGcpw = new CpwFragment();
             fragmentGcpw.setArguments(bundle);
-            pos = 5;
+            pos = Constants.PositionGcpw;
             imageResource = R.drawable.vt_cpwg;
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentGcpw).commit();
-        } else if (item == 6) {
+            break;
+        case Constants.PositionCoax:
             fragmentCoax = new CoaxFragment();
-            pos = 6;
+            pos = Constants.PositionCoax;
             imageResource = R.drawable.vt_coax;
-            Bundle bundle = new Bundle();
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCoax.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCoax).commit();
-        } else {
+            break;
+        default:
             fragmentMlin = new MlinFragment();
-            pos = 0;
+            pos = Constants.PositionMlin;
             imageResource = R.drawable.vt_mlin;
-            Bundle bundle = new Bundle();
             bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentMlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
+            break;
         }
     }
 
@@ -444,23 +453,6 @@ public class MainActivity extends AppCompatActivity
         if (mBillingManager != null
                 && mBillingManager.getBillingClientResponseCode() > BILLING_MANAGER_NOT_INITIALIZED) {
             mBillingManager.initiatePurchaseFlow(SKU_ADFREE, BillingClient.SkuType.INAPP);
-        } else {
-            isChecked = true;
-            if (pos == 0) {
-                fragmentMlin.addAdFragment();
-            } else if (pos == 1) {
-                fragmentCmlin.addAdFragment();
-            } else if (pos == 2) {
-                fragmentSlin.addAdFragment();
-            } else if (pos == 3) {
-                fragmentCslin.addAdFragment();
-            } else if (pos == 4) {
-                fragmentCpw.addAdFragment();
-            } else if (pos == 5) {
-                fragmentGcpw.addAdFragment();
-            } else if (pos == 6) {
-                fragmentCoax.addAdFragment();
-            }
         }
     }
 
@@ -480,42 +472,62 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onPurchasesUpdated(List<com.android.billingclient.api.Purchase> purchases) {
+            isChecked = true;
             if (purchases.isEmpty()) {
-                isChecked = true;
-                if (pos == 0) {
+                switch (pos) {
+                case Constants.PositionMlin:
                     fragmentMlin.addAdFragment();
-                } else if (pos == 1) {
+                    break;
+                case Constants.PositionCmlin:
                     fragmentCmlin.addAdFragment();
-                } else if (pos == 2) {
+                    break;
+                case Constants.PositionSlin:
                     fragmentSlin.addAdFragment();
-                } else if (pos == 3) {
+                    break;
+                case Constants.PositionCslin:
                     fragmentCslin.addAdFragment();
-                } else if (pos == 4) {
+                    break;
+                case Constants.PositionCpw:
                     fragmentCpw.addAdFragment();
-                } else if (pos == 5) {
+                    break;
+                case Constants.PositionGcpw:
                     fragmentGcpw.addAdFragment();
-                } else if (pos == 6) {
+                    break;
+                case Constants.PositionCoax:
                     fragmentCoax.addAdFragment();
+                    break;
+                default:
+                    break;
                 }
+
             }
             for (com.android.billingclient.api.Purchase purchase : purchases) {
                 if (purchase.getSku().equals(SKU_ADFREE)) {
-                    isChecked = true;
                     isAdFree = true;
-                    if (pos == 0) {
+                    switch (pos) {
+                    case Constants.PositionMlin:
                         fragmentMlin.removeAdFragment();
-                    } else if (pos == 1) {
+                        break;
+                    case Constants.PositionCmlin:
                         fragmentCmlin.removeAdFragment();
-                    } else if (pos == 2) {
+                        break;
+                    case Constants.PositionSlin:
                         fragmentSlin.removeAdFragment();
-                    } else if (pos == 3) {
+                        break;
+                    case Constants.PositionCslin:
                         fragmentCslin.removeAdFragment();
-                    } else if (pos == 4) {
+                        break;
+                    case Constants.PositionCpw:
                         fragmentCpw.removeAdFragment();
-                    } else if (pos == 5) {
+                        break;
+                    case Constants.PositionGcpw:
                         fragmentGcpw.removeAdFragment();
-                    } else if (pos == 6) {
+                        break;
+                    case Constants.PositionCoax:
                         fragmentCoax.removeAdFragment();
+                        break;
+                    default:
+                        break;
                     }
                     invalidateOptionsMenu();
                 }
