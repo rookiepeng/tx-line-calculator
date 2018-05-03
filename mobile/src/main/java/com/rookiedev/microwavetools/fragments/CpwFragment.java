@@ -626,7 +626,7 @@ public class CpwFragment extends Fragment {
     public void addAdFragment() {
         adFragment = new AdFragment();
         if (fragmentManager != null) {
-            fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commitAllowingStateLoss();
         }
     }
 
