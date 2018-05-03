@@ -425,31 +425,18 @@ public class SlinFragment extends Fragment {
             edittextT.setError(getText(R.string.Error_T_empty));
             checkResult = false;
         }
-        if (target == 0) {
+        if (edittextEr.length() == 0) {
+            edittextEr.setError(Constants.errorErEmpty(mContext));
+            checkResult = false;
+        }
+        if (target == Constants.Synthesize_Width) {
             if (edittextH.length() == 0) {
                 edittextH.setError(getText(R.string.Error_H_empty));
                 checkResult = false;
             }
-            if (edittextEr.length() == 0) {
-                edittextEr.setError(Constants.errorErEmpty(mContext));
-                checkResult = false;
-            }
-        } else if (target == 1) {
+        } else if (target == Constants.Synthesize_Height) {
             if (edittextW.length() == 0) {
                 edittextW.setError(getText(R.string.Error_W_empty));
-                checkResult = false;
-            }
-            if (edittextEr.length() == 0) {
-                edittextEr.setError(Constants.errorErEmpty(mContext));
-                checkResult = false;
-            }
-        } else if (target == 2) {
-            if (edittextW.length() == 0) {
-                edittextW.setError(getText(R.string.Error_W_empty));
-                checkResult = false;
-            }
-            if (edittextH.length() == 0) {
-                edittextH.setError(getText(R.string.Error_H_empty));
                 checkResult = false;
             }
         }

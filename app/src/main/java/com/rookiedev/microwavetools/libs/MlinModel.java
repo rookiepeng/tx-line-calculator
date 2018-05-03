@@ -90,7 +90,7 @@ public class MlinModel {
         substrate.setSubEpsilon(subEpsilon);
     }
 
-    double getSubHeight() {
+    public double getSubHeight() {
         return substrate.getSubHeight();
     }
 
