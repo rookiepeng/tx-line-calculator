@@ -27,7 +27,7 @@ proguard/
 
 
 .idea/
-app/release/output\.json
+mobile/release/output\.json
 
 \.project
 
@@ -36,3 +36,5 @@ app/release/output\.json
 app/\.classpath
 
 \.vscode/
+
+mobile/\.classpath
