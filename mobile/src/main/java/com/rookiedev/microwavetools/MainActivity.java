@@ -1,8 +1,6 @@
 package com.rookiedev.microwavetools;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -16,14 +14,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.android.billingclient.api.BillingClient;
-import com.crashlytics.android.Crashlytics;
 import com.rookiedev.microwavetools.billing.BillingManager;
 import com.rookiedev.microwavetools.billing.BillingProvider;
 import com.rookiedev.microwavetools.fragments.CmlinFragment;
@@ -41,11 +37,7 @@ import static com.rookiedev.microwavetools.billing.BillingManager.BILLING_MANAGE
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BillingProvider {
 
-    // (arbitrary) request code for the purchase flow
-    static final int RC_REQUEST = 10001;
     private final static String SKU_ADFREE = "com.rookiedev.rfline.adfree.v1";
-    // Provides purchase notification while this app is running
-    //IabBroadcastReceiver mBroadcastReceiver;
     private int pos;
     private DrawerLayout drawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -61,130 +53,12 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
     private ImageView imageModel;
     private int imageResource;
-    // The helper object
-    //private IabHelper mHelper;
+
     private boolean isAdFree = false;
     private boolean isChecked = false;
 
-    private static final String TAG = "BillingManager";
-
     private BillingManager mBillingManager;
-    private final UpdateListener mUpdateListener =new UpdateListener();
-
-    // Callback for when a purchase is finished
-    /*IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            // if we were disposed of in the meantime, quit.
-            if (mHelper == null) {
-                return;
-            }
-
-            if (result.isFailure()) {
-                complain("Error purchasing: " + result);
-                return;
-            }
-            if (!verifyDeveloperPayload(purchase)) {
-                isChecked = true;
-                complain("Error purchasing. Authenticity verification failed.");
-                if (pos == 0) {
-                    fragmentMlin.addAdFragment();
-                } else if (pos == 1) {
-                    fragmentCmlin.addAdFragment();
-                } else if (pos == 2) {
-                    fragmentSlin.addAdFragment();
-                } else if (pos == 3) {
-                    fragmentCslin.addAdFragment();
-                } else if (pos == 4) {
-                    fragmentCpw.addAdFragment();
-                } else if (pos == 5) {
-                    fragmentGcpw.addAdFragment();
-                } else if (pos == 6) {
-                    fragmentCoax.addAdFragment();
-                }
-                return;
-            }
-            if (purchase.getSku().equals(SKU_ADFREE)) {
-                isChecked = true;
-                isAdFree = true;
-                if (pos == 0) {
-                    fragmentMlin.removeAdFragment();
-                } else if (pos == 1) {
-                    fragmentCmlin.removeAdFragment();
-                } else if (pos == 2) {
-                    fragmentSlin.removeAdFragment();
-                } else if (pos == 3) {
-                    fragmentCslin.removeAdFragment();
-                } else if (pos == 4) {
-                    fragmentCpw.removeAdFragment();
-                } else if (pos == 5) {
-                    fragmentGcpw.removeAdFragment();
-                } else if (pos == 6) {
-                    fragmentCoax.removeAdFragment();
-                }
-                invalidateOptionsMenu();
-            }
-        }
-    };*/
-
-    // Listener that's called when we finish querying the items and subscriptions we own
-    /*IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-            // Have we been disposed of in the meantime? If so, quit.
-            if (mHelper == null) {
-                return;
-            }
-            // Is it a failure?
-            if (result.isFailure()) {
-                isChecked = true;
-                complain("Failed to query inventory: " + result);
-                if (pos == 0) {
-                    fragmentMlin.addAdFragment();
-                } else if (pos == 1) {
-                    fragmentCmlin.addAdFragment();
-                } else if (pos == 2) {
-                    fragmentSlin.addAdFragment();
-                } else if (pos == 3) {
-                    fragmentCslin.addAdFragment();
-                } else if (pos == 4) {
-                    fragmentCpw.addAdFragment();
-                } else if (pos == 5) {
-                    fragmentGcpw.addAdFragment();
-                } else if (pos == 6) {
-                    fragmentCoax.addAdFragment();
-                }
-                return;
-            }
-            // Do we have the premium upgrade?
-            Purchase premiumPurchase = inventory.getPurchase(SKU_ADFREE);
-            isChecked = true;
-            isAdFree = (premiumPurchase != null && verifyDeveloperPayload(premiumPurchase));
-            if (isAdFree) {
-                invalidateOptionsMenu();
-            } else {
-                if (pos == 0) {
-                    fragmentMlin.addAdFragment();
-                } else if (pos == 1) {
-                    fragmentCmlin.addAdFragment();
-                } else if (pos == 2) {
-                    fragmentSlin.addAdFragment();
-                } else if (pos == 3) {
-                    fragmentCslin.addAdFragment();
-                } else if (pos == 4) {
-                    fragmentCpw.addAdFragment();
-                } else if (pos == 5) {
-                    fragmentGcpw.addAdFragment();
-                } else if (pos == 6) {
-                    fragmentCoax.addAdFragment();
-                }
-            }
-        }
-    };*/
-
-    // Verifies the developer payload of a purchase.
-    /*boolean verifyDeveloperPayload(Purchase p) {
-        String payload = p.getDeveloperPayload();
-        return true;
-    }*/
+    private final UpdateListener mUpdateListener = new UpdateListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -345,16 +219,16 @@ public class MainActivity extends AppCompatActivity
         // Handle action buttons
         Intent intent = new Intent();
         switch (item.getItemId()) {
-            case R.id.menu_ad:
-                onAdfreeButtonClicked();
-                return true;
-            case R.id.menu_preference:
-                intent.setClass(this, preferences.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        case R.id.menu_ad:
+            onAdfreeButtonClicked();
+            return true;
+        case R.id.menu_preference:
+            intent.setClass(this, preferences.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -381,7 +255,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
+        SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get
+                                                                                                                    // the
+                                                                                                                    // header_parameters
+                                                                                                                    // from
+                                                                                                                    // the
+                                                                                                                    // Shared
         pos = Integer.parseInt(prefs.getString(Constants.PREFS_POSITION, "0"));
     }
 
@@ -538,14 +417,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        // Note: We query purchases in onResume() to handle purchases completed while the activity
-        // is inactive. For example, this can happen if the activity is destroyed during the
-        // purchase flow. This ensures that when the activity is resumed it reflects the user's
+        // Note: We query purchases in onResume() to handle purchases completed while
+        // the activity
+        // is inactive. For example, this can happen if the activity is destroyed during
+        // the
+        // purchase flow. This ensures that when the activity is resumed it reflects the
+        // user's
         // current purchases.
         if (mBillingManager != null
                 && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
             mBillingManager.queryPurchases();
-            Log.v(TAG, "Query purchase");
         }
     }
 
@@ -556,47 +437,31 @@ public class MainActivity extends AppCompatActivity
             mBillingManager.destroy();
         }
         super.onDestroy();
-        // very important:
-        //if (mBroadcastReceiver != null) {
-        //    unregisterReceiver(mBroadcastReceiver);
-        //}
-        // very important:
-        //if (mHelper != null) {
-        //    mHelper.disposeWhenFinished();
-        //    mHelper = null;
-        //}
     }
-
-    void complain(String message) {
-        Crashlytics.log(Log.ERROR, "PURCHASE", message);
-    }
-
-    /*
-    @Override
-    public void receivedBroadcast() {
-        // Received a broadcast notification that the inventory of items has changed
-        try {
-            mHelper.queryInventoryAsync(mGotInventoryListener);
-        } catch (IabHelper.IabAsyncInProgressException e) {
-            complain("Error querying inventory. Another async operation in progress.");
-        }
-    }*/
 
     // User clicked the "Ad free" button
     public void onAdfreeButtonClicked() {
-        //Log.d(TAG, "Purchase button clicked.");
-
         if (mBillingManager != null
-                && mBillingManager.getBillingClientResponseCode()
-                > BILLING_MANAGER_NOT_INITIALIZED) {
-
-            mBillingManager.initiatePurchaseFlow(SKU_ADFREE,
-                    BillingClient.SkuType.INAPP);
-
-            //long startTime = System.currentTimeMillis();
+                && mBillingManager.getBillingClientResponseCode() > BILLING_MANAGER_NOT_INITIALIZED) {
+            mBillingManager.initiatePurchaseFlow(SKU_ADFREE, BillingClient.SkuType.INAPP);
+        } else {
+            isChecked = true;
+            if (pos == 0) {
+                fragmentMlin.addAdFragment();
+            } else if (pos == 1) {
+                fragmentCmlin.addAdFragment();
+            } else if (pos == 2) {
+                fragmentSlin.addAdFragment();
+            } else if (pos == 3) {
+                fragmentCslin.addAdFragment();
+            } else if (pos == 4) {
+                fragmentCpw.addAdFragment();
+            } else if (pos == 5) {
+                fragmentGcpw.addAdFragment();
+            } else if (pos == 6) {
+                fragmentCoax.addAdFragment();
+            }
         }
-
-        //}
     }
 
     /**
@@ -605,7 +470,7 @@ public class MainActivity extends AppCompatActivity
     private class UpdateListener implements BillingManager.BillingUpdatesListener {
         @Override
         public void onBillingClientSetupFinished() {
-            //mActivity.onBillingManagerSetupFinished();
+
         }
 
         @Override
@@ -615,11 +480,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onPurchasesUpdated(List<com.android.billingclient.api.Purchase> purchases) {
-            //mGoldMonthly = false;
-            //mGoldYearly = false;
-            Log.v(TAG, "Purchase Updated");
-            if(purchases.isEmpty()){
-                Log.v(TAG, "empty");
+            if (purchases.isEmpty()) {
                 isChecked = true;
                 if (pos == 0) {
                     fragmentMlin.addAdFragment();
@@ -639,7 +500,6 @@ public class MainActivity extends AppCompatActivity
             }
             for (com.android.billingclient.api.Purchase purchase : purchases) {
                 if (purchase.getSku().equals(SKU_ADFREE)) {
-                    Log.v(TAG, "ad free");
                     isChecked = true;
                     isAdFree = true;
                     if (pos == 0) {
@@ -660,26 +520,8 @@ public class MainActivity extends AppCompatActivity
                     invalidateOptionsMenu();
                 }
             }
-
-            //mActivity.showRefreshedUi();
         }
     }
-
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mHelper == null)
-            return;
-
-        // Pass on the activity result to the helper for handling
-        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            // not handled, so handle it ourselves (here's where you'd
-            // perform any handling of activity results not related to in-app
-            // billing...
-            super.onActivityResult(requestCode, resultCode, data);
-        } else {
-            Crashlytics.log(Log.VERBOSE, "PURCHASE", "onActivityResult handled by IABUtil.");
-        }
-    }*/
 
     @Override
     public BillingManager getBillingManager() {
