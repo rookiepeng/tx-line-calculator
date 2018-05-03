@@ -130,8 +130,6 @@ public class MlinFragment extends Fragment {
                     line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
                             spinnerFreq.getSelectedItemPosition());
                     line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
-                    line.setSubHeight(Double.parseDouble(editTextH.getText().toString()),
-                            spinnerH.getSelectedItemPosition());
                     line.setMetalThick(Double.parseDouble(editTextT.getText().toString()),
                             spinnerT.getSelectedItemPosition());
 
