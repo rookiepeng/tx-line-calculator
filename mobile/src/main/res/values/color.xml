@@ -9,24 +9,10 @@
 
     <color name="viewBackground">#F5F5F5</color>
 
-    <color name="pink">#E91E63</color>
-    <color name="pink_shadow">#F8BBD0</color>
-
-    <color name="purple">#9C27B0</color>
-
-    <color name="green">#2E7D32</color>
-    <color name="green_shadow">#C8E6C9</color>
-    <color name="teal">#00695C</color>
-
-    <color name="blue">#1565C0</color>
-    <color name="blue_shadow">#BBDEFB</color>
-    <color name="indigo">#283593</color>
-
     <color name="synthesizeColor">#4CAF50</color>
     <color name="synthesizeColorDark">#2E7D32</color>
     <color name="synthesizeColorLight">#A5D6A7</color>
     <color name="analyzeColor">#9C27B0</color>
     <color name="analyzeColorDark">#6A1B9A</color>
     <color name="analyzeColorLight">#CE93D8</color>
-
 </resources>

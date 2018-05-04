@@ -1,32 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="line_array">
-        <item>Microstrip Line</item>
-        <item>Coupled Microstrip Line</item>
-        <item>Stripline</item>
-        <item>Coupled Stripline</item>
-        <item>Coplanar Waveguide</item>
-        <item>Grounded Coplanar Waveguide</item>
-        <item>Coaxial Line</item>
-    </string-array>
-
-    <string-array name="line_array_short">
-        <item>MLIN</item>
-        <item>CMLIN</item>
-        <item>SLIN</item>
-        <item>CSLIN</item>
-        <item>CPW</item>
-        <item>GCPW</item>
-        <item>COAX</item>
-    </string-array>
-
     <string-array name="list_units_Length">
         <item>mil</item>
         <item>mm</item>
         <item>cm</item>
     </string-array>
 
-    <string-array name="list_units_Ele_length">
+    <string-array name="list_units_Phase">
         <item>Deg</item>
     </string-array>
 
@@ -38,5 +18,4 @@
         <item>MHz</item>
         <item>GHz</item>
     </string-array>
-
 </resources>
