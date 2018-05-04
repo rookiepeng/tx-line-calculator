@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
 import com.rookiedev.microwavetools.billing.BillingManager;
@@ -225,10 +226,18 @@ public class MainActivity extends AppCompatActivity
         case R.id.menu_ad:
             onAdfreeButtonClicked();
             return true;
-        case R.id.menu_preference:
-            intent.setClass(this, preferences.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+        case R.id.menu_help:
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL, new String[] { "rookie.dev@gmail.com" });
+            i.putExtra(Intent.EXTRA_SUBJECT, "");
+            i.putExtra(Intent.EXTRA_TEXT, "");
+            try {
+                startActivity(Intent.createChooser(i, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(this, getResources().getString(R.string.noEmail), Toast.LENGTH_SHORT)
+                        .show();
+            }
             return true;
         default:
             return super.onOptionsItemSelected(item);

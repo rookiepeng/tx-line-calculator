@@ -5,19 +5,13 @@
     <item
         android:id="@+id/menu_ad"
         android:icon="@drawable/ic_menu_adsfree"
-        app:showAsAction="always|withText"
+        app:showAsAction="ifRoom|withText"
         android:title="@string/menu_shop" />
 
     <item
-            android:id="@+id/menu_preference"
-            android:icon="@drawable/ic_menu_setting"
-            app:showAsAction="never|withText"
-            android:title="@string/menu_preference"/>
-    <!--
-    <item
-            android:id="@+id/menu_about"
-            android:icon="@drawable/ic_menu_about"
-            app:showAsAction="never|withText"
-            android:title="@string/menu_about"/>
-    -->
+        android:id="@+id/menu_help"
+        android:icon="@drawable/ic_help_black_24dp"
+        app:showAsAction="never|withText"
+        android:title="@string/menu_help"/>
+
 </menu>
