@@ -259,7 +259,7 @@ public class Constants {
 
     public static ArrayAdapter<CharSequence> adapterPhaseUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterPhase = ArrayAdapter.createFromResource(mContext,
-                R.array.list_units_Ele_length, android.R.layout.simple_spinner_item);
+                R.array.list_units_Phase, android.R.layout.simple_spinner_item);
         adapterPhase.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterPhase;
     }

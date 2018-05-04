@@ -27,7 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
         android:layout_marginStart="16dp"
-        android:text="@string/mlin_text_W"
+        android:text="@string/text_W"
         app:layout_constraintBottom_toBottomOf="@+id/radioBtn_W"
         app:layout_constraintStart_toEndOf="@+id/radioBtn_W"
         app:layout_constraintTop_toTopOf="@+id/radioBtn_W"

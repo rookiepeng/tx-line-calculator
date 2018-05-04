@@ -4,6 +4,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <!-- error -->
     <string name="Error_W_empty">Error: The \"W\" can\'t be empty.</string>
     <string name="Error_S_empty">Error: The \"S\" can\'t be empty.</string>
@@ -19,93 +20,48 @@
     <string name="Error_c_empty">Error: The \"c\" can\'t be empty.</string>
     <string name="Error_Z0e_empty">Error: The \"Z0e\" can\'t be empty.</string>
     <string name="Error_Z0o_empty">Error: The \"Z0o\" can\'t be empty.</string>
+
     <!-- actionbar -->
-    <string name="longname_mlin">Microstrip Line</string>
-    <string name="longname_cmlin">Coupled Microstrip</string>
-    <string name="longname_cpw">Coplanar Waveguide</string>
-    <string name="longname_cpwg">CPW with Ground</string>
-    <string name="longname_slin">Stripline</string>
-    <string name="longname_cslin">Coupled Stripline</string>
-    <string name="longname_coax">Coaxial Line</string>
-    <!-- global -->
+    <string name="full_name_mlin">Microstrip Line</string>
+    <string name="full_name_cmlin">Coupled Microstrip Line</string>
+    <string name="full_name_slin">Stripline</string>
+    <string name="full_name_cslin">Coupled Stripline</string>
+    <string name="full_name_cpw">Coplanar Waveguide</string>
+    <string name="full_name_gcpw">Grounded Coplanar Waveguide</string>
+    <string name="full_name_coax">Coaxial</string>
+
+    <!-- cards -->
     <string name="Dim">Dimensions</string>
     <string name="Par">Parameters</string>
+
+    <!-- buttons -->
     <string name="Syn_button">Synthesize</string>
     <string name="Ana_button">Analyze</string>
+
+    <!-- parameters -->
+    <string name="text_a">a:</string>
+    <string name="text_b">b:</string>
+    <string name="text_c">c:</string>
+    <string name="text_W">W:</string>
+    <string name="text_H">H:</string>
+    <string name="text_L">L:</string>
+    <string name="text_S">S:</string>
+    <string name="text_T">T:</string>
+    <string name="text_k">k:</string>
     <string name="text_er">εr:</string>
     <string name="text_Z0">Z0:</string>
+    <string name="text_phi">φ:</string>
     <string name="text_Z0o">Z0o:</string>
     <string name="text_Z0e">Z0e:</string>
-    <string name="text_Eeff">Eeff:</string>
-    <string name="unit_mil">mil</string>
-    <string name="unit_Omega">Ω</string>
-    <string name="unit_mm">mm</string>
-    <string name="Freq">Freq:</string>
-    <string name="Ground">Ground</string>
-    <!-- fragment_mlin -->
-    <string name="mlin">Microstrip Line</string>
-    <string name="mlin_text_T">T:</string>
-    <string name="mlin_text_H">H:</string>
-    <string name="mlin_text_L">L:</string>
-    <string name="mlin_text_W">W:</string>
-    <string name="mlin_text_Phs">φ:</string>
+    <string name="text_Freq">Freq:</string>
 
-    <!-- fragment_cmlin -->
-    <string name="cmlin">Coupled Microstrip</string>
-    <string name="cmlin_text_W">W:</string>
-    <string name="cmlin_text_S">S:</string>
-    <string name="cmlin_text_k">k:</string>
-    <string name="cmlin_text_L">L:</string>
-    <string name="cmlin_text_H">H:</string>
-    <string name="cmlin_text_T">T:</string>
-    <!-- cpw -->
-    <string name="cpw">Coplanar Waveguide</string>
-    <string name="cpw_text_W">W:</string>
-    <string name="cpw_text_S">S:</string>
-    <string name="cpw_text_L">L:</string>
-    <string name="cpw_text_H">H:</string>
-    <string name="cpw_text_T">T:</string>
-    <!-- cpwg -->
-    <string name="cpwg">Coplanar Waveguide with Ground</string>
-    <string name="cpwg_text_W">W:</string>
-    <string name="cpwg_text_S">S:</string>
-    <string name="cpwg_text_L">L:</string>
-    <string name="cpwg_text_H">H:</string>
-    <string name="cpwg_text_T">T:</string>
-    <!-- fragment_slin -->
-    <string name="slin">Stripline</string>
-    <string name="slin_text_W">W:</string>
-    <string name="slin_text_L">L:</string>
-    <string name="slin_text_H">H:</string>
-    <string name="slin_text_T">T:</string>
-    <!-- fragment_cslin -->
-    <string name="cslin">Coupled Stripline</string>
-    <string name="cslin_text_W">W:</string>
-    <string name="cslin_text_S">S:</string>
-    <string name="cslin_text_L">L:</string>
-    <string name="cslin_text_H">H:</string>
-    <string name="cslin_text_T">T:</string>
-    <!-- fragment_coax -->
-    <string name="coax">Coaxial Line</string>
-    <string name="coax_text_a">a:</string>
-    <string name="coax_text_b">b:</string>
-    <string name="coax_text_c">c:</string>
-    <string name="coax_text_L">L:</string>
-    <string name="coax_text_T">T:</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    <!-- preference -->
-    <string name="calculator">Calculator</string>
-    <string name="noEmail">There is no email client!</string>
-    <!-- about -->
-    <string name="versionNum">2.0</string>
-    <string name="version">Version:</string>
-    <string name="changelog">Changelog:</string>
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <!-- feedback -->
+    <string name="calculator">Calculator</string>
+    <string name="noEmail">Can\'t find an email client!</string>
 
     <string name="menu_help">Help &amp; feedback</string>
     <string name="menu_shop">Ad free</string>
-    <string name="menu_about">about</string>
 </resources>

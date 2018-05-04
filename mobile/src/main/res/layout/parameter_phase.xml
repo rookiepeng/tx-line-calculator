@@ -24,7 +24,7 @@
         android:layout_width="45dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/mlin_text_Phs"
+        android:text="@string/text_phi"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/radioBtn_Phs"

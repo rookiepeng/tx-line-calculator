@@ -24,7 +24,7 @@
         android:id="@+id/text_k"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
-        android:text="@string/cmlin_text_k"
+        android:text="@string/text_k"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
         android:layout_marginStart="16dp"

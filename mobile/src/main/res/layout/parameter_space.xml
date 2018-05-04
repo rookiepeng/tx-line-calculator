@@ -27,7 +27,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
         android:layout_marginStart="16dp"
-        android:text="@string/cmlin_text_S"
+        android:text="@string/text_S"
         app:layout_constraintBottom_toBottomOf="@+id/radioBtn_S"
         app:layout_constraintEnd_toStartOf="@+id/editText_S"
         app:layout_constraintStart_toEndOf="@+id/radioBtn_S"

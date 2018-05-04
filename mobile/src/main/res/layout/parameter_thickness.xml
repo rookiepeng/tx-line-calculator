@@ -25,7 +25,7 @@
         android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/mlin_text_T"
+        android:text="@string/text_T"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?android:attr/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/radioBtn_T"
