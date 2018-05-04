@@ -27,10 +27,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.rookiedev.microwavetools.preferences"
-            android:label="Preferences"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
     </application>
