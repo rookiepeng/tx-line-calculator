@@ -32,7 +32,6 @@ public class CslinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
     private CardView cardViewParameters, cardViewDimensions;
-    private int DecimalLength; // the length of the Decimal, accurate of the result
     private TextView textZ0, textK, textZ0o, textZ0e;
     private EditText edittextW, edittextS, edittextL, edittextZ0, edittextK, edittextZ0o, edittextZ0e, edittextPhs,
             edittextFreq, edittextT, edittextH, edittextEr;
@@ -72,7 +71,6 @@ public class CslinFragment extends Fragment {
         buttonAnalyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Preference_SharedPref();
                 if (!analysisInputCheck()) {
                     edittextZ0.setText(""); // clear the Z0 and Eeff outputs
                     edittextPhs.setText("");
@@ -100,7 +98,7 @@ public class CslinFragment extends Fragment {
                         line = cslin.getAnaResult(line);
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextPhs.setText(String.valueOf(Eeff));
 
                     } else {
@@ -110,19 +108,19 @@ public class CslinFragment extends Fragment {
                     }
 
                     BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                    double Z0 = Z0_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittextZ0.setText(String.valueOf(Z0)); // cut the decimal
                     // of the Z0
                     BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
-                    double k = k_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    double k = k_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittextK.setText(String.valueOf(k));
 
                     BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
-                    double Z0o = Z0o_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    double Z0o = Z0o_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittextZ0o.setText(String.valueOf(Z0o));
 
                     BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
-                    double Z0e = Z0e_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    double Z0e = Z0e_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittextZ0e.setText(String.valueOf(Z0e));
                 }
                 forceRippleAnimation(cardViewParameters);
@@ -132,7 +130,6 @@ public class CslinFragment extends Fragment {
         buttonSynthesize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Preference_SharedPref();
                 if (!synthesizeInputCheck()) {
                     edittextL.setText(""); // clear the L and W outputs
                     edittextS.setText("");
@@ -146,11 +143,11 @@ public class CslinFragment extends Fragment {
                                 * Math.sqrt((1.0 + line.getCouplingFactor()) / (1.0 - line.getCouplingFactor())));
 
                         BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
-                        double Z0o = Z0o_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Z0o = Z0o_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextZ0o.setText(String.valueOf(Z0o));
 
                         BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
-                        double Z0e = Z0e_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Z0e = Z0e_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextZ0e.setText(String.valueOf(Z0e));
                     } else {
                         line.setImpedance(Math.sqrt(line.getImpedanceEven() * line.getImpedanceOdd()));
@@ -158,10 +155,10 @@ public class CslinFragment extends Fragment {
                                 / (line.getImpedanceEven() + line.getImpedanceOdd()));
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        double Z0 = Z0_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextZ0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
                         BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
-                        double k = k_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double k = k_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextK.setText(String.valueOf(k));
                     }
                 }
@@ -456,12 +453,6 @@ public class CslinFragment extends Fragment {
         useZ0k = prefs.getString(Constants.CSLIN_USEZ0K, "true").equals("true");
     }
 
-    private void Preference_SharedPref() {
-        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared Preferences in the device universal header_parameters
-        DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
-    }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -589,7 +580,7 @@ public class CslinFragment extends Fragment {
 
             BigDecimal L_temp = new BigDecimal(
                     Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
-            double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+            double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
             edittextL.setText(String.valueOf(L));
         } else {
             CslinCalculator cslin = new CslinCalculator();
@@ -599,12 +590,12 @@ public class CslinFragment extends Fragment {
 
         BigDecimal W_temp = new BigDecimal(
                 Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
-        double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
         edittextW.setText(String.valueOf(W));
 
         BigDecimal S_temp = new BigDecimal(
                 Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition())); // cut the decimal of S
-        double S = S_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
         edittextS.setText(String.valueOf(S));
     }
 

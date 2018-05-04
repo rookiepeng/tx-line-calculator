@@ -14,6 +14,8 @@ public class Constants {
     public static final String PREFS_POSITION = "POSITION";
     public static final String PREFS_ISFIRSTRUN = "ISFIRSTRUN";
 
+    public static final int DecimalLength = 3;
+
     // constant values
     public static final double LIGHTSPEED = 2.99792458e8; // free space speed of light, m/s
     public static final double FREESPACE_MU0 = 4.0 * Math.PI * 1.0e-7; // free space permitivitty, H/m

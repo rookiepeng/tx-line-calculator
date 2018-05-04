@@ -34,7 +34,6 @@ public class CpwFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
     private CardView cardViewParameters, cardViewDimensions;
-    private int DecimalLength; // the length of the Decimal, accurate of the result
     private TextView textH, textW, textS;
     private EditText edittextW, edittextS, edittextL, edittextZ0, edittextPhs, edittextFreq, edittextT, edittextH,
             edittextEr;
@@ -76,7 +75,6 @@ public class CpwFragment extends Fragment {
         buttonAnalyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Preference_SharedPref();
                 if (!analysisInputCheck()) {
                     edittextZ0.setText(""); // clear the Z0 and Eeff outputs
                     edittextPhs.setText("");
@@ -101,7 +99,7 @@ public class CpwFragment extends Fragment {
                         line = cpwg.getAnaResult(line, withGround);
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextPhs.setText(String.valueOf(Eeff));
                     } else {
                         CpwCalculator cpwg = new CpwCalculator();
@@ -109,7 +107,7 @@ public class CpwFragment extends Fragment {
                         edittextPhs.setText(""); // if the L input is empty, clear the Eeff
                     }
                     BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                    double Z0 = Z0_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittextZ0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
                 }
                 forceRippleAnimation(cardViewParameters);
@@ -119,7 +117,6 @@ public class CpwFragment extends Fragment {
         buttonSynthesize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Preference_SharedPref();
                 if (!synthesizeInputCheck()) {
                     if (target == Constants.Synthesize_Width) {
                         edittextW.setText("");
@@ -180,7 +177,7 @@ public class CpwFragment extends Fragment {
                         BigDecimal L_temp = new BigDecimal(
                                 Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the
                         // decimal of L
-                        double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextL.setText(String.valueOf(L));
                     } else {
                         CpwCalculator cpwg = new CpwCalculator();
@@ -190,21 +187,21 @@ public class CpwFragment extends Fragment {
                     if (target == Constants.Synthesize_Width) {
                         BigDecimal W_temp = new BigDecimal(
                                 Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
-                        double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextW.setText(String.valueOf(W));
                     } else if (target == Constants.Synthesize_Gap) {
                         BigDecimal S_temp = new BigDecimal(
                                 Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition())); // cut the decimal of S
-                        double S = S_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextS.setText(String.valueOf(S));
                     } else if (target == Constants.Synthesize_Height) {
                         BigDecimal H_temp = new BigDecimal(
                                 Constants.meter2others(line.getSubHeight(), spinnerH.getSelectedItemPosition()));
-                        double H = H_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double H = H_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextH.setText(String.valueOf(H));
                     } else if (target == Constants.Synthesize_Er) {
                         BigDecimal er_temp = new BigDecimal(line.getSubEpsilon());
-                        double er = er_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double er = er_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextEr.setText(String.valueOf(er));
                     }
                 }
@@ -375,12 +372,6 @@ public class CpwFragment extends Fragment {
             spinnerT.setSelection(Integer.parseInt(prefs.getString(Constants.CPW_T_UNIT, "0")));
             target = Integer.parseInt(prefs.getString(Constants.CPW_TARGET, "0"));
         }
-    }
-
-    private void Preference_SharedPref() {
-        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);
-        DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
     private void setRadioBtn() {

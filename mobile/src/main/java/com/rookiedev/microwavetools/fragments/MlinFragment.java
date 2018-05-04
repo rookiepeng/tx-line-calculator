@@ -34,7 +34,6 @@ public class MlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
     private CardView cardViewParameters, cardViewDimensions;
-    private int DecimalLength; // the length of the Decimal, accurate of the result
     private RadioButton radioButtonW, radioButtonH;
     private TextView textW, textH;
     private EditText editTextW, editTextL, editTextZ0, editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
@@ -72,7 +71,6 @@ public class MlinFragment extends Fragment {
         buttonAnalyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Preference_SharedPref();
                 if (!analysisInputCheck()) {
                     editTextZ0.setText(""); // clear the Z0 and Eeff outputs
                     editTextPhs.setText("");
@@ -94,18 +92,18 @@ public class MlinFragment extends Fragment {
                         line = mlin.getAnaResult(line);
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        double Z0 = Z0_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextZ0.setText(String.valueOf(Z0)); // cut the decimal
 
                         BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextPhs.setText(String.valueOf(Eeff));
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getAnaResult(line);
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        double Z0 = Z0_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextZ0.setText(String.valueOf(Z0)); // cut the decimal
 
                         editTextPhs.setText(""); // if the L input is empty, clear the Eeff
@@ -118,7 +116,6 @@ public class MlinFragment extends Fragment {
         buttonSynthesize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Preference_SharedPref();
                 if (!synthesizeInputCheck()) {
                     if (target == Constants.Synthesize_Width) {
                         editTextW.setText("");
@@ -151,12 +148,12 @@ public class MlinFragment extends Fragment {
                         line = mlin.getSynResult(line, target);
                         BigDecimal L_temp = new BigDecimal(
                                 Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
-                        double L = L_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextL.setText(String.valueOf(L));
 
                         BigDecimal W_temp = new BigDecimal(
                                 Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
-                        double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextW.setText(String.valueOf(W));
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
@@ -165,19 +162,19 @@ public class MlinFragment extends Fragment {
 
                         BigDecimal W_temp = new BigDecimal(
                                 Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
-                        double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextW.setText(String.valueOf(W));
                     }
                     if (target == Constants.Synthesize_Width) {
 
                         BigDecimal W_temp = new BigDecimal(
                                 Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
-                        double W = W_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextW.setText(String.valueOf(W));
                     } else if (target == Constants.Synthesize_Height) {
                         BigDecimal H_temp = new BigDecimal(
                                 Constants.meter2others(line.getSubHeight(), spinnerH.getSelectedItemPosition()));
-                        double H = H_temp.setScale(DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        double H = H_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextH.setText(String.valueOf(H));
                     }
                 }
@@ -362,14 +359,6 @@ public class MlinFragment extends Fragment {
         spinnerT.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT, "0")));
 
         target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, "0"));
-    }
-
-    private void Preference_SharedPref() {
-        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
-        // Preferences in the device
-        // universal header_parameters
-        DecimalLength = Integer.parseInt(prefs.getString("DecimalLength", "2"));
     }
 
     @Override
