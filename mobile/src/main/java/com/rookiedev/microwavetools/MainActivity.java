@@ -221,7 +221,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action buttons
-        Intent intent = new Intent();
         switch (item.getItemId()) {
         case R.id.menu_ad:
             onAdfreeButtonClicked();
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity
             i.putExtra(Intent.EXTRA_SUBJECT, "");
             i.putExtra(Intent.EXTRA_TEXT, "");
             try {
-                startActivity(Intent.createChooser(i, "Send mail..."));
+                startActivity(Intent.createChooser(i, "Send email ..."));
             } catch (android.content.ActivityNotFoundException ex) {
                 Toast.makeText(this, getResources().getString(R.string.noEmail), Toast.LENGTH_SHORT)
                         .show();
