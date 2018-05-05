@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
+import com.rookiedev.microwavetools.billing.BillingConstants;
 import com.rookiedev.microwavetools.billing.BillingManager;
 import com.rookiedev.microwavetools.billing.BillingProvider;
 import com.rookiedev.microwavetools.fragments.CmlinFragment;
@@ -38,7 +39,6 @@ import static com.rookiedev.microwavetools.billing.BillingManager.BILLING_MANAGE
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, BillingProvider {
 
-    private final static String SKU_ADFREE = "com.rookiedev.rfline.adfree.v1";
     private int pos;
     private DrawerLayout drawer;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity
     public void onAdfreeButtonClicked() {
         if (mBillingManager != null
                 && mBillingManager.getBillingClientResponseCode() > BILLING_MANAGER_NOT_INITIALIZED) {
-            mBillingManager.initiatePurchaseFlow(SKU_ADFREE, BillingClient.SkuType.INAPP);
+            mBillingManager.initiatePurchaseFlow(BillingConstants.SKU_ADFREE, BillingClient.SkuType.INAPP);
         }
     }
 
@@ -510,7 +510,7 @@ public class MainActivity extends AppCompatActivity
 
             }
             for (com.android.billingclient.api.Purchase purchase : purchases) {
-                if (purchase.getSku().equals(SKU_ADFREE)) {
+                if (purchase.getSku().equals(BillingConstants.SKU_ADFREE)) {
                     isAdFree = true;
                     switch (pos) {
                     case Constants.PositionMlin:

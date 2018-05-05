@@ -27,6 +27,7 @@ public final class BillingConstants {
     // SKUs for our products: the premium upgrade (non-consumable) and gas (consumable)
     public static final String SKU_PREMIUM = "premium";
     public static final String SKU_GAS = "gas";
+    public static final String SKU_ADFREE = "com.rookiedev.rfline.adfree.v1";
 
     // SKU for our subscription (infinite gas)
     public static final String SKU_GOLD_MONTHLY = "gold_monthly";
