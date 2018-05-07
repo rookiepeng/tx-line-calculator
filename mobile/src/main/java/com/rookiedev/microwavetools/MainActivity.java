@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.billingclient.api.BillingClient;
+import com.google.android.gms.ads.MobileAds;
 import com.rookiedev.microwavetools.billing.BillingConstants;
 import com.rookiedev.microwavetools.billing.BillingManager;
 import com.rookiedev.microwavetools.billing.BillingProvider;
@@ -187,6 +188,7 @@ public class MainActivity extends AppCompatActivity
             drawer.openDrawer(GravityCompat.START);
         }
 
+        MobileAds.initialize(this, "ca-app-pub-6523245757541965~3260298534");
     }
 
     @Override
