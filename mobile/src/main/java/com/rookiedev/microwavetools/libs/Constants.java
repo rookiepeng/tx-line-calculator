@@ -1,6 +1,7 @@
 package com.rookiedev.microwavetools.libs;
 
 import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -8,7 +9,7 @@ import android.text.style.SubscriptSpan;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AlphaAnimation;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
@@ -344,11 +345,12 @@ public class Constants {
             cy = view.getBottom();
         }
         int finalRadius = (int) Math.sqrt(Math.pow(view.getWidth(), 2) + Math.pow(view.getHeight(), 2));
-        Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
+
+        Animator animCircularReveal = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
         view.setVisibility(View.VISIBLE);
-        anim.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        anim.addListener(new Animator.AnimatorListener() {
+        animCircularReveal.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        animCircularReveal.setInterpolator(new AccelerateDecelerateInterpolator());
+        animCircularReveal.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -370,10 +372,22 @@ public class Constants {
             }
         });
 
-        AlphaAnimation alpha = new AlphaAnimation(1.00f, 0.00f);
-        alpha.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
-        alpha.setInterpolator(new AccelerateDecelerateInterpolator());
-        view.startAnimation(alpha);
-        anim.start();
+        ObjectAnimator animFadeOut = ObjectAnimator.ofFloat(view, View.ALPHA, 1f,0f);
+        animFadeOut.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        animFadeOut.setInterpolator(new AccelerateInterpolator());
+
+        /*
+        ValueAnimator animFadeOut= ValueAnimator.ofFloat(1f, 0.2f);
+        animFadeOut.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        animFadeOut.setInterpolator(new DecelerateInterpolator());
+        animFadeOut.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                view.setAlpha((Float) animation.getAnimatedValue());
+            }
+        });*/
+
+        animCircularReveal.start();
+        animFadeOut.start();
     }
 }
