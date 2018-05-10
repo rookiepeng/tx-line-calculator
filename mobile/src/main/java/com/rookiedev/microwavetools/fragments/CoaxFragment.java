@@ -3,21 +3,18 @@ package com.rookiedev.microwavetools.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,7 +29,6 @@ import java.math.BigDecimal;
 public class CoaxFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    private CardView cardViewParameters, cardViewDimensions;
     private TextView textA, textB, textC;
     private EditText edittextA, edittextB, edittextC, edittextL, edittextZ0, edittextPhs, edittextFreq, edittextEr;
     private Button buttonSynthesize, buttonAnalyze;
@@ -71,6 +67,8 @@ public class CoaxFragment extends Fragment {
         buttonAnalyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.analyze_reveal),
+                        Constants.ANALYZE);
                 if (!analysisInputCheck()) {
                     edittextZ0.setText(""); // clear the Z0 and Eeff outputs
                     edittextPhs.setText("");
@@ -104,13 +102,14 @@ public class CoaxFragment extends Fragment {
                     double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittextZ0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
                 }
-                forceRippleAnimation(cardViewParameters);
             }
         });
 
         buttonSynthesize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.synthesize_reveal),
+                        Constants.SYNTHESIZE);
                 if (!synthesizeInputCheck()) {
                     if (target == Constants.Synthesize_CoreRadius) {
                         edittextA.setText("");
@@ -189,7 +188,6 @@ public class CoaxFragment extends Fragment {
                         edittextEr.setText(String.valueOf(er));
                     }
                 }
-                forceRippleAnimation(cardViewDimensions);
             }
         });
 
@@ -205,9 +203,6 @@ public class CoaxFragment extends Fragment {
 
     private void initUI() {
         line = new CoaxModel();
-
-        cardViewDimensions = viewRoot.findViewById(R.id.card_dimensions);
-        cardViewParameters = viewRoot.findViewById(R.id.card_parameters);
 
         RadioButton radioButtonL = viewRoot.findViewById(R.id.radioBtn_L);
         radioButtonL.setVisibility(View.VISIBLE);
@@ -527,19 +522,6 @@ public class CoaxFragment extends Fragment {
             }
         }
         return checkResult;
-    }
-
-    protected void forceRippleAnimation(View view) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            view.setClickable(true);
-            Drawable background = view.getForeground();
-            final RippleDrawable rippleDrawable = (RippleDrawable) background;
-
-            rippleDrawable.setState(new int[] { android.R.attr.state_pressed, android.R.attr.state_enabled });
-
-            view.setClickable(false);
-            rippleDrawable.setState(new int[] {});
-        }
     }
 
     public void addAdFragment() {

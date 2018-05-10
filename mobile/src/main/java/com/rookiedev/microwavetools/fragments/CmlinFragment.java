@@ -2,21 +2,18 @@ package com.rookiedev.microwavetools.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,7 +28,6 @@ import java.math.BigDecimal;
 public class CmlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    private CardView cardViewParameters, cardViewDimensions;
     private TextView textZ0, textK, textZ0o, textZ0e;
     private EditText edittextW, edittextS, edittextL, edittextZ0, edittextK, edittextZ0o, edittextZ0e, edittextPhs,
             edittextFreq, edittextT, edittextH, edittextEr;
@@ -71,6 +67,8 @@ public class CmlinFragment extends Fragment {
         buttonAnalyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.analyze_reveal),
+                        Constants.ANALYZE);
                 if (!analysisInputCheck()) {
                     edittextZ0.setText(""); // clear the Z0 and Eeff outputs
                     edittextPhs.setText("");
@@ -122,13 +120,14 @@ public class CmlinFragment extends Fragment {
                     double Z0e = Z0e_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittextZ0e.setText(String.valueOf(Z0e));
                 }
-                forceRippleAnimation(cardViewParameters);
             }
         });
 
         buttonSynthesize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.synthesize_reveal),
+                        Constants.SYNTHESIZE);
                 if (!synthesizeInputCheck()) {
                     edittextL.setText(""); // clear the L and W outputs
                     edittextS.setText("");
@@ -156,7 +155,6 @@ public class CmlinFragment extends Fragment {
                         edittextK.setText(String.valueOf(k));
                     }
                 }
-                forceRippleAnimation(cardViewDimensions);
             }
         });
 
@@ -173,9 +171,6 @@ public class CmlinFragment extends Fragment {
 
     private void initUI() {
         line = new CmlinModel();
-
-        cardViewDimensions = viewRoot.findViewById(R.id.card_dimensions);
-        cardViewParameters = viewRoot.findViewById(R.id.card_parameters);
 
         RadioButton radioButtonW = viewRoot.findViewById(R.id.radioBtn_W);
         radioButtonW.setVisibility(View.VISIBLE);
@@ -603,19 +598,6 @@ public class CmlinFragment extends Fragment {
                     Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition())); // cut the decimal of S
             S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
             edittextS.setText(String.valueOf(S));
-        }
-    }
-
-    protected void forceRippleAnimation(View view) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            view.setClickable(true);
-            Drawable background = view.getForeground();
-            final RippleDrawable rippleDrawable = (RippleDrawable) background;
-
-            rippleDrawable.setState(new int[] { android.R.attr.state_pressed, android.R.attr.state_enabled });
-
-            view.setClickable(false);
-            rippleDrawable.setState(new int[] {});
         }
     }
 
