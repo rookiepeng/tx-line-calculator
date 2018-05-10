@@ -64,6 +64,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/synthesize_reveal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:srcCompat="@color/synthesizeColor"
+                android:visibility="invisible"/>
+
         </android.support.v7.widget.CardView>
 
         <include
@@ -124,6 +133,15 @@
                     android:layout_height="match_parent" />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/analyze_reveal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:srcCompat="@color/analyzeColor"
+                android:visibility="invisible"/>
+
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

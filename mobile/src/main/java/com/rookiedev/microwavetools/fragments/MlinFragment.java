@@ -4,9 +4,6 @@ package com.rookiedev.microwavetools.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,21 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.Constants;
-import com.rookiedev.microwavetools.libs.MlinModel;
 import com.rookiedev.microwavetools.libs.MlinCalculator;
+import com.rookiedev.microwavetools.libs.MlinModel;
 
 import java.math.BigDecimal;
 
 public class MlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    private CardView cardViewParameters, cardViewDimensions;
     private RadioButton radioButtonW, radioButtonH;
     private TextView textW, textH;
     private EditText editTextW, editTextL, editTextZ0, editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
@@ -71,6 +68,8 @@ public class MlinFragment extends Fragment {
         buttonAnalyze.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.analyze_reveal),
+                        Constants.ANALYZE);
                 if (!analysisInputCheck()) {
                     editTextZ0.setText(""); // clear the Z0 and Eeff outputs
                     editTextPhs.setText("");
@@ -95,8 +94,10 @@ public class MlinFragment extends Fragment {
                         double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextZ0.setText(String.valueOf(Z0)); // cut the decimal
 
-                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the
+                                                                                           // Eeff
+                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue();
                         editTextPhs.setText(String.valueOf(Eeff));
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
@@ -109,13 +110,14 @@ public class MlinFragment extends Fragment {
                         editTextPhs.setText(""); // if the L input is empty, clear the Eeff
                     }
                 }
-                forceRippleAnimation(cardViewParameters);
             }
         });
 
         buttonSynthesize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.synthesize_reveal),
+                        Constants.SYNTHESIZE);
                 if (!synthesizeInputCheck()) {
                     if (target == Constants.Synthesize_Width) {
                         editTextW.setText("");
@@ -147,12 +149,20 @@ public class MlinFragment extends Fragment {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, target);
                         BigDecimal L_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
+                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut
+                                                                                                                    // the
+                                                                                                                    // decimal
+                                                                                                                    // of
+                                                                                                                    // L
                         double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextL.setText(String.valueOf(L));
 
                         BigDecimal W_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
+                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut
+                                                                                                                   // the
+                                                                                                                   // decimal
+                                                                                                                   // of
+                                                                                                                   // W
                         double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextW.setText(String.valueOf(W));
                     } else {
@@ -161,14 +171,22 @@ public class MlinFragment extends Fragment {
                         editTextL.setText(""); // clear the L if the Eeff input is empty
 
                         BigDecimal W_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
+                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut
+                                                                                                                   // the
+                                                                                                                   // decimal
+                                                                                                                   // of
+                                                                                                                   // W
                         double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextW.setText(String.valueOf(W));
                     }
                     if (target == Constants.Synthesize_Width) {
 
                         BigDecimal W_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
+                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut
+                                                                                                                   // the
+                                                                                                                   // decimal
+                                                                                                                   // of
+                                                                                                                   // W
                         double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         editTextW.setText(String.valueOf(W));
                     } else if (target == Constants.Synthesize_Height) {
@@ -178,7 +196,6 @@ public class MlinFragment extends Fragment {
                         editTextH.setText(String.valueOf(H));
                     }
                 }
-                forceRippleAnimation(cardViewDimensions);
             }
         });
 
@@ -197,9 +214,6 @@ public class MlinFragment extends Fragment {
      */
     private void initUI() {
         line = new MlinModel();
-
-        cardViewDimensions = viewRoot.findViewById(R.id.card_dimensions);
-        cardViewParameters = viewRoot.findViewById(R.id.card_parameters);
 
         radioButtonW = viewRoot.findViewById(R.id.radioBtn_W);
         radioButtonW.setVisibility(View.VISIBLE);
@@ -225,8 +239,10 @@ public class MlinFragment extends Fragment {
 
         defaultTextColor = textW.getTextColors();
 
-        //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        // textW.setTextColor(ContextCompat.getColor(mContext,
+        // R.color.synthesizeColor));
+        // textH.setTextColor(ContextCompat.getColor(mContext,
+        // R.color.synthesizeColor));
 
         TextView textL = viewRoot.findViewById(R.id.text_L);
         textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
@@ -443,19 +459,6 @@ public class MlinFragment extends Fragment {
             }
         }
         return checkResult;
-    }
-
-    protected void forceRippleAnimation(View view) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            view.setClickable(true);
-            Drawable background = view.getForeground();
-            final RippleDrawable rippleDrawable = (RippleDrawable) background;
-
-            rippleDrawable.setState(new int[] { android.R.attr.state_pressed, android.R.attr.state_enabled });
-
-            view.setClickable(false);
-            rippleDrawable.setState(new int[] {});
-        }
     }
 
     public void addAdFragment() {

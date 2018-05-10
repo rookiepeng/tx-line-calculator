@@ -1,10 +1,16 @@
 package com.rookiedev.microwavetools.libs;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.SubscriptSpan;
+import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
 import com.rookiedev.microwavetools.R;
 
@@ -258,8 +264,8 @@ public class Constants {
     }
 
     public static ArrayAdapter<CharSequence> adapterPhaseUnits(Context mContext) {
-        ArrayAdapter<CharSequence> adapterPhase = ArrayAdapter.createFromResource(mContext,
-                R.array.list_units_Phase, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapterPhase = ArrayAdapter.createFromResource(mContext, R.array.list_units_Phase,
+                android.R.layout.simple_spinner_item);
         adapterPhase.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterPhase;
     }
@@ -324,5 +330,50 @@ public class Constants {
             break;
         }
         return l;
+    }
+
+    public static final int ANALYZE = 0, SYNTHESIZE = 1;
+
+    public static void refreshAnimation(Context mContext, final ImageView view, int flag) {
+        int cx, cy;
+        if (flag == ANALYZE) {
+            cx = view.getRight();
+            cy = view.getTop();
+        } else {
+            cx = view.getLeft();
+            cy = view.getBottom();
+        }
+        int finalRadius = (int) Math.sqrt(Math.pow(view.getWidth(), 2) + Math.pow(view.getHeight(), 2));
+        Animator anim = ViewAnimationUtils.createCircularReveal(view, cx, cy, 0, finalRadius);
+        view.setVisibility(View.VISIBLE);
+        anim.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        AlphaAnimation alpha = new AlphaAnimation(1.00f, 0.00f);
+        alpha.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
+        alpha.setInterpolator(new AccelerateDecelerateInterpolator());
+        view.startAnimation(alpha);
+        anim.start();
     }
 }
