@@ -96,8 +96,10 @@ public class CpwFragment extends Fragment {
                         CpwCalculator cpwg = new CpwCalculator();
                         line = cpwg.getAnaResult(line, withGround);
 
-                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the
+                                                                                           // Eeff
+                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue();
                         edittextPhs.setText(String.valueOf(Eeff));
                     } else {
                         CpwCalculator cpwg = new CpwCalculator();
@@ -132,7 +134,8 @@ public class CpwFragment extends Fragment {
                             spinnerFreq.getSelectedItemPosition());
                     line.setMetalThick(Double.parseDouble(edittextT.getText().toString()),
                             spinnerT.getSelectedItemPosition());
-                    //Z0 = Double.parseDouble(edittextZ0.getText().toString()); // get the header_parameters
+                    // Z0 = Double.parseDouble(edittextZ0.getText().toString()); // get the
+                    // header_parameters
 
                     if (target == Constants.Synthesize_Width) {
                         line.setSubHeight(Double.parseDouble(edittextH.getText().toString()),
@@ -141,7 +144,7 @@ public class CpwFragment extends Fragment {
                                 spinnerS.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
 
-                        //W = 0;
+                        // W = 0;
                     } else if (target == Constants.Synthesize_Gap) {
                         line.setSubHeight(Double.parseDouble(edittextH.getText().toString()),
                                 spinnerH.getSelectedItemPosition());
@@ -149,7 +152,7 @@ public class CpwFragment extends Fragment {
                                 spinnerW.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
 
-                        //S = 0;
+                        // S = 0;
                     } else if (target == Constants.Synthesize_Height) {
                         line.setMetalSpace(Double.parseDouble(edittextS.getText().toString()),
                                 spinnerS.getSelectedItemPosition());
@@ -157,7 +160,7 @@ public class CpwFragment extends Fragment {
                                 spinnerW.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
 
-                        //H = 0;
+                        // H = 0;
                     } else if (target == Constants.Synthesize_Er) {
                         line.setMetalSpace(Double.parseDouble(edittextS.getText().toString()),
                                 spinnerS.getSelectedItemPosition());
@@ -166,7 +169,7 @@ public class CpwFragment extends Fragment {
                         line.setSubHeight(Double.parseDouble(edittextH.getText().toString()),
                                 spinnerH.getSelectedItemPosition());
 
-                        //er = 0;
+                        // er = 0;
                     }
 
                     if (edittextPhs.length() != 0) { // check if the Eeff is empty
@@ -174,7 +177,8 @@ public class CpwFragment extends Fragment {
                         CpwCalculator cpwg = new CpwCalculator();
                         line = cpwg.getSynResult(line, target, withGround);
                         BigDecimal L_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the
+                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut
+                                                                                                                    // the
                         // decimal of L
                         double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextL.setText(String.valueOf(L));
@@ -185,12 +189,20 @@ public class CpwFragment extends Fragment {
                     }
                     if (target == Constants.Synthesize_Width) {
                         BigDecimal W_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
+                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut
+                                                                                                                   // the
+                                                                                                                   // decimal
+                                                                                                                   // of
+                                                                                                                   // W
                         double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextW.setText(String.valueOf(W));
                     } else if (target == Constants.Synthesize_Gap) {
                         BigDecimal S_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition())); // cut the decimal of S
+                                Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition())); // cut
+                                                                                                                   // the
+                                                                                                                   // decimal
+                                                                                                                   // of
+                                                                                                                   // S
                         double S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextS.setText(String.valueOf(S));
                     } else if (target == Constants.Synthesize_Height) {

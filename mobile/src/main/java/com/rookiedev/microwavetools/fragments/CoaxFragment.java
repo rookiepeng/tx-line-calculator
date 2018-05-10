@@ -90,8 +90,10 @@ public class CoaxFragment extends Fragment {
                         CoaxCalculator coax = new CoaxCalculator();
                         line = coax.getAnaResult(line);
 
-                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the
+                                                                                           // Eeff
+                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue();
                         edittextPhs.setText(String.valueOf(Eeff));
                     } else {
                         CoaxCalculator coax = new CoaxCalculator();
@@ -123,25 +125,25 @@ public class CoaxFragment extends Fragment {
                     line.setFrequency(Double.parseDouble(edittextFreq.getText().toString()),
                             spinnerFreq.getSelectedItemPosition());
 
-                    if (target == Constants.Synthesize_CoreRadius) { //a = 0;
+                    if (target == Constants.Synthesize_CoreRadius) { // a = 0;
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
                                 spinnerB.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
                                 spinnerC.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
-                    } else if (target == Constants.Synthesize_SubRadius) { //b = 0;
+                    } else if (target == Constants.Synthesize_SubRadius) { // b = 0;
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
                                 spinnerC.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
-                    } else if (target == Constants.Synthesize_CoreOffset) { //c = 0;
+                    } else if (target == Constants.Synthesize_CoreOffset) { // c = 0;
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
                                 spinnerB.getSelectedItemPosition());
                         line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
-                    } else if (target == Constants.Synthesize_Er) { //er = 0;
+                    } else if (target == Constants.Synthesize_Er) { // er = 0;
                         line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
                         line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
@@ -156,7 +158,11 @@ public class CoaxFragment extends Fragment {
                         line = coax.getSynResult(line, target);
 
                         BigDecimal L_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
+                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut
+                                                                                                                    // the
+                                                                                                                    // decimal
+                                                                                                                    // of
+                                                                                                                    // L
                         double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextL.setText(String.valueOf(L));
                     } else {
@@ -167,14 +173,23 @@ public class CoaxFragment extends Fragment {
                     if (target == Constants.Synthesize_CoreRadius) {
 
                         BigDecimal a_temp = new BigDecimal(
-                                Constants.meter2others(line.getCoreRadius(), spinnerA.getSelectedItemPosition())); // cut the decimal of W
+                                Constants.meter2others(line.getCoreRadius(), spinnerA.getSelectedItemPosition())); // cut
+                                                                                                                   // the
+                                                                                                                   // decimal
+                                                                                                                   // of
+                                                                                                                   // W
                         double a = a_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextA.setText(String.valueOf(a));
                     } else if (target == Constants.Synthesize_SubRadius) {
 
                         BigDecimal b_temp = new BigDecimal(
-                                Constants.meter2others(line.getSubRadius(), spinnerB.getSelectedItemPosition())); // cut the decimal of S
-                        double height = b_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                                Constants.meter2others(line.getSubRadius(), spinnerB.getSelectedItemPosition())); // cut
+                                                                                                                  // the
+                                                                                                                  // decimal
+                                                                                                                  // of
+                                                                                                                  // S
+                        double height = b_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue();
                         edittextB.setText(String.valueOf(height));
                     } else if (target == Constants.Synthesize_CoreOffset) {
 
@@ -347,7 +362,7 @@ public class CoaxFragment extends Fragment {
             radioButtonC.setChecked(true);
             textC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             edittextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        }else{
+        } else {
             target = Constants.Synthesize_CoreRadius;
             radioButtonA.setChecked(true);
             textA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));

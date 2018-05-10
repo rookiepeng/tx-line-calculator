@@ -89,10 +89,12 @@ public class SlinFragment extends Fragment {
 
                         SlinCalculator slin = new SlinCalculator();
                         line = slin.getAnaResult(line);
-                        //Eeff = fragment_slin.getEeff();
+                        // Eeff = fragment_slin.getEeff();
 
-                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the
+                                                                                           // Eeff
+                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue();
                         edittextPhs.setText(String.valueOf(Eeff));
 
                     } else {
@@ -152,7 +154,11 @@ public class SlinFragment extends Fragment {
                         line = slin.getSynResult(line, target);
 
                         BigDecimal L_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
+                                Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut
+                                                                                                                    // the
+                                                                                                                    // decimal
+                                                                                                                    // of
+                                                                                                                    // L
                         double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextL.setText(String.valueOf(L));
                     } else {
@@ -163,7 +169,11 @@ public class SlinFragment extends Fragment {
                     if (target == Constants.Synthesize_Width) {
 
                         BigDecimal W_temp = new BigDecimal(
-                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
+                                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut
+                                                                                                                   // the
+                                                                                                                   // decimal
+                                                                                                                   // of
+                                                                                                                   // W
                         double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                         edittextW.setText(String.valueOf(W));
                     } else if (target == Constants.Synthesize_Height) {

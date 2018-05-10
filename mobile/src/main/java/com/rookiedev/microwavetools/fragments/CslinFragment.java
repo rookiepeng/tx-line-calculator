@@ -95,8 +95,10 @@ public class CslinFragment extends Fragment {
                         CslinCalculator cslin = new CslinCalculator();
                         line = cslin.getAnaResult(line);
 
-                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the Eeff
-                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the
+                                                                                           // Eeff
+                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue();
                         edittextPhs.setText(String.valueOf(Eeff));
 
                     } else {
@@ -574,7 +576,8 @@ public class CslinFragment extends Fragment {
             line = cslin.getSynResult(line, useZ0k);
 
             BigDecimal L_temp = new BigDecimal(
-                    Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the decimal of L
+                    Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the
+                                                                                                        // decimal of L
             double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
             edittextL.setText(String.valueOf(L));
         } else {
@@ -584,12 +587,14 @@ public class CslinFragment extends Fragment {
         }
 
         BigDecimal W_temp = new BigDecimal(
-                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of W
+                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of
+                                                                                                   // W
         double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
         edittextW.setText(String.valueOf(W));
 
         BigDecimal S_temp = new BigDecimal(
-                Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition())); // cut the decimal of S
+                Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition())); // cut the decimal of
+                                                                                                   // S
         double S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
         edittextS.setText(String.valueOf(S));
     }
