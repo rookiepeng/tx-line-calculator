@@ -81,30 +81,28 @@ public class MlinFragment extends Fragment {
                     line.setMetalThick(Double.parseDouble(editTextT.getText().toString()),
                             spinnerT.getSelectedItemPosition());
 
-                    if (editTextL.length() != 0) { // check the L input
+                    if (editTextL.length() != 0) {
                         line.setMetalLength(Double.parseDouble(editTextL.getText().toString()),
                                 spinnerL.getSelectedItemPosition());
-                        MlinCalculator mlin = new MlinCalculator();
-                        line = mlin.getAnaResult(line);
+                    } else {
+                        line.setMetalLength(0, spinnerL.getSelectedItemPosition());
+                    }
+                    MlinCalculator mlin = new MlinCalculator();
+                    line = mlin.getAnaResult(line);
 
-                        BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        editTextZ0.setText(String.valueOf(Z0));
+                    BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
+                    double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    editTextZ0.setText(String.valueOf(Z0));
 
+                    if (editTextL.length() != 0) {
                         BigDecimal Eeff_temp = new BigDecimal(line.getPhase());
                         double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         editTextPhs.setText(String.valueOf(Eeff));
                     } else {
-                        MlinCalculator mlin = new MlinCalculator();
-                        line = mlin.getAnaResult(line);
-
-                        BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        editTextZ0.setText(String.valueOf(Z0));
-
                         editTextPhs.setText("");
                     }
+
                 }
             }
         });
@@ -135,44 +133,44 @@ public class MlinFragment extends Fragment {
 
                     if (editTextPhs.length() != 0) {
                         line.setPhase(Double.parseDouble(editTextPhs.getText().toString()));
-                        MlinCalculator mlin = new MlinCalculator();
-                        line = mlin.getSynResult(line, target);
+                    } else {
+                        line.setPhase(0);
+                    }
+                    MlinCalculator mlin = new MlinCalculator();
+                    line = mlin.getSynResult(line, target);
 
-                        if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                    if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                        if (editTextPhs.length() != 0) {
                             BigDecimal L_temp = new BigDecimal(
                                     Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition()));
                             double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                             editTextL.setText(String.valueOf(L));
-                        }
-                    } else {
-                        MlinCalculator mlin = new MlinCalculator();
-                        line = mlin.getSynResult(line, Constants.Synthesize_Width);
-                        if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                        } else {
                             editTextL.setText("");
                         }
-                    }
 
-                    if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                         if (target == Constants.Synthesize_Width) {
-                            if ((Double.isNaN(line.getMetalWidth())||Double.isInfinite(line.getMetalWidth()))) {
+                            if ((Double.isNaN(line.getMetalWidth()) || Double.isInfinite(line.getMetalWidth()))) {
                                 editTextW.setText("");
                                 editTextW.setError(getString(R.string.synthesize_failed));
                                 editTextW.requestFocus();
                             } else {
-                                BigDecimal W_temp = new BigDecimal(
-                                        Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition()));
-                                double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                                BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(),
+                                        spinnerW.getSelectedItemPosition()));
+                                double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
+                                        .doubleValue();
                                 editTextW.setText(String.valueOf(W));
                             }
                         } else if (target == Constants.Synthesize_Height) {
-                            if ((Double.isNaN(line.getSubHeight())||Double.isInfinite(line.getSubHeight()))) {
+                            if ((Double.isNaN(line.getSubHeight()) || Double.isInfinite(line.getSubHeight()))) {
                                 editTextH.setText("");
                                 editTextH.setError(getString(R.string.synthesize_failed));
                                 editTextH.requestFocus();
                             } else {
-                                BigDecimal H_temp = new BigDecimal(
-                                        Constants.meter2others(line.getSubHeight(), spinnerH.getSelectedItemPosition()));
-                                double H = H_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                                BigDecimal H_temp = new BigDecimal(Constants.meter2others(line.getSubHeight(),
+                                        spinnerH.getSelectedItemPosition()));
+                                double H = H_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
+                                        .doubleValue();
                                 editTextH.setText(String.valueOf(H));
                             }
                         }
@@ -399,7 +397,7 @@ public class MlinFragment extends Fragment {
             editTextH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextH.getText().toString()),
-                spinnerH.getSelectedItemPosition()) < Constants.MIN_LIMIT) {
+                spinnerH.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
             editTextH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -407,7 +405,7 @@ public class MlinFragment extends Fragment {
             editTextW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextW.getText().toString()),
-                spinnerW.getSelectedItemPosition()) < Constants.MIN_LIMIT) {
+                spinnerW.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
             editTextW.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -420,6 +418,9 @@ public class MlinFragment extends Fragment {
         }
         if (editTextFreq.length() == 0) {
             editTextFreq.setError(getText(R.string.Error_Freq_empty));
+            checkResult = false;
+        } else if (Double.parseDouble(editTextFreq.getText().toString()) == 0) {
+            editTextFreq.setError(getText(R.string.error_zero_frequency));
             checkResult = false;
         }
 
@@ -436,17 +437,29 @@ public class MlinFragment extends Fragment {
         if (editTextZ0.length() == 0) {
             editTextZ0.setError(Constants.errorZ0Empty(mContext));
             checkResult = false;
+        } else if (Double.parseDouble(editTextZ0.getText().toString()) == 0) {
+            editTextZ0.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
+
         if (editTextFreq.length() == 0) {
             editTextFreq.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
+        } else if (Double.parseDouble(editTextFreq.getText().toString()) == 0) {
+            editTextFreq.setError(getText(R.string.error_zero_frequency));
+            checkResult = false;
         }
+
         if (editTextT.length() == 0) {
             editTextT.setError(getText(R.string.Error_T_empty));
             checkResult = false;
         }
+
         if (editTextEr.length() == 0) {
             editTextEr.setError(Constants.errorErEmpty(mContext));
+            checkResult = false;
+        } else if (Double.parseDouble(editTextEr.getText().toString()) < 1) {
+            editTextEr.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
@@ -491,5 +504,6 @@ public class MlinFragment extends Fragment {
         editTextZ0.setError(null);
         editTextH.setError(null);
         editTextEr.setError(null);
+        editTextFreq.setError(null);
     }
 }

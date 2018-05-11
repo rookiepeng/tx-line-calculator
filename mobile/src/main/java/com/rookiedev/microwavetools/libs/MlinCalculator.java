@@ -1,7 +1,5 @@
 package com.rookiedev.microwavetools.libs;
 
-import android.util.Log;
-
 public class MlinCalculator {
     private double effectiveEr;
 
@@ -21,15 +19,15 @@ public class MlinCalculator {
         double v;
 
         width = line.getMetalWidth();
-        if (width < Constants.MIN_LIMIT) {
-            line.setErrorCode(Constants.ERROR.DIMENSION_MINIMAL_LIMIT);
+        if (width < Constants.MINI_LIMIT) {
+            line.setErrorCode(Constants.ERROR.WIDTH_MINIMAL_LIMIT);
             return line;
         }
         length = line.getMetalLength();
         // SubstrateModel dielectric thickness
         height = line.getSubHeight();
-        if (height < Constants.MIN_LIMIT) {
-            line.setErrorCode(Constants.ERROR.DIMENSION_MINIMAL_LIMIT);
+        if (height < Constants.MINI_LIMIT) {
+            line.setErrorCode(Constants.ERROR.HEIGHT_MINIMAL_LIMIT);
             return line;
         }
 
