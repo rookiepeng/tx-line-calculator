@@ -9,7 +9,7 @@ public class MlinCalculator {
     }
 
     private MlinModel Analysis(MlinModel line) {
-        double width, length, height, er, thickness;
+        double width, length, height, epsilon, thickness;
         double impedance, phase;
         double thicknessToHeight, widthToHeight;
 
@@ -26,7 +26,7 @@ public class MlinCalculator {
         height = line.getSubHeight();
 
         // SubstrateModel relative permittivity
-        er = line.getSubEpsilon();
+        epsilon = line.getSubEpsilon();
 
         // MetalModel thickness
         thickness = line.getMetalThick();
@@ -43,7 +43,7 @@ public class MlinCalculator {
                             Math.cosh(Math.sqrt(6.517 * widthToHeight)) / Math.sinh(Math.sqrt(6.517 * widthToHeight)),
                             2.0)));
             // (7) from Hammerstad and Jensen
-            deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(er - 1.0))) * deltau1;
+            deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(epsilon - 1.0))) * deltau1;
         } else {
             deltau1 = 0.0;
             deltaur = 0.0;
@@ -53,7 +53,7 @@ public class MlinCalculator {
         // (3) from Hammerstad & Jensen and Y from the Rogers Corp. paper
         u1 = widthToHeight + deltau1;
         ur = widthToHeight + deltaur;
-        E0 = EffectiveDielectricConstant_Effer(ur, er);
+        E0 = EffectiveDielectricConstant_Effer(ur, epsilon);
 
         // zero frequency characteristic impedance
         // (8) from Hammerstad and Jensen
@@ -70,34 +70,34 @@ public class MlinCalculator {
         // (2) from Kirschning and Jansen
         P1 = 0.27488 + (0.6315 + (0.525 / (Math.pow((1.0 + 0.157 * fn), 20.0)))) * widthToHeight
                 - 0.065683 * Math.exp(-8.7513 * widthToHeight);
-        P2 = 0.33622 * (1.0 - Math.exp(-0.03442 * er));
+        P2 = 0.33622 * (1.0 - Math.exp(-0.03442 * epsilon));
         P3 = 0.0363 * Math.exp(-4.6 * widthToHeight) * (1.0 - Math.exp(-Math.pow((fn / 3.87), 4.97)));
-        P4 = 1.0 + 2.751 * (1.0 - Math.exp(-Math.pow((er / 15.916), 8.0)));
+        P4 = 1.0 + 2.751 * (1.0 - Math.exp(-Math.pow((epsilon / 15.916), 8.0)));
         P = P1 * P2 * Math.pow(((0.1844 + P3 * P4) * 10.0 * fn), 1.5763);
 
         // (1) from Kirschning and Jansen
-        EF = (EFF0 + er * P) / (1.0 + P);
+        EF = (EFF0 + epsilon * P) / (1.0 + P);
 
         // Characteristic Impedance (Jansen and Kirschning)
         // normalized frequency (GHz-mm)
         fn = 1.0e-6 * line.getFrequency() * height;
 
         // (1) from Jansen and Kirschning
-        R1 = 0.03891 * Math.pow(er, 1.4);
+        R1 = 0.03891 * Math.pow(epsilon, 1.4);
         R2 = 0.267 * Math.pow(widthToHeight, 7.0);
         R3 = 4.766 * Math.exp(-3.228 * Math.pow(widthToHeight, 0.641));
-        R4 = 0.016 + Math.pow((0.0514 * er), 4.524);
+        R4 = 0.016 + Math.pow((0.0514 * epsilon), 4.524);
         R5 = Math.pow((fn / 28.843), 12.0);
         R6 = 22.20 * Math.pow(widthToHeight, 1.92);
 
         // (2) from Jansen and Kirschning
         R7 = 1.206 - 0.3144 * Math.exp(-R1) * (1.0 - Math.exp(-R2));
-        R8 = 1.0 + 1.275 * (1.0 - Math.exp(-0.004625 * R3 * Math.pow(er, 1.674) * Math.pow(fn / 18.365, 2.745)));
+        R8 = 1.0 + 1.275 * (1.0 - Math.exp(-0.004625 * R3 * Math.pow(epsilon, 1.674) * Math.pow(fn / 18.365, 2.745)));
         R9 = (5.086 * R4 * R5 / (0.3838 + 0.386 * R4)) * (Math.exp(-R6) / (1.0 + 1.2992 * R5));
-        R9 = R9 * Math.pow((er - 1.0), 6.0) / (1.0 + 10.0 * Math.pow((er - 1), 6.0));
+        R9 = R9 * Math.pow((epsilon - 1.0), 6.0) / (1.0 + 10.0 * Math.pow((epsilon - 1), 6.0));
 
         // (3) from Jansen and Kirschning
-        R10 = 0.00044 * Math.pow(er, 2.136) + 0.0184;
+        R10 = 0.00044 * Math.pow(epsilon, 2.136) + 0.0184;
         R11 = Math.pow((fn / 19.47), 6.0) / (1.0 + 0.0962 * Math.pow((fn / 19.47), 6.0));
         R12 = 1.0 / (1.0 + 0.00245 * widthToHeight * widthToHeight);
 
@@ -105,7 +105,7 @@ public class MlinCalculator {
         R13 = 0.9408 * Math.pow(EF, R8) - 0.9603;
         R14 = (0.9408 - R9) * Math.pow(EFF0, R8) - 0.9603;
         R15 = 0.707 * R10 * Math.pow((fn / 12.3), 1.097);
-        R16 = 1.0 + 0.0503 * er * er * R11 * (1.0 - Math.exp(-Math.pow((widthToHeight / 15), 6.0)));
+        R16 = 1.0 + 0.0503 * epsilon * epsilon * R11 * (1.0 - Math.exp(-Math.pow((widthToHeight / 15), 6.0)));
         R17 = R7 * (1.0 - 1.1241 * (R12 / R16) * Math.exp(-0.026 * Math.pow(fn, 1.15656) - R15));
 
         // (5) from Jansen and Kirschning
@@ -133,29 +133,14 @@ public class MlinCalculator {
 
         // store results
         line.setImpedance(impedance);
+        line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;
     }
 
-    /*
-     * Synthesize microstrip transmission line from electrical header_parameters
-     *
-     * calculates: w = microstrip line width (mils) l = microstrip line length
-     * (mils) loss = insertion loss (dB) eeff = effective relative permitivity
-     *
-     * from: z0 = characteristic impedance (ohms) len = electrical length (degrees)
-     * f = frequency (Hz) subs = substrate header_parameters. See TRSUBS for
-     * details.
-     *
-     * |<--W-->| _______ | metal | ---------------------------------------------- (
-     * dielectric,er /|\ ( ) H | ) ( \|/ (
-     * ----------------------------------------------
-     * /////////////////ground///////////////////////
-     *
-     */
     private MlinModel Synthesize(MlinModel line, int flag) {
         double length;
         double impedance;
-        double v, electricalLength;
+        double v, phase;
 
         // the optimization variables, current, min/max, and previous values
         double var = 0, varMax = 0, varMin = 0, varOld = 0;
@@ -219,7 +204,7 @@ public class MlinCalculator {
         }
 
         // read values from the input line structure
-        electricalLength = line.getPhase();
+        phase = line.getPhase();
         impedance = line.getImpedance();
 
         // temp value for l used while synthesizing the other header_parameters. We'll
@@ -250,6 +235,8 @@ public class MlinCalculator {
             if (errmax * errmin > 0) {
                 // alert("Could not bracket the solution.\n"
                 // "Synthesis failed.\n");
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
                 // return -1;
             }
 
@@ -307,6 +294,8 @@ public class MlinCalculator {
                 // alert("Synthesis failed to converge in\n"
                 // "%d iterations\n", maxiters);
                 // return -1;
+                line.setErrorCode(Constants.ERROR.MAX_ITERATIONS);
+                return line;
             }
             // done with iteration
         }
@@ -314,9 +303,10 @@ public class MlinCalculator {
         // velocity on line
         line = Analysis(line);
         v = Constants.LIGHTSPEED / Math.sqrt(effectiveEr);
-        length = (electricalLength / 360) * (v / line.getFrequency());
+        length = (phase / 360) * (v / line.getFrequency());
         line.setMetalLength(length, Constants.LengthUnit_m);
 
+        line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;
     }
 
