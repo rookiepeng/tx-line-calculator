@@ -6,20 +6,21 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- error -->
-    <string name="Error_W_empty">Error: The \"W\" can\'t be empty.</string>
-    <string name="Error_S_empty">Error: The \"S\" can\'t be empty.</string>
-    <string name="Error_Freq_empty">Error: The \"Freq\" can\'t be empty.</string>
-    <string name="Error_H_empty">Error: The \"H\" can\'t be empty.</string>
-    <string name="Error_T_empty">Error: The \"T\" can\'t be empty.</string>
-    <string name="Error_er_empty">Error: The \"εr\" can\'t be empty.</string>
-    <string name="Error_mu_empty">Error: The \"μr\" can\'t be empty.</string>
-    <string name="Error_Z0_empty">Error: The \"Z0\" can\'t be empty.</string>
-    <string name="Error_k_empty">Error: The \"k\" can\'t be empty.</string>
-    <string name="Error_a_empty">Error: The \"a\" can\'t be empty.</string>
-    <string name="Error_b_empty">Error: The \"b\" can\'t be empty.</string>
-    <string name="Error_c_empty">Error: The \"c\" can\'t be empty.</string>
-    <string name="Error_Z0e_empty">Error: The \"Z0e\" can\'t be empty.</string>
-    <string name="Error_Z0o_empty">Error: The \"Z0o\" can\'t be empty.</string>
+    <string name="Error">Error:</string>
+    <string name="er">\"εr\"</string>
+    <string name="Z0">\"Z0\"</string>
+    <string name="Z0e">\"Z0e\"</string>
+    <string name="Z0o">\"Z0o\"</string>
+    <string name="no_empty">can\'t be empty.</string>
+    <string name="Error_W_empty">Error: \"W\" can\'t be empty.</string>
+    <string name="Error_S_empty">Error: \"S\" can\'t be empty.</string>
+    <string name="Error_Freq_empty">Error: \"Freq\" can\'t be empty.</string>
+    <string name="Error_H_empty">Error: \"H\" can\'t be empty.</string>
+    <string name="Error_T_empty">Error: \"T\" can\'t be empty.</string>
+    <string name="Error_k_empty">Error: \"k\" can\'t be empty.</string>
+    <string name="Error_a_empty">Error: \"a\" can\'t be empty.</string>
+    <string name="Error_b_empty">Error: \"b\" can\'t be empty.</string>
+    <string name="Error_c_empty">Error: \"c\" can\'t be empty.</string>
 
     <!-- actionbar -->
     <string name="full_name_mlin">Microstrip Line</string>
