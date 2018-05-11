@@ -3,8 +3,9 @@ package com.rookiedev.microwavetools.libs;
 public class SlinModel {
     private SubstrateModel substrate;
     private MetalModel metal;
-    private double impedance, electricalLength; // ohms, degree
+    private double impedance, phase; // ohms, degree
     private double frequency; // Hz
+    private Constants.ERROR errorCode;
 
     public SlinModel() {
         substrate = new SubstrateModel();
@@ -13,24 +14,24 @@ public class SlinModel {
 
     void setSynthesizeParameter(double para, int flag) {
         switch (flag) {
-            case Constants.Synthesize_Width:
-                metal.setMetalWidth(para);
-                break;
+        case Constants.Synthesize_Width:
+            metal.setMetalWidth(para);
+            break;
 
-            case Constants.Synthesize_Height:
-                substrate.setSubHeight(para);
-                break;
+        case Constants.Synthesize_Height:
+            substrate.setSubHeight(para);
+            break;
 
-            case Constants.Synthesize_Er:
-                substrate.setSubEpsilon(para);
-                break;
+        case Constants.Synthesize_Er:
+            substrate.setSubEpsilon(para);
+            break;
 
-            case Constants.Synthesize_Length:
-                metal.setMetalLength(para);
-                break;
+        case Constants.Synthesize_Length:
+            metal.setMetalLength(para);
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -66,12 +67,12 @@ public class SlinModel {
         this.impedance = impedance;
     }
 
-    public double getElectricalLength() {
-        return electricalLength;
+    public double getPhase() {
+        return phase;
     }
 
-    public void setElectricalLength(double electricalLength) {
-        this.electricalLength = electricalLength;
+    public void setPhase(double phase) {
+        this.phase = phase;
     }
 
     public void setFrequency(double frequency, int unit) {
@@ -112,5 +113,13 @@ public class SlinModel {
 
     public void setMetal(MetalModel metal) {
         this.metal = metal;
+    }
+
+    public Constants.ERROR getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(Constants.ERROR errorCode) {
+        this.errorCode = errorCode;
     }
 }
