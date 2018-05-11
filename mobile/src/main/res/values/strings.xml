@@ -6,22 +6,26 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- error -->
+    <string name="error">Error:</string>
     <string name="er">\"εr\"</string>
     <string name="Z0">\"Z0\"</string>
     <string name="Z0e">\"Z0e\"</string>
     <string name="Z0o">\"Z0o\"</string>
     <string name="no_empty">can\'t be empty.</string>
-    <string name="Error_W_empty">\"W\" can\'t be empty.</string>
-    <string name="Error_S_empty">\"S\" can\'t be empty.</string>
-    <string name="Error_Freq_empty">\"Freq\" can\'t be empty.</string>
-    <string name="Error_H_empty">\"H\" can\'t be empty.</string>
-    <string name="Error_T_empty">\"T\" can\'t be empty.</string>
-    <string name="Error_k_empty">\"k\" can\'t be empty.</string>
-    <string name="Error_a_empty">\"a\" can\'t be empty.</string>
-    <string name="Error_b_empty">\"b\" can\'t be empty.</string>
-    <string name="Error_c_empty">\"c\" can\'t be empty.</string>
-    <string name="unreasonable_value">Please put a resonable value here.</string>
-    <string name="synthesize_failed">Unable to obtain a value, please check your inputs.</string>
+    <string name="Error_W_empty">Error: \"W\" can\'t be empty.</string>
+    <string name="Error_S_empty">Error: \"S\" can\'t be empty.</string>
+    <string name="Error_Freq_empty">Error: \"Freq\" can\'t be empty.</string>
+    <string name="Error_H_empty">Error: \"H\" can\'t be empty.</string>
+    <string name="Error_T_empty">Error: \"T\" can\'t be empty.</string>
+    <string name="Error_k_empty">Error: \"k\" can\'t be empty.</string>
+    <string name="Error_a_empty">Error: \"a\" can\'t be empty.</string>
+    <string name="Error_b_empty">Error: \"b\" can\'t be empty.</string>
+    <string name="Error_c_empty">Error: \"c\" can\'t be empty.</string>
+    <string name="error_zero_frequency">Error: Freq can\'t be 0.</string>
+    <string name="unreasonable_value">Error: Please put a resonable value here.</string>
+    <string name="synthesize_failed">Error: Unable to obtain a value, please check your inputs.</string>
+    <string name="k_out_of_range">Error: \"k\" should be within (0,1).</string>
+    <string name="Z0e_larger_Z0o">Error: Z0e must be larger than Z0o.</string>
 
     <!-- actionbar -->
     <string name="full_name_mlin">Microstrip Line</string>

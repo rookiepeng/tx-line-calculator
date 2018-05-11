@@ -32,7 +32,7 @@ public class Constants {
                                                                                                // permitivitty, F/m
     public static final double FREESPACEZ0 = FREESPACE_MU0 * LIGHTSPEED; // free space impedance, Ohms
     public static final double Pi = Math.PI;
-    public static final double MIN_LIMIT = 1e-10; // 0.1 nm
+    public static final double MINI_LIMIT = 1e-10; // 0.1 nm
 
     // flags
     public static final int Synthesize_Width = 0, Synthesize_Height = 1, Synthesize_Er = 2, Synthesize_Length = 3,
@@ -229,6 +229,8 @@ public class Constants {
         SpannableStringBuilder error_er = new SpannableStringBuilder();
         SpannableString er = new SpannableString(mContext.getString(R.string.er));
         er.setSpan(new SubscriptSpan(), 2, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_er.append(mContext.getString(R.string.error));
+        error_er.append(" ");
         error_er.append(er);
         error_er.append(" ");
         error_er.append(mContext.getString(R.string.no_empty));
@@ -239,6 +241,8 @@ public class Constants {
         SpannableStringBuilder error_Z0 = new SpannableStringBuilder();
         SpannableString Z0 = new SpannableString(mContext.getString(R.string.Z0));
         Z0.setSpan(new SubscriptSpan(), 2, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_Z0.append(mContext.getString(R.string.error));
+        error_Z0.append(" ");
         error_Z0.append(Z0);
         error_Z0.append(" ");
         error_Z0.append(mContext.getString(R.string.no_empty));
@@ -249,6 +253,8 @@ public class Constants {
         SpannableStringBuilder error_Z0e = new SpannableStringBuilder();
         SpannableString Z0e = new SpannableString(mContext.getString(R.string.Z0e));
         Z0e.setSpan(new SubscriptSpan(), 2, 4, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_Z0e.append(mContext.getString(R.string.error));
+        error_Z0e.append(" ");
         error_Z0e.append(Z0e);
         error_Z0e.append(" ");
         error_Z0e.append(mContext.getString(R.string.no_empty));
@@ -259,6 +265,8 @@ public class Constants {
         SpannableStringBuilder error_Z0o = new SpannableStringBuilder();
         SpannableString Z0o = new SpannableString(mContext.getString(R.string.Z0o));
         Z0o.setSpan(new SubscriptSpan(), 2, 4, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_Z0o.append(mContext.getString(R.string.error));
+        error_Z0o.append(" ");
         error_Z0o.append(Z0o);
         error_Z0o.append(" ");
         error_Z0o.append(mContext.getString(R.string.no_empty));
@@ -413,12 +421,24 @@ public class Constants {
     }
 
     public enum ERROR {
-        NO_ERROR(0), DIMENSION_MINIMAL_LIMIT(1), ER_MINIMAL_LIMIT(2), COULD_NOT_BRACKET_SOLUTION(3), MAX_ITERATIONS(4);
+        NO_ERROR(0), DIMENSION_MINIMAL_LIMIT(1), ER_MINIMAL_LIMIT(2), COULD_NOT_BRACKET_SOLUTION(3), MAX_ITERATIONS(4),
+        WIDTH_MINIMAL_LIMIT(5), HEIGHT_MINIMAL_LIMIT(6), SPACE_MINIMAL_LIMIT(7), K_OUT_OF_RANGE(8), Z0E_Z0O_MISTAKE(9);
 
-        private final int errorCode;
+        private int errorCode;
 
         ERROR(int errorCode) {
             this.errorCode = errorCode;
+        }
+    }
+
+    public enum WARNING {
+        NO_WARNING(0), WIDTH2HEIGHT_OUT_OF_RANGE(1), SPACE2HEIGHT_OUT_OF_RANGE(2), DIELECTRIC_OUT_OF_RANGE(3),
+        FREQUENCY2HEIGHT_OUT_OF_RANGE(4);
+
+        private int warningCode;
+
+        WARNING(int warningCode) {
+            this.warningCode = warningCode;
         }
     }
 }
