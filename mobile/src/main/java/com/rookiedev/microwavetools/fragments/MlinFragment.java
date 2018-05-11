@@ -69,6 +69,7 @@ public class MlinFragment extends Fragment {
             public void onClick(View view) {
                 Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.analyze_reveal),
                         Constants.ANALYZE);
+                clearEditTextErrors();
                 if (analysisInputEmptyCheck()) {
                     line.setMetalWidth(Double.parseDouble(editTextW.getText().toString()),
                             spinnerW.getSelectedItemPosition());
@@ -113,6 +114,7 @@ public class MlinFragment extends Fragment {
             public void onClick(View view) {
                 Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.synthesize_reveal),
                         Constants.SYNTHESIZE);
+                clearEditTextErrors();
                 if (synthesizeInputEmptyCheck()) {
                     line.setImpedance(Double.parseDouble(editTextZ0.getText().toString()));
                     line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
@@ -453,5 +455,12 @@ public class MlinFragment extends Fragment {
                 fragmentManager.beginTransaction().remove(adFragment).commit();
             }
         }
+    }
+
+    private void clearEditTextErrors(){
+        editTextW.setError(null);
+        editTextZ0.setError(null);
+        editTextH.setError(null);
+        editTextEr.setError(null);
     }
 }
