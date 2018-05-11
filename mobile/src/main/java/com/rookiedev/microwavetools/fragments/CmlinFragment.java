@@ -554,18 +554,32 @@ public class CmlinFragment extends Fragment {
             if (edittextZ0.length() == 0) {
                 edittextZ0.setError(Constants.errorZ0Empty(mContext));
                 checkResult = false;
+            } else if (Double.parseDouble(edittextZ0.getText().toString()) == 0) {
+                edittextZ0.setError(getText(R.string.unreasonable_value));
+                checkResult = false;
             }
+
             if (edittextK.length() == 0) {
                 edittextK.setError(getText(R.string.Error_k_empty));
+                checkResult = false;
+            } else if (Double.parseDouble(edittextK.getText().toString()) == 0) {
+                edittextK.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
         } else {
             if (edittextZ0e.length() == 0) {
                 edittextZ0e.setError(Constants.errorZ0eEmpty(mContext));
                 checkResult = false;
+            } else if (Double.parseDouble(edittextZ0e.getText().toString()) == 0) {
+                edittextZ0e.setError(getText(R.string.unreasonable_value));
+                checkResult = false;
             }
+
             if (edittextZ0o.length() == 0) {
                 edittextZ0o.setError(Constants.errorZ0oEmpty(mContext));
+                checkResult = false;
+            } else if (Double.parseDouble(edittextZ0o.getText().toString()) == 0) {
+                edittextZ0o.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
         }
