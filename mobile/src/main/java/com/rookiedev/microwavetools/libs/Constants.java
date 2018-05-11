@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.SubscriptSpan;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -36,7 +38,9 @@ public class Constants {
             Synthesize_Gap = 4, Synthesize_CoreRadius = 5, Synthesize_CoreOffset = 6;
     public static final int Synthesize_SubRadius = Synthesize_Height;
     public static final int LengthUnit_mil = 0, LengthUnit_mm = 1, LengthUnit_cm = 2, LengthUnit_m = 3;
-    public static final int FreqUnit_Hz = 10, FreqUnit_MHz = 0, FreqUnit_GHz = 1;
+    public static final int FreqUnit_MHz = 0, FreqUnit_GHz = 1, FreqUnit_Hz = 10;
+    public static final int ImpedanceUnit_Ohm=0;
+    public static final int PhaseUnit_Degree=0;
 
     public static final int PositionMlin = 0, PositionCmlin = 1, PositionSlin = 2, PositionCslin = 3, PositionCpw = 4,
             PositionGcpw = 5, PositionCoax = 6;
@@ -220,27 +224,51 @@ public class Constants {
      * @param mContext context
      * @return string with subscript
      */
-    public static SpannableString errorErEmpty(Context mContext) {
-        SpannableString error_er = new SpannableString(mContext.getString(R.string.Error_er_empty));
-        error_er.setSpan(new SubscriptSpan(), 13, 14, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+    public static SpannableStringBuilder errorErEmpty(Context mContext) {
+        SpannableStringBuilder error_er = new SpannableStringBuilder();
+        SpannableString er = new SpannableString(mContext.getString(R.string.er));
+        er.setSpan(new SubscriptSpan(), 2, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_er.append(mContext.getString(R.string.Error));
+        error_er.append(" ");
+        error_er.append(er);
+        error_er.append(" ");
+        error_er.append(mContext.getString(R.string.no_empty));
         return error_er;
     }
 
-    public static SpannableString errorZ0Empty(Context mContext) {
-        SpannableString error_Z0 = new SpannableString(mContext.getString(R.string.Error_Z0_empty));
-        error_Z0.setSpan(new SubscriptSpan(), 13, 14, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+    public static SpannableStringBuilder errorZ0Empty(Context mContext) {
+        SpannableStringBuilder error_Z0 = new SpannableStringBuilder();
+        SpannableString Z0 = new SpannableString(mContext.getString(R.string.Z0));
+        Z0.setSpan(new SubscriptSpan(), 2, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_Z0.append(mContext.getString(R.string.Error));
+        error_Z0.append(" ");
+        error_Z0.append(Z0);
+        error_Z0.append(" ");
+        error_Z0.append(mContext.getString(R.string.no_empty));
         return error_Z0;
     }
 
-    public static SpannableString errorZ0eEmpty(Context mContext) {
-        SpannableString error_Z0e = new SpannableString(mContext.getString(R.string.Error_Z0e_empty));
-        error_Z0e.setSpan(new SubscriptSpan(), 13, 15, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+    public static SpannableStringBuilder errorZ0eEmpty(Context mContext) {
+        SpannableStringBuilder error_Z0e = new SpannableStringBuilder();
+        SpannableString Z0e = new SpannableString(mContext.getString(R.string.Z0e));
+        Z0e.setSpan(new SubscriptSpan(), 2, 4, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_Z0e.append(mContext.getString(R.string.Error));
+        error_Z0e.append(" ");
+        error_Z0e.append(Z0e);
+        error_Z0e.append(" ");
+        error_Z0e.append(mContext.getString(R.string.no_empty));
         return error_Z0e;
     }
 
-    public static SpannableString errorZ0oEmpty(Context mContext) {
-        SpannableString error_Z0o = new SpannableString(mContext.getString(R.string.Error_Z0o_empty));
-        error_Z0o.setSpan(new SubscriptSpan(), 13, 15, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+    public static SpannableStringBuilder errorZ0oEmpty(Context mContext) {
+        SpannableStringBuilder error_Z0o = new SpannableStringBuilder();
+        SpannableString Z0o = new SpannableString(mContext.getString(R.string.Z0o));
+        Z0o.setSpan(new SubscriptSpan(), 2, 4, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        error_Z0o.append(mContext.getString(R.string.Error));
+        error_Z0o.append(" ");
+        error_Z0o.append(Z0o);
+        error_Z0o.append(" ");
+        error_Z0o.append(mContext.getString(R.string.no_empty));
         return error_Z0o;
     }
 
