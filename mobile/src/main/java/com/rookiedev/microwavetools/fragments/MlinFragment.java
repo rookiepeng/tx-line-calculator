@@ -255,27 +255,34 @@ public class MlinFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);
 
         editTextW.setText(prefs.getString(Constants.MLIN_W, "2.9"));
-        spinnerW.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_W_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerW.setSelection(
+                Integer.parseInt(prefs.getString(Constants.MLIN_W_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
         editTextL.setText(prefs.getString(Constants.MLIN_L, "40"));
-        spinnerL.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_L_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerL.setSelection(
+                Integer.parseInt(prefs.getString(Constants.MLIN_L_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
         editTextZ0.setText(prefs.getString(Constants.MLIN_Z0, "50.0"));
-        spinnerZ0.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
+        spinnerZ0.setSelection(Integer
+                .parseInt(prefs.getString(Constants.MLIN_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
 
         editTextPhs.setText(prefs.getString(Constants.MLIN_PHS, "90"));
-        spinnerPhs.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))));
+        spinnerPhs.setSelection(Integer
+                .parseInt(prefs.getString(Constants.MLIN_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))));
 
         editTextFreq.setText(prefs.getString(Constants.MLIN_FREQ, "1.00"));
-        spinnerFreq.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))));
+        spinnerFreq.setSelection(
+                Integer.parseInt(prefs.getString(Constants.MLIN_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))));
 
         editTextEr.setText(prefs.getString(Constants.MLIN_ER, "4.6"));
 
         editTextH.setText(prefs.getString(Constants.MLIN_H, "1.6"));
-        spinnerH.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_H_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerH.setSelection(
+                Integer.parseInt(prefs.getString(Constants.MLIN_H_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
         editTextT.setText(prefs.getString(Constants.MLIN_T, "0.035"));
-        spinnerT.setSelection(Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerT.setSelection(
+                Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
         target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, Integer.toString(Constants.Synthesize_Width)));
     }
@@ -360,13 +367,24 @@ public class MlinFragment extends Fragment {
         if (editTextH.length() == 0) {
             editTextH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
+        } else if (Constants.value2meter(Double.parseDouble(editTextH.getText().toString()),
+                spinnerH.getSelectedItemPosition()) < Constants.MIN_LIMIT) {
+            editTextH.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
         if (editTextW.length() == 0) {
             editTextW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
+        } else if (Constants.value2meter(Double.parseDouble(editTextW.getText().toString()),
+                spinnerW.getSelectedItemPosition()) < Constants.MIN_LIMIT) {
+            editTextW.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
         if (editTextEr.length() == 0) {
             editTextEr.setError(Constants.errorErEmpty(mContext));
+            checkResult = false;
+        } else if (Double.parseDouble(editTextEr.getText().toString()) < 1) {
+            editTextEr.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
         if (editTextFreq.length() == 0) {
@@ -374,7 +392,7 @@ public class MlinFragment extends Fragment {
             checkResult = false;
         }
 
-        if (!checkResult){
+        if (!checkResult) {
             editTextZ0.setText("");
             editTextPhs.setText("");
         }
@@ -406,7 +424,7 @@ public class MlinFragment extends Fragment {
                 editTextH.setError(getText(R.string.Error_H_empty));
                 checkResult = false;
             }
-            if (!checkResult){
+            if (!checkResult) {
                 editTextW.setText("");
             }
         } else if (target == Constants.Synthesize_Height) {
@@ -414,7 +432,7 @@ public class MlinFragment extends Fragment {
                 editTextW.setError(getText(R.string.Error_W_empty));
                 checkResult = false;
             }
-            if (!checkResult){
+            if (!checkResult) {
                 editTextH.setText("");
             }
         }

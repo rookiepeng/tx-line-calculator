@@ -21,6 +21,7 @@
     <string name="Error_a_empty">Error: \"a\" can\'t be empty.</string>
     <string name="Error_b_empty">Error: \"b\" can\'t be empty.</string>
     <string name="Error_c_empty">Error: \"c\" can\'t be empty.</string>
+    <string name="unreasonable_value">Please put a resonable value here.</string>
 
     <!-- actionbar -->
     <string name="full_name_mlin">Microstrip Line</string>

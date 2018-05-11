@@ -1,5 +1,7 @@
 package com.rookiedev.microwavetools.libs;
 
+import android.util.Log;
+
 public class MlinCalculator {
     private double effectiveEr;
 
@@ -22,21 +24,24 @@ public class MlinCalculator {
         length = line.getMetalLength();
         // SubstrateModel dielectric thickness
         height = line.getSubHeight();
+
         // SubstrateModel relative permittivity
         er = line.getSubEpsilon();
+
         // MetalModel thickness
         thickness = line.getMetalThick();
 
-        // starting microstrip_calc_int() with %f/1.0e6 MHz and Find u and correction factor for nonzero metal thickness
+        // starting microstrip_calc_int() with %f/1.0e6 MHz and Find u and correction
+        // factor for nonzero metal thickness
         widthToHeight = width / height;
         if (thickness > 0.0) {
             // find normalized metal thickness
             thicknessToHeight = thickness / height;
             // (6) from Hammerstad and Jensen
-            deltau1 = (thicknessToHeight / Constants.Pi)
-                    * Math.log(1.0 + 4.0 * Math.exp(1.0)
-                    / (thicknessToHeight * Math.pow(Math.cosh(Math.sqrt(6.517 * widthToHeight))
-                    / Math.sinh(Math.sqrt(6.517 * widthToHeight)), 2.0)));
+            deltau1 = (thicknessToHeight / Constants.Pi) * Math.log(1.0 + 4.0 * Math.exp(1.0)
+                    / (thicknessToHeight * Math.pow(
+                            Math.cosh(Math.sqrt(6.517 * widthToHeight)) / Math.sinh(Math.sqrt(6.517 * widthToHeight)),
+                            2.0)));
             // (7) from Hammerstad and Jensen
             deltaur = 0.5 * (1.0 + 1.0 / Math.cosh(Math.sqrt(er - 1.0))) * deltau1;
         } else {
@@ -63,8 +68,7 @@ public class MlinCalculator {
         fn = 1e-7 * line.getFrequency() * height;
 
         // (2) from Kirschning and Jansen
-        P1 = 0.27488 +
-                (0.6315 + (0.525 / (Math.pow((1.0 + 0.157 * fn), 20.0)))) * widthToHeight
+        P1 = 0.27488 + (0.6315 + (0.525 / (Math.pow((1.0 + 0.157 * fn), 20.0)))) * widthToHeight
                 - 0.065683 * Math.exp(-8.7513 * widthToHeight);
         P2 = 0.33622 * (1.0 - Math.exp(-0.03442 * er));
         P3 = 0.0363 * Math.exp(-4.6 * widthToHeight) * (1.0 - Math.exp(-Math.pow((fn / 3.87), 4.97)));
@@ -88,10 +92,7 @@ public class MlinCalculator {
 
         // (2) from Jansen and Kirschning
         R7 = 1.206 - 0.3144 * Math.exp(-R1) * (1.0 - Math.exp(-R2));
-        R8 = 1.0 + 1.275 * (1.0 -
-                Math.exp(-0.004625 * R3 *
-                        Math.pow(er, 1.674) *
-                        Math.pow(fn / 18.365, 2.745)));
+        R8 = 1.0 + 1.275 * (1.0 - Math.exp(-0.004625 * R3 * Math.pow(er, 1.674) * Math.pow(fn / 18.365, 2.745)));
         R9 = (5.086 * R4 * R5 / (0.3838 + 0.386 * R4)) * (Math.exp(-R6) / (1.0 + 1.2992 * R5));
         R9 = R9 * Math.pow((er - 1.0), 6.0) / (1.0 + 10.0 * Math.pow((er - 1), 6.0));
 
@@ -126,41 +127,31 @@ public class MlinCalculator {
         // effective relative permittivity
         effectiveEr = EF;
 
-        //this.effectiveEr = effectiveEr;
-        //MLINLine.setkEff(eeff);
+        // this.effectiveEr = effectiveEr;
+        // MLINLine.setkEff(eeff);
         line.setPhase(phase);
 
-        //  store results
+        // store results
         line.setImpedance(impedance);
         return line;
     }
 
     /*
-    *  Synthesize microstrip transmission line from electrical header_parameters
-    *
-    *  calculates:
-    *    w     = microstrip line width (mils)
-    *    l     = microstrip line length (mils)
-    *    loss  = insertion loss (dB)
-    *    eeff  = effective relative permitivity
-    *
-    *  from:
-    *    z0    = characteristic impedance (ohms)
-    *    len   = electrical length (degrees)
-    *    f     = frequency (Hz)
-    *    subs  = substrate header_parameters.  See TRSUBS for details.
-    *
-    *                |<--W-->|
-    *                 _______
-    *                | metal |
-    *   ----------------------------------------------
-    *  (  dielectric,er                      /|\     (
-    *   )                                 H   |       )
-    *  (                                     \|/     (
-    *   ----------------------------------------------
-    *   /////////////////ground///////////////////////
-    *
-    */
+     * Synthesize microstrip transmission line from electrical header_parameters
+     *
+     * calculates: w = microstrip line width (mils) l = microstrip line length
+     * (mils) loss = insertion loss (dB) eeff = effective relative permitivity
+     *
+     * from: z0 = characteristic impedance (ohms) len = electrical length (degrees)
+     * f = frequency (Hz) subs = substrate header_parameters. See TRSUBS for
+     * details.
+     *
+     * |<--W-->| _______ | metal | ---------------------------------------------- (
+     * dielectric,er /|\ ( ) H | ) ( \|/ (
+     * ----------------------------------------------
+     * /////////////////ground///////////////////////
+     *
+     */
     private MlinModel Synthesize(MlinModel line, int flag) {
         double length;
         double impedance;
@@ -190,50 +181,49 @@ public class MlinCalculator {
         boolean done = false;
 
         /*
-        * figure out what parameter we're synthesizing and set up the
-        * various optimization header_parameters.
-        *
-        * Basically what we need to know are
-        *    1)  min/max values for the parameter
-        *    2)  how to access the parameter
-        *    3)  an initial guess for the parameter
-        */
+         * figure out what parameter we're synthesizing and set up the various
+         * optimization header_parameters.
+         *
+         * Basically what we need to know are 1) min/max values for the parameter 2) how
+         * to access the parameter 3) an initial guess for the parameter
+         */
 
         switch (flag) {
-            case Constants.Synthesize_Width:
-                varMax = 100.0 * line.getSubHeight();
-                varMin = 0.01 * line.getSubHeight();
-                var = line.getSubHeight();
-                break;
+        case Constants.Synthesize_Width:
+            varMax = 100.0 * line.getSubHeight();
+            varMin = 0.01 * line.getSubHeight();
+            var = line.getSubHeight();
+            break;
 
-            case Constants.Synthesize_Height:
-                varMax = 100.0 * line.getMetalWidth();
-                varMin = 0.01 * line.getMetalWidth();
-                var = line.getMetalWidth();
-                break;
+        case Constants.Synthesize_Height:
+            varMax = 100.0 * line.getMetalWidth();
+            varMin = 0.01 * line.getMetalWidth();
+            var = line.getMetalWidth();
+            break;
 
-            case Constants.Synthesize_Er:
-                varMax = 100.0;
-                varMin = 1.0;
-                var = 5.0;
-                break;
+        case Constants.Synthesize_Er:
+            varMax = 100.0;
+            varMin = 1.0;
+            var = 5.0;
+            break;
 
-            case Constants.Synthesize_Length:
-                varMax = 100.0;
-                varMin = 1.0;
-                var = 5.0;
-                done = true;
-                break;
+        case Constants.Synthesize_Length:
+            varMax = 100.0;
+            varMin = 1.0;
+            var = 5.0;
+            done = true;
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
 
         // read values from the input line structure
         electricalLength = line.getPhase();
         impedance = line.getImpedance();
 
-        //temp value for l used while synthesizing the other header_parameters. We'll correct l later.
+        // temp value for l used while synthesizing the other header_parameters. We'll
+        // correct l later.
         length = 1000.0;
         line.setMetalLength(length, Constants.LengthUnit_m);
 
@@ -258,9 +248,9 @@ public class MlinCalculator {
 
             // see if we've actually been able to bracket the solution
             if (errmax * errmin > 0) {
-                //alert("Could not bracket the solution.\n"
-                //        "Synthesis failed.\n");
-                //return -1;
+                // alert("Could not bracket the solution.\n"
+                // "Synthesis failed.\n");
+                // return -1;
             }
 
             // figure out the slope of the error vs variable
@@ -289,10 +279,9 @@ public class MlinCalculator {
             var = var - err / deriv;
 
             /*
-            * see if the new guess is within our bracketed range.  If so,
-            * accept the new estimate.  If not, toss it out and do a
-            * bisection step to reduce the bracket.
-            */
+             * see if the new guess is within our bracketed range. If so, accept the new
+             * estimate. If not, toss it out and do a bisection step to reduce the bracket.
+             */
             if ((var > varMax) || (var < varMin)) {
                 var = (varMin + varMax) / 2.0;
             }
@@ -315,9 +304,9 @@ public class MlinCalculator {
             } else if (Math.abs((var - varOld) / var) < reltol) {
                 done = true;
             } else if (iters >= maxiters) {
-                //alert("Synthesis failed to converge in\n"
-                //        "%d iterations\n", maxiters);
-                //return -1;
+                // alert("Synthesis failed to converge in\n"
+                // "%d iterations\n", maxiters);
+                // return -1;
             }
             // done with iteration
         }
@@ -335,8 +324,8 @@ public class MlinCalculator {
         double A, B, E0;
 
         // (4) from Hammerstad and Jensen
-        A = 1.0 + (1.0 / 49.0)
-                * Math.log((Math.pow(widthToHeight, 4.0) + Math.pow((widthToHeight / 52.0), 2.0)) / (Math.pow(widthToHeight, 4.0) + 0.432))
+        A = 1.0 + (1.0 / 49.0) * Math.log((Math.pow(widthToHeight, 4.0) + Math.pow((widthToHeight / 52.0), 2.0))
+                / (Math.pow(widthToHeight, 4.0) + 0.432))
                 + (1.0 / 18.7) * Math.log(1.0 + Math.pow((widthToHeight / 18.1), 3.0));
 
         // (5) from Hammerstad and Jensen
@@ -345,7 +334,8 @@ public class MlinCalculator {
         // zero frequency effective permitivity.
         // (3) from Hammerstad and Jensen.
         // This is ee(ur,er) that is used by (9) in Hammerstad and Jensen.
-        E0 = (dielectricConstant + 1.0) / 2.0 + ((dielectricConstant - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / widthToHeight), (-A * B));
+        E0 = (dielectricConstant + 1.0) / 2.0
+                + ((dielectricConstant - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / widthToHeight), (-A * B));
 
         return E0;
     }
@@ -354,11 +344,12 @@ public class MlinCalculator {
     private static double CharacteristicImpedance_Z0(double widthToHeight) {
         double F, z01;
 
-        // (2) from Hammerstad and Jensen.  'u' is the normalized width
+        // (2) from Hammerstad and Jensen. 'u' is the normalized width
         F = 6.0 + (2.0 * Constants.Pi - 6.0) * Math.exp(-Math.pow((30.666 / widthToHeight), 0.7528));
 
         // (1) from Hammerstad and Jensen
-        z01 = (Constants.FREESPACEZ0 / (2 * Constants.Pi)) * Math.log(F / widthToHeight + Math.sqrt(1.0 + Math.pow((2 / widthToHeight), 2.0)));
+        z01 = (Constants.FREESPACEZ0 / (2 * Constants.Pi))
+                * Math.log(F / widthToHeight + Math.sqrt(1.0 + Math.pow((2 / widthToHeight), 2.0)));
 
         return z01;
     }

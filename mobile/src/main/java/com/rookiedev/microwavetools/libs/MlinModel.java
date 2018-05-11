@@ -5,6 +5,7 @@ public class MlinModel {
     private MetalModel metal;
     private double impedance, phase; // ohms, degree
     private double frequency; // Hz
+    private Constants.ERROR errorCode;
 
     public MlinModel() {
         substrate = new SubstrateModel();
@@ -13,24 +14,24 @@ public class MlinModel {
 
     void setSynthesizeParameter(double para, int flag) {
         switch (flag) {
-            case Constants.Synthesize_Width:
-                metal.setMetalWidth(para);
-                break;
+        case Constants.Synthesize_Width:
+            metal.setMetalWidth(para);
+            break;
 
-            case Constants.Synthesize_Height:
-                substrate.setSubHeight(para);
-                break;
+        case Constants.Synthesize_Height:
+            substrate.setSubHeight(para);
+            break;
 
-            case Constants.Synthesize_Er:
-                substrate.setSubEpsilon(para);
-                break;
+        case Constants.Synthesize_Er:
+            substrate.setSubEpsilon(para);
+            break;
 
-            case Constants.Synthesize_Length:
-                metal.setMetalLength(para);
-                break;
+        case Constants.Synthesize_Length:
+            metal.setMetalLength(para);
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -96,5 +97,13 @@ public class MlinModel {
 
     public void setSubHeight(double subHeight, int unit) {
         substrate.setSubHeight(Constants.value2meter(subHeight, unit));
+    }
+
+    public Constants.ERROR getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(Constants.ERROR errorCode) {
+        this.errorCode = errorCode;
     }
 }

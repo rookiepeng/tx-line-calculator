@@ -32,6 +32,7 @@ public class Constants {
                                                                                                // permitivitty, F/m
     public static final double FREESPACEZ0 = FREESPACE_MU0 * LIGHTSPEED; // free space impedance, Ohms
     public static final double Pi = Math.PI;
+    public static final double MIN_LIMIT = 1e-10; // 0.1 nm
 
     // flags
     public static final int Synthesize_Width = 0, Synthesize_Height = 1, Synthesize_Er = 2, Synthesize_Length = 3,
@@ -39,8 +40,8 @@ public class Constants {
     public static final int Synthesize_SubRadius = Synthesize_Height;
     public static final int LengthUnit_mil = 0, LengthUnit_mm = 1, LengthUnit_cm = 2, LengthUnit_m = 3;
     public static final int FreqUnit_MHz = 0, FreqUnit_GHz = 1, FreqUnit_Hz = 10;
-    public static final int ImpedanceUnit_Ohm=0;
-    public static final int PhaseUnit_Degree=0;
+    public static final int ImpedanceUnit_Ohm = 0;
+    public static final int PhaseUnit_Degree = 0;
 
     public static final int PositionMlin = 0, PositionCmlin = 1, PositionSlin = 2, PositionCslin = 3, PositionCpw = 4,
             PositionGcpw = 5, PositionCoax = 6;
@@ -400,22 +401,32 @@ public class Constants {
             }
         });
 
-        ObjectAnimator animFadeOut = ObjectAnimator.ofFloat(view, View.ALPHA, 1f,0f);
+        ObjectAnimator animFadeOut = ObjectAnimator.ofFloat(view, View.ALPHA, 1f, 0f);
         animFadeOut.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
         animFadeOut.setInterpolator(new AccelerateInterpolator());
 
         /*
-        ValueAnimator animFadeOut= ValueAnimator.ofFloat(1f, 0.2f);
-        animFadeOut.setDuration(mContext.getResources().getInteger(android.R.integer.config_mediumAnimTime));
-        animFadeOut.setInterpolator(new DecelerateInterpolator());
-        animFadeOut.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                view.setAlpha((Float) animation.getAnimatedValue());
-            }
-        });*/
+         * ValueAnimator animFadeOut= ValueAnimator.ofFloat(1f, 0.2f);
+         * animFadeOut.setDuration(mContext.getResources().getInteger(android.R.integer.
+         * config_mediumAnimTime)); animFadeOut.setInterpolator(new
+         * DecelerateInterpolator()); animFadeOut.addUpdateListener(new
+         * ValueAnimator.AnimatorUpdateListener() {
+         * 
+         * @Override public void onAnimationUpdate(ValueAnimator animation) {
+         * view.setAlpha((Float) animation.getAnimatedValue()); } });
+         */
 
         animCircularReveal.start();
         animFadeOut.start();
+    }
+
+    public enum ERROR {
+        NO_ERROR(0), DIMENSION_MINIMAL_LIMIT(1), ER_MINIMAL_LIMIT(2);
+
+        private final int errorCode;
+
+        ERROR(int errorCode) {
+            this.errorCode = errorCode;
+        }
     }
 }
