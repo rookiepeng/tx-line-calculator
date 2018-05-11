@@ -128,7 +128,7 @@ public class MlinCalculator {
 
         //this.effectiveEr = effectiveEr;
         //MLINLine.setkEff(eeff);
-        line.setElectricalLength(phase);
+        line.setPhase(phase);
 
         //  store results
         line.setImpedance(impedance);
@@ -230,7 +230,7 @@ public class MlinCalculator {
         }
 
         // read values from the input line structure
-        electricalLength = line.getElectricalLength();
+        electricalLength = line.getPhase();
         impedance = line.getImpedance();
 
         //temp value for l used while synthesizing the other header_parameters. We'll correct l later.

@@ -3,7 +3,7 @@ package com.rookiedev.microwavetools.libs;
 public class MlinModel {
     private SubstrateModel substrate;
     private MetalModel metal;
-    private double impedance, electricalLength; // ohms, degree
+    private double impedance, phase; // ohms, degree
     private double frequency; // Hz
 
     public MlinModel() {
@@ -66,12 +66,12 @@ public class MlinModel {
         this.impedance = impedance;
     }
 
-    public double getElectricalLength() {
-        return electricalLength;
+    public double getPhase() {
+        return phase;
     }
 
-    public void setElectricalLength(double electricalLength) {
-        this.electricalLength = electricalLength;
+    public void setPhase(double electricalLength) {
+        this.phase = electricalLength;
     }
 
     public void setFrequency(double frequency, int unit) {
