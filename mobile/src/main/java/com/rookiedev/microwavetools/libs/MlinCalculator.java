@@ -21,12 +21,24 @@ public class MlinCalculator {
         double v;
 
         width = line.getMetalWidth();
+        if (width < Constants.MIN_LIMIT) {
+            line.setErrorCode(Constants.ERROR.DIMENSION_MINIMAL_LIMIT);
+            return line;
+        }
         length = line.getMetalLength();
         // SubstrateModel dielectric thickness
         height = line.getSubHeight();
+        if (height < Constants.MIN_LIMIT) {
+            line.setErrorCode(Constants.ERROR.DIMENSION_MINIMAL_LIMIT);
+            return line;
+        }
 
         // SubstrateModel relative permittivity
         epsilon = line.getSubEpsilon();
+        if (epsilon < 1) {
+            line.setErrorCode(Constants.ERROR.ER_MINIMAL_LIMIT);
+            return line;
+        }
 
         // MetalModel thickness
         thickness = line.getMetalThick();
@@ -216,20 +228,40 @@ public class MlinCalculator {
             // Initialize the various error values
             line.setSynthesizeParameter(varMin, flag);
             line = Analysis(line);
-            errmin = line.getImpedance() - impedance;
+            if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                errmin = line.getImpedance() - impedance;
+            } else {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
 
             line.setSynthesizeParameter(varMax, flag);
             line = Analysis(line);
-            errmax = line.getImpedance() - impedance;
+            if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                errmax = line.getImpedance() - impedance;
+            } else {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
 
             line.setSynthesizeParameter(var, flag);
             line = Analysis(line);
-            err = line.getImpedance() - impedance;
+            if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                err = line.getImpedance() - impedance;
+            } else {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
 
             varOld = 0.99 * var;
             line.setSynthesizeParameter(varOld, flag);
             line = Analysis(line);
-            errold = line.getImpedance() - impedance;
+            if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                errold = line.getImpedance() - impedance;
+            } else {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
 
             // see if we've actually been able to bracket the solution
             if (errmax * errmin > 0) {
@@ -276,7 +308,12 @@ public class MlinCalculator {
             // update the error value
             line.setSynthesizeParameter(var, flag);
             line = Analysis(line);
-            err = line.getImpedance() - impedance;
+            if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                err = line.getImpedance() - impedance;
+            } else {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
 
             // update our bracket of the solution.
             if (sign * err > 0) {

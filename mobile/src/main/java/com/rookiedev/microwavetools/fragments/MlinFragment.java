@@ -138,7 +138,7 @@ public class MlinFragment extends Fragment {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, target);
 
-                        if(line.getErrorCode()== Constants.ERROR.NO_ERROR) {
+                        if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                             BigDecimal L_temp = new BigDecimal(
                                     Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition()));
                             double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -147,12 +147,12 @@ public class MlinFragment extends Fragment {
                     } else {
                         MlinCalculator mlin = new MlinCalculator();
                         line = mlin.getSynResult(line, Constants.Synthesize_Width);
-                        if(line.getErrorCode()== Constants.ERROR.NO_ERROR) {
+                        if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                             editTextL.setText("");
                         }
                     }
 
-                    if(line.getErrorCode()== Constants.ERROR.NO_ERROR) {
+                    if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                         if (target == Constants.Synthesize_Width) {
                             BigDecimal W_temp = new BigDecimal(
                                     Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition()));
@@ -164,7 +164,7 @@ public class MlinFragment extends Fragment {
                             double H = H_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                             editTextH.setText(String.valueOf(H));
                         }
-                    }else {
+                    } else {
                         if (target == Constants.Synthesize_Width) {
                             editTextW.setText("");
                             editTextW.setError(getString(R.string.synthesize_failed));
@@ -474,7 +474,7 @@ public class MlinFragment extends Fragment {
         }
     }
 
-    private void clearEditTextErrors(){
+    private void clearEditTextErrors() {
         editTextW.setError(null);
         editTextZ0.setError(null);
         editTextH.setError(null);
