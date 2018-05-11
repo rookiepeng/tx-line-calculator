@@ -154,15 +154,27 @@ public class MlinFragment extends Fragment {
 
                     if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                         if (target == Constants.Synthesize_Width) {
-                            BigDecimal W_temp = new BigDecimal(
-                                    Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition()));
-                            double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                            editTextW.setText(String.valueOf(W));
+                            if ((Double.isNaN(line.getMetalWidth())||Double.isInfinite(line.getMetalWidth()))) {
+                                editTextW.setText("");
+                                editTextW.setError(getString(R.string.synthesize_failed));
+                                editTextW.requestFocus();
+                            } else {
+                                BigDecimal W_temp = new BigDecimal(
+                                        Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition()));
+                                double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                                editTextW.setText(String.valueOf(W));
+                            }
                         } else if (target == Constants.Synthesize_Height) {
-                            BigDecimal H_temp = new BigDecimal(
-                                    Constants.meter2others(line.getSubHeight(), spinnerH.getSelectedItemPosition()));
-                            double H = H_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                            editTextH.setText(String.valueOf(H));
+                            if ((Double.isNaN(line.getSubHeight())||Double.isInfinite(line.getSubHeight()))) {
+                                editTextH.setText("");
+                                editTextH.setError(getString(R.string.synthesize_failed));
+                                editTextH.requestFocus();
+                            } else {
+                                BigDecimal H_temp = new BigDecimal(
+                                        Constants.meter2others(line.getSubHeight(), spinnerH.getSelectedItemPosition()));
+                                double H = H_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                                editTextH.setText(String.valueOf(H));
+                            }
                         }
                     } else {
                         if (target == Constants.Synthesize_Width) {
