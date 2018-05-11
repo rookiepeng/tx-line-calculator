@@ -1,7 +1,5 @@
 package com.rookiedev.microwavetools.libs;
 
-import android.util.Log;
-
 public class CmlinCalculator {
 
     public CmlinCalculator() {
@@ -436,7 +434,7 @@ public class CmlinCalculator {
             // use z0e and z0o to calculate z0 and k
             z0 = Math.sqrt(z0e * z0o);
             k = (z0e - z0o) / (z0e + z0o);
-            Log.v("CmlinCalculator", "k=" + Double.toString(k));
+            //Log.v("CmlinCalculator", "k=" + Double.toString(k));
             line.setImpedance(z0);
             line.setCouplingFactor(k);
             if (k <= 0 || k >= 1) {

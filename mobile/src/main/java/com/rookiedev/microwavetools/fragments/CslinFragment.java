@@ -69,13 +69,8 @@ public class CslinFragment extends Fragment {
             public void onClick(View view) {
                 Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.analyze_reveal),
                         Constants.ANALYZE);
-                if (!analysisInputCheck()) {
-                    edittextZ0.setText(""); // clear the Z0 and Eeff outputs
-                    edittextPhs.setText("");
-                    edittextZ0o.setText(""); //
-                    edittextZ0e.setText(""); //
-                    edittextK.setText("");
-                } else {
+                clearEditTextErrors();
+                if (analysisInputCheck()) {
                     line.setMetalWidth(Double.parseDouble(edittextW.getText().toString()),
                             spinnerW.getSelectedItemPosition());
                     line.setMetalSpace(Double.parseDouble(edittextS.getText().toString()),
@@ -91,26 +86,26 @@ public class CslinFragment extends Fragment {
                     if (edittextL.length() != 0) {
                         line.setMetalLength(Double.parseDouble(edittextL.getText().toString()),
                                 spinnerL.getSelectedItemPosition());
+                    } else {
+                        line.setMetalLength(0, spinnerL.getSelectedItemPosition());
+                    }
 
-                        CslinCalculator cslin = new CslinCalculator();
-                        line = cslin.getAnaResult(line);
+                    CslinCalculator cslin = new CslinCalculator();
+                    line = cslin.getAnaResult(line);
 
-                        BigDecimal Eeff_temp = new BigDecimal(line.getElectricalLength()); // cut the decimal of the
-                                                                                           // Eeff
+                    if (edittextL.length() != 0) {
+                        BigDecimal Eeff_temp = new BigDecimal(line.getPhase());
                         double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                 .doubleValue();
                         edittextPhs.setText(String.valueOf(Eeff));
-
                     } else {
-                        CslinCalculator cslin = new CslinCalculator();
-                        line = cslin.getAnaResult(line);
-                        edittextPhs.setText(""); // if the L input is empty, clear the Eeff
+                        edittextPhs.setText("");
                     }
 
                     BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
                     double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    edittextZ0.setText(String.valueOf(Z0)); // cut the decimal
-                    // of the Z0
+                    edittextZ0.setText(String.valueOf(Z0));
+
                     BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
                     double k = k_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                     edittextK.setText(String.valueOf(k));
@@ -131,37 +126,9 @@ public class CslinFragment extends Fragment {
             public void onClick(View view) {
                 Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.synthesize_reveal),
                         Constants.SYNTHESIZE);
-                if (!synthesizeInputCheck()) {
-                    edittextL.setText(""); // clear the L and W outputs
-                    edittextS.setText("");
-                    edittextW.setText("");
-                } else {
+                clearEditTextErrors();
+                if (synthesizeInputCheck()) {
                     synthesizeButton();
-                    if (useZ0k) {
-                        line.setImpedanceOdd(line.getImpedance()
-                                * Math.sqrt((1.0 - line.getCouplingFactor()) / (1.0 + line.getCouplingFactor())));
-                        line.setImpedanceEven(line.getImpedance()
-                                * Math.sqrt((1.0 + line.getCouplingFactor()) / (1.0 - line.getCouplingFactor())));
-
-                        BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
-                        double Z0o = Z0o_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittextZ0o.setText(String.valueOf(Z0o));
-
-                        BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
-                        double Z0e = Z0e_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittextZ0e.setText(String.valueOf(Z0e));
-                    } else {
-                        line.setImpedance(Math.sqrt(line.getImpedanceEven() * line.getImpedanceOdd()));
-                        line.setCouplingFactor((line.getImpedanceEven() - line.getImpedanceOdd())
-                                / (line.getImpedanceEven() + line.getImpedanceOdd()));
-
-                        BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                        double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittextZ0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
-                        BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
-                        double k = k_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittextK.setText(String.valueOf(k));
-                    }
                 }
             }
         });
@@ -413,39 +380,49 @@ public class CslinFragment extends Fragment {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
 
-        edittextW.setText(prefs.getString(Constants.CSLIN_W, "50.00"));
-        spinnerW.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_W_UNIT, "0")));
+        edittextW.setText(prefs.getString(Constants.CSLIN_W, "0.59"));
+        spinnerW.setSelection(
+                Integer.parseInt(prefs.getString(Constants.CSLIN_W_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
-        edittextS.setText(prefs.getString(Constants.CSLIN_S, "20.00"));
-        spinnerS.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_S_UNIT, "0")));
+        edittextS.setText(prefs.getString(Constants.CSLIN_S, "0.36"));
+        spinnerS.setSelection(
+                Integer.parseInt(prefs.getString(Constants.CSLIN_S_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
-        edittextL.setText(prefs.getString(Constants.CSLIN_L, "1000.00"));
-        spinnerL.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_L_UNIT, "0")));
+        edittextL.setText(prefs.getString(Constants.CSLIN_L, "34.9"));
+        spinnerL.setSelection(
+                Integer.parseInt(prefs.getString(Constants.CSLIN_L_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
-        edittextZ0.setText(prefs.getString(Constants.CSLIN_Z0, "33.42"));
-        spinnerZ0.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_Z0_UNIT, "0")));
+        edittextZ0.setText(prefs.getString(Constants.CSLIN_Z0, "50"));
+        spinnerZ0.setSelection(Integer
+                .parseInt(prefs.getString(Constants.CSLIN_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
 
-        edittextK.setText(prefs.getString(Constants.CSLIN_K, "0.10"));
+        edittextK.setText(prefs.getString(Constants.CSLIN_K, "0.2"));
 
-        edittextZ0o.setText(prefs.getString(Constants.CSLIN_Z0O, "30.35"));
-        spinnerZ0o.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_Z0O_UNIT, "0")));
+        edittextZ0o.setText(prefs.getString(Constants.CSLIN_Z0O, "40.8"));
+        spinnerZ0o.setSelection(Integer
+                .parseInt(prefs.getString(Constants.CSLIN_Z0O_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
 
-        edittextZ0e.setText(prefs.getString(Constants.CSLIN_Z0E, "36.69"));
-        spinnerZ0e.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_Z0E_UNIT, "0")));
+        edittextZ0e.setText(prefs.getString(Constants.CSLIN_Z0E, "61.2"));
+        spinnerZ0e.setSelection(Integer
+                .parseInt(prefs.getString(Constants.CSLIN_Z0E_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
 
-        edittextPhs.setText(prefs.getString(Constants.CSLIN_PHS, "61.00"));
-        spinnerPhs.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_PHS_UNIT, "0")));
+        edittextPhs.setText(prefs.getString(Constants.CSLIN_PHS, "90"));
+        spinnerPhs.setSelection(Integer
+                .parseInt(prefs.getString(Constants.CSLIN_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))));
 
         edittextFreq.setText(prefs.getString(Constants.CSLIN_FREQ, "1.00"));
-        spinnerFreq.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_FREQ_UNIT, "1")));
+        spinnerFreq.setSelection(
+                Integer.parseInt(prefs.getString(Constants.CSLIN_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))));
 
-        edittextEr.setText(prefs.getString(Constants.CSLIN_ER, "4.00"));
+        edittextEr.setText(prefs.getString(Constants.CSLIN_ER, "4.6"));
 
-        edittextH.setText(prefs.getString(Constants.CSLIN_H, "60.00"));
-        spinnerH.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_H_UNIT, "0")));
+        edittextH.setText(prefs.getString(Constants.CSLIN_H, "1.6"));
+        spinnerH.setSelection(
+                Integer.parseInt(prefs.getString(Constants.CSLIN_H_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
-        edittextT.setText(prefs.getString(Constants.CSLIN_T, "2.80"));
-        spinnerT.setSelection(Integer.parseInt(prefs.getString(Constants.CSLIN_T_UNIT, "0")));
+        edittextT.setText(prefs.getString(Constants.CSLIN_T, "0.035"));
+        spinnerT.setSelection(
+                Integer.parseInt(prefs.getString(Constants.CSLIN_T_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
         useZ0k = prefs.getString(Constants.CSLIN_USEZ0K, "true").equals("true");
     }
@@ -492,27 +469,59 @@ public class CslinFragment extends Fragment {
         if (edittextW.length() == 0) {
             edittextW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
+        } else if (Constants.value2meter(Double.parseDouble(edittextW.getText().toString()),
+                spinnerW.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
+            edittextW.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
+
         if (edittextS.length() == 0) {
             edittextS.setError(getText(R.string.Error_S_empty));
             checkResult = false;
+        } else if (Constants.value2meter(Double.parseDouble(edittextS.getText().toString()),
+                spinnerS.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
+            edittextS.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
+
         if (edittextFreq.length() == 0) {
             edittextFreq.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
+        } else if (Double.parseDouble(edittextFreq.getText().toString()) == 0) {
+            edittextFreq.setError(getText(R.string.error_zero_frequency));
+            checkResult = false;
         }
+
         if (edittextH.length() == 0) {
             edittextH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
+        } else if (Constants.value2meter(Double.parseDouble(edittextH.getText().toString()),
+                spinnerH.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
+            edittextH.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
+
         if (edittextT.length() == 0) {
             edittextT.setError(getText(R.string.Error_T_empty));
             checkResult = false;
         }
+
         if (edittextEr.length() == 0) {
             edittextEr.setError(Constants.errorErEmpty(mContext));
             checkResult = false;
+        } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
+            edittextEr.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
+
+        if (!checkResult) {
+            edittextZ0.setText("");
+            edittextPhs.setText("");
+            edittextZ0o.setText("");
+            edittextZ0e.setText("");
+            edittextK.setText("");
+        }
+
         return checkResult;
     }
 
@@ -521,11 +530,20 @@ public class CslinFragment extends Fragment {
         if (edittextFreq.length() == 0) {
             edittextFreq.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
+        } else if (Double.parseDouble(edittextFreq.getText().toString()) == 0) {
+            edittextFreq.setError(getText(R.string.error_zero_frequency));
+            checkResult = false;
         }
+
         if (edittextH.length() == 0) {
             edittextH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
+        } else if (Constants.value2meter(Double.parseDouble(edittextH.getText().toString()),
+                spinnerH.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
+            edittextH.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
+
         if (edittextT.length() == 0) {
             edittextT.setError(getText(R.string.Error_T_empty));
             checkResult = false;
@@ -533,26 +551,51 @@ public class CslinFragment extends Fragment {
         if (edittextEr.length() == 0) {
             edittextEr.setError(Constants.errorErEmpty(mContext));
             checkResult = false;
+        } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
+            edittextEr.setError(getText(R.string.unreasonable_value));
+            checkResult = false;
         }
+
         if (useZ0k) {
             if (edittextZ0.length() == 0) {
                 edittextZ0.setError(Constants.errorZ0Empty(mContext));
                 checkResult = false;
+            } else if (Double.parseDouble(edittextZ0.getText().toString()) == 0) {
+                edittextZ0.setError(getText(R.string.unreasonable_value));
+                checkResult = false;
             }
+
             if (edittextK.length() == 0) {
                 edittextK.setError(getText(R.string.Error_k_empty));
+                checkResult = false;
+            } else if (Double.parseDouble(edittextK.getText().toString()) == 0) {
+                edittextK.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
         } else {
             if (edittextZ0e.length() == 0) {
                 edittextZ0e.setError(Constants.errorZ0eEmpty(mContext));
                 checkResult = false;
+            } else if (Double.parseDouble(edittextZ0e.getText().toString()) == 0) {
+                edittextZ0e.setError(getText(R.string.unreasonable_value));
+                checkResult = false;
             }
+
             if (edittextZ0o.length() == 0) {
                 edittextZ0o.setError(Constants.errorZ0oEmpty(mContext));
                 checkResult = false;
+            } else if (Double.parseDouble(edittextZ0o.getText().toString()) == 0) {
+                edittextZ0o.setError(getText(R.string.unreasonable_value));
+                checkResult = false;
             }
         }
+
+        if (!checkResult) {
+            edittextL.setText("");
+            edittextS.setText("");
+            edittextW.setText("");
+        }
+
         return checkResult;
     }
 
@@ -560,9 +603,13 @@ public class CslinFragment extends Fragment {
         if (useZ0k) {
             line.setImpedance(Double.parseDouble(edittextZ0.getText().toString()));
             line.setCouplingFactor(Double.parseDouble(edittextK.getText().toString()));
+            line.setImpedanceOdd(0);
+            line.setImpedanceEven(0);
         } else {
             line.setImpedanceEven(Double.parseDouble(edittextZ0e.getText().toString()));
             line.setImpedanceOdd(Double.parseDouble(edittextZ0o.getText().toString()));
+            line.setImpedance(0);
+            line.setCouplingFactor(0);
         }
 
         line.setFrequency(Double.parseDouble(edittextFreq.getText().toString()), spinnerFreq.getSelectedItemPosition());
@@ -570,33 +617,81 @@ public class CslinFragment extends Fragment {
         line.setSubHeight(Double.parseDouble(edittextH.getText().toString()), spinnerH.getSelectedItemPosition());
         line.setMetalThick(Double.parseDouble(edittextT.getText().toString()), spinnerT.getSelectedItemPosition());
 
-        if (edittextPhs.length() != 0) { // check if the Eeff is empty
-            line.setElectricalLength(Double.parseDouble(edittextPhs.getText().toString()));
-            CslinCalculator cslin = new CslinCalculator();
-            line = cslin.getSynResult(line, useZ0k);
-
-            BigDecimal L_temp = new BigDecimal(
-                    Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition())); // cut the
-                                                                                                        // decimal of L
-            double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-            edittextL.setText(String.valueOf(L));
+        if (edittextPhs.length() != 0) {
+            line.setPhase(Double.parseDouble(edittextPhs.getText().toString()));
         } else {
-            CslinCalculator cslin = new CslinCalculator();
-            line = cslin.getSynResult(line, useZ0k);
-            edittextL.setText(""); // clear the L if the Eeff input is empty
+            line.setPhase(0);
         }
+        CslinCalculator cslin = new CslinCalculator();
+        line = cslin.getSynResult(line, useZ0k);
 
-        BigDecimal W_temp = new BigDecimal(
-                Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition())); // cut the decimal of
-                                                                                                   // W
-        double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-        edittextW.setText(String.valueOf(W));
+        if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+            if (edittextPhs.length() != 0) {
+                BigDecimal L_temp = new BigDecimal(
+                        Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition()));
+                double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                edittextL.setText(String.valueOf(L));
+            } else {
+                edittextL.setText("");
+            }
 
-        BigDecimal S_temp = new BigDecimal(
-                Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition())); // cut the decimal of
-                                                                                                   // S
-        double S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-        edittextS.setText(String.valueOf(S));
+            if ((Double.isNaN(line.getMetalWidth()) || Double.isInfinite(line.getMetalWidth()))
+                    || (Double.isNaN(line.getMetalSpace()) || Double.isInfinite(line.getMetalSpace()))) {
+                edittextW.setText("");
+                edittextW.setError(getString(R.string.synthesize_failed));
+                edittextW.requestFocus();
+                edittextS.setText("");
+                edittextS.setError(getString(R.string.synthesize_failed));
+                edittextL.setText("");
+            } else {
+                BigDecimal W_temp = new BigDecimal(
+                        Constants.meter2others(line.getMetalWidth(), spinnerW.getSelectedItemPosition()));
+                double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                edittextW.setText(String.valueOf(W));
+
+                BigDecimal S_temp = new BigDecimal(
+                        Constants.meter2others(line.getMetalSpace(), spinnerS.getSelectedItemPosition()));
+                double S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                edittextS.setText(String.valueOf(S));
+            }
+
+            if (useZ0k) {
+                BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
+                double Z0o = Z0o_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                edittextZ0o.setText(String.valueOf(Z0o));
+
+                BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
+                double Z0e = Z0e_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                edittextZ0e.setText(String.valueOf(Z0e));
+            } else {
+                BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
+                double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                edittextZ0.setText(String.valueOf(Z0));
+
+                BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
+                double k = k_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                edittextK.setText(String.valueOf(k));
+            }
+        } else if (line.getErrorCode() == Constants.ERROR.K_OUT_OF_RANGE) {
+            edittextW.setText("");
+            edittextS.setText("");
+            edittextL.setText("");
+            edittextK.setError(getString(R.string.k_out_of_range));
+            edittextK.requestFocus();
+        } else if (line.getErrorCode() == Constants.ERROR.Z0E_Z0O_MISTAKE) {
+            edittextW.setText("");
+            edittextS.setText("");
+            edittextL.setText("");
+            edittextZ0o.setError(getString(R.string.Z0e_larger_Z0o));
+            edittextZ0o.requestFocus();
+            edittextZ0e.setError(getString(R.string.Z0e_larger_Z0o));
+        } else {
+            edittextW.setText("");
+            edittextW.setError(getString(R.string.synthesize_failed));
+            edittextW.requestFocus();
+            edittextS.setText("");
+            edittextS.setError(getString(R.string.synthesize_failed));
+        }
     }
 
     public void addAdFragment() {
@@ -612,5 +707,18 @@ public class CslinFragment extends Fragment {
                 fragmentManager.beginTransaction().remove(adFragment).commit();
             }
         }
+    }
+
+    private void clearEditTextErrors() {
+        edittextW.setError(null);
+        edittextS.setError(null);
+        edittextH.setError(null);
+        edittextZ0.setError(null);
+        edittextK.setError(null);
+        edittextZ0e.setError(null);
+        edittextZ0o.setError(null);
+        edittextEr.setError(null);
+        edittextFreq.setError(null);
+        edittextT.setError(null);
     }
 }

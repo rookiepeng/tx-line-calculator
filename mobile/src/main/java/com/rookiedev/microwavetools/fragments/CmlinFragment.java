@@ -137,7 +137,6 @@ public class CmlinFragment extends Fragment {
                 clearEditTextErrors();
                 if (synthesizeInputCheck()) {
                     synthesizeButton();
-
                 }
             }
         });

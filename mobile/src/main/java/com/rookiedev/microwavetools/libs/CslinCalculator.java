@@ -19,14 +19,11 @@ public class CslinCalculator {
             i++;
         } while ((Math.abs(kf - 1.0) > 1e-15) && (i < 20));
 
-/* alternate approach
-  if( k < sqrt(0.5) ) {
-    kp = sqrt(1.0 - k*k);
-    r = M_PI / log(2.0 * (1.0 + sqrt(kp)) / (1.0 - sqrt(kp)) );
-  } else {
-    r = log(2.0 * (1.0 + sqrt(k)) / (1.0 - sqrt(k)) ) / M_PI;
-  }
-*/
+        /*
+         * alternate approach if( k < sqrt(0.5) ) { kp = sqrt(1.0 - k*k); r = M_PI /
+         * log(2.0 * (1.0 + sqrt(kp)) / (1.0 - sqrt(kp)) ); } else { r = log(2.0 * (1.0
+         * + sqrt(k)) / (1.0 - sqrt(k)) ) / M_PI; }
+         */
         return r;
     }
 
@@ -35,9 +32,11 @@ public class CslinCalculator {
         double ke, ko;
 
         // (3) from Cohn
-        ke = Math.tanh(Math.PI * line.getMetalWidth() / (2.0 * line.getSubHeight())) * Math.tanh(Math.PI * (line.getMetalWidth() + line.getMetalSpace()) / (2.0 * line.getSubHeight()));
+        ke = Math.tanh(Math.PI * line.getMetalWidth() / (2.0 * line.getSubHeight()))
+                * Math.tanh(Math.PI * (line.getMetalWidth() + line.getMetalSpace()) / (2.0 * line.getSubHeight()));
         // (6) from Cohn
-        ko = Math.tanh(Math.PI * line.getMetalWidth() / (2.0 * line.getSubHeight())) / Math.tanh(Math.PI * (line.getMetalWidth() + line.getMetalSpace()) / (2.0 * line.getSubHeight()));
+        ko = Math.tanh(Math.PI * line.getMetalWidth() / (2.0 * line.getSubHeight()))
+                / Math.tanh(Math.PI * (line.getMetalWidth() + line.getMetalSpace()) / (2.0 * line.getSubHeight()));
         // (2) from Cohn
         line.setImpedanceEven((Constants.FREESPACEZ0 / 4.0) * Math.sqrt(1.0 / line.getSubEpsilon()) / k_over_kp(ke));
         // (5) from Cohn
@@ -55,16 +54,29 @@ public class CslinCalculator {
         double z0s, z0s_0t;
         double cf_t, cf_0;
 
+        if (line.getMetalWidth() < Constants.MINI_LIMIT) {
+            line.setErrorCode(Constants.ERROR.WIDTH_MINIMAL_LIMIT);
+            return line;
+        }
+        if (line.getMetalSpace() < Constants.MINI_LIMIT) {
+            line.setErrorCode(Constants.ERROR.SPACE_MINIMAL_LIMIT);
+            return line;
+        }
+        if (line.getSubHeight() < Constants.MINI_LIMIT) {
+            line.setErrorCode(Constants.ERROR.HEIGHT_MINIMAL_LIMIT);
+            return line;
+        }
+        if (line.getSubEpsilon() < 1) {
+            line.setErrorCode(Constants.ERROR.ER_MINIMAL_LIMIT);
+            return line;
+        }
+
         // Start of coupled stripline calculations
         // zero thickness coupled line
         line = impedance_zeroThickness(line);
         z0e_0t = line.getImpedanceEven();
         z0o_0t = line.getImpedanceOdd();
-
-        if (line.getMetalThick() == 0.0) {
-            //line -> z0e = z0e_0t;
-            //line -> z0o = z0o_0t;
-        } else {
+        if (line.getMetalThick() != 0.0) {
             lineSlin.setSubstrate(line.getSubstrate());
             lineSlin.setMetalThick(line.getMetalThick(), Constants.LengthUnit_m);
             lineSlin.setMetalWidth(line.getMetalWidth(), Constants.LengthUnit_m);
@@ -73,19 +85,31 @@ public class CslinCalculator {
 
             SlinCalculator slin = new SlinCalculator();
             lineSlin = slin.getAnaResult(lineSlin);
-
+            if (lineSlin.getErrorCode() != Constants.ERROR.NO_ERROR) {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
             z0s = lineSlin.getImpedance();
 
             lineSlin.setMetalThick(0, Constants.LengthUnit_m);
             lineSlin = slin.getAnaResult(lineSlin);
+            if (lineSlin.getErrorCode() != Constants.ERROR.NO_ERROR) {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
             z0s_0t = lineSlin.getImpedance();
 
+            if ((1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0 < 0) {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
+
             // fringing capacitance
-            cf_t = (Constants.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * (
-                    (2.0 / (1.0 - line.getMetalThick() / line.getSubHeight())) *
-                            Math.log((1.0 / (1.0 - line.getMetalThick() / line.getSubHeight())) + 1.0) -
-                            (1.0 / (1.0 - line.getMetalThick() / line.getSubHeight()) - 1.0) *
-                                    Math.log((1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0));
+            cf_t = (Constants.FREESPACE_E0 * line.getSubEpsilon() / Math.PI)
+                    * ((2.0 / (1.0 - line.getMetalThick() / line.getSubHeight()))
+                            * Math.log((1.0 / (1.0 - line.getMetalThick() / line.getSubHeight())) + 1.0)
+                            - (1.0 / (1.0 - line.getMetalThick() / line.getSubHeight()) - 1.0) * Math.log(
+                                    (1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0));
 
             // zero thickness fringing capacitance
             cf_0 = (Constants.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * 2.0 * Math.log(2.0);
@@ -94,14 +118,16 @@ public class CslinCalculator {
             line.setImpedanceEven(1.0 / ((1.0 / z0s) - (cf_t / cf_0) * ((1.0 / z0s_0t) - (1.0 / z0e_0t))));
 
             if (line.getMetalSpace() >= 5.0 * line.getMetalThick()) {
-                // (20) from Cohn, (4.6.5.2) in Wadell -- note, Wadell has a sign error in the equation
+                // (20) from Cohn, (4.6.5.2) in Wadell -- note, Wadell has a sign error in the
+                // equation
                 line.setImpedanceOdd(1.0 / ((1.0 / z0s) + (cf_t / cf_0) * ((1.0 / z0o_0t) - (1.0 / z0s_0t))));
             } else {
-                // (22) from Cohn, (4.6.5.3) in Wadell -- note, Wadell has a couple of errors in the transcription from the original (Cohn)
-                line.setImpedanceOdd(1.0 / ((1.0 / z0o_0t) +
-                        ((1.0 / z0s) - (1.0 / z0s_0t)) -
-                        (2.0 / Constants.FREESPACEZ0) * (cf_t / Constants.FREESPACE_E0 - cf_0 / Constants.FREESPACE_E0) +
-                        (2.0 * line.getMetalThick()) / (Constants.FREESPACEZ0 * line.getMetalSpace())));
+                // (22) from Cohn, (4.6.5.3) in Wadell -- note, Wadell has a couple of errors in
+                // the transcription from the original (Cohn)
+                line.setImpedanceOdd(1.0 / ((1.0 / z0o_0t) + ((1.0 / z0s) - (1.0 / z0s_0t))
+                        - (2.0 / Constants.FREESPACEZ0)
+                                * (cf_t / Constants.FREESPACE_E0 - cf_0 / Constants.FREESPACE_E0)
+                        + (2.0 * line.getMetalThick()) / (Constants.FREESPACEZ0 * line.getMetalSpace())));
             }
         }
 
@@ -109,16 +135,19 @@ public class CslinCalculator {
         line.setImpedance(Math.sqrt(line.getImpedanceEven() * line.getImpedanceOdd()));
 
         // coupling coefficient
-        line.setCouplingFactor((line.getImpedanceEven() - line.getImpedanceOdd()) / (line.getImpedanceEven() + line.getImpedanceOdd()));
+        line.setCouplingFactor((line.getImpedanceEven() - line.getImpedanceOdd())
+                / (line.getImpedanceEven() + line.getImpedanceOdd()));
 
-  /*
-   * electrical length = 360 degrees * physical length / wavelength
-   *
-   * freq * wavelength = velocity => 1/wavelength = freq / velocity
-   *
-   * 1/wavelength = freq * LIGHTSPEED/sqrt(keff)
-   */
-        line.setElectricalLength(360.0 * line.getMetalLength() * line.getFrequency() / (Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon())));
+        /*
+         * electrical length = 360 degrees * physical length / wavelength
+         *
+         * freq * wavelength = velocity => 1/wavelength = freq / velocity
+         *
+         * 1/wavelength = freq * LIGHTSPEED/sqrt(keff)
+         */
+        line.setPhase(360.0 * line.getMetalLength() * line.getFrequency()
+                / (Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon())));
+        line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;
     }
 
@@ -136,16 +165,16 @@ public class CslinCalculator {
 
         double AW, F1, F2, F3;
 
-        double ai[] = {1, -0.301, 3.209, -27.282, 56.609, -37.746};
-        double bi[] = {0.020, -0.623, 17.192, -68.946, 104.740, -16.148};
-        double ci[] = {0.002, -0.347, 7.171, -36.910, 76.132, -51.616};
+        double ai[] = { 1, -0.301, 3.209, -27.282, 56.609, -37.746 };
+        double bi[] = { 0.020, -0.623, 17.192, -68.946, 104.740, -16.148 };
+        double ci[] = { 0.002, -0.347, 7.171, -36.910, 76.132, -51.616 };
 
         int i;
         double dw, ds;
         double ze0 = 0, ze1, ze2, dedw, deds;
         double zo0 = 0, zo1, zo2, dodw, dods;
 
-        len = line.getElectricalLength();
+        len = line.getPhase();
 
         // SubstrateModel dielectric thickness (m)
         h = line.getSubHeight();
@@ -162,32 +191,46 @@ public class CslinCalculator {
             // use z0 and k to calculate z0e and z0o
             z0o = z0 * Math.sqrt((1.0 - k) / (1.0 + k));
             z0e = z0 * Math.sqrt((1.0 + k) / (1.0 - k));
+            line.setImpedanceEven(z0e);
+            line.setImpedanceOdd(z0e);
+            if (k >= 1) {
+                line.setErrorCode(Constants.ERROR.K_OUT_OF_RANGE);
+                return line;
+            }
         } else {
             // use z0e and z0o to calculate z0 and k
             z0 = Math.sqrt(z0e * z0o);
             k = (z0e - z0o) / (z0e + z0o);
+            line.setImpedance(z0);
+            line.setCouplingFactor(k);
+            if (k <= 0 || k >= 1) {
+                line.setErrorCode(Constants.ERROR.Z0E_Z0O_MISTAKE);
+                return line;
+            }
         }
 
         // temp value for l used while finding w and s
         l = 1000.0;
         line.setMetalLength(l, Constants.LengthUnit_m);
 
-        // FIXME - change limits to be normalized to substrate thickness limits on the allowed range for w
-        //wmin = MIL2M(0.5);
-        //wmax = MIL2M(1000);
+        // FIXME - change limits to be normalized to substrate thickness limits on the
+        // allowed range for w
+        // wmin = MIL2M(0.5);
+        // wmax = MIL2M(1000);
 
         // limits on the allowed range for s
-        //smin = MIL2M(0.5);
-        //smax = MIL2M(1000);
+        // smin = MIL2M(0.5);
+        // smax = MIL2M(1000);
 
         // impedance convergence tolerance (ohms)
-        //abstol = 1e-6;
+        // abstol = 1e-6;
 
         // width relative convergence tolerance (mils) (set to 0.1 micron)
-        //reltol = MICRON2MIL(0.1);
+        // reltol = MICRON2MIL(0.1);
         maxiters = 50;
 
-        // Initial guess at a solution -- FIXME:  This is an initial guess for coupled microstrip _not_ coupled stripline.
+        // Initial guess at a solution -- FIXME: This is an initial guess for coupled
+        // microstrip _not_ coupled stripline.
         AW = Math.exp(z0 * Math.sqrt(er + 1.0) / 42.4) - 1.0;
         F1 = 8.0 * Math.sqrt(AW * (7.0 + 4.0 / er) / 11.0 + (1.0 + 1.0 / er) / 0.81) / AW;
         F2 = 0;
@@ -211,19 +254,22 @@ public class CslinCalculator {
         delta = Constants.value2meter(1e-5, Constants.LengthUnit_mil);
         cval = 1e-12 * z0e * z0o;
 
-  /*
-   * We should never need anything anywhere near maxiters iterations.
-   * This limit is just to prevent going to lala land if something
-   * breaks.
-   */
-        while ((!done) && (iters < maxiters)) {
+        /*
+         * We should never need anything anywhere near maxiters iterations. This limit
+         * is just to prevent going to lala land if something breaks.
+         */
+        while (!done) {
             iters++;
             line.setMetalWidth(w, Constants.LengthUnit_m);
             line.setMetalSpace(s, Constants.LengthUnit_m);
             line = Analysis(line);
-
-            ze0 = line.getImpedanceEven();
-            zo0 = line.getImpedanceOdd();
+            if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                ze0 = line.getImpedanceEven();
+                zo0 = line.getImpedanceOdd();
+            } else {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
 
             // check for convergence
             err = Math.pow((ze0 - z0e), 2.0) + Math.pow((zo0 - z0o), 2.0);
@@ -234,14 +280,24 @@ public class CslinCalculator {
                 line.setMetalWidth(w + delta, Constants.LengthUnit_m);
                 line.setMetalSpace(s, Constants.LengthUnit_m);
                 line = Analysis(line);
-                ze1 = line.getImpedanceEven();
-                zo1 = line.getImpedanceOdd();
+                if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                    ze1 = line.getImpedanceEven();
+                    zo1 = line.getImpedanceOdd();
+                } else {
+                    line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                    return line;
+                }
 
                 line.setMetalWidth(w, Constants.LengthUnit_m);
                 line.setMetalSpace(s + delta, Constants.LengthUnit_m);
                 line = Analysis(line);
-                ze2 = line.getImpedanceEven();
-                zo2 = line.getImpedanceOdd();
+                if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
+                    ze2 = line.getImpedanceEven();
+                    zo2 = line.getImpedanceOdd();
+                } else {
+                    line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                    return line;
+                }
 
                 dedw = (ze1 - ze0) / delta;
                 dodw = (zo1 - zo0) / delta;
@@ -251,10 +307,10 @@ public class CslinCalculator {
                 // find the determinate
                 d = dedw * dods - deds * dodw;
 
-	/*
-     * estimate the new solution, but don't change by more than
-	 * 10% at a time to avoid convergence problems
-	 */
+                /*
+                 * estimate the new solution, but don't change by more than 10% at a time to
+                 * avoid convergence problems
+                 */
                 dw = -1.0 * ((ze0 - z0e) * dods - (zo0 - z0o) * deds) / d;
                 if (Math.abs(dw) > 0.1 * w) {
                     if (dw > 0.0)
@@ -273,6 +329,11 @@ public class CslinCalculator {
                 }
                 s = Math.abs(s + ds);
             }
+
+            if (iters >= maxiters) {
+                line.setErrorCode(Constants.ERROR.MAX_ITERATIONS);
+                return line;
+            }
         }
 
         line.setMetalWidth(w, Constants.LengthUnit_m);
@@ -280,7 +341,8 @@ public class CslinCalculator {
         line = Analysis(line);
 
         // scale the line length to get the desired electrical length
-        line.setMetalLength(line.getMetalLength() * len / line.getElectricalLength(), Constants.LengthUnit_m);
+        line.setMetalLength(line.getMetalLength() * len / line.getPhase(), Constants.LengthUnit_m);
+        line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;
     }
 
