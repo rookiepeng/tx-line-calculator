@@ -26,6 +26,8 @@
     <string name="synthesize_failed">Error: Unable to obtain a value, please check your inputs.</string>
     <string name="k_out_of_range">Error: \"k\" should be within (0,1).</string>
     <string name="Z0e_larger_Z0o">Error: Z0e must be larger than Z0o.</string>
+    <string name="substrate_too_large">Error: Metal core must be smaller than the substrate.</string>
+    <string name="offset_too_large">Error: Metal core is out of the substrate.</string>
 
     <!-- actionbar -->
     <string name="full_name_mlin">Microstrip Line</string>

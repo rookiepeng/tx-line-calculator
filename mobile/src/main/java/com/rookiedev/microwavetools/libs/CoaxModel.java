@@ -2,9 +2,10 @@ package com.rookiedev.microwavetools.libs;
 
 public class CoaxModel {
     private SubstrateModel substrate;
-    private double impedance, electricalLength; // ohms, degree
+    private double impedance, phase; // ohms, degree
     private double frequency; // Hz
     private double coreRadius, coreOffset, metalLength;
+    private Constants.ERROR errorCode;
 
     public CoaxModel() {
         substrate = new SubstrateModel();
@@ -13,24 +14,24 @@ public class CoaxModel {
     void setSynthesizeParameter(double para, int flag) {
         switch (flag) {
 
-            case Constants.Synthesize_Height:
-                substrate.setSubHeight(para);
-                break;
+        case Constants.Synthesize_Height:
+            substrate.setSubHeight(para);
+            break;
 
-            case Constants.Synthesize_Er:
-                substrate.setSubEpsilon(para);
-                break;
+        case Constants.Synthesize_Er:
+            substrate.setSubEpsilon(para);
+            break;
 
-            case Constants.Synthesize_CoreRadius:
-                coreRadius = para;
-                break;
+        case Constants.Synthesize_CoreRadius:
+            coreRadius = para;
+            break;
 
-            case Constants.Synthesize_CoreOffset:
-                coreOffset = para;
-                break;
+        case Constants.Synthesize_CoreOffset:
+            coreOffset = para;
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -42,12 +43,12 @@ public class CoaxModel {
         this.impedance = impedance;
     }
 
-    public double getElectricalLength() {
-        return electricalLength;
+    public double getPhase() {
+        return phase;
     }
 
-    public void setElectricalLength(double electricalLength) {
-        this.electricalLength = electricalLength;
+    public void setPhase(double phase) {
+        this.phase = phase;
     }
 
     public void setFrequency(double frequency, int unit) {
@@ -96,5 +97,13 @@ public class CoaxModel {
 
     public void setMetalLength(double metalLength, int unit) {
         this.metalLength = Constants.value2meter(metalLength, unit);
+    }
+
+    public Constants.ERROR getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(Constants.ERROR errorCode) {
+        this.errorCode = errorCode;
     }
 }
