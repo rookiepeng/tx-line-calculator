@@ -28,7 +28,7 @@ import java.math.BigDecimal;
 public class CmlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    private TextView textZ0, textK, textZ0o, textZ0e;
+    //private TextView textZ0, textK, textZ0o, textZ0e;
     private EditText edittextW;
     private EditText edittextS;
     private EditText edittextL;
@@ -180,29 +180,29 @@ public class CmlinFragment extends Fragment {
         radioButtonZ0e = viewRoot.findViewById(R.id.radioBtn_Z0e);
         radioButtonZ0e.setVisibility(View.VISIBLE);
 
-        TextView textW = viewRoot.findViewById(R.id.text_W);
-        textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        //TextView textW = viewRoot.findViewById(R.id.text_W);
+        //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textS = viewRoot.findViewById(R.id.text_S);
-        textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        //TextView textS = viewRoot.findViewById(R.id.text_S);
+        //textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textL = viewRoot.findViewById(R.id.text_L);
-        textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        //TextView textL = viewRoot.findViewById(R.id.text_L);
+        //textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
-        textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        //TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
+        //textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
-        TextView textEr = viewRoot.findViewById(R.id.text_er);
-        textEr.append(Constants.stringEr(mContext));
+        //TextView textEr = viewRoot.findViewById(R.id.text_er);
+        //textEr.append(Constants.stringEr(mContext));
 
-        textZ0 = viewRoot.findViewById(R.id.text_Z0);
-        textZ0.append(Constants.stringZ0(mContext));
-        textK = viewRoot.findViewById(R.id.text_k);
+        //textZ0 = viewRoot.findViewById(R.id.text_Z0);
+        //textZ0.append(Constants.stringZ0(mContext));
+        //textK = viewRoot.findViewById(R.id.text_k);
 
-        textZ0o = viewRoot.findViewById(R.id.text_Z0o);
-        textZ0o.append(Constants.stringZ0o(mContext));
-        textZ0e = viewRoot.findViewById(R.id.text_Z0e);
-        textZ0e.append(Constants.stringZ0e(mContext));
+        //textZ0o = viewRoot.findViewById(R.id.text_Z0o);
+        //textZ0o.append(Constants.stringZ0o(mContext));
+        //textZ0e = viewRoot.findViewById(R.id.text_Z0e);
+        //textZ0e.append(Constants.stringZ0e(mContext));
 
         // edittext elements
         edittextW = viewRoot.findViewById(R.id.editText_W);
@@ -276,10 +276,10 @@ public class CmlinFragment extends Fragment {
                 edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittextZ0e.setEnabled(false);
                 edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                //textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                //textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                //textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             }
         });
         radioButtonK.setOnClickListener(new View.OnClickListener() {
@@ -298,10 +298,10 @@ public class CmlinFragment extends Fragment {
                 edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittextZ0e.setEnabled(false);
                 edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                //textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                //textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                //textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             }
         });
         radioButtonZ0o.setOnClickListener(new View.OnClickListener() {
@@ -320,10 +320,10 @@ public class CmlinFragment extends Fragment {
                 edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittextZ0e.setEnabled(true);
                 edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                //textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                //textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                //textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             }
         });
         radioButtonZ0e.setOnClickListener(new View.OnClickListener() {
@@ -342,10 +342,10 @@ public class CmlinFragment extends Fragment {
                 edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittextZ0e.setEnabled(true);
                 edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                //textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+                //textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+                //textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             }
         });
         if (useZ0k) {
@@ -361,10 +361,10 @@ public class CmlinFragment extends Fragment {
             edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             edittextZ0e.setEnabled(false);
             edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-            textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-            textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-            textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-            textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            //textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            //textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            //textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
         } else {
             radioButtonZ0.setChecked(false);
             radioButtonK.setChecked(false);
@@ -378,10 +378,10 @@ public class CmlinFragment extends Fragment {
             edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             edittextZ0e.setEnabled(true);
             edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-            textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-            textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-            textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-            textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            //textK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            //textZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            //textZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         }
     }
 

@@ -42,30 +42,27 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_thickness"
+                    layout="@layout/parameter_thickness_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_height"
+                    layout="@layout/parameter_height_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_width"
-                    layout="@layout/parameter_width"
+                    layout="@layout/parameter_width_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_space"
-                    layout="@layout/parameter_space"
+                    layout="@layout/parameter_gap"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_length"
-                    layout="@layout/parameter_length"
+                    layout="@layout/parameter_length_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -117,31 +114,12 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_z0"
-                    layout="@layout/parameter_z0"
+                    layout="@layout/parameter_impedance"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_k"
-                    layout="@layout/parameter_k"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:background="?android:attr/listDivider" />
-
-                <include
-                    android:id="@+id/parameter_z0o"
-                    layout="@layout/parameter_z0o"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <include
-                    android:id="@+id/parameter_z0e"
-                    layout="@layout/parameter_z0e"
+                    layout="@layout/parameter_k_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
@@ -151,18 +129,32 @@
                     android:background="?android:attr/listDivider" />
 
                 <include
-                    android:id="@+id/parameter_phase"
-                    layout="@layout/parameter_phase"
+                    layout="@layout/parameter_impedance_odd"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_epsilon"
+                    layout="@layout/parameter_impedance_even"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:background="?android:attr/listDivider" />
+
+                <include
+                    layout="@layout/parameter_phase_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_frequency"
+                    layout="@layout/parameter_epsilon_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <include
+                    layout="@layout/parameter_frequency_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

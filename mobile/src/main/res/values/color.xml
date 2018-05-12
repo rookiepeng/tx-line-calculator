@@ -3,15 +3,15 @@
     <color name="colorPrimary">#0277bd</color>
     <color name="colorPrimaryDark">#004c8c</color>
     <color name="colorPrimaryLight">#58a5f0</color>
-    <color name="colorAccent">#fb8c00</color>
+    <color name="colorAccent">#FF5722</color>
 
     <color name="overlayBackground">#80808080</color>
 
     <color name="viewBackground">#F5F5F5</color>
 
-    <color name="synthesizeColor">#4CAF50</color>
-    <color name="synthesizeColorDark">#2E7D32</color>
-    <color name="synthesizeColorLight">#A5D6A7</color>
+    <color name="synthesizeColor">#009688</color>
+    <color name="synthesizeColorDark">#00695C</color>
+    <color name="synthesizeColorLight">#80CBC4</color>
     <color name="analyzeColor">#9C27B0</color>
     <color name="analyzeColorDark">#6A1B9A</color>
     <color name="analyzeColorLight">#CE93D8</color>

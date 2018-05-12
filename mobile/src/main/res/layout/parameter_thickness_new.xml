@@ -24,6 +24,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
+        android:textColorHint="?android:attr/textColorTertiary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/spinner_T"
         app:layout_constraintStart_toEndOf="@+id/radioBtn_T"

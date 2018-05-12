@@ -30,7 +30,7 @@ import java.util.Objects;
 public class CpwFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    private TextView textH, textW, textS;
+    //private TextView textH, textW, textS;
     private EditText edittextW, edittextS, edittextL, edittextZ0, edittextPhs, edittextFreq, edittextT, edittextH,
             edittextEr;
     private Button buttonSynthesize, buttonAnalyze;
@@ -39,7 +39,7 @@ public class CpwFragment extends Fragment {
     private RadioButton radioButtonW, radioButtonS, radioButtonH;
     private boolean withGround;
     private CpwModel line;
-    private ColorStateList defaultTextColor, defaultEdittextColor;
+    private ColorStateList defaultEdittextColor;
     private AdFragment adFragment = null;
     private FragmentManager fragmentManager = null;
 
@@ -267,23 +267,23 @@ public class CpwFragment extends Fragment {
         radioButtonH = viewRoot.findViewById(R.id.radioBtn_H);
         radioButtonH.setVisibility(View.VISIBLE);
 
-        TextView textEr = viewRoot.findViewById(R.id.text_er);
-        textEr.append(Constants.stringEr(mContext));
-        defaultTextColor = textEr.getTextColors();
+        //TextView textEr = viewRoot.findViewById(R.id.text_er);
+        //textEr.append(Constants.stringEr(mContext));
+        //defaultTextColor = textEr.getTextColors();
 
-        TextView textZ0 = viewRoot.findViewById(R.id.text_Z0);
-        textZ0.append(Constants.stringZ0(mContext));
-        textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        //TextView textZ0 = viewRoot.findViewById(R.id.text_Z0);
+        //textZ0.append(Constants.stringZ0(mContext));
+        //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
-        TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
-        textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        //TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
+        //textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
-        TextView text_L = viewRoot.findViewById(R.id.text_L);
-        text_L.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        //TextView text_L = viewRoot.findViewById(R.id.text_L);
+        //text_L.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        textW = viewRoot.findViewById(R.id.text_W);
-        textS = viewRoot.findViewById(R.id.text_S);
-        textH = viewRoot.findViewById(R.id.text_H);
+        //textW = viewRoot.findViewById(R.id.text_W);
+        //textS = viewRoot.findViewById(R.id.text_S);
+        //textH = viewRoot.findViewById(R.id.text_H);
 
         // edittext elements
         edittextW = viewRoot.findViewById(R.id.editText_W);
@@ -420,43 +420,43 @@ public class CpwFragment extends Fragment {
     private void setRadioBtn() {
         if (target == Constants.Synthesize_Width) {
             radioButtonW.setChecked(true);
-            textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonS.setChecked(false);
-            textS.setTextColor(defaultTextColor);
+            //textS.setTextColor(defaultTextColor);
             edittextS.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(false);
-            textH.setTextColor(defaultTextColor);
+            //textH.setTextColor(defaultTextColor);
             edittextH.setTextColor(defaultEdittextColor);
         } else if (target == Constants.Synthesize_Gap) {
             radioButtonW.setChecked(false);
-            textW.setTextColor(defaultTextColor);
+            //textW.setTextColor(defaultTextColor);
             edittextW.setTextColor(defaultEdittextColor);
             radioButtonS.setChecked(true);
-            textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            //textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             edittextS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonH.setChecked(false);
-            textH.setTextColor(defaultTextColor);
+            //textH.setTextColor(defaultTextColor);
             edittextH.setTextColor(defaultEdittextColor);
         } else if (target == Constants.Synthesize_Height) {
             radioButtonW.setChecked(false);
-            textW.setTextColor(defaultTextColor);
+            //textW.setTextColor(defaultTextColor);
             edittextW.setTextColor(defaultEdittextColor);
             radioButtonS.setChecked(false);
-            textS.setTextColor(defaultTextColor);
+            //textS.setTextColor(defaultTextColor);
             edittextS.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(true);
-            textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             edittextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         } else {
             radioButtonW.setChecked(true);
-            textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonS.setChecked(false);
-            textS.setTextColor(defaultTextColor);
+            //textS.setTextColor(defaultTextColor);
             edittextS.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(false);
-            textH.setTextColor(defaultTextColor);
+            //textH.setTextColor(defaultTextColor);
             edittextH.setTextColor(defaultEdittextColor);
             target = Constants.Synthesize_Width;
         }
@@ -464,13 +464,13 @@ public class CpwFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(true);
-                textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonS.setChecked(false);
-                textS.setTextColor(defaultTextColor);
+                //textS.setTextColor(defaultTextColor);
                 edittextS.setTextColor(defaultEdittextColor);
                 radioButtonH.setChecked(false);
-                textH.setTextColor(defaultTextColor);
+                //textH.setTextColor(defaultTextColor);
                 edittextH.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_Width;
             }
@@ -479,13 +479,13 @@ public class CpwFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(false);
-                textW.setTextColor(defaultTextColor);
+                //textW.setTextColor(defaultTextColor);
                 edittextW.setTextColor(defaultEdittextColor);
                 radioButtonS.setChecked(true);
-                textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                //textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 edittextS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonH.setChecked(false);
-                textH.setTextColor(defaultTextColor);
+                //textH.setTextColor(defaultTextColor);
                 edittextH.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_Gap;
             }
@@ -494,13 +494,13 @@ public class CpwFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(false);
-                textW.setTextColor(defaultTextColor);
+                //textW.setTextColor(defaultTextColor);
                 edittextW.setTextColor(defaultEdittextColor);
                 radioButtonS.setChecked(false);
-                textS.setTextColor(defaultTextColor);
+                //textS.setTextColor(defaultTextColor);
                 edittextS.setTextColor(defaultEdittextColor);
                 radioButtonH.setChecked(true);
-                textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 edittextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 target = Constants.Synthesize_Height;
             }

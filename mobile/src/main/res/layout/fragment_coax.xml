@@ -42,26 +42,22 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_a"
-                    layout="@layout/parameter_a"
+                    layout="@layout/parameter_a_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_b"
-                    layout="@layout/parameter_b"
+                    layout="@layout/parameter_b_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_c"
-                    layout="@layout/parameter_c"
+                    layout="@layout/parameter_c_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_length"
-                    layout="@layout/parameter_length"
+                    layout="@layout/parameter_length_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -112,20 +108,17 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_z0"
-                    layout="@layout/parameter_z0"
+                    layout="@layout/parameter_impedance"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_phase"
-                    layout="@layout/parameter_phase"
+                    layout="@layout/parameter_phase_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    android:id="@+id/parameter_epsilon"
-                    layout="@layout/parameter_epsilon"
+                    layout="@layout/parameter_epsilon_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
