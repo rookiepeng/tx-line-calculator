@@ -31,13 +31,12 @@ public class MlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
     private RadioButton radioButtonW, radioButtonH;
-    private TextView textW, textH;
     private EditText editTextW, editTextL, editTextZ0, editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
     private Button buttonSynthesize, buttonAnalyze;
     private Spinner spinnerW, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerPhs, spinnerFreq;
     private MlinModel line;
     private int target;
-    private ColorStateList defaultTextColor, defaultEdittextColor;
+    private ColorStateList defaultEdittextColor;
     private AdFragment adFragment = null;
     private boolean isAdFree;
     private FragmentManager fragmentManager = null;
@@ -220,23 +219,23 @@ public class MlinFragment extends Fragment {
         radioButtonPhs.setVisibility(View.VISIBLE);
         radioButtonPhs.setChecked(true);
 
-        textW = viewRoot.findViewById(R.id.text_W);
-        textH = viewRoot.findViewById(R.id.text_H);
+        //textW = viewRoot.findViewById(R.id.text_W);
+        //textH = viewRoot.findViewById(R.id.text_H);
 
-        defaultTextColor = textW.getTextColors();
+        //defaultTextColor = textW.getTextColors();
 
-        TextView textL = viewRoot.findViewById(R.id.text_L);
-        textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        //TextView textL = viewRoot.findViewById(R.id.text_L);
+        //textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
-        textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        //TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
+        //textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
-        TextView textZ0 = viewRoot.findViewById(R.id.text_Z0);
-        textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-        textZ0.append(Constants.stringZ0(mContext));
+        //TextView textZ0 = viewRoot.findViewById(R.id.text_Z0);
+        //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        //textZ0.append(Constants.stringZ0(mContext));
 
-        TextView textEr = viewRoot.findViewById(R.id.text_er);
-        textEr.append(Constants.stringEr(mContext));
+        //TextView textEr = viewRoot.findViewById(R.id.text_er);
+        //textEr.append(Constants.stringEr(mContext));
 
         editTextW = viewRoot.findViewById(R.id.editText_W);
         defaultEdittextColor = editTextW.getTextColors();
@@ -319,18 +318,18 @@ public class MlinFragment extends Fragment {
     private void setRadioBtn() {
         if (target == Constants.Synthesize_Width) {
             radioButtonW.setChecked(true);
-            textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonH.setChecked(false);
-            textH.setTextColor(defaultTextColor);
+            //textH.setTextColor(defaultTextColor);
             editTextH.setTextColor(defaultEdittextColor);
         } else {
             target = Constants.Synthesize_Height;
             radioButtonW.setChecked(false);
-            textW.setTextColor(defaultTextColor);
+            //textW.setTextColor(defaultTextColor);
             editTextW.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(true);
-            textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             editTextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         }
 
@@ -338,10 +337,10 @@ public class MlinFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(true);
-                textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonH.setChecked(false);
-                textH.setTextColor(defaultTextColor);
+                //textH.setTextColor(defaultTextColor);
                 editTextH.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_Width;
             }
@@ -350,10 +349,10 @@ public class MlinFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(false);
-                textW.setTextColor(defaultTextColor);
+                //textW.setTextColor(defaultTextColor);
                 editTextW.setTextColor(defaultEdittextColor);
                 radioButtonH.setChecked(true);
-                textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 editTextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 target = Constants.Synthesize_Height;
             }

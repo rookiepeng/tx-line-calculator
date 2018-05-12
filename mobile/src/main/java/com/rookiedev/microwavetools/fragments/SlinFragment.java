@@ -29,14 +29,13 @@ import java.math.BigDecimal;
 public class SlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    private TextView textW, textH;
     private EditText edittextW, edittextL, edittextZ0, edittextPhs, edittextFreq, edittextT, edittextH, edittextEr;
     private Button buttonSynthesize, buttonAnalyze;
     private Spinner spinnerW, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerPhs, spinnerFreq;
     private int target;
     private RadioButton radioButtonW, radioButtonH;
     private SlinModel line;
-    private ColorStateList defaultTextColor, defaultEdittextColor;
+    private ColorStateList defaultEdittextColor;
     private AdFragment adFragment = null;
     private FragmentManager fragmentManager = null;
 
@@ -228,23 +227,23 @@ public class SlinFragment extends Fragment {
         radioButtonH = viewRoot.findViewById(R.id.radioBtn_H);
         radioButtonH.setVisibility(View.VISIBLE);
 
-        TextView textViewL = viewRoot.findViewById(R.id.text_L);
-        textViewL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        //TextView textViewL = viewRoot.findViewById(R.id.text_L);
+        //textViewL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
 
-        TextView textEr = viewRoot.findViewById(R.id.text_er);
-        textEr.append(Constants.stringEr(mContext));
+        //TextView textEr = viewRoot.findViewById(R.id.text_er);
+        //textEr.append(Constants.stringEr(mContext));
 
-        TextView textZ0 = viewRoot.findViewById(R.id.text_Z0);
-        textZ0.append(Constants.stringZ0o(mContext));
-        textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        //TextView textZ0 = viewRoot.findViewById(R.id.text_Z0);
+        //textZ0.append(Constants.stringZ0o(mContext));
+        //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
-        TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
-        textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        //TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
+        //textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
 
-        textW = viewRoot.findViewById(R.id.text_W);
-        textH = viewRoot.findViewById(R.id.text_H);
+        //textW = viewRoot.findViewById(R.id.text_W);
+        //textH = viewRoot.findViewById(R.id.text_H);
 
-        defaultTextColor = textW.getTextColors();
+        //defaultTextColor = textW.getTextColors();
 
         // edittext elements
         edittextW = viewRoot.findViewById(R.id.editText_W);
@@ -329,28 +328,28 @@ public class SlinFragment extends Fragment {
     private void setRadioBtn() {
         if (target == Constants.Synthesize_Width) {
             radioButtonW.setChecked(true);
-            textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonH.setChecked(false);
-            textH.setTextColor(defaultTextColor);
+            //textH.setTextColor(defaultTextColor);
             edittextH.setTextColor(defaultEdittextColor);
         } else {
             target = Constants.Synthesize_Height;
             radioButtonW.setChecked(false);
-            textW.setTextColor(defaultTextColor);
+            //textW.setTextColor(defaultTextColor);
             edittextW.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(true);
-            textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             edittextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         }
         radioButtonW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(true);
-                textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonH.setChecked(false);
-                textH.setTextColor(defaultTextColor);
+                //textH.setTextColor(defaultTextColor);
                 edittextH.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_Width;
             }
@@ -359,10 +358,10 @@ public class SlinFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(false);
-                textW.setTextColor(defaultTextColor);
+                //textW.setTextColor(defaultTextColor);
                 edittextW.setTextColor(defaultEdittextColor);
                 radioButtonH.setChecked(true);
-                textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 edittextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 target = Constants.Synthesize_Height;
             }
