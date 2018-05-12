@@ -107,7 +107,7 @@ public class CoaxCalculator {
             var = 5 * line.getCoreRadius();
             break;
         case Constants.Synthesize_CoreOffset:
-            varmax = 0.999 * (line.getSubRadius() - line.getCoreRadius());
+            varmax = 0.999 * (line.getSubRadius() - 2 * line.getCoreRadius());
             varmin = 0;
             var = 0.1 * varmax;
             break;
