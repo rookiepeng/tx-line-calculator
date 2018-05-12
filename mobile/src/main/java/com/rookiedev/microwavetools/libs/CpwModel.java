@@ -1,12 +1,12 @@
 package com.rookiedev.microwavetools.libs;
 
-
 public class CpwModel {
     private SubstrateModel substrate;
     private MetalModel metal;
     private double metalSpace;
-    private double impedance, electricalLength; // ohms, degree
+    private double impedance, phase; // ohms, degree
     private double frequency; // Hz
+    private Constants.ERROR errorCode;
 
     public CpwModel() {
         substrate = new SubstrateModel();
@@ -15,24 +15,28 @@ public class CpwModel {
 
     void setSynthesizeParameter(double para, int flag) {
         switch (flag) {
-            case Constants.Synthesize_Width:
-                metal.setMetalWidth(para);
-                break;
+        case Constants.Synthesize_Width:
+            metal.setMetalWidth(para);
+            break;
 
-            case Constants.Synthesize_Height:
-                substrate.setSubHeight(para);
-                break;
+        case Constants.Synthesize_Height:
+            substrate.setSubHeight(para);
+            break;
 
-            case Constants.Synthesize_Er:
-                substrate.setSubEpsilon(para);
-                break;
+        case Constants.Synthesize_Er:
+            substrate.setSubEpsilon(para);
+            break;
 
-            case Constants.Synthesize_Length:
-                metal.setMetalLength(para);
-                break;
+        case Constants.Synthesize_Length:
+            metal.setMetalLength(para);
+            break;
 
-            default:
-                break;
+        case Constants.Synthesize_Gap:
+            metalSpace = para;
+            break;
+
+        default:
+            break;
         }
     }
 
@@ -68,12 +72,12 @@ public class CpwModel {
         this.impedance = impedance;
     }
 
-    public double getElectricalLength() {
-        return electricalLength;
+    public double getPhase() {
+        return phase;
     }
 
-    public void setElectricalLength(double electricalLength) {
-        this.electricalLength = electricalLength;
+    public void setPhase(double phase) {
+        this.phase = phase;
     }
 
     public void setFrequency(double frequency, int unit) {
@@ -122,5 +126,13 @@ public class CpwModel {
 
     public void setMetalSpace(double metalSpace, int unit) {
         this.metalSpace = Constants.value2meter(metalSpace, unit);
+    }
+
+    public Constants.ERROR getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(Constants.ERROR errorCode) {
+        this.errorCode = errorCode;
     }
 }
