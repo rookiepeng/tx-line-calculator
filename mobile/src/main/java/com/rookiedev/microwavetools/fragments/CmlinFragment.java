@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CmlinCalculator;
@@ -35,7 +34,7 @@ public class CmlinFragment extends Fragment {
     // private TextView textZ0, textK, textZ0o, textZ0e;
     private TextInputEditText edittextW, edittextS, edittextL, edittextZ0, edittextK, edittextZ0o, edittextZ0e,
             edittextPhs, edittextFreq, edittextH, edittextEr;
-    private TextInputLayout textInputLayoutT, textInputLayoutH, textInputLayoutW, textInputLayoutS, textInputLayoutZ0,
+    private TextInputLayout textInputLayoutH, textInputLayoutW, textInputLayoutS, textInputLayoutZ0,
             textInputLayoutK, textInputLayoutZ0o, textInputLayoutZ0e, textInputLayoutEr, textInputLayoutF;
     private CmlinModel line;
     private Button buttonSynthesize, buttonAnalyze;
@@ -425,11 +424,11 @@ public class CmlinFragment extends Fragment {
                 edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittextZ0e.setEnabled(false);
                 edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextZ0e
+                edittextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+                edittextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+                edittextZ0e
                         .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextZ0o
+                edittextZ0o
                         .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
             }
         });
@@ -449,11 +448,11 @@ public class CmlinFragment extends Fragment {
                 edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
                 edittextZ0e.setEnabled(false);
                 edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextZ0e
+                edittextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+                edittextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+                edittextZ0e
                         .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextZ0o
+                edittextZ0o
                         .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
             }
         });
@@ -473,12 +472,12 @@ public class CmlinFragment extends Fragment {
                 edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittextZ0e.setEnabled(true);
                 edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextZ0
+                edittextZ0
                         .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextK
+                edittextK
                         .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+                edittextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+                edittextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
             }
         });
         radioButtonZ0e.setOnClickListener(new View.OnClickListener() {
@@ -497,12 +496,12 @@ public class CmlinFragment extends Fragment {
                 edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
                 edittextZ0e.setEnabled(true);
                 edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextZ0
+                edittextZ0
                         .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextK
+                edittextK
                         .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+                edittextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+                edittextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
             }
         });
         if (useZ0k) {
@@ -518,10 +517,10 @@ public class CmlinFragment extends Fragment {
             edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             edittextZ0e.setEnabled(false);
             edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-            editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-            editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-            editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-            editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+            edittextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+            edittextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+            edittextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+            edittextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
         } else {
             radioButtonZ0.setChecked(false);
             radioButtonK.setChecked(false);
@@ -535,10 +534,10 @@ public class CmlinFragment extends Fragment {
             edittextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             edittextZ0e.setEnabled(true);
             edittextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-            editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-            editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-            editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyz));
-            editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+            edittextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+            edittextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+            edittextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+            edittextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
         }
     }
 
