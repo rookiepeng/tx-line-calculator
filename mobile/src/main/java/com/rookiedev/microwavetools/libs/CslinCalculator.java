@@ -1,5 +1,7 @@
 package com.rookiedev.microwavetools.libs;
 
+import android.util.Log;
+
 public class CslinCalculator {
 
     public CslinCalculator() {
@@ -83,6 +85,7 @@ public class CslinCalculator {
             lineSlin.setMetalLength(line.getMetalLength(), Constants.LengthUnit_m);
             lineSlin.setFrequency(line.getFrequency(), Constants.FreqUnit_Hz);
 
+            Log.v("TAG", "1");
             SlinCalculator slin = new SlinCalculator();
             lineSlin = slin.getAnaResult(lineSlin);
             if (lineSlin.getErrorCode() != Constants.ERROR.NO_ERROR) {
@@ -90,7 +93,7 @@ public class CslinCalculator {
                 return line;
             }
             z0s = lineSlin.getImpedance();
-
+            Log.v("TAG", "2");
             lineSlin.setMetalThick(0, Constants.LengthUnit_m);
             lineSlin = slin.getAnaResult(lineSlin);
             if (lineSlin.getErrorCode() != Constants.ERROR.NO_ERROR) {
@@ -99,11 +102,16 @@ public class CslinCalculator {
             }
             z0s_0t = lineSlin.getImpedance();
 
-            if ((1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0 < 0) {
+            if(line.getMetalThick() == line.getSubHeight()){
                 line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
                 return line;
             }
 
+            if ((1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0 < 0) {
+                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+                return line;
+            }
+            Log.v("TAG", "3");
             // fringing capacitance
             cf_t = (Constants.FREESPACE_E0 * line.getSubEpsilon() / Math.PI)
                     * ((2.0 / (1.0 - line.getMetalThick() / line.getSubHeight()))
@@ -111,9 +119,11 @@ public class CslinCalculator {
                             - (1.0 / (1.0 - line.getMetalThick() / line.getSubHeight()) - 1.0) * Math.log(
                                     (1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0));
 
+            Log.v("TAG", "4");
             // zero thickness fringing capacitance
             cf_0 = (Constants.FREESPACE_E0 * line.getSubEpsilon() / Math.PI) * 2.0 * Math.log(2.0);
 
+            Log.v("TAG", "5");
             // (18) from Cohn, (4.6.5.1) in Wadell
             line.setImpedanceEven(1.0 / ((1.0 / z0s) - (cf_t / cf_0) * ((1.0 / z0s_0t) - (1.0 / z0e_0t))));
 
@@ -129,6 +139,7 @@ public class CslinCalculator {
                                 * (cf_t / Constants.FREESPACE_E0 - cf_0 / Constants.FREESPACE_E0)
                         + (2.0 * line.getMetalThick()) / (Constants.FREESPACEZ0 * line.getMetalSpace())));
             }
+            Log.v("TAG", "6");
         }
 
         // find impedance and coupling coefficient
