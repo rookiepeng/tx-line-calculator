@@ -227,7 +227,7 @@ public class MlinFragment extends Fragment {
         textInputLayoutW = viewRoot.findViewById(R.id.text_input_layout_W);
         editTextW = viewRoot.findViewById(R.id.editText_W);
         defaultEdittextColor = editTextW.getTextColors();
-        editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        //editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         editTextW.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
