@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,17 +33,8 @@ public class CmlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
     //private TextView textZ0, textK, textZ0o, textZ0e;
-    private EditText edittextW;
-    private EditText edittextS;
-    private EditText edittextL;
-    private EditText edittextZ0;
-    private EditText edittextK;
-    private EditText edittextZ0o;
-    private EditText edittextZ0e;
-    private EditText edittextPhs;
-    private EditText edittextFreq;
-    private EditText edittextH;
-    private EditText edittextEr;
+    private TextInputEditText edittextW, edittextS,edittextL,edittextZ0,edittextK, edittextZ0o,edittextZ0e,edittextPhs,edittextFreq, edittextH,edittextEr;
+    private TextInputLayout textInputLayoutT,textInputLayoutH, textInputLayoutW,textInputLayoutS,textInputLayoutZ0,textInputLayoutK,textInputLayoutZ0o,textInputLayoutZ0e,textInputLayoutEr,textInputLayoutF;
     private CmlinModel line;
     private Button buttonSynthesize, buttonAnalyze;
     private Spinner spinnerW, spinnerS, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerZ0o, spinnerZ0e, spinnerPhs,
@@ -179,50 +174,203 @@ public class CmlinFragment extends Fragment {
         radioButtonZ0o.setVisibility(View.VISIBLE);
         radioButtonZ0e = viewRoot.findViewById(R.id.radioBtn_Z0e);
         radioButtonZ0e.setVisibility(View.VISIBLE);
-
-        //TextView textW = viewRoot.findViewById(R.id.text_W);
-        //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-
-        //TextView textS = viewRoot.findViewById(R.id.text_S);
-        //textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-
-        //TextView textL = viewRoot.findViewById(R.id.text_L);
-        //textL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-
-        //TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
-        //textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-
-        //TextView textEr = viewRoot.findViewById(R.id.text_er);
-        //textEr.append(Constants.stringEr(mContext));
-
-        //textZ0 = viewRoot.findViewById(R.id.text_Z0);
-        //textZ0.append(Constants.stringZ0(mContext));
-        //textK = viewRoot.findViewById(R.id.text_k);
-
-        //textZ0o = viewRoot.findViewById(R.id.text_Z0o);
-        //textZ0o.append(Constants.stringZ0o(mContext));
-        //textZ0e = viewRoot.findViewById(R.id.text_Z0e);
-        //textZ0e.append(Constants.stringZ0e(mContext));
-
-        // edittext elements
+        
+        textInputLayoutW=viewRoot.findViewById(R.id.text_input_layout_W);
         edittextW = viewRoot.findViewById(R.id.editText_W);
         edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+        edittextW.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutW.setError("");
+                textInputLayoutW.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutS=viewRoot.findViewById(R.id.text_input_layout_S);
         edittextS = viewRoot.findViewById(R.id.editText_S);
         edittextS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+        edittextS.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutS.setError("");
+                textInputLayoutS.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         edittextL = viewRoot.findViewById(R.id.editText_L);
         edittextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        edittextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+
+        textInputLayoutZ0=viewRoot.findViewById(R.id.text_input_layout_Z0);
         edittextZ0 = viewRoot.findViewById(R.id.editText_Z0);
+        edittextZ0.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutZ0.setError("");
+                textInputLayoutZ0.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutK=viewRoot.findViewById(R.id.text_input_layout_k);
         edittextK = viewRoot.findViewById(R.id.editText_k);
+        edittextK.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutK.setError("");
+                textInputLayoutK.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutZ0o=viewRoot.findViewById(R.id.text_input_layout_Z0o);
         edittextZ0o = viewRoot.findViewById(R.id.editText_Z0o);
+        edittextZ0o.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutZ0o.setError("");
+                textInputLayoutZ0o.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutZ0e=viewRoot.findViewById(R.id.text_input_layout_Z0e);
         edittextZ0e = viewRoot.findViewById(R.id.editText_Z0e);
+        edittextZ0e.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutZ0e.setError("");
+                textInputLayoutZ0e.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
         edittextPhs = viewRoot.findViewById(R.id.editText_Phs);
         edittextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittextPhs.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+
+        textInputLayoutF=viewRoot.findViewById(R.id.text_input_layout_Freq);
         edittextFreq = viewRoot.findViewById(R.id.editText_Freq);
+        edittextFreq.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutF.setError("");
+                textInputLayoutF.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         EditText edittextT = viewRoot.findViewById(R.id.editText_T);
         edittextT.setText("0");
         edittextT.setEnabled(false);
+
+        textInputLayoutH=viewRoot.findViewById(R.id.text_input_layout_H);
         edittextH = viewRoot.findViewById(R.id.editText_H);
+        edittextH.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutH.setError("");
+                textInputLayoutH.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutEr=viewRoot.findViewById(R.id.text_input_layout_er);
         edittextEr = viewRoot.findViewById(R.id.editText_er);
+        edittextEr.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutEr.setError("");
+                textInputLayoutEr.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         // button elements
         buttonAnalyze = viewRoot.findViewById(R.id.button_ana);
