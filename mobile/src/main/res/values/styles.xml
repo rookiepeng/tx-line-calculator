@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -28,4 +28,40 @@
         <item name="colorControlHighlight">@color/analyzeColorDark</item>
         <item name="colorButtonNormal">@color/analyzeColor</item>
     </style>
+
+    <style name="HintTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/secondaryColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="DefaultTextInputStyle" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">?android:attr/textColorTertiary</item>
+        <item name="android:textSize">18sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/secondaryColor</item>
+        <!--<item name="colorControlNormal">@color/analyzeColor</item>-->
+        <item name="colorControlActivated">@color/secondaryColor</item>
+    </style>
+
+    <style name="SynthesizeTextInputStyle" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/synthesizeColor</item>
+        <item name="android:textSize">18sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/secondaryColor</item> <!-- Selection color -->
+        <item name="colorControlNormal">@color/synthesizeColor</item>
+        <item name="colorControlActivated">@color/secondaryColor</item>
+    </style>
+
+    <style name="AnalyzeTextInputStyle" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/analyzeColor</item>
+        <item name="android:textSize">18sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/secondaryColor</item> <!-- Selection color -->
+        <item name="colorControlNormal">@color/analyzeColor</item>
+        <item name="colorControlActivated">@color/secondaryColor</item>
+    </style>
+
 </resources>

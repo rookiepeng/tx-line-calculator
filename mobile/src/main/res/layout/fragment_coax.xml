@@ -123,7 +123,7 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_frequency"
+                    layout="@layout/parameter_frequency_new"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

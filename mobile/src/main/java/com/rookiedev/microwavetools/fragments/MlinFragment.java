@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -14,11 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.Constants;
@@ -31,7 +31,8 @@ public class MlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
     private RadioButton radioButtonW, radioButtonH;
-    private EditText editTextW, editTextL, editTextZ0, editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
+    private TextInputEditText editTextW, editTextL, editTextZ0, editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
+    private TextInputLayout textInputLayoutW;
     private Button buttonSynthesize, buttonAnalyze;
     private Spinner spinnerW, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerPhs, spinnerFreq;
     private MlinModel line;
@@ -237,9 +238,14 @@ public class MlinFragment extends Fragment {
         //TextView textEr = viewRoot.findViewById(R.id.text_er);
         //textEr.append(Constants.stringEr(mContext));
 
+        textInputLayoutW=viewRoot.findViewById(R.id.text_input_layout_W);
+
+
         editTextW = viewRoot.findViewById(R.id.editText_W);
         defaultEdittextColor = editTextW.getTextColors();
         editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+
+        //editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
 
         editTextL = viewRoot.findViewById(R.id.editText_L);
         editTextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
