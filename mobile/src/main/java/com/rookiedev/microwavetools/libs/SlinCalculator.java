@@ -24,6 +24,11 @@ public class SlinCalculator {
             return line;
         }
 
+        if (line.getMetalThick()>= line.getSubHeight()){
+            line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+            return line;
+        }
+
         frequency = line.getFrequency();
 
         // Characteristic Impedance

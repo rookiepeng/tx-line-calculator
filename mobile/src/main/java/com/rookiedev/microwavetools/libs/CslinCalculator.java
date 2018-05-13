@@ -102,7 +102,7 @@ public class CslinCalculator {
             }
             z0s_0t = lineSlin.getImpedance();
 
-            if(line.getMetalThick() == line.getSubHeight()){
+            if(line.getMetalThick() >= line.getSubHeight()){
                 line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
                 return line;
             }
