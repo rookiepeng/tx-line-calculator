@@ -33,8 +33,10 @@ public class MlinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
     private RadioButton radioButtonW, radioButtonH;
-    private TextInputEditText editTextW, editTextL, editTextZ0, editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
-    private TextInputLayout textInputLayoutT,textInputLayoutH, textInputLayoutW,textInputLayoutZ0,textInputLayoutEr,textInputLayoutF;
+    private TextInputEditText editTextW, editTextL, editTextZ0, editTextPhs, editTextFreq, editTextT, editTextH,
+            editTextEr;
+    private TextInputLayout textInputLayoutT, textInputLayoutH, textInputLayoutW, textInputLayoutZ0, textInputLayoutEr,
+            textInputLayoutF;
     private Button buttonSynthesize, buttonAnalyze;
     private Spinner spinnerW, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerPhs, spinnerFreq;
     private MlinModel line;
@@ -222,7 +224,7 @@ public class MlinFragment extends Fragment {
         radioButtonPhs.setVisibility(View.VISIBLE);
         radioButtonPhs.setChecked(true);
 
-        textInputLayoutW=viewRoot.findViewById(R.id.text_input_layout_W);
+        textInputLayoutW = viewRoot.findViewById(R.id.text_input_layout_W);
         editTextW = viewRoot.findViewById(R.id.editText_W);
         defaultEdittextColor = editTextW.getTextColors();
         editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
@@ -248,7 +250,7 @@ public class MlinFragment extends Fragment {
         editTextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         editTextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
 
-        textInputLayoutZ0=viewRoot.findViewById(R.id.text_input_layout_Z0);
+        textInputLayoutZ0 = viewRoot.findViewById(R.id.text_input_layout_Z0);
         editTextZ0 = viewRoot.findViewById(R.id.editText_Z0);
         editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
@@ -274,7 +276,7 @@ public class MlinFragment extends Fragment {
         editTextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
         editTextPhs.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
 
-        textInputLayoutF=viewRoot.findViewById(R.id.text_input_layout_Freq);
+        textInputLayoutF = viewRoot.findViewById(R.id.text_input_layout_Freq);
         editTextFreq = viewRoot.findViewById(R.id.editText_Freq);
         editTextFreq.addTextChangedListener(new TextWatcher() {
             @Override
@@ -294,7 +296,7 @@ public class MlinFragment extends Fragment {
             }
         });
 
-        textInputLayoutT=viewRoot.findViewById(R.id.text_input_layout_T);
+        textInputLayoutT = viewRoot.findViewById(R.id.text_input_layout_T);
         editTextT = viewRoot.findViewById(R.id.editText_T);
         editTextT.addTextChangedListener(new TextWatcher() {
             @Override
@@ -314,7 +316,7 @@ public class MlinFragment extends Fragment {
             }
         });
 
-        textInputLayoutH=viewRoot.findViewById(R.id.text_input_layout_H);
+        textInputLayoutH = viewRoot.findViewById(R.id.text_input_layout_H);
         editTextH = viewRoot.findViewById(R.id.editText_H);
         editTextH.addTextChangedListener(new TextWatcher() {
             @Override
@@ -334,7 +336,7 @@ public class MlinFragment extends Fragment {
             }
         });
 
-        textInputLayoutEr=viewRoot.findViewById(R.id.text_input_layout_er);
+        textInputLayoutEr = viewRoot.findViewById(R.id.text_input_layout_er);
         editTextEr = viewRoot.findViewById(R.id.editText_er);
         editTextEr.addTextChangedListener(new TextWatcher() {
             @Override
