@@ -563,11 +563,11 @@ public class CmlinFragment extends Fragment {
 
         edittextK.setText(prefs.getString(Constants.CMLIN_K, "0.2"));
 
-        edittextZ0o.setText(prefs.getString(Constants.CMLIN_Z0O, "0.825"));
+        edittextZ0o.setText(prefs.getString(Constants.CMLIN_Z0O, "41.044"));
         spinnerZ0o.setSelection(Integer
                 .parseInt(prefs.getString(Constants.CMLIN_Z0O_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
 
-        edittextZ0e.setText(prefs.getString(Constants.CMLIN_Z0E, "61.237"));
+        edittextZ0e.setText(prefs.getString(Constants.CMLIN_Z0E, "62.341"));
         spinnerZ0e.setSelection(Integer
                 .parseInt(prefs.getString(Constants.CMLIN_Z0E_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
 
