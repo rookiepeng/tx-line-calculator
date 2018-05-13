@@ -510,7 +510,7 @@ public class MlinFragment extends Fragment {
             checkResult = false;
         }
         if (editTextEr.length() == 0) {
-            textInputLayoutEr.setError(Constants.errorErEmpty(mContext));
+            textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
         } else if (Double.parseDouble(editTextEr.getText().toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));
@@ -535,7 +535,7 @@ public class MlinFragment extends Fragment {
     private boolean synthesizeInputEmptyCheck() {
         boolean checkResult = true;
         if (editTextZ0.length() == 0) {
-            textInputLayoutZ0.setError(Constants.errorZ0Empty(mContext));
+            textInputLayoutZ0.setError(getText(R.string.error_Z0_empty));
             checkResult = false;
         } else if (Double.parseDouble(editTextZ0.getText().toString()) == 0) {
             textInputLayoutZ0.setError(getText(R.string.unreasonable_value));
@@ -556,7 +556,7 @@ public class MlinFragment extends Fragment {
         }
 
         if (editTextEr.length() == 0) {
-            textInputLayoutEr.setError(Constants.errorErEmpty(mContext));
+            textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
         } else if (Double.parseDouble(editTextEr.getText().toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));

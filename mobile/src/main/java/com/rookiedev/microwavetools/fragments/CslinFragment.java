@@ -687,7 +687,7 @@ public class CslinFragment extends Fragment {
         }
 
         if (edittextEr.length() == 0) {
-            textInputLayoutEr.setError(Constants.errorErEmpty(mContext));
+            textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
         } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));
@@ -729,7 +729,7 @@ public class CslinFragment extends Fragment {
             checkResult = false;
         }
         if (edittextEr.length() == 0) {
-            textInputLayoutEr.setError(Constants.errorErEmpty(mContext));
+            textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
         } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));
@@ -738,7 +738,7 @@ public class CslinFragment extends Fragment {
 
         if (useZ0k) {
             if (edittextZ0.length() == 0) {
-                textInputLayoutZ0.setError(Constants.errorZ0Empty(mContext));
+                textInputLayoutZ0.setError(getText(R.string.error_Z0_empty));
                 checkResult = false;
             } else if (Double.parseDouble(edittextZ0.getText().toString()) == 0) {
                 textInputLayoutZ0.setError(getText(R.string.unreasonable_value));
@@ -754,7 +754,7 @@ public class CslinFragment extends Fragment {
             }
         } else {
             if (edittextZ0e.length() == 0) {
-                textInputLayoutZ0e.setError(Constants.errorZ0eEmpty(mContext));
+                textInputLayoutZ0e.setError(getText(R.string.error_Z0e_empty));
                 checkResult = false;
             } else if (Double.parseDouble(edittextZ0e.getText().toString()) == 0) {
                 textInputLayoutZ0e.setError(getText(R.string.unreasonable_value));
@@ -762,7 +762,7 @@ public class CslinFragment extends Fragment {
             }
 
             if (edittextZ0o.length() == 0) {
-                textInputLayoutZ0o.setError(Constants.errorZ0oEmpty(mContext));
+                textInputLayoutZ0o.setError(getText(R.string.error_Z0o_empty));
                 checkResult = false;
             } else if (Double.parseDouble(edittextZ0o.getText().toString()) == 0) {
                 textInputLayoutZ0o.setError(getText(R.string.unreasonable_value));

@@ -717,7 +717,7 @@ public class CpwFragment extends Fragment {
         }
 
         if (edittextEr.length() == 0) {
-            textInputLayoutEr.setError(Constants.errorErEmpty(mContext));
+            textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
         } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));
@@ -735,7 +735,7 @@ public class CpwFragment extends Fragment {
     private boolean synthesizeInputCheck() {
         boolean checkResult = true;
         if (edittextZ0.length() == 0) {
-            textInputLayoutZ0.setError(Constants.errorZ0Empty(mContext));
+            textInputLayoutZ0.setError(getText(R.string.error_Z0_empty));
             checkResult = false;
         } else if (Double.parseDouble(edittextZ0.getText().toString()) == 0) {
             textInputLayoutZ0.setError(getText(R.string.unreasonable_value));
@@ -751,7 +751,7 @@ public class CpwFragment extends Fragment {
         }
 
         if (edittextEr.length() == 0) {
-            textInputLayoutEr.setError(Constants.errorErEmpty(mContext));
+            textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
         } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));

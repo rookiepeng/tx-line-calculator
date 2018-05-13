@@ -5,5 +5,7 @@
         android:state_focused="false"/>
     <item
         android:color="@color/secondaryColor"
-        android:state_focused="true"/>
+        android:state_enabled="true" android:state_focused="true"/>
+    <item
+        android:color="@color/analyzeColorLight" />
 </selector>
