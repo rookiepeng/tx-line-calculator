@@ -72,6 +72,10 @@ public class CslinCalculator {
             line.setErrorCode(Constants.ERROR.ER_MINIMAL_LIMIT);
             return line;
         }
+        if(line.getMetalThick() >= line.getSubHeight()){
+            line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
+            return line;
+        }
 
         // Start of coupled stripline calculations
         // zero thickness coupled line
@@ -101,11 +105,6 @@ public class CslinCalculator {
                 return line;
             }
             z0s_0t = lineSlin.getImpedance();
-
-            if(line.getMetalThick() >= line.getSubHeight()){
-                line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
-                return line;
-            }
 
             if ((1.0 / Math.pow(1.0 - line.getMetalThick() / line.getSubHeight(), 2.0)) - 1.0 < 0) {
                 line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
