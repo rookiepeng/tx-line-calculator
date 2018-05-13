@@ -35,6 +35,7 @@
             android:id="@+id/editText_T"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/background_tint_default"
             android:hint="(T) Metal Thickness"
             android:inputType="numberDecimal"/>
 

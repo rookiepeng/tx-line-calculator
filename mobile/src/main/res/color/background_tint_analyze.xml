@@ -2,9 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:color="@color/analyzeColor"
-        android:state_focused="true"/>
-    <item
-        android:color="@color/analyzeColor"
         android:state_focused="false"/>
-
+    <item
+        android:color="@color/secondaryColor"
+        android:state_focused="true"/>
 </selector>

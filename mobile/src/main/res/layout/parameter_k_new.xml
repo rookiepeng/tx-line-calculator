@@ -36,6 +36,7 @@
             android:id="@+id/editText_k"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/background_tint_default"
             android:hint="Coupling Coefficient"
             android:inputType="numberDecimal"/>
 
