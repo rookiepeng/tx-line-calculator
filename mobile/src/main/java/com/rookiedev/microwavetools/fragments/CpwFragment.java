@@ -5,19 +5,21 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.Constants;
@@ -30,9 +32,11 @@ import java.util.Objects;
 public class CpwFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    //private TextView textH, textW, textS;
-    private EditText edittextW, edittextS, edittextL, edittextZ0, edittextPhs, edittextFreq, edittextT, edittextH,
-            edittextEr;
+    // private TextView textH, textW, textS;
+    private TextInputEditText edittextW, edittextS, edittextL, edittextZ0, edittextPhs, edittextFreq, edittextT,
+            edittextH, edittextEr;
+    private TextInputLayout textInputLayoutT, textInputLayoutH, textInputLayoutW, textInputLayoutS, textInputLayoutZ0,
+            textInputLayoutEr, textInputLayoutF;
     private Button buttonSynthesize, buttonAnalyze;
     private Spinner spinnerW, spinnerS, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerPhs, spinnerFreq;
     private int target;
@@ -64,8 +68,8 @@ public class CpwFragment extends Fragment {
         mContext = this.getContext();
         fragmentManager = getFragmentManager();
 
-        initUI(); // initial the UI
-        readSharedPref(); // read shared preferences
+        initUI();
+        readSharedPref();
         setRadioBtn();
 
         buttonAnalyze.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +186,7 @@ public class CpwFragment extends Fragment {
                         if (target == Constants.Synthesize_Width) {
                             if ((Double.isNaN(line.getMetalWidth()) || Double.isInfinite(line.getMetalWidth()))) {
                                 edittextW.setText("");
-                                edittextW.setError(getString(R.string.synthesize_failed));
+                                textInputLayoutW.setError(getString(R.string.synthesize_failed));
                                 edittextW.requestFocus();
                             } else {
                                 BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(),
@@ -194,7 +198,7 @@ public class CpwFragment extends Fragment {
                         } else if (target == Constants.Synthesize_Gap) {
                             if ((Double.isNaN(line.getMetalSpace()) || Double.isInfinite(line.getMetalSpace()))) {
                                 edittextS.setText("");
-                                edittextS.setError(getString(R.string.synthesize_failed));
+                                textInputLayoutS.setError(getString(R.string.synthesize_failed));
                                 edittextS.requestFocus();
                             } else {
                                 BigDecimal S_temp = new BigDecimal(Constants.meter2others(line.getMetalSpace(),
@@ -206,7 +210,7 @@ public class CpwFragment extends Fragment {
                         } else if (target == Constants.Synthesize_Height) {
                             if ((Double.isNaN(line.getSubHeight()) || Double.isInfinite(line.getSubHeight()))) {
                                 edittextH.setText("");
-                                edittextH.setError(getString(R.string.synthesize_failed));
+                                textInputLayoutH.setError(getString(R.string.synthesize_failed));
                                 edittextH.requestFocus();
                             } else {
                                 BigDecimal H_temp = new BigDecimal(Constants.meter2others(line.getSubHeight(),
@@ -219,15 +223,15 @@ public class CpwFragment extends Fragment {
                     } else {
                         if (target == Constants.Synthesize_Width) {
                             edittextW.setText("");
-                            edittextW.setError(getString(R.string.synthesize_failed));
+                            textInputLayoutW.setError(getString(R.string.synthesize_failed));
                             edittextW.requestFocus();
                         } else if (target == Constants.Synthesize_Gap) {
                             edittextS.setText("");
-                            edittextS.setError(getString(R.string.synthesize_failed));
+                            textInputLayoutS.setError(getString(R.string.synthesize_failed));
                             edittextS.requestFocus();
                         } else if (target == Constants.Synthesize_Height) {
                             edittextH.setText("");
-                            edittextH.setError(getString(R.string.synthesize_failed));
+                            textInputLayoutH.setError(getString(R.string.synthesize_failed));
                             edittextH.requestFocus();
                         }
                     }
@@ -267,47 +271,160 @@ public class CpwFragment extends Fragment {
         radioButtonH = viewRoot.findViewById(R.id.radioBtn_H);
         radioButtonH.setVisibility(View.VISIBLE);
 
-        //TextView textEr = viewRoot.findViewById(R.id.text_er);
-        //textEr.append(Constants.stringEr(mContext));
-        //defaultTextColor = textEr.getTextColors();
-
-        //TextView textZ0 = viewRoot.findViewById(R.id.text_Z0);
-        //textZ0.append(Constants.stringZ0(mContext));
-        //textZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-
-        //TextView textPhs = viewRoot.findViewById(R.id.text_Phs);
-        //textPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-
-        //TextView text_L = viewRoot.findViewById(R.id.text_L);
-        //text_L.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-
-        //textW = viewRoot.findViewById(R.id.text_W);
-        //textS = viewRoot.findViewById(R.id.text_S);
-        //textH = viewRoot.findViewById(R.id.text_H);
-
-        // edittext elements
+        textInputLayoutW = viewRoot.findViewById(R.id.text_input_layout_W);
         edittextW = viewRoot.findViewById(R.id.editText_W);
         defaultEdittextColor = edittextW.getTextColors();
+        edittextW.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutW.setError("");
+                textInputLayoutW.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutS = viewRoot.findViewById(R.id.text_input_layout_S);
         edittextS = viewRoot.findViewById(R.id.editText_S);
+        edittextS.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutS.setError("");
+                textInputLayoutS.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         edittextL = viewRoot.findViewById(R.id.editText_L);
         edittextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        edittextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
 
+        textInputLayoutZ0 = viewRoot.findViewById(R.id.text_input_layout_Z0);
         edittextZ0 = viewRoot.findViewById(R.id.editText_Z0);
         edittextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+        edittextZ0.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutZ0.setError("");
+                textInputLayoutZ0.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         edittextPhs = viewRoot.findViewById(R.id.editText_Phs);
         edittextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        edittextPhs.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
 
+        textInputLayoutF = viewRoot.findViewById(R.id.text_input_layout_Freq);
         edittextFreq = viewRoot.findViewById(R.id.editText_Freq);
+        edittextFreq.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutF.setError("");
+                textInputLayoutF.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutT = viewRoot.findViewById(R.id.text_input_layout_T);
         edittextT = viewRoot.findViewById(R.id.editText_T);
         if (withGround) {
             edittextT.setText("0");
             edittextT.setEnabled(false);
         }
+        edittextT.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutT.setError("");
+                textInputLayoutT.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutH = viewRoot.findViewById(R.id.text_input_layout_H);
         edittextH = viewRoot.findViewById(R.id.editText_H);
+        edittextH.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutH.setError("");
+                textInputLayoutH.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        textInputLayoutEr = viewRoot.findViewById(R.id.text_input_layout_er);
         edittextEr = viewRoot.findViewById(R.id.editText_er);
+        edittextEr.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                textInputLayoutEr.setError("");
+                textInputLayoutEr.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         // button elements
         buttonAnalyze = viewRoot.findViewById(R.id.button_ana);
@@ -420,43 +537,43 @@ public class CpwFragment extends Fragment {
     private void setRadioBtn() {
         if (target == Constants.Synthesize_Width) {
             radioButtonW.setChecked(true);
-            //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
             edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonS.setChecked(false);
-            //textS.setTextColor(defaultTextColor);
+            edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
             edittextS.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(false);
-            //textH.setTextColor(defaultTextColor);
+            edittextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
             edittextH.setTextColor(defaultEdittextColor);
         } else if (target == Constants.Synthesize_Gap) {
             radioButtonW.setChecked(false);
-            //textW.setTextColor(defaultTextColor);
+            edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
             edittextW.setTextColor(defaultEdittextColor);
             radioButtonS.setChecked(true);
-            //textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
             edittextS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonH.setChecked(false);
-            //textH.setTextColor(defaultTextColor);
+            edittextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
             edittextH.setTextColor(defaultEdittextColor);
         } else if (target == Constants.Synthesize_Height) {
             radioButtonW.setChecked(false);
-            //textW.setTextColor(defaultTextColor);
+            edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
             edittextW.setTextColor(defaultEdittextColor);
             radioButtonS.setChecked(false);
-            //textS.setTextColor(defaultTextColor);
+            edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
             edittextS.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(true);
-            //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            edittextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
             edittextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         } else {
             radioButtonW.setChecked(true);
-            //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
             edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonS.setChecked(false);
-            //textS.setTextColor(defaultTextColor);
+            edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
             edittextS.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(false);
-            //textH.setTextColor(defaultTextColor);
+            edittextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
             edittextH.setTextColor(defaultEdittextColor);
             target = Constants.Synthesize_Width;
         }
@@ -464,13 +581,13 @@ public class CpwFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(true);
-                //textW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
                 edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonS.setChecked(false);
-                //textS.setTextColor(defaultTextColor);
+                edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
                 edittextS.setTextColor(defaultEdittextColor);
                 radioButtonH.setChecked(false);
-                //textH.setTextColor(defaultTextColor);
+                edittextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
                 edittextH.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_Width;
             }
@@ -479,13 +596,13 @@ public class CpwFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(false);
-                //textW.setTextColor(defaultTextColor);
+                edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
                 edittextW.setTextColor(defaultEdittextColor);
                 radioButtonS.setChecked(true);
-                //textS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
                 edittextS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonH.setChecked(false);
-                //textH.setTextColor(defaultTextColor);
+                edittextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
                 edittextH.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_Gap;
             }
@@ -494,13 +611,13 @@ public class CpwFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(false);
-                //textW.setTextColor(defaultTextColor);
+                edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
                 edittextW.setTextColor(defaultEdittextColor);
                 radioButtonS.setChecked(false);
-                //textS.setTextColor(defaultTextColor);
+                edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
                 edittextS.setTextColor(defaultEdittextColor);
                 radioButtonH.setChecked(true);
-                //textH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                edittextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
                 edittextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 target = Constants.Synthesize_Height;
             }
@@ -559,51 +676,51 @@ public class CpwFragment extends Fragment {
     private boolean analysisInputCheck() {
         boolean checkResult = true;
         if (edittextW.length() == 0) {
-            edittextW.setError(getText(R.string.Error_W_empty));
+            textInputLayoutW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(edittextW.getText().toString()),
                 spinnerW.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-            edittextW.setError(getText(R.string.unreasonable_value));
+            textInputLayoutW.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
         if (edittextS.length() == 0) {
-            edittextS.setError(getText(R.string.Error_S_empty));
+            textInputLayoutS.setError(getText(R.string.Error_S_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(edittextS.getText().toString()),
                 spinnerS.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-            edittextS.setError(getText(R.string.unreasonable_value));
+            textInputLayoutS.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
         if (edittextFreq.length() == 0) {
-            edittextFreq.setError(getText(R.string.Error_Freq_empty));
+            textInputLayoutF.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
         } else if (Double.parseDouble(edittextFreq.getText().toString()) == 0) {
-            edittextFreq.setError(getText(R.string.error_zero_frequency));
+            textInputLayoutF.setError(getText(R.string.error_zero_frequency));
             checkResult = false;
         }
 
         if (edittextH.length() == 0) {
-            edittextH.setError(getText(R.string.Error_H_empty));
+            textInputLayoutH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(edittextH.getText().toString()),
                 spinnerH.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-            edittextH.setError(getText(R.string.unreasonable_value));
+            textInputLayoutH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
         if (!withGround) {
             if (edittextT.length() == 0) {
-                edittextT.setError(getText(R.string.Error_T_empty));
+                textInputLayoutT.setError(getText(R.string.Error_T_empty));
                 checkResult = false;
             }
         }
 
         if (edittextEr.length() == 0) {
-            edittextEr.setError(Constants.errorErEmpty(mContext));
+            textInputLayoutEr.setError(Constants.errorErEmpty(mContext));
             checkResult = false;
         } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
-            edittextEr.setError(getText(R.string.unreasonable_value));
+            textInputLayoutEr.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
@@ -618,52 +735,52 @@ public class CpwFragment extends Fragment {
     private boolean synthesizeInputCheck() {
         boolean checkResult = true;
         if (edittextZ0.length() == 0) {
-            edittextZ0.setError(Constants.errorZ0Empty(mContext));
+            textInputLayoutZ0.setError(Constants.errorZ0Empty(mContext));
             checkResult = false;
         } else if (Double.parseDouble(edittextZ0.getText().toString()) == 0) {
-            edittextZ0.setError(getText(R.string.unreasonable_value));
+            textInputLayoutZ0.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
         if (edittextFreq.length() == 0) {
-            edittextFreq.setError(getText(R.string.Error_Freq_empty));
+            textInputLayoutF.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
         } else if (Double.parseDouble(edittextFreq.getText().toString()) == 0) {
-            edittextFreq.setError(getText(R.string.error_zero_frequency));
+            textInputLayoutF.setError(getText(R.string.error_zero_frequency));
             checkResult = false;
         }
 
         if (edittextEr.length() == 0) {
-            edittextEr.setError(Constants.errorErEmpty(mContext));
+            textInputLayoutEr.setError(Constants.errorErEmpty(mContext));
             checkResult = false;
         } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
-            edittextEr.setError(getText(R.string.unreasonable_value));
+            textInputLayoutEr.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
         if (!withGround) {
             if (edittextT.length() == 0) {
-                edittextT.setError(getText(R.string.Error_T_empty));
+                textInputLayoutT.setError(getText(R.string.Error_T_empty));
                 checkResult = false;
             }
         }
 
         if (target == Constants.Synthesize_Width) {
             if (edittextS.length() == 0) {
-                edittextS.setError(getText(R.string.Error_S_empty));
+                textInputLayoutS.setError(getText(R.string.Error_S_empty));
                 checkResult = false;
             } else if (Constants.value2meter(Double.parseDouble(edittextS.getText().toString()),
                     spinnerS.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-                edittextS.setError(getText(R.string.unreasonable_value));
+                textInputLayoutS.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
 
             if (edittextH.length() == 0) {
-                edittextH.setError(getText(R.string.Error_H_empty));
+                textInputLayoutH.setError(getText(R.string.Error_H_empty));
                 checkResult = false;
             } else if (Constants.value2meter(Double.parseDouble(edittextH.getText().toString()),
                     spinnerH.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-                edittextH.setError(getText(R.string.unreasonable_value));
+                textInputLayoutH.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
 
@@ -672,20 +789,20 @@ public class CpwFragment extends Fragment {
             }
         } else if (target == Constants.Synthesize_Gap) {
             if (edittextW.length() == 0) {
-                edittextW.setError(getText(R.string.Error_W_empty));
+                textInputLayoutW.setError(getText(R.string.Error_W_empty));
                 checkResult = false;
             } else if (Constants.value2meter(Double.parseDouble(edittextW.getText().toString()),
                     spinnerW.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-                edittextW.setError(getText(R.string.unreasonable_value));
+                textInputLayoutW.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
 
             if (edittextH.length() == 0) {
-                edittextH.setError(getText(R.string.Error_H_empty));
+                textInputLayoutH.setError(getText(R.string.Error_H_empty));
                 checkResult = false;
             } else if (Constants.value2meter(Double.parseDouble(edittextH.getText().toString()),
                     spinnerH.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-                edittextH.setError(getText(R.string.unreasonable_value));
+                textInputLayoutH.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
 
@@ -694,20 +811,20 @@ public class CpwFragment extends Fragment {
             }
         } else if (target == Constants.Synthesize_Height) {
             if (edittextW.length() == 0) {
-                edittextW.setError(getText(R.string.Error_W_empty));
+                textInputLayoutW.setError(getText(R.string.Error_W_empty));
                 checkResult = false;
             } else if (Constants.value2meter(Double.parseDouble(edittextW.getText().toString()),
                     spinnerW.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-                edittextW.setError(getText(R.string.unreasonable_value));
+                textInputLayoutW.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
 
             if (edittextS.length() == 0) {
-                edittextS.setError(getText(R.string.Error_S_empty));
+                textInputLayoutS.setError(getText(R.string.Error_S_empty));
                 checkResult = false;
             } else if (Constants.value2meter(Double.parseDouble(edittextS.getText().toString()),
                     spinnerS.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
-                edittextS.setError(getText(R.string.unreasonable_value));
+                textInputLayoutS.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
 
@@ -735,12 +852,19 @@ public class CpwFragment extends Fragment {
     }
 
     private void clearEditTextErrors() {
-        edittextW.setError(null);
-        edittextS.setError(null);
-        edittextH.setError(null);
-        edittextZ0.setError(null);
-        edittextEr.setError(null);
-        edittextFreq.setError(null);
-        edittextT.setError(null);
+        textInputLayoutW.setError(null);
+        textInputLayoutW.setErrorEnabled(false);
+        textInputLayoutS.setError(null);
+        textInputLayoutS.setErrorEnabled(false);
+        textInputLayoutH.setError(null);
+        textInputLayoutH.setErrorEnabled(false);
+        textInputLayoutZ0.setError(null);
+        textInputLayoutZ0.setErrorEnabled(false);
+        textInputLayoutEr.setError(null);
+        textInputLayoutEr.setErrorEnabled(false);
+        textInputLayoutF.setError(null);
+        textInputLayoutF.setErrorEnabled(false);
+        textInputLayoutT.setError(null);
+        textInputLayoutT.setErrorEnabled(false);
     }
 }
