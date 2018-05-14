@@ -248,7 +248,7 @@ public class MlinFragment extends Fragment {
 
         editTextL = viewRoot.findViewById(R.id.editText_L);
         editTextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        editTextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+        editTextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
 
         textInputLayoutZ0 = viewRoot.findViewById(R.id.text_input_layout_Z0);
         editTextZ0 = viewRoot.findViewById(R.id.editText_Z0);
@@ -419,18 +419,18 @@ public class MlinFragment extends Fragment {
     private void setRadioBtn() {
         if (target == Constants.Synthesize_Width) {
             radioButtonW.setChecked(true);
-            editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+            editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
             editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonH.setChecked(false);
-            editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             editTextH.setTextColor(defaultEdittextColor);
         } else {
             target = Constants.Synthesize_Height;
             radioButtonW.setChecked(false);
-            editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             editTextW.setTextColor(defaultEdittextColor);
             radioButtonH.setChecked(true);
-            editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+            editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
             editTextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         }
 
@@ -438,10 +438,10 @@ public class MlinFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(true);
-                editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+                editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
                 editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonH.setChecked(false);
-                editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+                editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
                 editTextH.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_Width;
             }
@@ -450,10 +450,10 @@ public class MlinFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(false);
-                editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+                editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
                 editTextW.setTextColor(defaultEdittextColor);
                 radioButtonH.setChecked(true);
-                editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+                editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
                 editTextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 target = Constants.Synthesize_Height;
             }

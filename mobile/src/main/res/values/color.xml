@@ -21,4 +21,6 @@
     <color name="analyzeColor">#9C27B0</color>
     <color name="analyzeColorDark">#6A1B9A</color>
     <color name="analyzeColorLight">#CE93D8</color>
+
+    <color name="defaultTintColor">#757575</color>
 </resources>

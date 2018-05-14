@@ -179,7 +179,7 @@ public class CmlinFragment extends Fragment {
         textInputLayoutW = viewRoot.findViewById(R.id.text_input_layout_W);
         edittextW = viewRoot.findViewById(R.id.editText_W);
         edittextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+        edittextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
         edittextW.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -201,7 +201,7 @@ public class CmlinFragment extends Fragment {
         textInputLayoutS = viewRoot.findViewById(R.id.text_input_layout_S);
         edittextS = viewRoot.findViewById(R.id.editText_S);
         edittextS.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+        edittextS.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
         edittextS.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -222,7 +222,7 @@ public class CmlinFragment extends Fragment {
 
         edittextL = viewRoot.findViewById(R.id.editText_L);
         edittextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        edittextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+        edittextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
 
         textInputLayoutZ0 = viewRoot.findViewById(R.id.text_input_layout_Z0);
         edittextZ0 = viewRoot.findViewById(R.id.editText_Z0);

@@ -3,6 +3,5 @@
     <item
         android:color="@color/analyzeColorLight"
         android:state_focused="true"/>
-    <item
-        android:color="@color/analyzeColorLight" />
+    <item android:color="@color/defaultTintColor"/>
 </selector>

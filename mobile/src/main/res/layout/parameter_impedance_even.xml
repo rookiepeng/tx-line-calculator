@@ -37,7 +37,7 @@
             android:id="@+id/editText_Z0e"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/background_tint_default"
+            android:backgroundTint="@color/background_tint_default_analyze"
             android:hint="Even Mode Impedance"
             android:inputType="numberDecimal"/>
 

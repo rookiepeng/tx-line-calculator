@@ -324,7 +324,7 @@ public class CoaxFragment extends Fragment {
 
         edittextL = viewRoot.findViewById(R.id.editText_L);
         edittextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        edittextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+        edittextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
 
         textInputLayoutZ0 = viewRoot.findViewById(R.id.text_input_layout_Z0);
         edittextZ0 = viewRoot.findViewById(R.id.editText_Z0);
@@ -462,57 +462,57 @@ public class CoaxFragment extends Fragment {
     private void setRadioBtn() {
         if (target == Constants.Synthesize_CoreRadius) {
             radioButtonA.setChecked(true);
-            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
             edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonB.setChecked(false);
-            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             edittextB.setTextColor(defaultEdittextColor);
             radioButtonC.setChecked(false);
-            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             edittextC.setTextColor(defaultEdittextColor);
         } else if (target == Constants.Synthesize_SubRadius) {
             radioButtonA.setChecked(false);
-            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             edittextA.setTextColor(defaultEdittextColor);
             radioButtonB.setChecked(true);
-            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
             edittextB.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonC.setChecked(false);
-            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             edittextC.setTextColor(defaultEdittextColor);
         } else if (target == Constants.Synthesize_CoreOffset) {
             radioButtonA.setChecked(false);
-            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             edittextA.setTextColor(defaultEdittextColor);
             radioButtonB.setChecked(false);
-            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             edittextB.setTextColor(defaultEdittextColor);
             radioButtonC.setChecked(true);
-            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
             edittextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         } else {
             target = Constants.Synthesize_CoreRadius;
             radioButtonA.setChecked(true);
-            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
             edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonB.setChecked(false);
-            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             edittextB.setTextColor(defaultEdittextColor);
             radioButtonC.setChecked(false);
-            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
             edittextC.setTextColor(defaultEdittextColor);
         }
         radioButtonA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioButtonA.setChecked(true);
-                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
                 edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonB.setChecked(false);
-                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
                 edittextB.setTextColor(defaultEdittextColor);
                 radioButtonC.setChecked(false);
-                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
                 edittextC.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_CoreRadius;
             }
@@ -521,13 +521,13 @@ public class CoaxFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonA.setChecked(false);
-                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
                 edittextA.setTextColor(defaultEdittextColor);
                 radioButtonB.setChecked(true);
-                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
                 edittextB.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonC.setChecked(false);
-                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
                 edittextC.setTextColor(defaultEdittextColor);
                 target = Constants.Synthesize_Height;
             }
@@ -536,13 +536,13 @@ public class CoaxFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonA.setChecked(false);
-                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
                 edittextA.setTextColor(defaultEdittextColor);
                 radioButtonB.setChecked(false);
-                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default));
+                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
                 edittextB.setTextColor(defaultEdittextColor);
                 radioButtonC.setChecked(true);
-                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthersize));
+                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
                 edittextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 target = Constants.Synthesize_CoreOffset;
             }
