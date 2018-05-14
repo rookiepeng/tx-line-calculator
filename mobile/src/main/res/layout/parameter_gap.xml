@@ -25,7 +25,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:textColorHint="@color/hintColor"
-        app:hintTextAppearance="@style/HintTextStyle"
+        app:hintTextAppearance="@style/SynthesizeHintTextStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/spinner_S"
         app:layout_constraintStart_toEndOf="@+id/radioBtn_S"

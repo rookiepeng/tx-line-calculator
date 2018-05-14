@@ -3,9 +3,4 @@
     <item
         android:color="#757575"
         android:state_focused="false"/>
-    <item
-        android:color="@color/secondaryColor"
-        android:state_enabled="true" android:state_focused="true"/>
-    <item
-        android:color="#757575" />
 </selector>

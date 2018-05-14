@@ -24,6 +24,7 @@
             android:layout_marginTop="16dp"
             android:clickable="false"
             android:foreground="@drawable/ripple_synthesize"
+            android:theme="@style/SynthesizeCardTheme"
             card_view:cardCornerRadius="4dp"
             card_view:cardElevation="8dp">
 
@@ -95,6 +96,7 @@
             android:layout_marginTop="16dp"
             android:clickable="false"
             android:foreground="@drawable/ripple_analyze"
+            android:theme="@style/AnalyzeCardTheme"
             card_view:cardCornerRadius="4dp"
             card_view:cardElevation="8dp">
 

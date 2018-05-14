@@ -4,7 +4,7 @@
         android:color="@color/analyzeColorLight"
         android:state_focused="false"/>
     <item
-        android:color="@color/secondaryColor"
+        android:color="@color/analyzeColorLight"
         android:state_enabled="true" android:state_focused="true"/>
     <item
         android:color="@color/analyzeColorLight" />
