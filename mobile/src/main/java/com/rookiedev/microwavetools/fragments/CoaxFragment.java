@@ -31,9 +31,8 @@ import java.math.BigDecimal;
 public class CoaxFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    // private TextView textA, textB, textC;
-    private TextInputEditText edittextA, edittextB, edittextC, edittextL, edittextZ0, edittextPhs, edittextFreq,
-            edittextEr;
+    private TextInputEditText editTextA, editTextB, editTextC, editTextL, editTextZ0, editTextPhs, editTextFreq,
+            editTextEr;
     private TextInputLayout textInputLayoutA, textInputLayoutB, textInputLayoutC, textInputLayoutZ0, textInputLayoutEr,
             textInputLayoutF;
     private Button buttonSynthesize, buttonAnalyze;
@@ -41,7 +40,7 @@ public class CoaxFragment extends Fragment {
     private int target;
     private RadioButton radioButtonA, radioButtonB, radioButtonC;
     private CoaxModel line;
-    private ColorStateList defaultEdittextColor;
+    private ColorStateList defaultEditTextColor;
     private AdFragment adFragment = null;
     private FragmentManager fragmentManager = null;
 
@@ -76,18 +75,18 @@ public class CoaxFragment extends Fragment {
                         Constants.ANALYZE);
                 clearEditTextErrors();
                 if (analysisInputCheck()) {
-                    line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
+                    line.setCoreRadius(Double.parseDouble(editTextA.getText().toString()),
                             spinnerA.getSelectedItemPosition());
-                    line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
+                    line.setSubRadius(Double.parseDouble(editTextB.getText().toString()),
                             spinnerB.getSelectedItemPosition());
-                    line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
+                    line.setCoreOffset(Double.parseDouble(editTextC.getText().toString()),
                             spinnerC.getSelectedItemPosition());
-                    line.setFrequency(Double.parseDouble(edittextFreq.getText().toString()),
+                    line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
                             spinnerFreq.getSelectedItemPosition());
-                    line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
+                    line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
 
-                    if (!edittextL.getText().toString().equals("")) {
-                        line.setMetalLength(Double.parseDouble(edittextL.getText().toString()),
+                    if (!editTextL.getText().toString().equals("")) {
+                        line.setMetalLength(Double.parseDouble(editTextL.getText().toString()),
                                 spinnerL.getSelectedItemPosition());
                     } else {
                         line.setMetalLength(0, spinnerL.getSelectedItemPosition());
@@ -97,29 +96,29 @@ public class CoaxFragment extends Fragment {
                     line = coax.getAnaResult(line);
 
                     if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
-                        if (!edittextL.getText().toString().equals("")) {
+                        if (!editTextL.getText().toString().equals("")) {
                             BigDecimal Eeff_temp = new BigDecimal(line.getPhase());
                             double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                     .doubleValue();
-                            edittextPhs.setText(String.valueOf(Eeff));
+                            editTextPhs.setText(String.valueOf(Eeff));
                         } else {
-                            edittextPhs.setText("");
+                            editTextPhs.setText("");
                         }
 
                         BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
                         double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                        edittextZ0.setText(String.valueOf(Z0));
+                        editTextZ0.setText(String.valueOf(Z0));
                     } else if (line.getErrorCode() == Constants.ERROR.SUBSTRATE_TOO_LARGE) {
-                        edittextZ0.setText("");
-                        edittextPhs.setText("");
+                        editTextZ0.setText("");
+                        editTextPhs.setText("");
                         textInputLayoutA.setError(getString(R.string.substrate_too_large));
-                        edittextA.requestFocus();
+                        editTextA.requestFocus();
                         textInputLayoutB.setError(getString(R.string.substrate_too_large));
                     } else if (line.getErrorCode() == Constants.ERROR.OFFSET_TOO_LARGE) {
-                        edittextZ0.setText("");
-                        edittextPhs.setText("");
+                        editTextZ0.setText("");
+                        editTextPhs.setText("");
                         textInputLayoutC.setError(getString(R.string.offset_too_large));
-                        edittextC.requestFocus();
+                        editTextC.requestFocus();
                     }
                 }
             }
@@ -132,30 +131,30 @@ public class CoaxFragment extends Fragment {
                         Constants.SYNTHESIZE);
                 clearEditTextErrors();
                 if (synthesizeInputCheck()) {
-                    line.setImpedance(Double.parseDouble(edittextZ0.getText().toString()));
-                    line.setFrequency(Double.parseDouble(edittextFreq.getText().toString()),
+                    line.setImpedance(Double.parseDouble(editTextZ0.getText().toString()));
+                    line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
                             spinnerFreq.getSelectedItemPosition());
-                    line.setSubEpsilon(Double.parseDouble(edittextEr.getText().toString()));
+                    line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
 
                     if (target == Constants.Synthesize_CoreRadius) { // a = 0;
-                        line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
+                        line.setSubRadius(Double.parseDouble(editTextB.getText().toString()),
                                 spinnerB.getSelectedItemPosition());
-                        line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
+                        line.setCoreOffset(Double.parseDouble(editTextC.getText().toString()),
                                 spinnerC.getSelectedItemPosition());
                     } else if (target == Constants.Synthesize_SubRadius) { // b = 0;
-                        line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
+                        line.setCoreRadius(Double.parseDouble(editTextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
-                        line.setCoreOffset(Double.parseDouble(edittextC.getText().toString()),
+                        line.setCoreOffset(Double.parseDouble(editTextC.getText().toString()),
                                 spinnerC.getSelectedItemPosition());
                     } else if (target == Constants.Synthesize_CoreOffset) { // c = 0;
-                        line.setCoreRadius(Double.parseDouble(edittextA.getText().toString()),
+                        line.setCoreRadius(Double.parseDouble(editTextA.getText().toString()),
                                 spinnerA.getSelectedItemPosition());
-                        line.setSubRadius(Double.parseDouble(edittextB.getText().toString()),
+                        line.setSubRadius(Double.parseDouble(editTextB.getText().toString()),
                                 spinnerB.getSelectedItemPosition());
                     }
 
-                    if (edittextPhs.length() != 0) {
-                        line.setPhase(Double.parseDouble(edittextPhs.getText().toString()));
+                    if (editTextPhs.length() != 0) {
+                        line.setPhase(Double.parseDouble(editTextPhs.getText().toString()));
                     } else {
                         line.setPhase(0);
                     }
@@ -164,65 +163,65 @@ public class CoaxFragment extends Fragment {
                     line = coax.getSynResult(line, target);
 
                     if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
-                        if (edittextPhs.length() != 0) {
+                        if (editTextPhs.length() != 0) {
                             BigDecimal L_temp = new BigDecimal(
                                     Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition()));
                             double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                            edittextL.setText(String.valueOf(L));
+                            editTextL.setText(String.valueOf(L));
                         } else {
-                            edittextL.setText("");
+                            editTextL.setText("");
                         }
 
                         if (target == Constants.Synthesize_CoreRadius) {
                             if ((Double.isNaN(line.getCoreRadius()) || Double.isInfinite(line.getCoreRadius()))) {
-                                edittextA.setText("");
+                                editTextA.setText("");
                                 textInputLayoutA.setError(getString(R.string.synthesize_failed));
-                                edittextA.requestFocus();
+                                editTextA.requestFocus();
                             } else {
                                 BigDecimal a_temp = new BigDecimal(Constants.meter2others(line.getCoreRadius(),
                                         spinnerA.getSelectedItemPosition()));
                                 double a = a_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                         .doubleValue();
-                                edittextA.setText(String.valueOf(a));
+                                editTextA.setText(String.valueOf(a));
                             }
                         } else if (target == Constants.Synthesize_SubRadius) {
                             if ((Double.isNaN(line.getSubRadius()) || Double.isInfinite(line.getSubRadius()))) {
-                                edittextB.setText("");
+                                editTextB.setText("");
                                 textInputLayoutB.setError(getString(R.string.synthesize_failed));
-                                edittextB.requestFocus();
+                                editTextB.requestFocus();
                             } else {
                                 BigDecimal b_temp = new BigDecimal(Constants.meter2others(line.getSubRadius(),
                                         spinnerB.getSelectedItemPosition()));
                                 double height = b_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                         .doubleValue();
-                                edittextB.setText(String.valueOf(height));
+                                editTextB.setText(String.valueOf(height));
                             }
                         } else if (target == Constants.Synthesize_CoreOffset) {
                             if ((Double.isNaN(line.getCoreOffset()) || Double.isInfinite(line.getCoreOffset()))) {
-                                edittextC.setText("");
+                                editTextC.setText("");
                                 textInputLayoutC.setError(getString(R.string.synthesize_failed));
-                                edittextC.requestFocus();
+                                editTextC.requestFocus();
                             } else {
                                 BigDecimal c_temp = new BigDecimal(Constants.meter2others(line.getCoreOffset(),
                                         spinnerC.getSelectedItemPosition()));
                                 double b = c_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                         .doubleValue();
-                                edittextC.setText(String.valueOf(b));
+                                editTextC.setText(String.valueOf(b));
                             }
                         }
                     } else {
                         if (target == Constants.Synthesize_CoreRadius) {
-                            edittextA.setText("");
+                            editTextA.setText("");
                             textInputLayoutA.setError(getString(R.string.synthesize_failed));
-                            edittextA.requestFocus();
+                            editTextA.requestFocus();
                         } else if (target == Constants.Synthesize_SubRadius) {
-                            edittextB.setText("");
+                            editTextB.setText("");
                             textInputLayoutB.setError(getString(R.string.synthesize_failed));
-                            edittextB.requestFocus();
+                            editTextB.requestFocus();
                         } else if (target == Constants.Synthesize_CoreOffset) {
-                            edittextC.setText("");
+                            editTextC.setText("");
                             textInputLayoutC.setError(getString(R.string.synthesize_failed));
-                            edittextC.requestFocus();
+                            editTextC.requestFocus();
                         }
                     }
                 }
@@ -258,13 +257,13 @@ public class CoaxFragment extends Fragment {
         radioButtonA.setVisibility(View.VISIBLE);
         radioButtonC = viewRoot.findViewById(R.id.radioBtn_c);
         radioButtonC.setVisibility(View.VISIBLE);
-        radioButtonB = viewRoot.findViewById(R.id.radioBtn_b);
+        radioButtonB = viewRoot.findViewById(R.id.radio_button_b);
         radioButtonB.setVisibility(View.VISIBLE);
 
         textInputLayoutA = viewRoot.findViewById(R.id.text_input_layout_a);
-        edittextA = viewRoot.findViewById(R.id.editText_a);
-        defaultEdittextColor = edittextA.getTextColors();
-        edittextA.addTextChangedListener(new TextWatcher() {
+        editTextA = viewRoot.findViewById(R.id.editText_a);
+        defaultEditTextColor = editTextA.getTextColors();
+        editTextA.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -283,8 +282,8 @@ public class CoaxFragment extends Fragment {
         });
 
         textInputLayoutC = viewRoot.findViewById(R.id.text_input_layout_c);
-        edittextC = viewRoot.findViewById(R.id.editText_c);
-        edittextC.addTextChangedListener(new TextWatcher() {
+        editTextC = viewRoot.findViewById(R.id.editText_c);
+        editTextC.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -303,8 +302,8 @@ public class CoaxFragment extends Fragment {
         });
 
         textInputLayoutB = viewRoot.findViewById(R.id.text_input_layout_b);
-        edittextB = viewRoot.findViewById(R.id.editText_b);
-        edittextB.addTextChangedListener(new TextWatcher() {
+        editTextB = viewRoot.findViewById(R.id.editText_b);
+        editTextB.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -322,15 +321,15 @@ public class CoaxFragment extends Fragment {
             }
         });
 
-        edittextL = viewRoot.findViewById(R.id.editText_L);
-        edittextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        edittextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+        editTextL = viewRoot.findViewById(R.id.editText_L);
+        editTextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        editTextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
 
         textInputLayoutZ0 = viewRoot.findViewById(R.id.text_input_layout_Z0);
-        edittextZ0 = viewRoot.findViewById(R.id.editText_Z0);
-        edittextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-        edittextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-        edittextZ0.addTextChangedListener(new TextWatcher() {
+        editTextZ0 = viewRoot.findViewById(R.id.editText_Z0);
+        editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+        editTextZ0.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -348,13 +347,13 @@ public class CoaxFragment extends Fragment {
             }
         });
 
-        edittextPhs = viewRoot.findViewById(R.id.editText_Phs);
-        edittextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-        edittextPhs.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+        editTextPhs = viewRoot.findViewById(R.id.editText_Phs);
+        editTextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        editTextPhs.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
 
         textInputLayoutF = viewRoot.findViewById(R.id.text_input_layout_Freq);
-        edittextFreq = viewRoot.findViewById(R.id.editText_Freq);
-        edittextFreq.addTextChangedListener(new TextWatcher() {
+        editTextFreq = viewRoot.findViewById(R.id.editText_Freq);
+        editTextFreq.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -373,8 +372,8 @@ public class CoaxFragment extends Fragment {
         });
 
         textInputLayoutEr = viewRoot.findViewById(R.id.text_input_layout_er);
-        edittextEr = viewRoot.findViewById(R.id.editText_er);
-        edittextEr.addTextChangedListener(new TextWatcher() {
+        editTextEr = viewRoot.findViewById(R.id.editText_er);
+        editTextEr.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -425,35 +424,35 @@ public class CoaxFragment extends Fragment {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME,
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
 
-        edittextA.setText(prefs.getString(Constants.COAX_A, "0.167"));
+        editTextA.setText(prefs.getString(Constants.COAX_A, "0.167"));
         spinnerA.setSelection(
                 Integer.parseInt(prefs.getString(Constants.COAX_A_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
-        edittextB.setText(prefs.getString(Constants.COAX_B, "1.00"));
+        editTextB.setText(prefs.getString(Constants.COAX_B, "1.00"));
         spinnerB.setSelection(
                 Integer.parseInt(prefs.getString(Constants.COAX_B_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
-        edittextC.setText(prefs.getString(Constants.COAX_C, "0.00"));
+        editTextC.setText(prefs.getString(Constants.COAX_C, "0.00"));
         spinnerC.setSelection(
                 Integer.parseInt(prefs.getString(Constants.COAX_C_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
-        edittextL.setText(prefs.getString(Constants.COAX_L, "34.945"));
+        editTextL.setText(prefs.getString(Constants.COAX_L, "34.945"));
         spinnerL.setSelection(
                 Integer.parseInt(prefs.getString(Constants.COAX_L_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
-        edittextZ0.setText(prefs.getString(Constants.COAX_Z0, "50"));
+        editTextZ0.setText(prefs.getString(Constants.COAX_Z0, "50"));
         spinnerZ0.setSelection(Integer
                 .parseInt(prefs.getString(Constants.COAX_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
 
-        edittextPhs.setText(prefs.getString(Constants.COAX_PHS, "90"));
+        editTextPhs.setText(prefs.getString(Constants.COAX_PHS, "90"));
         spinnerPhs.setSelection(Integer
                 .parseInt(prefs.getString(Constants.COAX_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))));
 
-        edittextFreq.setText(prefs.getString(Constants.COAX_FREQ, "1.00"));
+        editTextFreq.setText(prefs.getString(Constants.COAX_FREQ, "1.00"));
         spinnerFreq.setSelection(
                 Integer.parseInt(prefs.getString(Constants.COAX_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))));
 
-        edittextEr.setText(prefs.getString(Constants.COAX_ER, "4.6"));
+        editTextEr.setText(prefs.getString(Constants.COAX_ER, "4.6"));
 
         target = Integer
                 .parseInt(prefs.getString(Constants.COAX_TARGET, Integer.toString(Constants.Synthesize_CoreRadius)));
@@ -462,58 +461,68 @@ public class CoaxFragment extends Fragment {
     private void setRadioBtn() {
         if (target == Constants.Synthesize_CoreRadius) {
             radioButtonA.setChecked(true);
-            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
-            edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            editTextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+            editTextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonB.setChecked(false);
-            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            edittextB.setTextColor(defaultEdittextColor);
+            editTextB.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextB.setTextColor(defaultEditTextColor);
             radioButtonC.setChecked(false);
-            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            edittextC.setTextColor(defaultEdittextColor);
+            editTextC.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextC.setTextColor(defaultEditTextColor);
         } else if (target == Constants.Synthesize_SubRadius) {
             radioButtonA.setChecked(false);
-            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            edittextA.setTextColor(defaultEdittextColor);
+            editTextA.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextA.setTextColor(defaultEditTextColor);
             radioButtonB.setChecked(true);
-            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
-            edittextB.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            editTextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+            editTextB.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonC.setChecked(false);
-            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            edittextC.setTextColor(defaultEdittextColor);
+            editTextC.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextC.setTextColor(defaultEditTextColor);
         } else if (target == Constants.Synthesize_CoreOffset) {
             radioButtonA.setChecked(false);
-            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            edittextA.setTextColor(defaultEdittextColor);
+            editTextA.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextA.setTextColor(defaultEditTextColor);
             radioButtonB.setChecked(false);
-            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            edittextB.setTextColor(defaultEdittextColor);
+            editTextB.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextB.setTextColor(defaultEditTextColor);
             radioButtonC.setChecked(true);
-            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
-            edittextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            editTextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+            editTextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
         } else {
             target = Constants.Synthesize_CoreRadius;
             radioButtonA.setChecked(true);
-            edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
-            edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+            editTextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+            editTextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonB.setChecked(false);
-            edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            edittextB.setTextColor(defaultEdittextColor);
+            editTextB.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextB.setTextColor(defaultEditTextColor);
             radioButtonC.setChecked(false);
-            edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            edittextC.setTextColor(defaultEdittextColor);
+            editTextC.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextC.setTextColor(defaultEditTextColor);
         }
         radioButtonA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 radioButtonA.setChecked(true);
-                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
-                edittextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                editTextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+                editTextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonB.setChecked(false);
-                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-                edittextB.setTextColor(defaultEdittextColor);
+                editTextB.setBackgroundTintList(
+                        getResources().getColorStateList(R.color.background_tint_default_synthesize));
+                editTextB.setTextColor(defaultEditTextColor);
                 radioButtonC.setChecked(false);
-                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-                edittextC.setTextColor(defaultEdittextColor);
+                editTextC.setBackgroundTintList(
+                        getResources().getColorStateList(R.color.background_tint_default_synthesize));
+                editTextC.setTextColor(defaultEditTextColor);
                 target = Constants.Synthesize_CoreRadius;
             }
         });
@@ -521,14 +530,16 @@ public class CoaxFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonA.setChecked(false);
-                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-                edittextA.setTextColor(defaultEdittextColor);
+                editTextA.setBackgroundTintList(
+                        getResources().getColorStateList(R.color.background_tint_default_synthesize));
+                editTextA.setTextColor(defaultEditTextColor);
                 radioButtonB.setChecked(true);
-                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
-                edittextB.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                editTextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+                editTextB.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonC.setChecked(false);
-                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-                edittextC.setTextColor(defaultEdittextColor);
+                editTextC.setBackgroundTintList(
+                        getResources().getColorStateList(R.color.background_tint_default_synthesize));
+                editTextC.setTextColor(defaultEditTextColor);
                 target = Constants.Synthesize_Height;
             }
         });
@@ -536,14 +547,16 @@ public class CoaxFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonA.setChecked(false);
-                edittextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-                edittextA.setTextColor(defaultEdittextColor);
+                editTextA.setBackgroundTintList(
+                        getResources().getColorStateList(R.color.background_tint_default_synthesize));
+                editTextA.setTextColor(defaultEditTextColor);
                 radioButtonB.setChecked(false);
-                edittextB.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-                edittextB.setTextColor(defaultEdittextColor);
+                editTextB.setBackgroundTintList(
+                        getResources().getColorStateList(R.color.background_tint_default_synthesize));
+                editTextB.setTextColor(defaultEditTextColor);
                 radioButtonC.setChecked(true);
-                edittextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
-                edittextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+                editTextC.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+                editTextC.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 target = Constants.Synthesize_CoreOffset;
             }
         });
@@ -556,20 +569,20 @@ public class CoaxFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString(Constants.COAX_A, edittextA.getText().toString());
+        editor.putString(Constants.COAX_A, editTextA.getText().toString());
         editor.putString(Constants.COAX_A_UNIT, Integer.toString(spinnerA.getSelectedItemPosition()));
-        editor.putString(Constants.COAX_B, edittextB.getText().toString());
+        editor.putString(Constants.COAX_B, editTextB.getText().toString());
         editor.putString(Constants.COAX_B_UNIT, Integer.toString(spinnerB.getSelectedItemPosition()));
-        editor.putString(Constants.COAX_C, edittextC.getText().toString());
+        editor.putString(Constants.COAX_C, editTextC.getText().toString());
         editor.putString(Constants.COAX_C_UNIT, Integer.toString(spinnerC.getSelectedItemPosition()));
-        editor.putString(Constants.COAX_ER, edittextEr.getText().toString());
-        editor.putString(Constants.COAX_L, edittextL.getText().toString());
+        editor.putString(Constants.COAX_ER, editTextEr.getText().toString());
+        editor.putString(Constants.COAX_L, editTextL.getText().toString());
         editor.putString(Constants.COAX_L_UNIT, Integer.toString(spinnerL.getSelectedItemPosition()));
-        editor.putString(Constants.COAX_Z0, edittextZ0.getText().toString());
+        editor.putString(Constants.COAX_Z0, editTextZ0.getText().toString());
         editor.putString(Constants.COAX_Z0_UNIT, Integer.toString(spinnerZ0.getSelectedItemPosition()));
-        editor.putString(Constants.COAX_PHS, edittextPhs.getText().toString());
+        editor.putString(Constants.COAX_PHS, editTextPhs.getText().toString());
         editor.putString(Constants.COAX_PHS_UNIT, Integer.toString(spinnerPhs.getSelectedItemPosition()));
-        editor.putString(Constants.COAX_FREQ, edittextFreq.getText().toString());
+        editor.putString(Constants.COAX_FREQ, editTextFreq.getText().toString());
         editor.putString(Constants.COAX_FREQ_UNIT, Integer.toString(spinnerFreq.getSelectedItemPosition()));
         editor.putString(Constants.COAX_TARGET, Integer.toString(target));
 
@@ -578,48 +591,48 @@ public class CoaxFragment extends Fragment {
 
     private boolean analysisInputCheck() {
         boolean checkResult = true;
-        if (edittextA.length() == 0) {
+        if (editTextA.length() == 0) {
             textInputLayoutA.setError(getText(R.string.Error_a_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(edittextA.getText().toString()),
+        } else if (Constants.value2meter(Double.parseDouble(editTextA.getText().toString()),
                 spinnerA.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
             textInputLayoutA.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
-        if (edittextFreq.length() == 0) {
+        if (editTextFreq.length() == 0) {
             textInputLayoutF.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
-        } else if (Double.parseDouble(edittextFreq.getText().toString()) == 0) {
+        } else if (Double.parseDouble(editTextFreq.getText().toString()) == 0) {
             textInputLayoutF.setError(getText(R.string.error_zero_frequency));
             checkResult = false;
         }
 
-        if (edittextB.length() == 0) {
+        if (editTextB.length() == 0) {
             textInputLayoutB.setError(getText(R.string.Error_b_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(edittextB.getText().toString()),
+        } else if (Constants.value2meter(Double.parseDouble(editTextB.getText().toString()),
                 spinnerB.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
             textInputLayoutB.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
-        if (edittextC.length() == 0) {
+        if (editTextC.length() == 0) {
             textInputLayoutC.setError(getText(R.string.Error_c_empty));
             checkResult = false;
         }
 
-        if (edittextEr.length() == 0) {
+        if (editTextEr.length() == 0) {
             textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
-        } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
+        } else if (Double.parseDouble(editTextEr.getText().toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
         if (!checkResult) {
-            edittextZ0.setText("");
-            edittextPhs.setText("");
+            editTextZ0.setText("");
+            editTextPhs.setText("");
         }
 
         return checkResult;
@@ -627,68 +640,68 @@ public class CoaxFragment extends Fragment {
 
     private boolean synthesizeInputCheck() {
         boolean checkResult = true;
-        if (edittextZ0.length() == 0) {
+        if (editTextZ0.length() == 0) {
             textInputLayoutZ0.setError(getText(R.string.error_Z0_empty));
             checkResult = false;
-        } else if (Double.parseDouble(edittextZ0.getText().toString()) == 0) {
+        } else if (Double.parseDouble(editTextZ0.getText().toString()) == 0) {
             textInputLayoutZ0.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
-        if (edittextFreq.length() == 0) {
+        if (editTextFreq.length() == 0) {
             textInputLayoutF.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
-        } else if (Double.parseDouble(edittextFreq.getText().toString()) == 0) {
+        } else if (Double.parseDouble(editTextFreq.getText().toString()) == 0) {
             textInputLayoutF.setError(getText(R.string.error_zero_frequency));
             checkResult = false;
         }
 
-        if (edittextEr.length() == 0) {
+        if (editTextEr.length() == 0) {
             textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
-        } else if (Double.parseDouble(edittextEr.getText().toString()) < 1) {
+        } else if (Double.parseDouble(editTextEr.getText().toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
 
         if (target == Constants.Synthesize_CoreRadius) {
-            if (edittextB.length() == 0) {
+            if (editTextB.length() == 0) {
                 textInputLayoutB.setError(getText(R.string.Error_b_empty));
                 checkResult = false;
             }
-            if (edittextC.length() == 0) {
+            if (editTextC.length() == 0) {
                 textInputLayoutC.setError(getText(R.string.Error_c_empty));
                 checkResult = false;
             }
 
             if (!checkResult) {
-                edittextA.setText("");
+                editTextA.setText("");
             }
         } else if (target == Constants.Synthesize_SubRadius) {
-            if (edittextA.length() == 0) {
+            if (editTextA.length() == 0) {
                 textInputLayoutA.setError(getText(R.string.Error_a_empty));
                 checkResult = false;
             }
-            if (edittextC.length() == 0) {
+            if (editTextC.length() == 0) {
                 textInputLayoutC.setError(getText(R.string.Error_c_empty));
                 checkResult = false;
             }
 
             if (!checkResult) {
-                edittextB.setText("");
+                editTextB.setText("");
             }
         } else if (target == Constants.Synthesize_CoreOffset) {
-            if (edittextA.length() == 0) {
+            if (editTextA.length() == 0) {
                 textInputLayoutA.setError(getText(R.string.Error_a_empty));
                 checkResult = false;
             }
-            if (edittextB.length() == 0) {
+            if (editTextB.length() == 0) {
                 textInputLayoutB.setError(getText(R.string.Error_b_empty));
                 checkResult = false;
             }
 
             if (!checkResult) {
-                edittextC.setText("");
+                editTextC.setText("");
             }
         }
 

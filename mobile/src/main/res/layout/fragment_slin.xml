@@ -43,22 +43,22 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_thickness_new"
+                    layout="@layout/parameter_metal_thickness"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_height_new"
+                    layout="@layout/parameter_substrate_height"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_width_new"
+                    layout="@layout/parameter_metal_width"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_length_new"
+                    layout="@layout/parameter_length"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
@@ -115,17 +115,17 @@
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_phase_new"
+                    layout="@layout/parameter_phase"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_epsilon_new"
+                    layout="@layout/parameter_dielectric_constant"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
                 <include
-                    layout="@layout/parameter_frequency_new"
+                    layout="@layout/parameter_frequency"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 

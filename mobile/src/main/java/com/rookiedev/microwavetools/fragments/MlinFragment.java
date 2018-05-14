@@ -41,7 +41,7 @@ public class MlinFragment extends Fragment {
     private Spinner spinnerW, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerPhs, spinnerFreq;
     private MlinModel line;
     private int target;
-    private ColorStateList defaultEdittextColor;
+    private ColorStateList defaultEditTextColor;
     private AdFragment adFragment = null;
     private boolean isAdFree;
     private FragmentManager fragmentManager = null;
@@ -226,8 +226,9 @@ public class MlinFragment extends Fragment {
 
         textInputLayoutW = viewRoot.findViewById(R.id.text_input_layout_W);
         editTextW = viewRoot.findViewById(R.id.editText_W);
-        defaultEdittextColor = editTextW.getTextColors();
-        //editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        defaultEditTextColor = editTextW.getTextColors();
+        // editTextW.setTextColor(ContextCompat.getColor(mContext,
+        // R.color.synthesizeColor));
         editTextW.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -422,13 +423,15 @@ public class MlinFragment extends Fragment {
             editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
             editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
             radioButtonH.setChecked(false);
-            editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            editTextH.setTextColor(defaultEdittextColor);
+            editTextH.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextH.setTextColor(defaultEditTextColor);
         } else {
             target = Constants.Synthesize_Height;
             radioButtonW.setChecked(false);
-            editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-            editTextW.setTextColor(defaultEdittextColor);
+            editTextW.setBackgroundTintList(
+                    getResources().getColorStateList(R.color.background_tint_default_synthesize));
+            editTextW.setTextColor(defaultEditTextColor);
             radioButtonH.setChecked(true);
             editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
             editTextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
@@ -441,8 +444,9 @@ public class MlinFragment extends Fragment {
                 editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
                 editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
                 radioButtonH.setChecked(false);
-                editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-                editTextH.setTextColor(defaultEdittextColor);
+                editTextH.setBackgroundTintList(
+                        getResources().getColorStateList(R.color.background_tint_default_synthesize));
+                editTextH.setTextColor(defaultEditTextColor);
                 target = Constants.Synthesize_Width;
             }
         });
@@ -450,8 +454,9 @@ public class MlinFragment extends Fragment {
             @Override
             public void onClick(View arg0) {
                 radioButtonW.setChecked(false);
-                editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_default_synthesize));
-                editTextW.setTextColor(defaultEdittextColor);
+                editTextW.setBackgroundTintList(
+                        getResources().getColorStateList(R.color.background_tint_default_synthesize));
+                editTextW.setTextColor(defaultEditTextColor);
                 radioButtonH.setChecked(true);
                 editTextH.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
                 editTextH.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
