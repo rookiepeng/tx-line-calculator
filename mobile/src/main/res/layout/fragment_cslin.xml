@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/viewBackground"
@@ -14,7 +14,10 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingTop="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_dimensions"
@@ -40,32 +43,32 @@
                 <include
                     layout="@layout/header_dimensions"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_metal_thickness"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_substrate_height"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_metal_width"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_gap"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_length"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
 
@@ -82,12 +85,12 @@
         <include
             layout="@layout/button_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
         <FrameLayout
             android:id="@+id/ad_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <android.support.v7.widget.CardView
             android:id="@+id/card_parameters"
@@ -113,52 +116,52 @@
                 <include
                     layout="@layout/header_parameters"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_impedance"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_coupling_coefficient"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="1dip"
-                    android:background="?android:attr/listDivider" />
+                    android:background="?android:attr/listDivider"/>
 
                 <include
                     layout="@layout/parameter_impedance_odd"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_impedance_even"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="1dip"
-                    android:background="?android:attr/listDivider" />
+                    android:background="?android:attr/listDivider"/>
 
                 <include
                     layout="@layout/parameter_phase"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_dielectric_constant"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
                 <include
                     layout="@layout/parameter_frequency"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
 
