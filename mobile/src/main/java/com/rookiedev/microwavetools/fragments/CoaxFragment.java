@@ -737,4 +737,35 @@ public class CoaxFragment extends Fragment {
         textInputLayoutF.setError(null);
         textInputLayoutF.setErrorEnabled(false);
     }
+
+    public void resetValues() {
+        editTextA.setText("0.167");
+        spinnerA.setSelection(Constants.LengthUnit_mm);
+        editTextB.setText("1.00");
+        spinnerB.setSelection(Constants.LengthUnit_mm);
+        editTextC.setText("0.00");
+        spinnerC.setSelection(Constants.LengthUnit_mm);
+        editTextL.setText("34.945");
+        spinnerL.setSelection(Constants.LengthUnit_mm);
+        editTextZ0.setText("50");
+        spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+        editTextPhs.setText("90");
+        spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+        editTextFreq.setText("1.00");
+        spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+        editTextEr.setText("4.6");
+        target = Constants.Synthesize_CoreRadius;
+
+        radioButtonA.setChecked(true);
+        editTextA.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+        editTextA.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        radioButtonB.setChecked(false);
+        editTextB.setBackgroundTintList(
+                getResources().getColorStateList(R.color.background_tint_default_synthesize));
+        editTextB.setTextColor(defaultEditTextColor);
+        radioButtonC.setChecked(false);
+        editTextC.setBackgroundTintList(
+                getResources().getColorStateList(R.color.background_tint_default_synthesize));
+        editTextC.setTextColor(defaultEditTextColor);
+    }
 }

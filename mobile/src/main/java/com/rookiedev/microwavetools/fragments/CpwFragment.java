@@ -494,7 +494,7 @@ public class CpwFragment extends Fragment {
             // editTextT.setText(prefs.getString(Constants.GCPW_T, "0"));
             // spinnerT.setSelection(Integer.parseInt(prefs.getString(Constants.GCPW_T_UNIT,
             // Integer.toString(Constants.LengthUnit_mm))));
-            target = Integer.parseInt(prefs.getString(Constants.GCPW_TARGET, "0"));
+            target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, Integer.toString(Constants.Synthesize_Width)));
         } else {
             editTextW.setText(prefs.getString(Constants.CPW_W, "1"));
             spinnerW.setSelection(
@@ -529,7 +529,7 @@ public class CpwFragment extends Fragment {
             editTextT.setText(prefs.getString(Constants.CPW_T, "0.035"));
             spinnerT.setSelection(
                     Integer.parseInt(prefs.getString(Constants.CPW_T_UNIT, Integer.toString(Constants.LengthUnit_mm))));
-            target = Integer.parseInt(prefs.getString(Constants.CPW_TARGET, "0"));
+            target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, Integer.toString(Constants.Synthesize_Width)));
         }
     }
 
@@ -879,5 +879,57 @@ public class CpwFragment extends Fragment {
         textInputLayoutF.setErrorEnabled(false);
         textInputLayoutT.setError(null);
         textInputLayoutT.setErrorEnabled(false);
+    }
+
+    public void resetValues() {
+        if (withGround) {
+            editTextW.setText("1");
+            spinnerW.setSelection(Constants.LengthUnit_mm);
+            editTextG.setText("0.15");
+            spinnerG.setSelection(Constants.LengthUnit_mm);
+            editTextL.setText("44.38");
+            spinnerL.setSelection(Constants.LengthUnit_mm);
+            editTextZ0.setText("50.00");
+            spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+            editTextPhs.setText("90.00");
+            spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+            editTextFreq.setText("1.00");
+            spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+            editTextEr.setText("4.6");
+            editTextH.setText("1.6");
+            spinnerH.setSelection(Constants.LengthUnit_mm);
+            target = Constants.Synthesize_Width;
+        } else {
+            editTextW.setText("1");
+            spinnerW.setSelection(Constants.LengthUnit_mm);
+            editTextG.setText("0.244");
+            spinnerG.setSelection(Constants.LengthUnit_mm);
+            editTextL.setText("44.464");
+            spinnerL.setSelection(Constants.LengthUnit_mm);
+            editTextZ0.setText("50");
+            spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+            editTextPhs.setText("90");
+            spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+            editTextFreq.setText("1.00");
+            spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+            editTextEr.setText("4.6");
+            editTextH.setText("1.6");
+            spinnerH.setSelection(Constants.LengthUnit_mm);
+            editTextT.setText("0.035");
+            spinnerT.setSelection(Constants.LengthUnit_mm);
+            target = Constants.Synthesize_Width;
+        }
+
+        radioButtonW.setChecked(true);
+        editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+        editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        radioButtonG.setChecked(false);
+        editTextG.setBackgroundTintList(
+                getResources().getColorStateList(R.color.background_tint_default_synthesize));
+        editTextG.setTextColor(defaultEditTextColor);
+        radioButtonH.setChecked(false);
+        editTextH.setBackgroundTintList(
+                getResources().getColorStateList(R.color.background_tint_default_synthesize));
+        editTextH.setTextColor(defaultEditTextColor);
     }
 }

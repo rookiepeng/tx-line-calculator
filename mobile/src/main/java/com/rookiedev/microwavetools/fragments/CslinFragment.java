@@ -910,4 +910,47 @@ public class CslinFragment extends Fragment {
         textInputLayoutT.setError(null);
         textInputLayoutT.setErrorEnabled(false);
     }
+
+    public void resetValues() {
+        editTextW.setText("0.59");
+        spinnerW.setSelection(Constants.LengthUnit_mm);
+        editTextG.setText("0.36");
+        spinnerG.setSelection(Constants.LengthUnit_mm);
+        editTextL.setText("34.9");
+        spinnerL.setSelection(Constants.LengthUnit_mm);
+        editTextZ0.setText("50");
+        spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+        editTextK.setText("0.2");
+        editTextZ0o.setText("40.8");
+        spinnerZ0o.setSelection(Constants.ImpedanceUnit_Ohm);
+        editTextZ0e.setText("61.2");
+        spinnerZ0e.setSelection(Constants.ImpedanceUnit_Ohm);
+        editTextPhs.setText("90");
+        spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+        editTextFreq.setText("1.00");
+        spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+        editTextEr.setText("4.6");
+        editTextH.setText("1.6");
+        spinnerH.setSelection(Constants.LengthUnit_mm);
+        editTextT.setText("0.035");
+        spinnerT.setSelection(Constants.LengthUnit_mm);
+        useZ0k = true;
+
+        radioButtonZ0.setChecked(true);
+        radioButtonK.setChecked(true);
+        radioButtonZ0o.setChecked(false);
+        radioButtonZ0e.setChecked(false);
+        editTextZ0.setEnabled(true);
+        editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        editTextK.setEnabled(true);
+        editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        editTextZ0o.setEnabled(false);
+        editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+        editTextZ0e.setEnabled(false);
+        editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+        editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+        editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+        editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+        editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+    }
 }

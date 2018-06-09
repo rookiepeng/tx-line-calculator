@@ -425,7 +425,7 @@ public class SlinFragment extends Fragment {
         editTextT.setText(prefs.getString(Constants.SLIN_T, "0.035"));
         spinnerT.setSelection(
                 Integer.parseInt(prefs.getString(Constants.SLIN_T_UNIT, Integer.toString(Constants.LengthUnit_mm))));
-        target = Integer.parseInt(prefs.getString(Constants.SLIN_TARGET, "0"));
+        target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, Integer.toString(Constants.Synthesize_Width)));
     }
 
     private void setRadioBtn() {
@@ -627,5 +627,32 @@ public class SlinFragment extends Fragment {
         textInputLayoutEr.setErrorEnabled(false);
         textInputLayoutF.setError(null);
         textInputLayoutF.setErrorEnabled(false);
+    }
+
+    public void resetValues() {
+        editTextW.setText("0.6");
+        spinnerW.setSelection(Constants.LengthUnit_mm);
+        editTextL.setText("34.9");
+        spinnerL.setSelection(Constants.LengthUnit_mm);
+        editTextZ0.setText("50");
+        spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+        editTextPhs.setText("90");
+        spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+        editTextFreq.setText("1.00");
+        spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+        editTextEr.setText("4.60");
+        editTextH.setText("1.6");
+        spinnerH.setSelection(Constants.LengthUnit_mm);
+        editTextT.setText("0.035");
+        spinnerT.setSelection(Constants.LengthUnit_mm);
+        target = Constants.Synthesize_Width;
+
+        radioButtonW.setChecked(true);
+        editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+        editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
+        radioButtonH.setChecked(false);
+        editTextH.setBackgroundTintList(
+                getResources().getColorStateList(R.color.background_tint_default_synthesize));
+        editTextH.setTextColor(defaultEditTextColor);
     }
 }

@@ -327,9 +327,9 @@ public class CmlinFragment extends Fragment {
             }
         });
 
-        EditText edittextT = viewRoot.findViewById(R.id.editText_T);
-        edittextT.setText("0");
-        edittextT.setEnabled(false);
+        EditText editTextT = viewRoot.findViewById(R.id.editText_T);
+        editTextT.setText("0");
+        editTextT.setEnabled(false);
 
         textInputLayoutH = viewRoot.findViewById(R.id.text_input_layout_H);
         editTextH = viewRoot.findViewById(R.id.editText_H);
@@ -879,5 +879,46 @@ public class CmlinFragment extends Fragment {
         textInputLayoutEr.setErrorEnabled(false);
         textInputLayoutF.setError(null);
         textInputLayoutF.setErrorEnabled(false);
+    }
+
+    public void resetValues() {
+        editTextW.setText("2.7");
+        spinnerW.setSelection(Constants.LengthUnit_mm);
+        editTextG.setText("0.8");
+        spinnerG.setSelection(Constants.LengthUnit_mm);
+        editTextL.setText("40.9");
+        spinnerL.setSelection(Constants.LengthUnit_mm);
+        editTextZ0.setText("50");
+        spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+        editTextK.setText("0.2");
+        editTextZ0o.setText("41.044");
+        spinnerZ0o.setSelection(Constants.ImpedanceUnit_Ohm);
+        editTextZ0e.setText("62.341");
+        spinnerZ0e.setSelection(Constants.ImpedanceUnit_Ohm);
+        editTextPhs.setText("90");
+        spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+        editTextFreq.setText("1.00");
+        spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+        editTextEr.setText("4.60");
+        editTextH.setText("1.6");
+        spinnerH.setSelection(Constants.LengthUnit_mm);
+        useZ0k = true;
+
+        radioButtonZ0.setChecked(true);
+        radioButtonK.setChecked(true);
+        radioButtonZ0o.setChecked(false);
+        radioButtonZ0e.setChecked(false);
+        editTextZ0.setEnabled(true);
+        editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        editTextK.setEnabled(true);
+        editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+        editTextZ0o.setEnabled(false);
+        editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+        editTextZ0e.setEnabled(false);
+        editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+        editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+        editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+        editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+        editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
     }
 }
