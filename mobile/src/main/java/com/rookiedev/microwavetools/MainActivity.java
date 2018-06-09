@@ -1,5 +1,6 @@
 package com.rookiedev.microwavetools;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -71,12 +73,54 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                alertDialog.setTitle("Reset?");
+                alertDialog.setMessage("Do you want to reset all the values?");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //dialog.dismiss();
+                                switch (pos) {
+                                    case Constants.PositionMlin:
+                                        fragmentMlin.resetValues();
+                                        break;
+                                    case Constants.PositionCmlin:
+                                        fragmentCmlin.resetValues();
+                                        break;
+                                    case Constants.PositionSlin:
+                                        fragmentSlin.resetValues();
+                                        break;
+                                    case Constants.PositionCslin:
+                                        fragmentCslin.resetValues();
+                                        break;
+                                    case Constants.PositionCpw:
+                                        fragmentCpw.resetValues();
+                                        break;
+                                    case Constants.PositionGcpw:
+                                        fragmentGcpw.resetValues();
+                                        break;
+                                    case Constants.PositionCoax:
+                                        fragmentCoax.resetValues();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
             }
         });
 
