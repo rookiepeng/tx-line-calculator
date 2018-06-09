@@ -115,7 +115,7 @@ public class SlinCalculator {
             break;
         case Constants.Synthesize_Height:
             varmax = 100.0 * line.getMetalWidth();
-            varmin = 0.01 * line.getMetalWidth();
+            varmin = 1.01 * line.getMetalThick();
             var = line.getMetalWidth();
             break;
         case Constants.Synthesize_Er:
