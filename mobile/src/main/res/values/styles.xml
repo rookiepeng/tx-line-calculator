@@ -19,16 +19,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="SynButton" parent="Theme.MaterialComponents.Light">
-        <item name="colorControlHighlight">@color/synthesizeColorDark</item>
-        <item name="colorButtonNormal">@color/synthesizeColor</item>
-    </style>
-
-    <style name="AnaButton" parent="Theme.MaterialComponents.Light">
-        <item name="colorControlHighlight">@color/analyzeColorDark</item>
-        <item name="colorButtonNormal">@color/analyzeColor</item>
-    </style>
-
     <style name="SynthesizeHintTextStyle" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/synthesizeColorLight</item>
         <item name="android:textSize">14sp</item>

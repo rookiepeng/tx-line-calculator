@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="@+id/text_input_layout_Z0e" />
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/text_input_layout_Z0e"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

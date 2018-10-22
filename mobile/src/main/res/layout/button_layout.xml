@@ -5,39 +5,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:showIn="@layout/fragment_mlin">
+    android:fitsSystemWindows="true">
 
-    <Button
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/button_syn"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
+        android:padding="16dp"
         android:text="@string/Syn_button"
-        android:textAppearance="?android:attr/textAppearanceInverse"
-        android:theme="@style/SynButton"
-        android:drawableTop="@drawable/ic_arrow_upward"
+        app:icon="@drawable/ic_arrow_upward"
+        app:backgroundTint="@color/synthesizeColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_ana"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/button_ana"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="10dp"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
+        android:padding="16dp"
         android:text="@string/Ana_button"
-        android:textAppearance="?android:attr/textAppearanceInverse"
-        android:theme="@style/AnaButton"
-        android:drawableBottom="@drawable/ic_arrow_downward"
+        app:icon="@drawable/ic_arrow_downward"
+        app:backgroundTint="@color/analyzeColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
