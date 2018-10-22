@@ -14,6 +14,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6523245757541965~3260298534"/>
 
         <activity
             android:name="com.rookiedev.microwavetools.MainActivity"
