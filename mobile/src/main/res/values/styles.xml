@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
@@ -15,16 +15,16 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="SynButton" parent="Theme.AppCompat.Light">
+    <style name="SynButton" parent="Theme.MaterialComponents.Light">
         <item name="colorControlHighlight">@color/synthesizeColorDark</item>
         <item name="colorButtonNormal">@color/synthesizeColor</item>
     </style>
 
-    <style name="AnaButton" parent="Theme.AppCompat.Light">
+    <style name="AnaButton" parent="Theme.MaterialComponents.Light">
         <item name="colorControlHighlight">@color/analyzeColorDark</item>
         <item name="colorButtonNormal">@color/analyzeColor</item>
     </style>
@@ -39,13 +39,13 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="SynthesizeCardTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="SynthesizeCardTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/synthesizeColorLight</item>
     </style>
 
-    <style name="AnalyzeCardTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="AnalyzeCardTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/analyzeColorLight</item>
