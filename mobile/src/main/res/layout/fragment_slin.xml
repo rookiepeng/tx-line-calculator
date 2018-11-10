@@ -19,7 +19,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="16dp">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_dimensions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                 app:srcCompat="@color/synthesizeColor"
                 android:visibility="invisible"/>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <include
             layout="@layout/button_layout"
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_parameters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -142,6 +142,6 @@
                 app:srcCompat="@color/analyzeColor"
                 android:visibility="invisible"/>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
