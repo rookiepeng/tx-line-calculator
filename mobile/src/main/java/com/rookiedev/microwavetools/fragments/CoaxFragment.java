@@ -16,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -36,7 +37,7 @@ public class CoaxFragment extends Fragment {
     private TextInputLayout textInputLayoutA, textInputLayoutB, textInputLayoutC, textInputLayoutZ0, textInputLayoutEr,
             textInputLayoutF;
     private Button buttonSynthesize, buttonAnalyze;
-    private Spinner spinnerA, spinnerB, spinnerC, spinnerL, spinnerZ0, spinnerPhs, spinnerFreq;
+    private AutoCompleteTextView spinnerA, spinnerB, spinnerC, spinnerL, spinnerZ0, spinnerPhs, spinnerFreq;
     private int target;
     private RadioButton radioButtonA, radioButtonB, radioButtonC;
     private CoaxModel line;
@@ -76,20 +77,20 @@ public class CoaxFragment extends Fragment {
                 clearEditTextErrors();
                 if (analysisInputCheck()) {
                     line.setCoreRadius(Double.parseDouble(editTextA.getText().toString()),
-                            spinnerA.getSelectedItemPosition());
+                            spinnerA.getListSelection());
                     line.setSubRadius(Double.parseDouble(editTextB.getText().toString()),
-                            spinnerB.getSelectedItemPosition());
+                            spinnerB.getListSelection());
                     line.setCoreOffset(Double.parseDouble(editTextC.getText().toString()),
-                            spinnerC.getSelectedItemPosition());
+                            spinnerC.getListSelection());
                     line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
-                            spinnerFreq.getSelectedItemPosition());
+                            spinnerFreq.getListSelection());
                     line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
 
                     if (!editTextL.getText().toString().equals("")) {
                         line.setMetalLength(Double.parseDouble(editTextL.getText().toString()),
-                                spinnerL.getSelectedItemPosition());
+                                spinnerL.getListSelection());
                     } else {
-                        line.setMetalLength(0, spinnerL.getSelectedItemPosition());
+                        line.setMetalLength(0, spinnerL.getListSelection());
                     }
 
                     CoaxCalculator coax = new CoaxCalculator();
@@ -133,24 +134,24 @@ public class CoaxFragment extends Fragment {
                 if (synthesizeInputCheck()) {
                     line.setImpedance(Double.parseDouble(editTextZ0.getText().toString()));
                     line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
-                            spinnerFreq.getSelectedItemPosition());
+                            spinnerFreq.getListSelection());
                     line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
 
                     if (target == Constants.Synthesize_CoreRadius) { // a = 0;
                         line.setSubRadius(Double.parseDouble(editTextB.getText().toString()),
-                                spinnerB.getSelectedItemPosition());
+                                spinnerB.getListSelection());
                         line.setCoreOffset(Double.parseDouble(editTextC.getText().toString()),
-                                spinnerC.getSelectedItemPosition());
+                                spinnerC.getListSelection());
                     } else if (target == Constants.Synthesize_SubRadius) { // b = 0;
                         line.setCoreRadius(Double.parseDouble(editTextA.getText().toString()),
-                                spinnerA.getSelectedItemPosition());
+                                spinnerA.getListSelection());
                         line.setCoreOffset(Double.parseDouble(editTextC.getText().toString()),
-                                spinnerC.getSelectedItemPosition());
+                                spinnerC.getListSelection());
                     } else if (target == Constants.Synthesize_CoreOffset) { // c = 0;
                         line.setCoreRadius(Double.parseDouble(editTextA.getText().toString()),
-                                spinnerA.getSelectedItemPosition());
+                                spinnerA.getListSelection());
                         line.setSubRadius(Double.parseDouble(editTextB.getText().toString()),
-                                spinnerB.getSelectedItemPosition());
+                                spinnerB.getListSelection());
                     }
 
                     if (editTextPhs.length() != 0) {
@@ -165,7 +166,7 @@ public class CoaxFragment extends Fragment {
                     if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                         if (editTextPhs.length() != 0) {
                             BigDecimal L_temp = new BigDecimal(
-                                    Constants.meter2others(line.getMetalLength(), spinnerL.getSelectedItemPosition()));
+                                    Constants.meter2others(line.getMetalLength(), spinnerL.getListSelection()));
                             double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                             editTextL.setText(String.valueOf(L));
                         } else {
@@ -179,7 +180,7 @@ public class CoaxFragment extends Fragment {
                                 editTextA.requestFocus();
                             } else {
                                 BigDecimal a_temp = new BigDecimal(Constants.meter2others(line.getCoreRadius(),
-                                        spinnerA.getSelectedItemPosition()));
+                                        spinnerA.getListSelection()));
                                 double a = a_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                         .doubleValue();
                                 editTextA.setText(String.valueOf(a));
@@ -191,7 +192,7 @@ public class CoaxFragment extends Fragment {
                                 editTextB.requestFocus();
                             } else {
                                 BigDecimal b_temp = new BigDecimal(Constants.meter2others(line.getSubRadius(),
-                                        spinnerB.getSelectedItemPosition()));
+                                        spinnerB.getListSelection()));
                                 double height = b_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                         .doubleValue();
                                 editTextB.setText(String.valueOf(height));
@@ -203,7 +204,7 @@ public class CoaxFragment extends Fragment {
                                 editTextC.requestFocus();
                             } else {
                                 BigDecimal c_temp = new BigDecimal(Constants.meter2others(line.getCoreOffset(),
-                                        spinnerC.getSelectedItemPosition()));
+                                        spinnerC.getListSelection()));
                                 double b = c_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                         .doubleValue();
                                 editTextC.setText(String.valueOf(b));
@@ -396,13 +397,13 @@ public class CoaxFragment extends Fragment {
         buttonSynthesize = viewRoot.findViewById(R.id.button_syn);
 
         // spinner elements
-        spinnerA = viewRoot.findViewById(R.id.spinner_a);
-        spinnerC = viewRoot.findViewById(R.id.spinner_c);
-        spinnerB = viewRoot.findViewById(R.id.spinner_b);
-        spinnerL = viewRoot.findViewById(R.id.spinner_L);
-        spinnerZ0 = viewRoot.findViewById(R.id.spinner_Z0);
-        spinnerPhs = viewRoot.findViewById(R.id.spinner_Phs);
-        spinnerFreq = viewRoot.findViewById(R.id.spinner_Freq);
+        spinnerA = viewRoot.findViewById(R.id.menu_a);
+        spinnerC = viewRoot.findViewById(R.id.menu_c);
+        spinnerB = viewRoot.findViewById(R.id.menu_b);
+        spinnerL = viewRoot.findViewById(R.id.menu_L);
+        spinnerZ0 = viewRoot.findViewById(R.id.menu_Z0);
+        spinnerPhs = viewRoot.findViewById(R.id.menu_Phs);
+        spinnerFreq = viewRoot.findViewById(R.id.menu_Freq);
 
         // configure the length units
         spinnerA.setAdapter(Constants.adapterDimensionUnits(mContext));
@@ -570,20 +571,20 @@ public class CoaxFragment extends Fragment {
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(Constants.COAX_A, editTextA.getText().toString());
-        editor.putString(Constants.COAX_A_UNIT, Integer.toString(spinnerA.getSelectedItemPosition()));
+        editor.putString(Constants.COAX_A_UNIT, Integer.toString(spinnerA.getListSelection()));
         editor.putString(Constants.COAX_B, editTextB.getText().toString());
-        editor.putString(Constants.COAX_B_UNIT, Integer.toString(spinnerB.getSelectedItemPosition()));
+        editor.putString(Constants.COAX_B_UNIT, Integer.toString(spinnerB.getListSelection()));
         editor.putString(Constants.COAX_C, editTextC.getText().toString());
-        editor.putString(Constants.COAX_C_UNIT, Integer.toString(spinnerC.getSelectedItemPosition()));
+        editor.putString(Constants.COAX_C_UNIT, Integer.toString(spinnerC.getListSelection()));
         editor.putString(Constants.COAX_ER, editTextEr.getText().toString());
         editor.putString(Constants.COAX_L, editTextL.getText().toString());
-        editor.putString(Constants.COAX_L_UNIT, Integer.toString(spinnerL.getSelectedItemPosition()));
+        editor.putString(Constants.COAX_L_UNIT, Integer.toString(spinnerL.getListSelection()));
         editor.putString(Constants.COAX_Z0, editTextZ0.getText().toString());
-        editor.putString(Constants.COAX_Z0_UNIT, Integer.toString(spinnerZ0.getSelectedItemPosition()));
+        editor.putString(Constants.COAX_Z0_UNIT, Integer.toString(spinnerZ0.getListSelection()));
         editor.putString(Constants.COAX_PHS, editTextPhs.getText().toString());
-        editor.putString(Constants.COAX_PHS_UNIT, Integer.toString(spinnerPhs.getSelectedItemPosition()));
+        editor.putString(Constants.COAX_PHS_UNIT, Integer.toString(spinnerPhs.getListSelection()));
         editor.putString(Constants.COAX_FREQ, editTextFreq.getText().toString());
-        editor.putString(Constants.COAX_FREQ_UNIT, Integer.toString(spinnerFreq.getSelectedItemPosition()));
+        editor.putString(Constants.COAX_FREQ_UNIT, Integer.toString(spinnerFreq.getListSelection()));
         editor.putString(Constants.COAX_TARGET, Integer.toString(target));
 
         editor.apply();
@@ -595,7 +596,7 @@ public class CoaxFragment extends Fragment {
             textInputLayoutA.setError(getText(R.string.Error_a_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextA.getText().toString()),
-                spinnerA.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
+                spinnerA.getListSelection()) < Constants.MINI_LIMIT) {
             textInputLayoutA.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -612,7 +613,7 @@ public class CoaxFragment extends Fragment {
             textInputLayoutB.setError(getText(R.string.Error_b_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextB.getText().toString()),
-                spinnerB.getSelectedItemPosition()) < Constants.MINI_LIMIT) {
+                spinnerB.getListSelection()) < Constants.MINI_LIMIT) {
             textInputLayoutB.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
