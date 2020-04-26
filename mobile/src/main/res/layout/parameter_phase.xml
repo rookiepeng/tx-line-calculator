@@ -9,26 +9,25 @@
         android:id="@+id/radioBtn_Phs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/item_start_margin"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/text_input_layout_phs"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_input_layout_Phs"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_input_layout_phs"
-        app:layout_constraintEnd_toStartOf="@+id/text_input_layout_phs"/>
+        app:layout_constraintEnd_toStartOf="@+id/text_input_layout_Phs"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/text_input_layout_phs"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:id="@+id/text_input_layout_Phs"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:errorEnabled="false"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/item_start_margin"
+        android:layout_marginBottom="@dimen/item_bottom_margin"
+        android:layout_marginTop="@dimen/item_top_margin"
         android:textColorHint="@color/hintColor"
         app:hintTextAppearance="@style/AnalyzeHintTextStyle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_Phs"
+        app:layout_constraintEnd_toStartOf="@+id/menu_Phs_layout"
         app:layout_constraintStart_toEndOf="@+id/radioBtn_Phs"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -42,13 +41,22 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/spinner_Phs"
-        android:layout_width="100dp"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:id="@+id/menu_Phs_layout"
+        android:layout_width="@dimen/unit_menu_width"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/text_input_layout_phs"
+        android:layout_marginStart="@dimen/item_start_margin"
+        app:layout_constraintBaseline_toBaselineOf="@+id/text_input_layout_Phs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_input_layout_phs"
-        app:layout_constraintTop_toTopOf="@+id/text_input_layout_phs" />
+        app:layout_constraintStart_toEndOf="@+id/text_input_layout_Phs"
+        android:hint="Unit">
+
+        <AutoCompleteTextView
+            android:id="@+id/menu_Phs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,4 +11,11 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+
+    <dimen name="item_start_margin">8dp</dimen>
+    <dimen name="item_top_margin">8dp</dimen>
+    <dimen name="item_bottom_margin">8dp</dimen>
+
+    <dimen name="unit_menu_width">100dp</dimen>
+
 </resources>
