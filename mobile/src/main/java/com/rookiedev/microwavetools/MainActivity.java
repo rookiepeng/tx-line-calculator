@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
@@ -338,7 +338,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-        case R.id.nav_mlin:
+//        case R.id.nav_mlin:
+        default:
             if (fragmentMlin == null) {
                 fragmentMlin = new MlinFragment();
             }
@@ -393,13 +394,6 @@ public class MainActivity extends AppCompatActivity
             pos = Constants.PositionCoax;
             imageResource = R.drawable.vt_coax;
             break;
-        default:
-            if (fragmentMlin == null) {
-                fragmentMlin = new MlinFragment();
-            }
-            pos = Constants.PositionMlin;
-            imageResource = R.drawable.vt_mlin;
-            break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -409,7 +403,8 @@ public class MainActivity extends AppCompatActivity
     private void initFragment(int item) {
         Bundle bundle = new Bundle();
         switch (item) {
-        case Constants.PositionMlin:
+//        case Constants.PositionMlin:
+        default:
             fragmentMlin = new MlinFragment();
             pos = Constants.PositionMlin;
             imageResource = R.drawable.vt_mlin;
@@ -467,14 +462,6 @@ public class MainActivity extends AppCompatActivity
             fragmentCoax.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCoax).commit();
             break;
-        default:
-            fragmentMlin = new MlinFragment();
-            pos = Constants.PositionMlin;
-            imageResource = R.drawable.vt_mlin;
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
-            fragmentMlin.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
-            break;
         }
     }
 
@@ -528,7 +515,7 @@ public class MainActivity extends AppCompatActivity
 //        }
     }
 
-    /**
+    /*
      * Register SKUs and purchase tokens with the server.
      */
 //    private void registerPurchases(List<Purchase> purchaseList) {
@@ -540,7 +527,7 @@ public class MainActivity extends AppCompatActivity
 //        }
 //    }
 
-    /**
+    /*
      * Handler to billing updates
      */
 //    private class UpdateListener implements BillingManager.BillingUpdatesListener {
