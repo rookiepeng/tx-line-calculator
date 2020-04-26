@@ -18,12 +18,15 @@ package com.rookiedev.microwavetools.billing;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
+
 import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClient.BillingResponse;
 import com.android.billingclient.api.BillingClient.FeatureType;
 import com.android.billingclient.api.BillingClient.SkuType;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.Purchase.PurchasesResult;
@@ -81,6 +84,27 @@ public class BillingManager implements PurchasesUpdatedListener {
     private static final String BASE_64_ENCODED_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs5JW1lae1XD7lDALy5eBi3G7X06jPSNVaOrdDp1ACV3vmt0LPF4nnSGDjkMxwhyCge+u8r4trnwJoOANgqxyDxq9icRXHGoZaZnjgHtUwGfZQYlwFIczpRbNkOSFe4/hiyWRDh9f4s/oSyoHO/yWtSrLHplabMQtg+CxU4IAC6Xym3gn8laPDUV6M/Fjsrv3t9ntKJIBGhX0S7ogrWTuLJU9hGTLIcPIR2WFtALYyX/AqlGKFk3KzYZ2hvoSfKnOPnFdswJYacr8aY7Y+vWG4Qz9LgPEM3iA15Lm7PxBd9r/VtcMn75cnuhMbAHKR8YEEjHk2gla4PaofedgwUstawIDAQAB";
 
     /**
+     * Handle a callback that purchases were updated from the Billing library
+     */
+    @Override
+    public void onPurchasesUpdated(BillingResult billingResult, @Nullable List<Purchase> purchases) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
+                && purchases != null)
+        {
+            for (Purchase purchase : purchases) {
+                handlePurchase(purchase);
+            }
+            mBillingUpdatesListener.onPurchasesUpdated(mPurchases);
+        } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
+            //Log.i(TAG, "onPurchasesUpdated() - user cancelled the purchase flow - skipping");
+            Crashlytics.log(Log.INFO, TAG, "onPurchasesUpdated() - user cancelled the purchase flow - skipping");
+        } else {
+            //Log.w(TAG, "onPurchasesUpdated() got unknown resultCode: " + resultCode);
+            Crashlytics.log(Log.WARN, TAG, "onPurchasesUpdated() got unknown resultCode: " + billingResult.getResponseCode());
+        }
+    }
+
+    /**
      * Listener to the updates that happen when purchases list was updated or consumption of the
      * item was finished
      */
@@ -121,25 +145,6 @@ public class BillingManager implements PurchasesUpdatedListener {
                 queryPurchases();
             }
         });
-    }
-
-    /**
-     * Handle a callback that purchases were updated from the Billing library
-     */
-    @Override
-    public void onPurchasesUpdated(int resultCode, List<Purchase> purchases) {
-        if (resultCode == BillingResponse.OK) {
-            for (Purchase purchase : purchases) {
-                handlePurchase(purchase);
-            }
-            mBillingUpdatesListener.onPurchasesUpdated(mPurchases);
-        } else if (resultCode == BillingResponse.USER_CANCELED) {
-            //Log.i(TAG, "onPurchasesUpdated() - user cancelled the purchase flow - skipping");
-            Crashlytics.log(Log.INFO, TAG, "onPurchasesUpdated() - user cancelled the purchase flow - skipping");
-        } else {
-            //Log.w(TAG, "onPurchasesUpdated() got unknown resultCode: " + resultCode);
-            Crashlytics.log(Log.WARN, TAG, "onPurchasesUpdated() got unknown resultCode: " + resultCode);
-        }
     }
 
     /**
