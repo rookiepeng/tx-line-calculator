@@ -5,13 +5,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -386,33 +390,33 @@ public class MlinFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);
 
         editTextW.setText(prefs.getString(Constants.MLIN_W, "2.9"));
-        spinnerW.setSelection(
-                Integer.parseInt(prefs.getString(Constants.MLIN_W_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerW.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.MLIN_W_UNIT, Integer.toString(Constants.LengthUnit_mm))), false);
+
 
         editTextL.setText(prefs.getString(Constants.MLIN_L, "40"));
-        spinnerL.setSelection(
+        spinnerL.setListSelection(
                 Integer.parseInt(prefs.getString(Constants.MLIN_L_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
         editTextZ0.setText(prefs.getString(Constants.MLIN_Z0, "50.0"));
-        spinnerZ0.setSelection(Integer
+        spinnerZ0.setListSelection(Integer
                 .parseInt(prefs.getString(Constants.MLIN_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
 
         editTextPhs.setText(prefs.getString(Constants.MLIN_PHS, "90"));
-        spinnerPhs.setSelection(Integer
+        spinnerPhs.setListSelection(Integer
                 .parseInt(prefs.getString(Constants.MLIN_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))));
 
         editTextFreq.setText(prefs.getString(Constants.MLIN_FREQ, "1.00"));
-        spinnerFreq.setSelection(
+        spinnerFreq.setListSelection(
                 Integer.parseInt(prefs.getString(Constants.MLIN_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))));
 
         editTextEr.setText(prefs.getString(Constants.MLIN_ER, "4.6"));
 
         editTextH.setText(prefs.getString(Constants.MLIN_H, "1.6"));
-        spinnerH.setSelection(
+        spinnerH.setListSelection(
                 Integer.parseInt(prefs.getString(Constants.MLIN_H_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
         editTextT.setText(prefs.getString(Constants.MLIN_T, "0.035"));
-        spinnerT.setSelection(
+        spinnerT.setListSelection(
                 Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT, Integer.toString(Constants.LengthUnit_mm))));
 
         target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, Integer.toString(Constants.Synthesize_Width)));
@@ -620,20 +624,20 @@ public class MlinFragment extends Fragment {
 
     public void resetValues() {
         editTextW.setText("2.9");
-        spinnerW.setSelection(Constants.LengthUnit_mm);
+        spinnerW.setListSelection(Constants.LengthUnit_mm);
         editTextL.setText("40");
-        spinnerL.setSelection(Constants.LengthUnit_mm);
+        spinnerL.setListSelection(Constants.LengthUnit_mm);
         editTextZ0.setText("50.0");
-        spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+        spinnerZ0.setListSelection(Constants.ImpedanceUnit_Ohm);
         editTextPhs.setText("90");
-        spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+        spinnerPhs.setListSelection(Constants.PhaseUnit_Degree);
         editTextFreq.setText("1.00");
-        spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+        spinnerFreq.setListSelection(Constants.FreqUnit_GHz);
         editTextEr.setText("4.6");
         editTextH.setText("1.6");
-        spinnerH.setSelection(Constants.LengthUnit_mm);
+        spinnerH.setListSelection(Constants.LengthUnit_mm);
         editTextT.setText("0.035");
-        spinnerT.setSelection(Constants.LengthUnit_mm);
+        spinnerT.setListSelection(Constants.LengthUnit_mm);
         target = Constants.Synthesize_Width;
 
         radioButtonW.setChecked(true);

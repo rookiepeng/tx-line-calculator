@@ -22,7 +22,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-//import com.example.android.classytaxijava.data.SubscriptionStatus;
 import com.rookiedev.microwavetools.data.SubscriptionStatus;
 
 import java.util.List;

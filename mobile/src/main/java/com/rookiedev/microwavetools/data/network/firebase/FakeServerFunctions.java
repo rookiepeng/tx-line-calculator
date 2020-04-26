@@ -20,17 +20,12 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-//import com.example.android.classytaxijava.Constants;
-//import com.example.android.classytaxijava.billing.BillingUtilities;
-//import com.example.android.classytaxijava.data.ContentResource;
-//import com.example.android.classytaxijava.data.SubscriptionStatus;
 import com.rookiedev.microwavetools.Constants;
 import com.rookiedev.microwavetools.billing.BillingUtilities;
 import com.rookiedev.microwavetools.data.ContentResource;
 import com.rookiedev.microwavetools.data.SubscriptionStatus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

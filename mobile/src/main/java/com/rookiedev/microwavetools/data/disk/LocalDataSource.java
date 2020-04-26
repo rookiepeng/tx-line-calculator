@@ -18,14 +18,13 @@ package com.rookiedev.microwavetools.data.disk;
 
 import androidx.lifecycle.LiveData;
 
-//import com.example.android.classytaxijava.AppExecutors;
-//import com.example.android.classytaxijava.data.SubscriptionStatus;
 import com.rookiedev.microwavetools.AppExecutors;
 import com.rookiedev.microwavetools.data.SubscriptionStatus;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+
 
 public class LocalDataSource {
     private static volatile LocalDataSource INSTANCE = null;

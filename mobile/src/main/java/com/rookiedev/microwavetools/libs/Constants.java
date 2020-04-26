@@ -12,6 +12,8 @@ import android.widget.ImageView;
 
 import com.rookiedev.microwavetools.R;
 
+import java.util.Objects;
+
 public class Constants {
     // Shared Preference values
     public static final String SHARED_PREFS_NAME = "com.rookiedev.microwavetools_preferences";
@@ -192,31 +194,47 @@ public class Constants {
      */
     public static ArrayAdapter<CharSequence> adapterDimensionUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter.createFromResource(mContext, R.array.list_units_Length,
-                android.R.layout.simple_spinner_item);
+                R.layout.dropdown_menu_popup_item);
         adapterLength.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterLength;
     }
 
     public static ArrayAdapter<CharSequence> adapterImpedanceUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterImpedance = ArrayAdapter.createFromResource(mContext,
-                R.array.list_units_Impedance, android.R.layout.simple_spinner_item);
+                R.array.list_units_Impedance, R.layout.dropdown_menu_popup_item);
         adapterImpedance.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterImpedance;
     }
 
     public static ArrayAdapter<CharSequence> adapterPhaseUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterPhase = ArrayAdapter.createFromResource(mContext, R.array.list_units_Phase,
-                android.R.layout.simple_spinner_item);
+                R.layout.dropdown_menu_popup_item);
         adapterPhase.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterPhase;
     }
 
     public static ArrayAdapter<CharSequence> adapterFrequencyUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterFreq = ArrayAdapter.createFromResource(mContext, R.array.list_units_Frequency,
-                android.R.layout.simple_spinner_item);
+                R.layout.dropdown_menu_popup_item);
         adapterFreq.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         return adapterFreq;
     }
+
+    public static String validateUnit(ArrayAdapter<CharSequence> adapter, String unit) {
+        int len = adapter.getCount();
+        int idx = 0;
+
+        for (idx=0; idx<len; idx++)
+        {
+            if (unit.equals(Objects.requireNonNull(adapter.getItem(idx)).toString()))
+            {
+                return unit;
+            }
+        }
+
+        return Objects.requireNonNull(adapter.getItem(0)).toString();
+    }
+
 
     // unit conversion
     public static double value2meter(double value, int lengthUnit) {

@@ -18,10 +18,6 @@ package com.rookiedev.microwavetools.data.network;
 
 import androidx.lifecycle.LiveData;
 
-//import com.example.android.classytaxijava.AppExecutors;
-//import com.example.android.classytaxijava.data.ContentResource;
-//import com.example.android.classytaxijava.data.SubscriptionStatus;
-//import com.example.android.classytaxijava.data.network.firebase.ServerFunctions;
 import com.rookiedev.microwavetools.AppExecutors;
 import com.rookiedev.microwavetools.data.ContentResource;
 import com.rookiedev.microwavetools.data.SubscriptionStatus;

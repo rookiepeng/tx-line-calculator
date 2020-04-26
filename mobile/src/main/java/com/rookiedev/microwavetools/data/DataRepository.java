@@ -25,10 +25,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Observer;
 
 import com.android.billingclient.api.Purchase;
-//import com.example.android.classytaxijava.Constants;
-//import com.example.android.classytaxijava.billing.BillingClientLifecycle;
-//import com.example.android.classytaxijava.data.disk.LocalDataSource;
-//import com.example.android.classytaxijava.data.network.WebDataSource;
 import com.rookiedev.microwavetools.Constants;
 import com.rookiedev.microwavetools.billing.BillingClientLifecycle;
 import com.rookiedev.microwavetools.data.disk.LocalDataSource;
@@ -36,8 +32,6 @@ import com.rookiedev.microwavetools.data.network.WebDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Collections.addAll;
 
 public class DataRepository {
     private static volatile DataRepository INSTANCE = null;

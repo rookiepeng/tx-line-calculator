@@ -27,15 +27,6 @@ import com.rookiedev.microwavetools.data.network.firebase.FakeServerFunctions;
 import com.rookiedev.microwavetools.data.network.firebase.ServerFunctions;
 import com.rookiedev.microwavetools.data.network.firebase.ServerFunctionsImpl;
 
-//import com.example.android.classytaxijava.billing.BillingClientLifecycle;
-//import com.example.android.classytaxijava.data.DataRepository;
-//import com.example.android.classytaxijava.data.disk.LocalDataSource;
-//import com.example.android.classytaxijava.data.disk.AppDatabase;
-//import com.example.android.classytaxijava.data.network.WebDataSource;
-//import com.example.android.classytaxijava.data.network.firebase.FakeServerFunctions;
-//import com.example.android.classytaxijava.data.network.firebase.ServerFunctions;
-//import com.example.android.classytaxijava.data.network.firebase.ServerFunctionsImpl;
-
 /**
  * Android Application class. Used for accessing singletons.
  */

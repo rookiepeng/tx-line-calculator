@@ -20,8 +20,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-//import com.example.android.classytaxijava.SubApp;
-//import com.example.android.classytaxijava.data.SubscriptionStatus;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.rookiedev.microwavetools.SubApp;
