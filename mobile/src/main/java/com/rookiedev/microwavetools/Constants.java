@@ -18,7 +18,7 @@ package com.rookiedev.microwavetools;
 
 public class Constants {
     // Use the fake local server data or real remote server.
-    public static boolean USE_FAKE_SERVER = false;
+    public static boolean USE_FAKE_SERVER = true;
 
     public static final String BASIC_SKU = "basic_subscription";
     public static final String PREMIUM_SKU = "premium_subscription";

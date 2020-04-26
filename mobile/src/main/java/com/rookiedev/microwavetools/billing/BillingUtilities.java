@@ -19,8 +19,6 @@ package com.rookiedev.microwavetools.billing;
 import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.Purchase;
-//import com.example.android.classytaxijava.Constants;
-//import com.example.android.classytaxijava.data.SubscriptionStatus;
 import com.rookiedev.microwavetools.Constants;
 import com.rookiedev.microwavetools.data.SubscriptionStatus;
 

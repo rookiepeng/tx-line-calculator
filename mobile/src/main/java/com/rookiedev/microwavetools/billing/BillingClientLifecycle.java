@@ -37,7 +37,6 @@ import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
-//import com.example.android.classytaxijava.Constants;
 import com.rookiedev.microwavetools.Constants;
 import com.rookiedev.microwavetools.SingleLiveEvent;
 

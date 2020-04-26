@@ -40,7 +40,7 @@ import com.rookiedev.microwavetools.libs.Constants;
 
 import java.util.List;
 
-import static com.rookiedev.microwavetools.billing.BillingManager.BILLING_MANAGER_NOT_INITIALIZED;
+//import static com.rookiedev.microwavetools.billing.BillingManager.BILLING_MANAGER_NOT_INITIALIZED;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -624,23 +624,4 @@ public class MainActivity extends AppCompatActivity
 //        return null;
 //    }
 
-//    @Override
-//    public boolean isPremiumPurchased() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isGoldMonthlySubscribed() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isTankFull() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isGoldYearlySubscribed() {
-//        return false;
-//    }
 }
