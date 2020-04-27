@@ -26,7 +26,7 @@ public class Constants {
     public static final double LIGHTSPEED = 2.99792458e8; // free space speed of light, m/s
     public static final double FREESPACE_MU0 = 4.0 * Math.PI * 1.0e-7; // free space permitivitty, H/m
     public static final double FREESPACE_E0 = 1.0 / (LIGHTSPEED * LIGHTSPEED * FREESPACE_MU0); // free space
-                                                                                               // permitivitty, F/m
+    // permitivitty, F/m
     public static final double FREESPACEZ0 = FREESPACE_MU0 * LIGHTSPEED; // free space impedance, Ohms
     public static final double Pi = Math.PI;
     public static final double MINI_LIMIT = 1e-10; // 0.1 nm
@@ -188,7 +188,7 @@ public class Constants {
 
     /**
      * Array adapters for spinners
-     * 
+     *
      * @param mContext context
      * @return adapters
      */
@@ -224,10 +224,8 @@ public class Constants {
         int len = adapter.getCount();
         int idx = 0;
 
-        for (idx=0; idx<len; idx++)
-        {
-            if (unit.equals(Objects.requireNonNull(adapter.getItem(idx)).toString()))
-            {
+        for (idx = 0; idx < len; idx++) {
+            if (unit.equals(Objects.requireNonNull(adapter.getItem(idx)).toString())) {
                 return unit;
             }
         }
@@ -237,56 +235,67 @@ public class Constants {
 
 
     // unit conversion
-    public static double value2meter(double value, int lengthUnit) {
+    public static double value2meter(double value, String lengthUnit) {
         double l = 0;
         switch (lengthUnit) {
-        case LengthUnit_mil:
-            l = value / 39370.0787402;
-            break;
-        case LengthUnit_mm:
-            l = value / 1000;
-            break;
-        case LengthUnit_cm:
-            l = value / 100;
-            break;
-        case LengthUnit_m:
-            l = value;
-            break;
+//        case LengthUnit_mil:
+            case "mil":
+                l = value / 39370.0787402;
+                break;
+//        case LengthUnit_mm:
+            case "mm":
+                l = value / 1000;
+                break;
+//        case LengthUnit_cm:
+            case "cm":
+                l = value / 100;
+                break;
+//        case LengthUnit_m:
+            case "m":
+                l = value;
+                break;
         }
         return l;
     }
 
-    public static double value2Hz(double value, int freqUnit) {
+    public static double value2Hz(double value, String freqUnit) {
         double f = 0;
         switch (freqUnit) {
-        case FreqUnit_Hz:
-            f = value;
-            break;
-        case FreqUnit_MHz:
-            f = value * 1e6;
-            break;
-        case FreqUnit_GHz:
-            f = value * 1e9;
-            break;
+//            case FreqUnit_Hz:
+            case "Hz":
+                f = value;
+                break;
+//            case FreqUnit_MHz:
+            case "MHz":
+                f = value * 1e6;
+                break;
+//            case FreqUnit_GHz:
+            case "GHz":
+                f = value * 1e9;
+                break;
         }
         return f;
     }
 
-    public static double meter2others(double value, int lengthUnit) {
+    public static double meter2others(double value, String lengthUnit) {
         double l = 0;
         switch (lengthUnit) {
-        case LengthUnit_mil:
-            l = value * 1000 * 39.37007874;
-            break;
-        case LengthUnit_mm:
-            l = value * 1000;
-            break;
-        case LengthUnit_cm:
-            l = value * 100;
-            break;
-        case LengthUnit_m:
-            l = value;
-            break;
+//            case LengthUnit_mil:
+            case "mil":
+                l = value * 1000 * 39.37007874;
+                break;
+//            case LengthUnit_mm:
+            case "mm":
+                l = value * 1000;
+                break;
+//            case LengthUnit_cm:
+            case "cm":
+                l = value * 100;
+                break;
+//            case LengthUnit_m:
+            case "m":
+                l = value;
+                break;
         }
         return l;
     }
@@ -340,7 +349,7 @@ public class Constants {
          * config_mediumAnimTime)); animFadeOut.setInterpolator(new
          * DecelerateInterpolator()); animFadeOut.addUpdateListener(new
          * ValueAnimator.AnimatorUpdateListener() {
-         * 
+         *
          * @Override public void onAnimationUpdate(ValueAnimator animation) {
          * view.setAlpha((Float) animation.getAnimatedValue()); } });
          */

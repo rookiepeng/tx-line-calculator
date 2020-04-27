@@ -81,20 +81,20 @@ public class MlinFragment extends Fragment {
                 clearEditTextErrors();
                 if (analysisInputEmptyCheck()) {
                     line.setMetalWidth(Double.parseDouble(editTextW.getText().toString()),
-                            spinnerW.getListSelection());
+                            spinnerW.getText().toString());
                     line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
-                            spinnerFreq.getListSelection());
+                            spinnerFreq.getText().toString());
                     line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
                     line.setSubHeight(Double.parseDouble(editTextH.getText().toString()),
-                            spinnerH.getListSelection());
+                            spinnerH.getText().toString());
                     line.setMetalThick(Double.parseDouble(editTextT.getText().toString()),
-                            spinnerT.getListSelection());
+                            spinnerT.getText().toString());
 
                     if (editTextL.length() != 0) {
                         line.setMetalLength(Double.parseDouble(editTextL.getText().toString()),
-                                spinnerL.getListSelection());
+                                spinnerL.getText().toString());
                     } else {
-                        line.setMetalLength(0, spinnerL.getListSelection());
+                        line.setMetalLength(0, spinnerL.getText().toString());
                     }
                     MlinCalculator mlin = new MlinCalculator();
                     line = mlin.getAnaResult(line);
@@ -125,19 +125,19 @@ public class MlinFragment extends Fragment {
                 if (synthesizeInputEmptyCheck()) {
                     line.setImpedance(Double.parseDouble(editTextZ0.getText().toString()));
                     line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
-                            spinnerFreq.getListSelection());
+                            spinnerFreq.getText().toString());
                     line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
                     line.setMetalThick(Double.parseDouble(editTextT.getText().toString()),
-                            spinnerT.getListSelection());
+                            spinnerT.getText().toString());
 
                     if (target == Constants.Synthesize_Width) {
                         line.setSubHeight(Double.parseDouble(editTextH.getText().toString()),
-                                spinnerH.getListSelection());
-                        line.setMetalWidth(0, Constants.LengthUnit_m);
+                                spinnerH.getText().toString());
+                        line.setMetalWidth(0, "m");
                     } else if (target == Constants.Synthesize_Height) {
                         line.setMetalWidth(Double.parseDouble(editTextW.getText().toString()),
-                                spinnerW.getListSelection());
-                        line.setSubHeight(0, Constants.LengthUnit_m);
+                                spinnerW.getText().toString());
+                        line.setSubHeight(0, "m");
                     }
 
                     if (editTextPhs.length() != 0) {
@@ -151,7 +151,7 @@ public class MlinFragment extends Fragment {
                     if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                         if (editTextPhs.length() != 0) {
                             BigDecimal L_temp = new BigDecimal(
-                                    Constants.meter2others(line.getMetalLength(), spinnerL.getListSelection()));
+                                    Constants.meter2others(line.getMetalLength(), spinnerL.getText().toString()));
                             double L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                             editTextL.setText(String.valueOf(L));
                         } else {
@@ -165,7 +165,7 @@ public class MlinFragment extends Fragment {
                                 editTextW.requestFocus();
                             } else {
                                 BigDecimal W_temp = new BigDecimal(Constants.meter2others(line.getMetalWidth(),
-                                        spinnerW.getListSelection()));
+                                        spinnerW.getText().toString()));
                                 double W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                         .doubleValue();
                                 editTextW.setText(String.valueOf(W));
@@ -177,7 +177,7 @@ public class MlinFragment extends Fragment {
                                 editTextH.requestFocus();
                             } else {
                                 BigDecimal H_temp = new BigDecimal(Constants.meter2others(line.getSubHeight(),
-                                        spinnerH.getListSelection()));
+                                        spinnerH.getText().toString()));
                                 double H = H_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
                                         .doubleValue();
                                 editTextH.setText(String.valueOf(H));
@@ -392,32 +392,25 @@ public class MlinFragment extends Fragment {
         editTextW.setText(prefs.getString(Constants.MLIN_W, "2.9"));
         spinnerW.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.MLIN_W_UNIT, Integer.toString(Constants.LengthUnit_mm))), false);
 
-
         editTextL.setText(prefs.getString(Constants.MLIN_L, "40"));
-        spinnerL.setListSelection(
-                Integer.parseInt(prefs.getString(Constants.MLIN_L_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerL.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.MLIN_L_UNIT, Integer.toString(Constants.LengthUnit_mm))), false);
 
         editTextZ0.setText(prefs.getString(Constants.MLIN_Z0, "50.0"));
-        spinnerZ0.setListSelection(Integer
-                .parseInt(prefs.getString(Constants.MLIN_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
+        spinnerZ0.setText(Constants.validateUnit(Constants.adapterImpedanceUnits(mContext), prefs.getString(Constants.MLIN_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))), false);
 
         editTextPhs.setText(prefs.getString(Constants.MLIN_PHS, "90"));
-        spinnerPhs.setListSelection(Integer
-                .parseInt(prefs.getString(Constants.MLIN_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))));
+        spinnerPhs.setText(Constants.validateUnit(Constants.adapterPhaseUnits(mContext), prefs.getString(Constants.MLIN_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))), false);
 
         editTextFreq.setText(prefs.getString(Constants.MLIN_FREQ, "1.00"));
-        spinnerFreq.setListSelection(
-                Integer.parseInt(prefs.getString(Constants.MLIN_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))));
+        spinnerFreq.setText(Constants.validateUnit(Constants.adapterFrequencyUnits(mContext), prefs.getString(Constants.MLIN_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))), false);
 
         editTextEr.setText(prefs.getString(Constants.MLIN_ER, "4.6"));
 
         editTextH.setText(prefs.getString(Constants.MLIN_H, "1.6"));
-        spinnerH.setListSelection(
-                Integer.parseInt(prefs.getString(Constants.MLIN_H_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerH.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.MLIN_H_UNIT, Integer.toString(Constants.LengthUnit_mm))), false);
 
         editTextT.setText(prefs.getString(Constants.MLIN_T, "0.035"));
-        spinnerT.setListSelection(
-                Integer.parseInt(prefs.getString(Constants.MLIN_T_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerT.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.MLIN_T_UNIT, Integer.toString(Constants.LengthUnit_mm))), false);
 
         target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, Integer.toString(Constants.Synthesize_Width)));
     }
@@ -479,20 +472,20 @@ public class MlinFragment extends Fragment {
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(Constants.MLIN_W, editTextW.getText().toString());
-        editor.putString(Constants.MLIN_W_UNIT, Integer.toString(spinnerW.getListSelection()));
+        editor.putString(Constants.MLIN_W_UNIT, spinnerW.getText().toString());
         editor.putString(Constants.MLIN_L, editTextL.getText().toString());
-        editor.putString(Constants.MLIN_L_UNIT, Integer.toString(spinnerL.getListSelection()));
+        editor.putString(Constants.MLIN_L_UNIT, spinnerL.getText().toString());
         editor.putString(Constants.MLIN_Z0, editTextZ0.getText().toString());
-        editor.putString(Constants.MLIN_Z0_UNIT, Integer.toString(spinnerZ0.getListSelection()));
+        editor.putString(Constants.MLIN_Z0_UNIT, spinnerZ0.getText().toString());
         editor.putString(Constants.MLIN_PHS, editTextPhs.getText().toString());
-        editor.putString(Constants.MLIN_PHS_UNIT, Integer.toString(spinnerPhs.getListSelection()));
+        editor.putString(Constants.MLIN_PHS_UNIT, spinnerPhs.getText().toString());
         editor.putString(Constants.MLIN_FREQ, editTextFreq.getText().toString());
-        editor.putString(Constants.MLIN_FREQ_UNIT, Integer.toString(spinnerFreq.getListSelection()));
+        editor.putString(Constants.MLIN_FREQ_UNIT, spinnerFreq.getText().toString());
         editor.putString(Constants.MLIN_ER, editTextEr.getText().toString());
         editor.putString(Constants.MLIN_H, editTextH.getText().toString());
-        editor.putString(Constants.MLIN_H_UNIT, Integer.toString(spinnerH.getListSelection()));
+        editor.putString(Constants.MLIN_H_UNIT, spinnerH.getText().toString());
         editor.putString(Constants.MLIN_T, editTextT.getText().toString());
-        editor.putString(Constants.MLIN_T_UNIT, Integer.toString(spinnerT.getListSelection()));
+        editor.putString(Constants.MLIN_T_UNIT, spinnerT.getText().toString());
         editor.putString(Constants.MLIN_TARGET, Integer.toString(target));
         editor.apply();
     }
@@ -507,7 +500,7 @@ public class MlinFragment extends Fragment {
             textInputLayoutH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextH.getText().toString()),
-                spinnerH.getListSelection()) < Constants.MINI_LIMIT) {
+                spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -515,7 +508,7 @@ public class MlinFragment extends Fragment {
             textInputLayoutW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextW.getText().toString()),
-                spinnerW.getListSelection()) < Constants.MINI_LIMIT) {
+                spinnerW.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutW.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }

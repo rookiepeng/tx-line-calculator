@@ -35,7 +35,7 @@ public class MlinModel {
         }
     }
 
-    public void setMetalWidth(double width, int unit) {
+    public void setMetalWidth(double width, String unit) {
         metal.setMetalWidth(Constants.value2meter(width, unit));
     }
 
@@ -43,7 +43,7 @@ public class MlinModel {
         return metal.getMetalWidth();
     }
 
-    public void setMetalLength(double length, int unit) {
+    public void setMetalLength(double length, String unit) {
         metal.setMetalLength(Constants.value2meter(length, unit));
     }
 
@@ -51,7 +51,7 @@ public class MlinModel {
         return metal.getMetalLength();
     }
 
-    public void setMetalThick(double thick, int unit) {
+    public void setMetalThick(double thick, String unit) {
         metal.setMetalThick(Constants.value2meter(thick, unit));
     }
 
@@ -75,7 +75,7 @@ public class MlinModel {
         this.phase = electricalLength;
     }
 
-    public void setFrequency(double frequency, int unit) {
+    public void setFrequency(double frequency, String unit) {
         this.frequency = Constants.value2Hz(frequency, unit);
     }
 
@@ -95,7 +95,7 @@ public class MlinModel {
         return substrate.getSubHeight();
     }
 
-    public void setSubHeight(double subHeight, int unit) {
+    public void setSubHeight(double subHeight, String unit) {
         substrate.setSubHeight(Constants.value2meter(subHeight, unit));
     }
 
