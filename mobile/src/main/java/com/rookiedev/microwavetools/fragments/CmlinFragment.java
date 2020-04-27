@@ -77,21 +77,21 @@ public class CmlinFragment extends Fragment {
                 clearEditTextErrors();
                 if (analysisInputCheck()) {
                     line.setMetalWidth(Double.parseDouble(editTextW.getText().toString()),
-                            spinnerW.getListSelection());
+                            spinnerW.getText().toString());
                     line.setMetalSpace(Double.parseDouble(editTextG.getText().toString()),
-                            spinnerG.getListSelection());
+                            spinnerG.getText().toString());
                     line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
-                            spinnerFreq.getListSelection());
+                            spinnerFreq.getText().toString());
                     line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
                     line.setSubHeight(Double.parseDouble(editTextH.getText().toString()),
-                            spinnerH.getListSelection());
-                    line.setMetalThick(0, spinnerT.getListSelection());
+                            spinnerH.getText().toString());
+                    line.setMetalThick(0, spinnerT.getText().toString());
 
                     if (editTextL.length() != 0) {
                         line.setMetalLength(Double.parseDouble(editTextL.getText().toString()),
-                                spinnerL.getListSelection());
+                                spinnerL.getText().toString());
                     } else {
-                        line.setMetalLength(0, spinnerL.getListSelection());
+                        line.setMetalLength(0, spinnerL.getText().toString());
                     }
 
                     CmlinCalculator cmlin = new CmlinCalculator();
@@ -596,24 +596,24 @@ public class CmlinFragment extends Fragment {
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(Constants.CMLIN_W, editTextW.getText().toString());
-        editor.putString(Constants.CMLIN_W_UNIT, Integer.toString(spinnerW.getListSelection()));
+        editor.putString(Constants.CMLIN_W_UNIT, spinnerW.getText().toString());
         editor.putString(Constants.CMLIN_S, editTextG.getText().toString());
-        editor.putString(Constants.CMLIN_S_UNIT, Integer.toString(spinnerG.getListSelection()));
+        editor.putString(Constants.CMLIN_S_UNIT, spinnerG.getText().toString());
         editor.putString(Constants.CMLIN_L, editTextL.getText().toString());
-        editor.putString(Constants.CMLIN_L_UNIT, Integer.toString(spinnerL.getListSelection()));
+        editor.putString(Constants.CMLIN_L_UNIT, spinnerL.getText().toString());
         editor.putString(Constants.CMLIN_Z0, editTextZ0.getText().toString());
-        editor.putString(Constants.CMLIN_Z0_UNIT, Integer.toString(spinnerZ0.getListSelection()));
+        editor.putString(Constants.CMLIN_Z0_UNIT, spinnerZ0.getText().toString());
         editor.putString(Constants.CMLIN_K, editTextK.getText().toString());
         editor.putString(Constants.CMLIN_Z0E, editTextZ0e.getText().toString());
-        editor.putString(Constants.CMLIN_Z0E_UNIT, Integer.toString(spinnerZ0e.getListSelection()));
-        editor.putString(Constants.CMLIN_Z0O_UNIT, Integer.toString(spinnerZ0o.getListSelection()));
+        editor.putString(Constants.CMLIN_Z0E_UNIT, spinnerZ0e.getText().toString());
+        editor.putString(Constants.CMLIN_Z0O_UNIT, spinnerZ0o.getText().toString());
         editor.putString(Constants.CMLIN_PHS, editTextPhs.getText().toString());
-        editor.putString(Constants.CMLIN_PHS_UNIT, Integer.toString(spinnerPhs.getListSelection()));
+        editor.putString(Constants.CMLIN_PHS_UNIT, spinnerPhs.getText().toString());
         editor.putString(Constants.CMLIN_FREQ, editTextFreq.getText().toString());
-        editor.putString(Constants.CMLIN_FREQ_UNIT, Integer.toString(spinnerFreq.getListSelection()));
+        editor.putString(Constants.CMLIN_FREQ_UNIT, spinnerFreq.getText().toString());
         editor.putString(Constants.CMLIN_ER, editTextEr.getText().toString());
         editor.putString(Constants.CMLIN_H, editTextH.getText().toString());
-        editor.putString(Constants.CMLIN_H_UNIT, Integer.toString(spinnerH.getListSelection()));
+        editor.putString(Constants.CMLIN_H_UNIT, spinnerH.getText().toString());
 
         if (useZ0k) {
             editor.putString(Constants.CMLIN_USEZ0K, "true");
@@ -629,7 +629,7 @@ public class CmlinFragment extends Fragment {
             textInputLayoutW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextW.getText().toString()),
-                spinnerW.getListSelection()) < Constants.MINI_LIMIT) {
+                spinnerW.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutW.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -638,7 +638,7 @@ public class CmlinFragment extends Fragment {
             textInputLayoutG.setError(getText(R.string.Error_S_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextG.getText().toString()),
-                spinnerG.getListSelection()) < Constants.MINI_LIMIT) {
+                spinnerG.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutG.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -655,7 +655,7 @@ public class CmlinFragment extends Fragment {
             textInputLayoutH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextH.getText().toString()),
-                spinnerH.getListSelection()) < Constants.MINI_LIMIT) {
+                spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -692,7 +692,7 @@ public class CmlinFragment extends Fragment {
             textInputLayoutH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
         } else if (Constants.value2meter(Double.parseDouble(editTextH.getText().toString()),
-                spinnerH.getListSelection()) < Constants.MINI_LIMIT) {
+                spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -760,10 +760,10 @@ public class CmlinFragment extends Fragment {
             line.setCouplingFactor(0);
         }
 
-        line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()), spinnerFreq.getListSelection());
+        line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()), spinnerFreq.getText().toString());
         line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
-        line.setSubHeight(Double.parseDouble(editTextH.getText().toString()), spinnerH.getListSelection());
-        line.setMetalThick(0, spinnerT.getListSelection());
+        line.setSubHeight(Double.parseDouble(editTextH.getText().toString()), spinnerH.getText().toString());
+        line.setMetalThick(0, spinnerT.getText().toString());
 
         double W, S, L;
         if (editTextPhs.length() != 0) {
@@ -777,7 +777,7 @@ public class CmlinFragment extends Fragment {
         if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
             if (editTextPhs.length() != 0) {
                 BigDecimal L_temp = new BigDecimal(
-                        Constants.meter2others(line.getMetalLength(), spinnerL.getListSelection()));
+                        Constants.meter2others(line.getMetalLength(), spinnerL.getText().toString()));
                 L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                 editTextL.setText(String.valueOf(L));
             } else {
@@ -794,12 +794,12 @@ public class CmlinFragment extends Fragment {
                 editTextL.setText("");
             } else {
                 BigDecimal W_temp = new BigDecimal(
-                        Constants.meter2others(line.getMetalWidth(), spinnerW.getListSelection()));
+                        Constants.meter2others(line.getMetalWidth(), spinnerW.getText().toString()));
                 W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                 editTextW.setText(String.valueOf(W));
 
                 BigDecimal S_temp = new BigDecimal(
-                        Constants.meter2others(line.getMetalSpace(), spinnerG.getListSelection()));
+                        Constants.meter2others(line.getMetalSpace(), spinnerG.getText().toString()));
                 S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
                 editTextG.setText(String.valueOf(S));
             }
