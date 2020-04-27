@@ -220,7 +220,7 @@ public class MlinCalculator {
         // temp value for l used while synthesizing the other header_parameters. We'll
         // correct l later.
         length = 1000.0;
-        line.setMetalLength(length, Constants.LengthUnit_m);
+        line.setMetalLength(length, "m");
 
         if (!done) {
             // Initialize the various error values
@@ -339,7 +339,7 @@ public class MlinCalculator {
         line = Analysis(line);
         v = Constants.LIGHTSPEED / Math.sqrt(effectiveEr);
         length = (phase / 360) * (v / line.getFrequency());
-        line.setMetalLength(length, Constants.LengthUnit_m);
+        line.setMetalLength(length, "m");
 
         line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;

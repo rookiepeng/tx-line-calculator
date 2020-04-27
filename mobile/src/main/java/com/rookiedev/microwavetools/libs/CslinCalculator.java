@@ -84,10 +84,10 @@ public class CslinCalculator {
         z0o_0t = line.getImpedanceOdd();
         if (line.getMetalThick() != 0.0) {
             lineSlin.setSubstrate(line.getSubstrate());
-            lineSlin.setMetalThick(line.getMetalThick(), Constants.LengthUnit_m);
-            lineSlin.setMetalWidth(line.getMetalWidth(), Constants.LengthUnit_m);
-            lineSlin.setMetalLength(line.getMetalLength(), Constants.LengthUnit_m);
-            lineSlin.setFrequency(line.getFrequency(), Constants.FreqUnit_Hz);
+            lineSlin.setMetalThick(line.getMetalThick(), "m");
+            lineSlin.setMetalWidth(line.getMetalWidth(), "m");
+            lineSlin.setMetalLength(line.getMetalLength(), "m");
+            lineSlin.setFrequency(line.getFrequency(), "Hz");
 
             Log.v("TAG", "1");
             SlinCalculator slin = new SlinCalculator();
@@ -98,7 +98,7 @@ public class CslinCalculator {
             }
             z0s = lineSlin.getImpedance();
             Log.v("TAG", "2");
-            lineSlin.setMetalThick(0, Constants.LengthUnit_m);
+            lineSlin.setMetalThick(0, "m");
             lineSlin = slin.getAnaResult(lineSlin);
             if (lineSlin.getErrorCode() != Constants.ERROR.NO_ERROR) {
                 line.setErrorCode(Constants.ERROR.COULD_NOT_BRACKET_SOLUTION);
@@ -221,7 +221,7 @@ public class CslinCalculator {
 
         // temp value for l used while finding w and s
         l = 1000.0;
-        line.setMetalLength(l, Constants.LengthUnit_m);
+        line.setMetalLength(l, "m");
 
         // FIXME - change limits to be normalized to substrate thickness limits on the
         // allowed range for w
@@ -261,7 +261,7 @@ public class CslinCalculator {
             delta = 1e-3 * w;
         else
             delta = 1e-3 * s;
-        delta = Constants.value2meter(1e-5, Constants.LengthUnit_mil);
+        delta = Constants.value2meter(1e-5, "mil");
         cval = 1e-12 * z0e * z0o;
 
         /*
@@ -270,8 +270,8 @@ public class CslinCalculator {
          */
         while (!done) {
             iters++;
-            line.setMetalWidth(w, Constants.LengthUnit_m);
-            line.setMetalSpace(s, Constants.LengthUnit_m);
+            line.setMetalWidth(w, "m");
+            line.setMetalSpace(s, "m");
             line = Analysis(line);
             if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                 ze0 = line.getImpedanceEven();
@@ -287,8 +287,8 @@ public class CslinCalculator {
                 done = true;
             } else {
                 // approximate the first jacobian
-                line.setMetalWidth(w + delta, Constants.LengthUnit_m);
-                line.setMetalSpace(s, Constants.LengthUnit_m);
+                line.setMetalWidth(w + delta, "m");
+                line.setMetalSpace(s, "m");
                 line = Analysis(line);
                 if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                     ze1 = line.getImpedanceEven();
@@ -298,8 +298,8 @@ public class CslinCalculator {
                     return line;
                 }
 
-                line.setMetalWidth(w, Constants.LengthUnit_m);
-                line.setMetalSpace(s + delta, Constants.LengthUnit_m);
+                line.setMetalWidth(w, "m");
+                line.setMetalSpace(s + delta, "m");
                 line = Analysis(line);
                 if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                     ze2 = line.getImpedanceEven();
@@ -346,12 +346,12 @@ public class CslinCalculator {
             }
         }
 
-        line.setMetalWidth(w, Constants.LengthUnit_m);
-        line.setMetalSpace(s, Constants.LengthUnit_m);
+        line.setMetalWidth(w, "m");
+        line.setMetalSpace(s, "m");
         line = Analysis(line);
 
         // scale the line length to get the desired electrical length
-        line.setMetalLength(line.getMetalLength() * len / line.getPhase(), Constants.LengthUnit_m);
+        line.setMetalLength(line.getMetalLength() * len / line.getPhase(), "m");
         line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;
     }

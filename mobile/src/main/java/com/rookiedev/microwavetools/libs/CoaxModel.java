@@ -51,7 +51,7 @@ public class CoaxModel {
         this.phase = phase;
     }
 
-    public void setFrequency(double frequency, int unit) {
+    public void setFrequency(double frequency, String unit) {
         this.frequency = Constants.value2Hz(frequency, unit);
     }
 
@@ -71,7 +71,7 @@ public class CoaxModel {
         return substrate.getSubHeight();
     }
 
-    public void setSubRadius(double subHeight, int unit) {
+    public void setSubRadius(double subHeight, String unit) {
         substrate.setSubHeight(Constants.value2meter(subHeight, unit));
     }
 
@@ -79,7 +79,7 @@ public class CoaxModel {
         return coreRadius;
     }
 
-    public void setCoreRadius(double coreRadius, int unit) {
+    public void setCoreRadius(double coreRadius, String unit) {
         this.coreRadius = Constants.value2meter(coreRadius, unit);
     }
 
@@ -87,7 +87,7 @@ public class CoaxModel {
         return coreOffset;
     }
 
-    public void setCoreOffset(double coreOffset, int unit) {
+    public void setCoreOffset(double coreOffset, String unit) {
         this.coreOffset = Constants.value2meter(coreOffset, unit);
     }
 
@@ -95,7 +95,7 @@ public class CoaxModel {
         return metalLength;
     }
 
-    public void setMetalLength(double metalLength, int unit) {
+    public void setMetalLength(double metalLength, String unit) {
         this.metalLength = Constants.value2meter(metalLength, unit);
     }
 

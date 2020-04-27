@@ -206,7 +206,7 @@ public class CpwCalculator {
          * correct l later.
          */
         len = line.getPhase(); /* remember what electrical length we want */
-        line.setMetalLength(1.0, Constants.LengthUnit_m);
+        line.setMetalLength(1.0, "m");
 
         Log.v("TAG", "1");
         if (!done) {
@@ -328,7 +328,7 @@ public class CpwCalculator {
         line = Analysis(line, withGround);
 
         // v = Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
-        line.setMetalLength(line.getMetalLength() * len / line.getPhase(), Constants.LengthUnit_m);
+        line.setMetalLength(line.getMetalLength() * len / line.getPhase(), "m");
 
         line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;

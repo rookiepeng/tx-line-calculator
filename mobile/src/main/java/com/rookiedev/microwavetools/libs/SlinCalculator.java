@@ -141,7 +141,7 @@ public class SlinCalculator {
 
         // temp value for l used while synthesizing the other header_parameters.
         l = 1000.0;
-        line.setMetalLength(l, Constants.LengthUnit_m);
+        line.setMetalLength(l, "m");
 
         if (!done) {
             // Initialize the various error values
@@ -260,7 +260,7 @@ public class SlinCalculator {
         line = Analysis(line);
 
         v = Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
-        line.setMetalLength((len / 360) * (v / line.getFrequency()), Constants.LengthUnit_m);
+        line.setMetalLength((len / 360) * (v / line.getFrequency()), "m");
 
         line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;

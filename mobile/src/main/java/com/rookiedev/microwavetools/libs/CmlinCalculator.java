@@ -445,7 +445,7 @@ public class CmlinCalculator {
 
         // temp value for l used while finding w and s
         l = 1000.0;
-        line.setMetalLength(l, Constants.LengthUnit_m);
+        line.setMetalLength(l, "m");
 
         // width relative convergence tolerance (mils) (set to 0.1 micron)
         // reltol = Constants.MICRON2MIL(0.1);
@@ -475,7 +475,7 @@ public class CmlinCalculator {
         else
             delta = 1e-3 * s;
 
-        delta = Constants.value2meter(1e-5, Constants.LengthUnit_mil);
+        delta = Constants.value2meter(1e-5, "mil");
 
         cval = 1e-12 * z0e * z0o;
 
@@ -485,8 +485,8 @@ public class CmlinCalculator {
          */
         while (!done) {
             iters++;
-            line.setMetalWidth(w, Constants.LengthUnit_m);
-            line.setMetalSpace(s, Constants.LengthUnit_m);
+            line.setMetalWidth(w, "m");
+            line.setMetalSpace(s, "m");
             line = Analysis(line);
             if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                 ze0 = line.getImpedanceEven();
@@ -502,8 +502,8 @@ public class CmlinCalculator {
                 done = true;
             } else {
                 // approximate the first jacobian
-                line.setMetalWidth(w + delta, Constants.LengthUnit_m);
-                line.setMetalSpace(s, Constants.LengthUnit_m);
+                line.setMetalWidth(w + delta, "m");
+                line.setMetalSpace(s, "m");
                 line = Analysis(line);
                 if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                     ze1 = line.getImpedanceEven();
@@ -513,8 +513,8 @@ public class CmlinCalculator {
                     return line;
                 }
 
-                line.setMetalWidth(w, Constants.LengthUnit_m);
-                line.setMetalSpace(s + delta, Constants.LengthUnit_m);
+                line.setMetalWidth(w, "m");
+                line.setMetalSpace(s + delta, "m");
                 line = Analysis(line);
                 if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
                     ze2 = line.getImpedanceEven();
@@ -546,13 +546,13 @@ public class CmlinCalculator {
             }
         }
 
-        line.setMetalWidth(w, Constants.LengthUnit_m);
-        line.setMetalSpace(s, Constants.LengthUnit_m);
+        line.setMetalWidth(w, "m");
+        line.setMetalSpace(s, "m");
         line = Analysis(line);
 
         // scale the line length to get the desired electrical length
         line.setMetalLength(line.getMetalLength() * electricalLength / line.getPhase(),
-                Constants.LengthUnit_m);
+                "m");
 
         /*
          * one last calculation and this time we find the loss too.

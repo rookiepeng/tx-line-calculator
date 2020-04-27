@@ -127,7 +127,7 @@ public class CoaxCalculator {
         elen = line.getPhase();
 
         // temp value for len used while synthesizing the other header_parameters.
-        line.setMetalLength(1.0, Constants.LengthUnit_m);
+        line.setMetalLength(1.0, "m");
 
         if (!done) {
             // Initialize the various error values
@@ -240,7 +240,7 @@ public class CoaxCalculator {
         line = Analysis(line);
 
         v = Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
-        line.setMetalLength((elen / 360) * (v / line.getFrequency()), Constants.LengthUnit_m);
+        line.setMetalLength((elen / 360) * (v / line.getFrequency()), "m");
         line.setErrorCode(Constants.ERROR.NO_ERROR);
         return line;
     }

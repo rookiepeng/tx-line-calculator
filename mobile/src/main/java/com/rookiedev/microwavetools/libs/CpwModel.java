@@ -40,7 +40,7 @@ public class CpwModel {
         }
     }
 
-    public void setMetalWidth(double width, int unit) {
+    public void setMetalWidth(double width, String unit) {
         metal.setMetalWidth(Constants.value2meter(width, unit));
     }
 
@@ -48,7 +48,7 @@ public class CpwModel {
         return metal.getMetalWidth();
     }
 
-    public void setMetalLength(double length, int unit) {
+    public void setMetalLength(double length, String unit) {
         metal.setMetalLength(Constants.value2meter(length, unit));
     }
 
@@ -56,7 +56,7 @@ public class CpwModel {
         return metal.getMetalLength();
     }
 
-    public void setMetalThick(double thick, int unit) {
+    public void setMetalThick(double thick, String unit) {
         metal.setMetalThick(Constants.value2meter(thick, unit));
     }
 
@@ -80,7 +80,7 @@ public class CpwModel {
         this.phase = phase;
     }
 
-    public void setFrequency(double frequency, int unit) {
+    public void setFrequency(double frequency, String unit) {
         this.frequency = Constants.value2Hz(frequency, unit);
     }
 
@@ -100,7 +100,7 @@ public class CpwModel {
         return substrate.getSubHeight();
     }
 
-    public void setSubHeight(double subHeight, int unit) {
+    public void setSubHeight(double subHeight, String unit) {
         substrate.setSubHeight(Constants.value2meter(subHeight, unit));
     }
 
@@ -124,7 +124,7 @@ public class CpwModel {
         return metalSpace;
     }
 
-    public void setMetalSpace(double metalSpace, int unit) {
+    public void setMetalSpace(double metalSpace, String unit) {
         this.metalSpace = Constants.value2meter(metalSpace, unit);
     }
 
