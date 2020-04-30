@@ -561,48 +561,38 @@ public class CslinFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
 
         editTextW.setText(prefs.getString(Constants.CSLIN_W, "0.59"));
-        spinnerW.setSelection(
-                Integer.parseInt(prefs.getString(Constants.CSLIN_W_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerW.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.CSLIN_W_UNIT, Constants.LengthUnit_mm)), false);
 
         editTextG.setText(prefs.getString(Constants.CSLIN_S, "0.36"));
-        spinnerG.setSelection(
-                Integer.parseInt(prefs.getString(Constants.CSLIN_S_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerG.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.CSLIN_S_UNIT, Constants.LengthUnit_mm)), false);
 
         editTextL.setText(prefs.getString(Constants.CSLIN_L, "34.9"));
-        spinnerL.setSelection(
-                Integer.parseInt(prefs.getString(Constants.CSLIN_L_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerL.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.CSLIN_L_UNIT, Constants.LengthUnit_mm)), false);
 
         editTextZ0.setText(prefs.getString(Constants.CSLIN_Z0, "50"));
-        spinnerZ0.setSelection(Integer
-                .parseInt(prefs.getString(Constants.CSLIN_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
+        spinnerZ0.setText(Constants.validateUnit(Constants.adapterImpedanceUnits(mContext), prefs.getString(Constants.CSLIN_Z0_UNIT, Constants.ImpedanceUnit_Ohm)), false);
 
         editTextK.setText(prefs.getString(Constants.CSLIN_K, "0.2"));
 
         editTextZ0o.setText(prefs.getString(Constants.CSLIN_Z0O, "40.8"));
-        spinnerZ0o.setSelection(Integer
-                .parseInt(prefs.getString(Constants.CSLIN_Z0O_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
+        spinnerZ0o.setText(Constants.validateUnit(Constants.adapterImpedanceUnits(mContext), prefs.getString(Constants.CSLIN_Z0O_UNIT, Constants.ImpedanceUnit_Ohm)), false);
 
         editTextZ0e.setText(prefs.getString(Constants.CSLIN_Z0E, "61.2"));
-        spinnerZ0e.setSelection(Integer
-                .parseInt(prefs.getString(Constants.CSLIN_Z0E_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
+        spinnerZ0e.setText(Constants.validateUnit(Constants.adapterImpedanceUnits(mContext), prefs.getString(Constants.CSLIN_Z0E_UNIT, Constants.ImpedanceUnit_Ohm)), false);
 
         editTextPhs.setText(prefs.getString(Constants.CSLIN_PHS, "90"));
-        spinnerPhs.setSelection(Integer
-                .parseInt(prefs.getString(Constants.CSLIN_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))));
+        spinnerPhs.setText(Constants.validateUnit(Constants.adapterPhaseUnits(mContext), prefs.getString(Constants.CSLIN_PHS_UNIT, Constants.PhaseUnit_Degree)), false);
 
         editTextFreq.setText(prefs.getString(Constants.CSLIN_FREQ, "1.00"));
-        spinnerFreq.setSelection(
-                Integer.parseInt(prefs.getString(Constants.CSLIN_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))));
+        spinnerFreq.setText(Constants.validateUnit(Constants.adapterFrequencyUnits(mContext), prefs.getString(Constants.CSLIN_FREQ_UNIT, Constants.FreqUnit_GHz)), false);
 
         editTextEr.setText(prefs.getString(Constants.CSLIN_ER, "4.6"));
 
         editTextH.setText(prefs.getString(Constants.CSLIN_H, "1.6"));
-        spinnerH.setSelection(
-                Integer.parseInt(prefs.getString(Constants.CSLIN_H_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerH.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.CSLIN_H_UNIT, Constants.LengthUnit_mm)), false);
 
         editTextT.setText(prefs.getString(Constants.CSLIN_T, "0.035"));
-        spinnerT.setSelection(
-                Integer.parseInt(prefs.getString(Constants.CSLIN_T_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerT.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.CSLIN_T_UNIT, Constants.LengthUnit_mm)), false);
 
         useZ0k = prefs.getString(Constants.CSLIN_USEZ0K, "true").equals("true");
     }
@@ -914,27 +904,27 @@ public class CslinFragment extends Fragment {
 
     public void resetValues() {
         editTextW.setText("0.59");
-        spinnerW.setSelection(Constants.LengthUnit_mm);
+        spinnerW.setText(Constants.LengthUnit_mm);
         editTextG.setText("0.36");
-        spinnerG.setSelection(Constants.LengthUnit_mm);
+        spinnerG.setText(Constants.LengthUnit_mm);
         editTextL.setText("34.9");
-        spinnerL.setSelection(Constants.LengthUnit_mm);
+        spinnerL.setText(Constants.LengthUnit_mm);
         editTextZ0.setText("50");
-        spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+        spinnerZ0.setText(Constants.ImpedanceUnit_Ohm);
         editTextK.setText("0.2");
         editTextZ0o.setText("40.8");
-        spinnerZ0o.setSelection(Constants.ImpedanceUnit_Ohm);
+        spinnerZ0o.setText(Constants.ImpedanceUnit_Ohm);
         editTextZ0e.setText("61.2");
-        spinnerZ0e.setSelection(Constants.ImpedanceUnit_Ohm);
+        spinnerZ0e.setText(Constants.ImpedanceUnit_Ohm);
         editTextPhs.setText("90");
-        spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+        spinnerPhs.setText(Constants.PhaseUnit_Degree);
         editTextFreq.setText("1.00");
-        spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+        spinnerFreq.setText(Constants.FreqUnit_GHz);
         editTextEr.setText("4.6");
         editTextH.setText("1.6");
-        spinnerH.setSelection(Constants.LengthUnit_mm);
+        spinnerH.setText(Constants.LengthUnit_mm);
         editTextT.setText("0.035");
-        spinnerT.setSelection(Constants.LengthUnit_mm);
+        spinnerT.setText(Constants.LengthUnit_mm);
         useZ0k = true;
 
         radioButtonZ0.setChecked(true);

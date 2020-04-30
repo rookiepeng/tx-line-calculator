@@ -35,10 +35,10 @@ public class Constants {
     public static final int Synthesize_Width = 0, Synthesize_Height = 1, Synthesize_Er = 2, Synthesize_Length = 3,
             Synthesize_Gap = 4, Synthesize_CoreRadius = 5, Synthesize_CoreOffset = 6;
     public static final int Synthesize_SubRadius = Synthesize_Height;
-    public static final int LengthUnit_mil = 0, LengthUnit_mm = 1, LengthUnit_cm = 2, LengthUnit_m = 3;
-    public static final int FreqUnit_MHz = 0, FreqUnit_GHz = 1, FreqUnit_Hz = 10;
-    public static final int ImpedanceUnit_Ohm = 0;
-    public static final int PhaseUnit_Degree = 0;
+    public static final String LengthUnit_mil = "mil", LengthUnit_mm = "mm", LengthUnit_cm = "cm", LengthUnit_m = "m";
+    public static final String FreqUnit_MHz = "MHz", FreqUnit_GHz = "GHz", FreqUnit_Hz = "Hz";
+    public static final String ImpedanceUnit_Ohm = "Ω";
+    public static final String PhaseUnit_Degree = "Deg";
 
     public static final int PositionMlin = 0, PositionCmlin = 1, PositionSlin = 2, PositionCslin = 3, PositionCpw = 4,
             PositionGcpw = 5, PositionCoax = 6;

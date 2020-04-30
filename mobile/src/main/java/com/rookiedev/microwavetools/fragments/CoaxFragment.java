@@ -426,32 +426,25 @@ public class CoaxFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
 
         editTextA.setText(prefs.getString(Constants.COAX_A, "0.167"));
-        spinnerA.setSelection(
-                Integer.parseInt(prefs.getString(Constants.COAX_A_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerA.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.COAX_A_UNIT, Constants.LengthUnit_mm)), false);
 
         editTextB.setText(prefs.getString(Constants.COAX_B, "1.00"));
-        spinnerB.setSelection(
-                Integer.parseInt(prefs.getString(Constants.COAX_B_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerB.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.COAX_B_UNIT, Constants.LengthUnit_mm)), false);
 
         editTextC.setText(prefs.getString(Constants.COAX_C, "0.00"));
-        spinnerC.setSelection(
-                Integer.parseInt(prefs.getString(Constants.COAX_C_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerC.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.COAX_C_UNIT, Constants.LengthUnit_mm)), false);
 
         editTextL.setText(prefs.getString(Constants.COAX_L, "34.945"));
-        spinnerL.setSelection(
-                Integer.parseInt(prefs.getString(Constants.COAX_L_UNIT, Integer.toString(Constants.LengthUnit_mm))));
+        spinnerL.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.COAX_L_UNIT, Constants.LengthUnit_mm)), false);
 
         editTextZ0.setText(prefs.getString(Constants.COAX_Z0, "50"));
-        spinnerZ0.setSelection(Integer
-                .parseInt(prefs.getString(Constants.COAX_Z0_UNIT, Integer.toString(Constants.ImpedanceUnit_Ohm))));
+        spinnerZ0.setText(Constants.validateUnit(Constants.adapterImpedanceUnits(mContext), prefs.getString(Constants.COAX_Z0_UNIT, Constants.ImpedanceUnit_Ohm)), false);
 
         editTextPhs.setText(prefs.getString(Constants.COAX_PHS, "90"));
-        spinnerPhs.setSelection(Integer
-                .parseInt(prefs.getString(Constants.COAX_PHS_UNIT, Integer.toString(Constants.PhaseUnit_Degree))));
+        spinnerPhs.setText(Constants.validateUnit(Constants.adapterPhaseUnits(mContext), prefs.getString(Constants.COAX_PHS_UNIT, Constants.PhaseUnit_Degree)), false);
 
         editTextFreq.setText(prefs.getString(Constants.COAX_FREQ, "1.00"));
-        spinnerFreq.setSelection(
-                Integer.parseInt(prefs.getString(Constants.COAX_FREQ_UNIT, Integer.toString(Constants.FreqUnit_GHz))));
+        spinnerFreq.setText(Constants.validateUnit(Constants.adapterFrequencyUnits(mContext), prefs.getString(Constants.COAX_FREQ_UNIT, Constants.FreqUnit_GHz)), false);
 
         editTextEr.setText(prefs.getString(Constants.COAX_ER, "4.6"));
 
@@ -741,19 +734,19 @@ public class CoaxFragment extends Fragment {
 
     public void resetValues() {
         editTextA.setText("0.167");
-        spinnerA.setSelection(Constants.LengthUnit_mm);
+        spinnerA.setText(Constants.LengthUnit_mm);
         editTextB.setText("1.00");
-        spinnerB.setSelection(Constants.LengthUnit_mm);
+        spinnerB.setText(Constants.LengthUnit_mm);
         editTextC.setText("0.00");
-        spinnerC.setSelection(Constants.LengthUnit_mm);
+        spinnerC.setText(Constants.LengthUnit_mm);
         editTextL.setText("34.945");
-        spinnerL.setSelection(Constants.LengthUnit_mm);
+        spinnerL.setText(Constants.LengthUnit_mm);
         editTextZ0.setText("50");
-        spinnerZ0.setSelection(Constants.ImpedanceUnit_Ohm);
+        spinnerZ0.setText(Constants.ImpedanceUnit_Ohm);
         editTextPhs.setText("90");
-        spinnerPhs.setSelection(Constants.PhaseUnit_Degree);
+        spinnerPhs.setText(Constants.PhaseUnit_Degree);
         editTextFreq.setText("1.00");
-        spinnerFreq.setSelection(Constants.FreqUnit_GHz);
+        spinnerFreq.setText(Constants.FreqUnit_GHz);
         editTextEr.setText("4.6");
         target = Constants.Synthesize_CoreRadius;
 
