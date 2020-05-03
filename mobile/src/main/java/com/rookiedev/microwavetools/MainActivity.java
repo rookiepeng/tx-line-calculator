@@ -33,7 +33,8 @@ import com.rookiedev.microwavetools.fragments.MlinFragment;
 import com.rookiedev.microwavetools.fragments.SlinFragment;
 import com.rookiedev.microwavetools.libs.Constants;
 
-//import static com.rookiedev.microwavetools.billing.BillingManager.BILLING_MANAGER_NOT_INITIALIZED;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     private boolean isAdFree = true;
     private boolean isChecked = true;
 
-//    private BillingClientLifecycle billingClientLifecycle;
+//    private SubscriptionStatusViewModel subscriptionViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,22 +221,6 @@ public class MainActivity extends AppCompatActivity
         mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
         imageModel.setImageResource(imageResource);
 
-        /* *****************************************************/
-//        billingClientLifecycle = ((SubApp) getApplication()).getBillingClientLifecycle();
-//        getLifecycle().addObserver(billingClientLifecycle);
-//
-//        // Register purchases when they change.
-//        billingClientLifecycle.purchaseUpdateEvent.observe(this, new Observer<List<Purchase>>() {
-//            @Override
-//            public void onChanged(List<Purchase> purchases) {
-//                if (purchases != null) {
-//                    registerPurchases(purchases);
-//                }
-//            }
-//        });
-
-        // Create and initialize BillingManager which talks to BillingLibrary
-//        mBillingManager = new BillingManager(this, mUpdateListener);
 
         if (isFirstRun()) {
             drawer.openDrawer(GravityCompat.START);
@@ -505,18 +490,6 @@ public class MainActivity extends AppCompatActivity
 //            mBillingManager.initiatePurchaseFlow(BillingConstants.SKU_ADFREE, BillingClient.SkuType.INAPP);
 //        }
     }
-
-    /*
-     * Register SKUs and purchase tokens with the server.
-     */
-//    private void registerPurchases(List<Purchase> purchaseList) {
-//        for (Purchase purchase : purchaseList) {
-//            String sku = purchase.getSku();
-//            String purchaseToken = purchase.getPurchaseToken();
-////            Log.d(TAG, "Register purchase with sku: " + sku + ", token: " + purchaseToken);
-////            subscriptionViewModel.registerSubscription(sku, purchaseToken);
-//        }
-//    }
 
     /*
      * Handler to billing updates

@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 47
+        versionCode 48
         versionName "4.12"
     }
     buildTypes {
@@ -23,29 +23,15 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:19.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
 
-
     // Firebase libraries.
     // These libraries versions are known to be compatible with each other.
     // If you encounter a build error "Cannot Access Hide", it means the Firebase libraries'
     // versions you are using are not compatible.
-    implementation 'com.firebaseui:firebase-ui-auth:3.3.0'
     implementation 'com.google.firebase:firebase-core:17.4.0'
     implementation 'com.google.firebase:firebase-analytics:17.4.0'
-    implementation 'com.google.firebase:firebase-functions:19.0.2'
-    implementation 'com.google.firebase:firebase-messaging:20.1.6'
     implementation 'com.google.firebase:firebase-ads:19.1.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
-
-
-    implementation 'com.android.billingclient:billing:2.2.0'
-
-    def room_version = "2.2.5"
-
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-
-    implementation 'com.google.code.gson:gson:2.8.5'
 
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
