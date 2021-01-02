@@ -1,12 +1,11 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 48
         versionName "4.12"
     }
@@ -19,18 +18,18 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.google.android.gms:play-services-ads:19.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     // Firebase libraries.
     // These libraries versions are known to be compatible with each other.
     // If you encounter a build error "Cannot Access Hide", it means the Firebase libraries'
     // versions you are using are not compatible.
-    implementation 'com.google.firebase:firebase-core:17.4.0'
-    implementation 'com.google.firebase:firebase-analytics:17.4.0'
-    implementation 'com.google.firebase:firebase-ads:19.1.0'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-core:18.0.0'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation 'com.google.firebase:firebase-ads:19.6.0'
+//    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
 
     api fileTree(dir: 'libs', include: ['*.jar'])
