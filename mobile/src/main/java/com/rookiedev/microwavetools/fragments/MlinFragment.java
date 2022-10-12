@@ -12,7 +12,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,9 +46,6 @@ public class MlinFragment extends Fragment {
     private MlinModel line;
     private int target;
     private ColorStateList defaultEditTextColor;
-    private AdFragment adFragment = null;
-    private boolean isAdFree;
-    private FragmentManager fragmentManager = null;
 
     public MlinFragment() {
         // Empty constructor required for fragment subclasses
@@ -58,16 +54,12 @@ public class MlinFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            isAdFree = getArguments().getBoolean(Constants.IS_AD_FREE, true);
-        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_mlin, container, false);
         mContext = this.getContext();
-        fragmentManager = getFragmentManager();
 
         initUI();
         readSharedPref(); // read shared preferences
@@ -198,13 +190,6 @@ public class MlinFragment extends Fragment {
             }
         });
 
-        if (!isAdFree) {
-            adFragment = new AdFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            if (fragmentManager != null) {
-                fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
-            }
-        }
         return viewRoot;
     }
 
@@ -585,21 +570,6 @@ public class MlinFragment extends Fragment {
         }
 
         return checkResult;
-    }
-
-    public void addAdFragment() {
-        adFragment = new AdFragment();
-        if (fragmentManager != null) {
-            fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commitAllowingStateLoss();
-        }
-    }
-
-    public void removeAdFragment() {
-        if (adFragment != null) {
-            if (fragmentManager != null) {
-                fragmentManager.beginTransaction().remove(adFragment).commit();
-            }
-        }
     }
 
     private void clearEditTextErrors() {

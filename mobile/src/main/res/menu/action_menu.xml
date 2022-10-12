@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_ad"
-        android:icon="@drawable/ic_menu_adsfree"
-        app:showAsAction="ifRoom|withText"
-        android:title="@string/menu_shop" />
-
-    <item
         android:id="@+id/menu_help"
         android:icon="@drawable/ic_help_black_24dp"
         app:showAsAction="never|withText"

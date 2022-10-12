@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
@@ -20,7 +19,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CoaxCalculator;
@@ -42,10 +40,6 @@ public class CoaxFragment extends Fragment {
     private RadioButton radioButtonA, radioButtonB, radioButtonC;
     private CoaxModel line;
     private ColorStateList defaultEditTextColor;
-    private AdFragment adFragment = null;
-    private FragmentManager fragmentManager = null;
-
-    private boolean isAdFree;
 
     public CoaxFragment() {
         // Empty constructor required for fragment subclasses
@@ -54,16 +48,12 @@ public class CoaxFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            isAdFree = getArguments().getBoolean(Constants.IS_AD_FREE, true);
-        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_coax, container, false);
         mContext = this.getContext();
-        fragmentManager = getFragmentManager();
 
         initUI();
         readSharedPref();
@@ -229,13 +219,6 @@ public class CoaxFragment extends Fragment {
             }
         });
 
-        if (!isAdFree) {
-            adFragment = new AdFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            if (fragmentManager != null) {
-                fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
-            }
-        }
         return viewRoot;
     }
 
@@ -700,21 +683,6 @@ public class CoaxFragment extends Fragment {
         }
 
         return checkResult;
-    }
-
-    public void addAdFragment() {
-        adFragment = new AdFragment();
-        if (fragmentManager != null) {
-            fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commitAllowingStateLoss();
-        }
-    }
-
-    public void removeAdFragment() {
-        if (adFragment != null) {
-            if (fragmentManager != null) {
-                fragmentManager.beginTransaction().remove(adFragment).commit();
-            }
-        }
     }
 
     private void clearEditTextErrors() {

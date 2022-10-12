@@ -21,7 +21,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -32,8 +31,6 @@ import com.rookiedev.microwavetools.fragments.CslinFragment;
 import com.rookiedev.microwavetools.fragments.MlinFragment;
 import com.rookiedev.microwavetools.fragments.SlinFragment;
 import com.rookiedev.microwavetools.libs.Constants;
-
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
@@ -55,10 +52,6 @@ public class MainActivity extends AppCompatActivity
     private ImageView imageModel;
     private int imageResource;
 
-    private boolean isAdFree = true;
-    private boolean isChecked = true;
-
-//    private SubscriptionStatusViewModel subscriptionViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +137,6 @@ public class MainActivity extends AppCompatActivity
                 switch (pos) {
 //                case Constants.PositionMlin:
                 default:
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentMlin.setArguments(bundle);
                     transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -152,7 +144,6 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                     break;
                 case Constants.PositionCmlin:
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCmlin.setArguments(bundle);
                     transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -160,7 +151,6 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                     break;
                 case Constants.PositionSlin:
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentSlin.setArguments(bundle);
                     transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -168,7 +158,6 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                     break;
                 case Constants.PositionCslin:
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCslin.setArguments(bundle);
                     transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -176,7 +165,6 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                     break;
                 case Constants.PositionCpw:
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
                     fragmentCpw.setArguments(bundle);
                     transaction = fragmentManager.beginTransaction();
@@ -185,7 +173,6 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                     break;
                 case Constants.PositionGcpw:
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
                     fragmentGcpw.setArguments(bundle);
                     transaction = fragmentManager.beginTransaction();
@@ -194,7 +181,6 @@ public class MainActivity extends AppCompatActivity
                     transaction.commit();
                     break;
                 case Constants.PositionCoax:
-                    bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
                     fragmentCoax.setArguments(bundle);
                     transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
@@ -225,8 +211,6 @@ public class MainActivity extends AppCompatActivity
         if (isFirstRun()) {
             drawer.openDrawer(GravityCompat.START);
         }
-
-        MobileAds.initialize(this, "ca-app-pub-6523245757541965~3260298534");
     }
 
     @Override
@@ -246,25 +230,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.menu_ad);
-        if (isAdFree) {
-            menuItem.setVisible(false);
-        } else {
-            menuItem.setVisible(true);
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action buttons
         switch (item.getItemId()) {
-        case R.id.menu_ad:
-            onAdfreeButtonClicked();
-            return true;
         case R.id.menu_help:
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
@@ -384,7 +353,6 @@ public class MainActivity extends AppCompatActivity
             fragmentMlin = new MlinFragment();
             pos = Constants.PositionMlin;
             imageResource = R.drawable.vt_mlin;
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentMlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
             break;
@@ -392,7 +360,6 @@ public class MainActivity extends AppCompatActivity
             fragmentCmlin = new CmlinFragment();
             pos = Constants.PositionCmlin;
             imageResource = R.drawable.vt_cmlin;
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCmlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCmlin).commit();
             break;
@@ -400,7 +367,6 @@ public class MainActivity extends AppCompatActivity
             fragmentSlin = new SlinFragment();
             pos = Constants.PositionSlin;
             imageResource = R.drawable.vt_slin;
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentSlin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentSlin).commit();
             break;
@@ -408,13 +374,11 @@ public class MainActivity extends AppCompatActivity
             fragmentCslin = new CslinFragment();
             pos = Constants.PositionCslin;
             imageResource = R.drawable.vt_cslin;
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCslin.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCslin).commit();
             break;
         case Constants.PositionCpw:
             bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCpw = new CpwFragment();
             fragmentCpw.setArguments(bundle);
             pos = Constants.PositionCpw;
@@ -423,7 +387,6 @@ public class MainActivity extends AppCompatActivity
             break;
         case Constants.PositionGcpw:
             bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentGcpw = new CpwFragment();
             fragmentGcpw.setArguments(bundle);
             pos = Constants.PositionGcpw;
@@ -434,16 +397,10 @@ public class MainActivity extends AppCompatActivity
             fragmentCoax = new CoaxFragment();
             pos = Constants.PositionCoax;
             imageResource = R.drawable.vt_coax;
-            bundle.putBoolean(Constants.IS_AD_FREE, !(isChecked && (!isAdFree)));
             fragmentCoax.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCoax).commit();
             break;
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     private boolean isFirstRun() {
@@ -457,122 +414,5 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Note: We query purchases in onResume() to handle purchases completed while
-        // the activity
-        // is inactive. For example, this can happen if the activity is destroyed during
-        // the
-        // purchase flow. This ensures that when the activity is resumed it reflects the
-        // user's
-        // current purchases.
-//        if (mBillingManager != null
-//                && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
-//            mBillingManager.queryPurchases();
-//        }
-    }
-
-    // We're being destroyed. It's important to dispose of the helper here!
-    @Override
-    public void onDestroy() {
-//        if (mBillingManager != null) {
-//            mBillingManager.destroy();
-//        }
-        super.onDestroy();
-    }
-
-    // User clicked the "Ad free" button
-    public void onAdfreeButtonClicked() {
-//        if (mBillingManager != null
-//                && mBillingManager.getBillingClientResponseCode() > BILLING_MANAGER_NOT_INITIALIZED) {
-//            mBillingManager.initiatePurchaseFlow(BillingConstants.SKU_ADFREE, BillingClient.SkuType.INAPP);
-//        }
-    }
-
-    /*
-     * Handler to billing updates
-     */
-//    private class UpdateListener implements BillingManager.BillingUpdatesListener {
-//        @Override
-//        public void onBillingClientSetupFinished() {
-//
-//        }
-//
-//        @Override
-//        public void onConsumeFinished(String token, @BillingClient.BillingResponse int result) {
-//
-//        }
-//
-//        @Override
-//        public void onPurchasesUpdated(List<com.android.billingclient.api.Purchase> purchases) {
-//            isChecked = true;
-//            if (purchases.isEmpty()) {
-//                switch (pos) {
-//                case Constants.PositionMlin:
-//                    fragmentMlin.addAdFragment();
-//                    break;
-//                case Constants.PositionCmlin:
-//                    fragmentCmlin.addAdFragment();
-//                    break;
-//                case Constants.PositionSlin:
-//                    fragmentSlin.addAdFragment();
-//                    break;
-//                case Constants.PositionCslin:
-//                    fragmentCslin.addAdFragment();
-//                    break;
-//                case Constants.PositionCpw:
-//                    fragmentCpw.addAdFragment();
-//                    break;
-//                case Constants.PositionGcpw:
-//                    fragmentGcpw.addAdFragment();
-//                    break;
-//                case Constants.PositionCoax:
-//                    fragmentCoax.addAdFragment();
-//                    break;
-//                default:
-//                    break;
-//                }
-//
-//            }
-//            for (com.android.billingclient.api.Purchase purchase : purchases) {
-//                if (purchase.getSku().equals(BillingConstants.SKU_ADFREE)) {
-//                    isAdFree = true;
-//                    switch (pos) {
-//                    case Constants.PositionMlin:
-//                        fragmentMlin.removeAdFragment();
-//                        break;
-//                    case Constants.PositionCmlin:
-//                        fragmentCmlin.removeAdFragment();
-//                        break;
-//                    case Constants.PositionSlin:
-//                        fragmentSlin.removeAdFragment();
-//                        break;
-//                    case Constants.PositionCslin:
-//                        fragmentCslin.removeAdFragment();
-//                        break;
-//                    case Constants.PositionCpw:
-//                        fragmentCpw.removeAdFragment();
-//                        break;
-//                    case Constants.PositionGcpw:
-//                        fragmentGcpw.removeAdFragment();
-//                        break;
-//                    case Constants.PositionCoax:
-//                        fragmentCoax.removeAdFragment();
-//                        break;
-//                    default:
-//                        break;
-//                    }
-//                    invalidateOptionsMenu();
-//                }
-//            }
-//        }
-//    }
-
-//    @Override
-//    public BillingManager getBillingManager() {
-//        return null;
-//    }
 
 }

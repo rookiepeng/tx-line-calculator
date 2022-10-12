@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
@@ -20,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.CmlinCalculator;
@@ -42,10 +40,6 @@ public class CmlinFragment extends Fragment {
             spinnerFreq;
     private RadioButton radioButtonZ0, radioButtonK, radioButtonZ0o, radioButtonZ0e;
     private boolean useZ0k; // calculate with Z0, k, or Z0e, Z0o
-    private AdFragment adFragment = null;
-    private FragmentManager fragmentManager = null;
-
-    private boolean isAdFree;
 
     public CmlinFragment() {
         // Empty constructor required for fragment subclasses
@@ -54,16 +48,12 @@ public class CmlinFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            isAdFree = getArguments().getBoolean(Constants.IS_AD_FREE, true);
-        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_cmlin, container, false);
         mContext = this.getContext();
-        fragmentManager = getFragmentManager();
 
         initUI();
         readSharedPref();
@@ -136,14 +126,6 @@ public class CmlinFragment extends Fragment {
                 }
             }
         });
-
-        if (!isAdFree) {
-            adFragment = new AdFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            if (fragmentManager != null) {
-                fragmentManager.beginTransaction().add(R.id.ad_frame, adFragment).commit();
-            }
-        }
 
         return viewRoot;
     }
@@ -834,21 +816,6 @@ public class CmlinFragment extends Fragment {
             editTextW.requestFocus();
             editTextG.setText("");
             textInputLayoutG.setError(getString(R.string.synthesize_failed));
-        }
-    }
-
-    public void addAdFragment() {
-        adFragment = new AdFragment();
-        if (fragmentManager != null) {
-            fragmentManager.beginTransaction().replace(R.id.ad_frame, adFragment).commitAllowingStateLoss();
-        }
-    }
-
-    public void removeAdFragment() {
-        if (adFragment != null) {
-            if (fragmentManager != null) {
-                fragmentManager.beginTransaction().remove(adFragment).commit();
-            }
         }
     }
 
