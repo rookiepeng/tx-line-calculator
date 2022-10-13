@@ -17,6 +17,4 @@ Supported transmission lines:
  - Grounded Coplanar Waveguide
  - Coaxial 
 
-### Screenshots
-
 <img src="https://github.com/rookiepeng/tx-line-calculator/blob/master/pics/tx_line.gif" width="300"></a>
