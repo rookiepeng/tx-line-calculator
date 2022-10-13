@@ -3,12 +3,17 @@ package com.rookiedev.microwavetools.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 
 import com.rookiedev.microwavetools.R;
@@ -26,6 +30,8 @@ import com.rookiedev.microwavetools.libs.CmlinModel;
 import com.rookiedev.microwavetools.libs.Constants;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
 public class CmlinFragment extends Fragment {
     private Context mContext;
@@ -59,71 +65,65 @@ public class CmlinFragment extends Fragment {
         readSharedPref();
         setRadioBtn();
 
-        buttonAnalyze.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.analyze_reveal),
-                        Constants.ANALYZE);
-                clearEditTextErrors();
-                if (analysisInputCheck()) {
-                    line.setMetalWidth(Double.parseDouble(editTextW.getText().toString()),
-                            spinnerW.getText().toString());
-                    line.setMetalSpace(Double.parseDouble(editTextG.getText().toString()),
-                            spinnerG.getText().toString());
-                    line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()),
-                            spinnerFreq.getText().toString());
-                    line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
-                    line.setSubHeight(Double.parseDouble(editTextH.getText().toString()),
-                            spinnerH.getText().toString());
-                    line.setMetalThick(0, spinnerT.getText().toString());
+        buttonAnalyze.setOnClickListener(view -> {
+            Constants.refreshAnimation(mContext, viewRoot.findViewById(R.id.analyze_reveal),
+                    Constants.ANALYZE);
+            clearEditTextErrors();
+            if (analysisInputCheck()) {
+                line.setMetalWidth(Double.parseDouble(Objects.requireNonNull(editTextW.getText()).toString()),
+                        spinnerW.getText().toString());
+                line.setMetalSpace(Double.parseDouble(Objects.requireNonNull(editTextG.getText()).toString()),
+                        spinnerG.getText().toString());
+                line.setFrequency(Double.parseDouble(Objects.requireNonNull(editTextFreq.getText()).toString()),
+                        spinnerFreq.getText().toString());
+                line.setSubEpsilon(Double.parseDouble(Objects.requireNonNull(editTextEr.getText()).toString()));
+                line.setSubHeight(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()),
+                        spinnerH.getText().toString());
+                line.setMetalThick(0, spinnerT.getText().toString());
 
-                    if (editTextL.length() != 0) {
-                        line.setMetalLength(Double.parseDouble(editTextL.getText().toString()),
-                                spinnerL.getText().toString());
-                    } else {
-                        line.setMetalLength(0, spinnerL.getText().toString());
-                    }
-
-                    CmlinCalculator cmlin = new CmlinCalculator();
-                    line = cmlin.getAnaResult(line);
-
-                    if (editTextL.length() != 0) {
-                        BigDecimal Eeff_temp = new BigDecimal(line.getPhase());
-                        double Eeff = Eeff_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP)
-                                .doubleValue();
-                        editTextPhs.setText(String.valueOf(Eeff));
-                    } else {
-                        editTextPhs.setText("");
-                    }
-
-                    BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                    double Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    editTextZ0.setText(String.valueOf(Z0));
-
-                    BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
-                    double k = k_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    editTextK.setText(String.valueOf(k));
-
-                    BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
-                    double Z0o = Z0o_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    editTextZ0o.setText(String.valueOf(Z0o));
-
-                    BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
-                    double Z0e = Z0e_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    editTextZ0e.setText(String.valueOf(Z0e));
+                if (editTextL.length() != 0) {
+                    line.setMetalLength(Double.parseDouble(Objects.requireNonNull(editTextL.getText()).toString()),
+                            spinnerL.getText().toString());
+                } else {
+                    line.setMetalLength(0, spinnerL.getText().toString());
                 }
+
+                CmlinCalculator cmlin = new CmlinCalculator();
+                line = cmlin.getAnaResult(line);
+
+                if (editTextL.length() != 0) {
+                    BigDecimal Eeff_temp = BigDecimal.valueOf(line.getPhase());
+                    double Eeff = Eeff_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP)
+                            .doubleValue();
+                    editTextPhs.setText(String.valueOf(Eeff));
+                } else {
+                    editTextPhs.setText("");
+                }
+
+                BigDecimal Z0_temp = BigDecimal.valueOf(line.getImpedance());
+                double Z0 = Z0_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
+                editTextZ0.setText(String.valueOf(Z0));
+
+                BigDecimal k_temp = BigDecimal.valueOf(line.getCouplingFactor());
+                double k = k_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
+                editTextK.setText(String.valueOf(k));
+
+                BigDecimal Z0o_temp = BigDecimal.valueOf(line.getImpedanceOdd());
+                double Z0o = Z0o_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
+                editTextZ0o.setText(String.valueOf(Z0o));
+
+                BigDecimal Z0e_temp = BigDecimal.valueOf(line.getImpedanceEven());
+                double Z0e = Z0e_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
+                editTextZ0e.setText(String.valueOf(Z0e));
             }
         });
 
-        buttonSynthesize.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Constants.refreshAnimation(mContext, (ImageView) viewRoot.findViewById(R.id.synthesize_reveal),
-                        Constants.SYNTHESIZE);
-                clearEditTextErrors();
-                if (synthesizeInputCheck()) {
-                    synthesizeButton();
-                }
+        buttonSynthesize.setOnClickListener(view -> {
+            Constants.refreshAnimation(mContext, viewRoot.findViewById(R.id.synthesize_reveal),
+                    Constants.SYNTHESIZE);
+            clearEditTextErrors();
+            if (synthesizeInputCheck()) {
+                synthesizeButton();
             }
         });
 
@@ -161,7 +161,7 @@ public class CmlinFragment extends Fragment {
         textInputLayoutW = viewRoot.findViewById(R.id.text_input_layout_W);
         editTextW = viewRoot.findViewById(R.id.editText_W);
         editTextW.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        editTextW.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+        editTextW.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_synthesize));
         editTextW.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -183,7 +183,7 @@ public class CmlinFragment extends Fragment {
         textInputLayoutG = viewRoot.findViewById(R.id.text_input_layout_g);
         editTextG = viewRoot.findViewById(R.id.editText_g);
         editTextG.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        editTextG.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+        editTextG.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_synthesize));
         editTextG.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -204,7 +204,7 @@ public class CmlinFragment extends Fragment {
 
         editTextL = viewRoot.findViewById(R.id.editText_L);
         editTextL.setTextColor(ContextCompat.getColor(mContext, R.color.synthesizeColor));
-        editTextL.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_synthesize));
+        editTextL.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_synthesize));
 
         textInputLayoutZ0 = viewRoot.findViewById(R.id.text_input_layout_Z0);
         editTextZ0 = viewRoot.findViewById(R.id.editText_Z0);
@@ -288,7 +288,7 @@ public class CmlinFragment extends Fragment {
 
         editTextPhs = viewRoot.findViewById(R.id.editText_Phs);
         editTextPhs.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-        editTextPhs.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+        editTextPhs.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
 
         textInputLayoutF = viewRoot.findViewById(R.id.text_input_layout_Freq);
         editTextFreq = viewRoot.findViewById(R.id.editText_Freq);
@@ -390,101 +390,89 @@ public class CmlinFragment extends Fragment {
     }
 
     private void setRadioBtn() {
-        radioButtonZ0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                radioButtonZ0.setChecked(true);
-                radioButtonK.setChecked(true);
-                radioButtonZ0o.setChecked(false);
-                radioButtonZ0e.setChecked(false);
-                useZ0k = true;
-                editTextZ0.setEnabled(true);
-                editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextK.setEnabled(true);
-                editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextZ0o.setEnabled(false);
-                editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextZ0e.setEnabled(false);
-                editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextZ0e
-                        .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextZ0o
-                        .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-            }
+        radioButtonZ0.setOnClickListener(arg0 -> {
+            radioButtonZ0.setChecked(true);
+            radioButtonK.setChecked(true);
+            radioButtonZ0o.setChecked(false);
+            radioButtonZ0e.setChecked(false);
+            useZ0k = true;
+            editTextZ0.setEnabled(true);
+            editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            editTextK.setEnabled(true);
+            editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            editTextZ0o.setEnabled(false);
+            editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            editTextZ0e.setEnabled(false);
+            editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextZ0e
+                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0o
+                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
         });
-        radioButtonK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                radioButtonZ0.setChecked(true);
-                radioButtonK.setChecked(true);
-                radioButtonZ0o.setChecked(false);
-                radioButtonZ0e.setChecked(false);
-                useZ0k = true;
-                editTextZ0.setEnabled(true);
-                editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextK.setEnabled(true);
-                editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextZ0o.setEnabled(false);
-                editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextZ0e.setEnabled(false);
-                editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextZ0e
-                        .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextZ0o
-                        .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-            }
+        radioButtonK.setOnClickListener(arg0 -> {
+            radioButtonZ0.setChecked(true);
+            radioButtonK.setChecked(true);
+            radioButtonZ0o.setChecked(false);
+            radioButtonZ0e.setChecked(false);
+            useZ0k = true;
+            editTextZ0.setEnabled(true);
+            editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            editTextK.setEnabled(true);
+            editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            editTextZ0o.setEnabled(false);
+            editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            editTextZ0e.setEnabled(false);
+            editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextZ0e
+                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0o
+                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
         });
-        radioButtonZ0o.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                radioButtonZ0o.setChecked(true);
-                radioButtonZ0e.setChecked(true);
-                radioButtonZ0.setChecked(false);
-                radioButtonK.setChecked(false);
-                useZ0k = false;
-                editTextZ0.setEnabled(false);
-                editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextK.setEnabled(false);
-                editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextZ0o.setEnabled(true);
-                editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextZ0e.setEnabled(true);
-                editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextZ0
-                        .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextK
-                        .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-            }
+        radioButtonZ0o.setOnClickListener(arg0 -> {
+            radioButtonZ0o.setChecked(true);
+            radioButtonZ0e.setChecked(true);
+            radioButtonZ0.setChecked(false);
+            radioButtonK.setChecked(false);
+            useZ0k = false;
+            editTextZ0.setEnabled(false);
+            editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            editTextK.setEnabled(false);
+            editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            editTextZ0o.setEnabled(true);
+            editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            editTextZ0e.setEnabled(true);
+            editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            editTextZ0
+                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextK
+                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
         });
-        radioButtonZ0e.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                radioButtonZ0o.setChecked(true);
-                radioButtonZ0e.setChecked(true);
-                radioButtonZ0.setChecked(false);
-                radioButtonK.setChecked(false);
-                useZ0k = false;
-                editTextZ0.setEnabled(false);
-                editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextK.setEnabled(false);
-                editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-                editTextZ0o.setEnabled(true);
-                editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextZ0e.setEnabled(true);
-                editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-                editTextZ0
-                        .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextK
-                        .setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-                editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-                editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-            }
+        radioButtonZ0e.setOnClickListener(arg0 -> {
+            radioButtonZ0o.setChecked(true);
+            radioButtonZ0e.setChecked(true);
+            radioButtonZ0.setChecked(false);
+            radioButtonK.setChecked(false);
+            useZ0k = false;
+            editTextZ0.setEnabled(false);
+            editTextZ0.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            editTextK.setEnabled(false);
+            editTextK.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
+            editTextZ0o.setEnabled(true);
+            editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            editTextZ0e.setEnabled(true);
+            editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
+            editTextZ0
+                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextK
+                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
         });
         if (useZ0k) {
             radioButtonZ0.setChecked(true);
@@ -499,10 +487,10 @@ public class CmlinFragment extends Fragment {
             editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             editTextZ0e.setEnabled(false);
             editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-            editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-            editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-            editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-            editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+            editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
         } else {
             radioButtonZ0.setChecked(false);
             radioButtonK.setChecked(false);
@@ -516,10 +504,10 @@ public class CmlinFragment extends Fragment {
             editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             editTextZ0e.setEnabled(true);
             editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-            editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-            editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-            editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-            editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
+            editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+            editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
         }
     }
 
@@ -568,24 +556,24 @@ public class CmlinFragment extends Fragment {
                 AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString(Constants.CMLIN_W, editTextW.getText().toString());
+        editor.putString(Constants.CMLIN_W, Objects.requireNonNull(editTextW.getText()).toString());
         editor.putString(Constants.CMLIN_W_UNIT, spinnerW.getText().toString());
-        editor.putString(Constants.CMLIN_S, editTextG.getText().toString());
+        editor.putString(Constants.CMLIN_S, Objects.requireNonNull(editTextG.getText()).toString());
         editor.putString(Constants.CMLIN_S_UNIT, spinnerG.getText().toString());
-        editor.putString(Constants.CMLIN_L, editTextL.getText().toString());
+        editor.putString(Constants.CMLIN_L, Objects.requireNonNull(editTextL.getText()).toString());
         editor.putString(Constants.CMLIN_L_UNIT, spinnerL.getText().toString());
-        editor.putString(Constants.CMLIN_Z0, editTextZ0.getText().toString());
+        editor.putString(Constants.CMLIN_Z0, Objects.requireNonNull(editTextZ0.getText()).toString());
         editor.putString(Constants.CMLIN_Z0_UNIT, spinnerZ0.getText().toString());
-        editor.putString(Constants.CMLIN_K, editTextK.getText().toString());
-        editor.putString(Constants.CMLIN_Z0E, editTextZ0e.getText().toString());
+        editor.putString(Constants.CMLIN_K, Objects.requireNonNull(editTextK.getText()).toString());
+        editor.putString(Constants.CMLIN_Z0E, Objects.requireNonNull(editTextZ0e.getText()).toString());
         editor.putString(Constants.CMLIN_Z0E_UNIT, spinnerZ0e.getText().toString());
         editor.putString(Constants.CMLIN_Z0O_UNIT, spinnerZ0o.getText().toString());
-        editor.putString(Constants.CMLIN_PHS, editTextPhs.getText().toString());
+        editor.putString(Constants.CMLIN_PHS, Objects.requireNonNull(editTextPhs.getText()).toString());
         editor.putString(Constants.CMLIN_PHS_UNIT, spinnerPhs.getText().toString());
-        editor.putString(Constants.CMLIN_FREQ, editTextFreq.getText().toString());
+        editor.putString(Constants.CMLIN_FREQ, Objects.requireNonNull(editTextFreq.getText()).toString());
         editor.putString(Constants.CMLIN_FREQ_UNIT, spinnerFreq.getText().toString());
-        editor.putString(Constants.CMLIN_ER, editTextEr.getText().toString());
-        editor.putString(Constants.CMLIN_H, editTextH.getText().toString());
+        editor.putString(Constants.CMLIN_ER, Objects.requireNonNull(editTextEr.getText()).toString());
+        editor.putString(Constants.CMLIN_H, Objects.requireNonNull(editTextH.getText()).toString());
         editor.putString(Constants.CMLIN_H_UNIT, spinnerH.getText().toString());
 
         if (useZ0k) {
@@ -601,7 +589,7 @@ public class CmlinFragment extends Fragment {
         if (editTextW.length() == 0) {
             textInputLayoutW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(editTextW.getText().toString()),
+        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextW.getText()).toString()),
                 spinnerW.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutW.setError(getText(R.string.unreasonable_value));
             checkResult = false;
@@ -610,7 +598,7 @@ public class CmlinFragment extends Fragment {
         if (editTextG.length() == 0) {
             textInputLayoutG.setError(getText(R.string.Error_S_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(editTextG.getText().toString()),
+        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextG.getText()).toString()),
                 spinnerG.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutG.setError(getText(R.string.unreasonable_value));
             checkResult = false;
@@ -619,7 +607,7 @@ public class CmlinFragment extends Fragment {
         if (editTextFreq.length() == 0) {
             textInputLayoutF.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
-        } else if (Double.parseDouble(editTextFreq.getText().toString()) == 0) {
+        } else if (Double.parseDouble(Objects.requireNonNull(editTextFreq.getText()).toString()) == 0) {
             textInputLayoutF.setError(getText(R.string.error_zero_frequency));
             checkResult = false;
         }
@@ -627,7 +615,7 @@ public class CmlinFragment extends Fragment {
         if (editTextH.length() == 0) {
             textInputLayoutH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(editTextH.getText().toString()),
+        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()),
                 spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
@@ -636,7 +624,7 @@ public class CmlinFragment extends Fragment {
         if (editTextEr.length() == 0) {
             textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
-        } else if (Double.parseDouble(editTextEr.getText().toString()) < 1) {
+        } else if (Double.parseDouble(Objects.requireNonNull(editTextEr.getText()).toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -656,7 +644,7 @@ public class CmlinFragment extends Fragment {
         if (editTextFreq.length() == 0) {
             textInputLayoutF.setError(getText(R.string.Error_Freq_empty));
             checkResult = false;
-        } else if (Double.parseDouble(editTextFreq.getText().toString()) == 0) {
+        } else if (Double.parseDouble(Objects.requireNonNull(editTextFreq.getText()).toString()) == 0) {
             textInputLayoutF.setError(getText(R.string.error_zero_frequency));
             checkResult = false;
         }
@@ -664,7 +652,7 @@ public class CmlinFragment extends Fragment {
         if (editTextH.length() == 0) {
             textInputLayoutH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(editTextH.getText().toString()),
+        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()),
                 spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
@@ -673,7 +661,7 @@ public class CmlinFragment extends Fragment {
         if (editTextEr.length() == 0) {
             textInputLayoutEr.setError(getText(R.string.error_er_empty));
             checkResult = false;
-        } else if (Double.parseDouble(editTextEr.getText().toString()) < 1) {
+        } else if (Double.parseDouble(Objects.requireNonNull(editTextEr.getText()).toString()) < 1) {
             textInputLayoutEr.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -682,7 +670,7 @@ public class CmlinFragment extends Fragment {
             if (editTextZ0.length() == 0) {
                 textInputLayoutZ0.setError(getText(R.string.error_Z0_empty));
                 checkResult = false;
-            } else if (Double.parseDouble(editTextZ0.getText().toString()) == 0) {
+            } else if (Double.parseDouble(Objects.requireNonNull(editTextZ0.getText()).toString()) == 0) {
                 textInputLayoutZ0.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
@@ -690,7 +678,7 @@ public class CmlinFragment extends Fragment {
             if (editTextK.length() == 0) {
                 textInputLayoutK.setError(getText(R.string.Error_k_empty));
                 checkResult = false;
-            } else if (Double.parseDouble(editTextK.getText().toString()) == 0) {
+            } else if (Double.parseDouble(Objects.requireNonNull(editTextK.getText()).toString()) == 0) {
                 textInputLayoutK.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
@@ -698,7 +686,7 @@ public class CmlinFragment extends Fragment {
             if (editTextZ0e.length() == 0) {
                 textInputLayoutZ0e.setError(getText(R.string.error_Z0e_empty));
                 checkResult = false;
-            } else if (Double.parseDouble(editTextZ0e.getText().toString()) == 0) {
+            } else if (Double.parseDouble(Objects.requireNonNull(editTextZ0e.getText()).toString()) == 0) {
                 textInputLayoutZ0e.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
@@ -706,7 +694,7 @@ public class CmlinFragment extends Fragment {
             if (editTextZ0o.length() == 0) {
                 textInputLayoutZ0o.setError(getText(R.string.error_Z0o_empty));
                 checkResult = false;
-            } else if (Double.parseDouble(editTextZ0o.getText().toString()) == 0) {
+            } else if (Double.parseDouble(Objects.requireNonNull(editTextZ0o.getText()).toString()) == 0) {
                 textInputLayoutZ0o.setError(getText(R.string.unreasonable_value));
                 checkResult = false;
             }
@@ -722,25 +710,25 @@ public class CmlinFragment extends Fragment {
 
     private void synthesizeButton() {
         if (useZ0k) {
-            line.setImpedance(Double.parseDouble(editTextZ0.getText().toString()));
-            line.setCouplingFactor(Double.parseDouble(editTextK.getText().toString()));
+            line.setImpedance(Double.parseDouble(Objects.requireNonNull(editTextZ0.getText()).toString()));
+            line.setCouplingFactor(Double.parseDouble(Objects.requireNonNull(editTextK.getText()).toString()));
             line.setImpedanceOdd(0);
             line.setImpedanceEven(0);
         } else {
-            line.setImpedanceEven(Double.parseDouble(editTextZ0e.getText().toString()));
-            line.setImpedanceOdd(Double.parseDouble(editTextZ0o.getText().toString()));
+            line.setImpedanceEven(Double.parseDouble(Objects.requireNonNull(editTextZ0e.getText()).toString()));
+            line.setImpedanceOdd(Double.parseDouble(Objects.requireNonNull(editTextZ0o.getText()).toString()));
             line.setImpedance(0);
             line.setCouplingFactor(0);
         }
 
-        line.setFrequency(Double.parseDouble(editTextFreq.getText().toString()), spinnerFreq.getText().toString());
-        line.setSubEpsilon(Double.parseDouble(editTextEr.getText().toString()));
-        line.setSubHeight(Double.parseDouble(editTextH.getText().toString()), spinnerH.getText().toString());
+        line.setFrequency(Double.parseDouble(Objects.requireNonNull(editTextFreq.getText()).toString()), spinnerFreq.getText().toString());
+        line.setSubEpsilon(Double.parseDouble(Objects.requireNonNull(editTextEr.getText()).toString()));
+        line.setSubHeight(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()), spinnerH.getText().toString());
         line.setMetalThick(0, spinnerT.getText().toString());
 
         double W, S, L;
         if (editTextPhs.length() != 0) {
-            line.setPhase(Double.parseDouble(editTextPhs.getText().toString()));
+            line.setPhase(Double.parseDouble(Objects.requireNonNull(editTextPhs.getText()).toString()));
         } else {
             line.setPhase(0);
         }
@@ -749,9 +737,8 @@ public class CmlinFragment extends Fragment {
 
         if (line.getErrorCode() == Constants.ERROR.NO_ERROR) {
             if (editTextPhs.length() != 0) {
-                BigDecimal L_temp = new BigDecimal(
-                        Constants.meter2others(line.getMetalLength(), spinnerL.getText().toString()));
-                L = L_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                BigDecimal L_temp = BigDecimal.valueOf(Constants.meter2others(line.getMetalLength(), spinnerL.getText().toString()));
+                L = L_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
                 editTextL.setText(String.valueOf(L));
             } else {
                 editTextL.setText("");
@@ -766,35 +753,33 @@ public class CmlinFragment extends Fragment {
                 textInputLayoutG.setError(getString(R.string.synthesize_failed));
                 editTextL.setText("");
             } else {
-                BigDecimal W_temp = new BigDecimal(
-                        Constants.meter2others(line.getMetalWidth(), spinnerW.getText().toString()));
-                W = W_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                BigDecimal W_temp = BigDecimal.valueOf(Constants.meter2others(line.getMetalWidth(), spinnerW.getText().toString()));
+                W = W_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
                 editTextW.setText(String.valueOf(W));
 
-                BigDecimal S_temp = new BigDecimal(
-                        Constants.meter2others(line.getMetalSpace(), spinnerG.getText().toString()));
-                S = S_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                BigDecimal S_temp = BigDecimal.valueOf(Constants.meter2others(line.getMetalSpace(), spinnerG.getText().toString()));
+                S = S_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
                 editTextG.setText(String.valueOf(S));
             }
 
             if (useZ0k) {
                 double Z0e, Z0o;
 
-                BigDecimal Z0o_temp = new BigDecimal(line.getImpedanceOdd());
-                Z0o = Z0o_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                BigDecimal Z0o_temp = BigDecimal.valueOf(line.getImpedanceOdd());
+                Z0o = Z0o_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
                 editTextZ0o.setText(String.valueOf(Z0o));
 
-                BigDecimal Z0e_temp = new BigDecimal(line.getImpedanceEven());
-                Z0e = Z0e_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                BigDecimal Z0e_temp = BigDecimal.valueOf(line.getImpedanceEven());
+                Z0e = Z0e_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
                 editTextZ0e.setText(String.valueOf(Z0e));
             } else {
                 double Z0, k;
 
-                BigDecimal Z0_temp = new BigDecimal(line.getImpedance());
-                Z0 = Z0_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                BigDecimal Z0_temp = BigDecimal.valueOf(line.getImpedance());
+                Z0 = Z0_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
                 editTextZ0.setText(String.valueOf(Z0)); // cut the decimal of the Z0
-                BigDecimal k_temp = new BigDecimal(line.getCouplingFactor());
-                k = k_temp.setScale(Constants.DecimalLength, BigDecimal.ROUND_HALF_UP).doubleValue();
+                BigDecimal k_temp = BigDecimal.valueOf(line.getCouplingFactor());
+                k = k_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
                 editTextK.setText(String.valueOf(k));
             }
         } else if (line.getErrorCode() == Constants.ERROR.K_OUT_OF_RANGE) {
@@ -875,9 +860,9 @@ public class CmlinFragment extends Fragment {
         editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
         editTextZ0e.setEnabled(false);
         editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
-        editTextZ0.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-        editTextK.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze));
-        editTextZ0e.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
-        editTextZ0o.setBackgroundTintList(getResources().getColorStateList(R.color.background_tint_analyze_light));
+        editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+        editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
+        editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+        editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
     }
 }

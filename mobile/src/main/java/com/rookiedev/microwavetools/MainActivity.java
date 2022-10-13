@@ -1,6 +1,6 @@
 package com.rookiedev.microwavetools;
 
-import android.content.DialogInterface;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -61,52 +61,41 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-                alertDialog.setTitle("Reset?");
-                alertDialog.setMessage("Do you want to reset all the values?");
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                //dialog.dismiss();
-                                switch (pos) {
-                                    case Constants.PositionMlin:
-                                        fragmentMlin.resetValues();
-                                        break;
-                                    case Constants.PositionCmlin:
-                                        fragmentCmlin.resetValues();
-                                        break;
-                                    case Constants.PositionSlin:
-                                        fragmentSlin.resetValues();
-                                        break;
-                                    case Constants.PositionCslin:
-                                        fragmentCslin.resetValues();
-                                        break;
-                                    case Constants.PositionCpw:
-                                        fragmentCpw.resetValues();
-                                        break;
-                                    case Constants.PositionGcpw:
-                                        fragmentGcpw.resetValues();
-                                        break;
-                                    case Constants.PositionCoax:
-                                        fragmentCoax.resetValues();
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        });
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-            }
+        fab.setOnClickListener(view -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("Reset?");
+            alertDialog.setMessage("Do you want to reset all the values?");
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                    (dialog, which) -> {
+                        switch (pos) {
+                            case Constants.PositionMlin:
+                                fragmentMlin.resetValues();
+                                break;
+                            case Constants.PositionCmlin:
+                                fragmentCmlin.resetValues();
+                                break;
+                            case Constants.PositionSlin:
+                                fragmentSlin.resetValues();
+                                break;
+                            case Constants.PositionCslin:
+                                fragmentCslin.resetValues();
+                                break;
+                            case Constants.PositionCpw:
+                                fragmentCpw.resetValues();
+                                break;
+                            case Constants.PositionGcpw:
+                                fragmentGcpw.resetValues();
+                                break;
+                            case Constants.PositionCoax:
+                                fragmentCoax.resetValues();
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                    (dialog, which) -> dialog.dismiss());
+            alertDialog.show();
         });
 
         navigationView = findViewById(R.id.nav_view);
@@ -135,58 +124,57 @@ public class MainActivity extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 FragmentTransaction transaction;
                 switch (pos) {
-//                case Constants.PositionMlin:
-                default:
-                    fragmentMlin.setArguments(bundle);
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                    transaction.replace(R.id.content_frame, fragmentMlin);
-                    transaction.commit();
-                    break;
-                case Constants.PositionCmlin:
-                    fragmentCmlin.setArguments(bundle);
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                    transaction.replace(R.id.content_frame, fragmentCmlin);
-                    transaction.commit();
-                    break;
-                case Constants.PositionSlin:
-                    fragmentSlin.setArguments(bundle);
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                    transaction.replace(R.id.content_frame, fragmentSlin);
-                    transaction.commit();
-                    break;
-                case Constants.PositionCslin:
-                    fragmentCslin.setArguments(bundle);
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                    transaction.replace(R.id.content_frame, fragmentCslin);
-                    transaction.commit();
-                    break;
-                case Constants.PositionCpw:
-                    bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
-                    fragmentCpw.setArguments(bundle);
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                    transaction.replace(R.id.content_frame, fragmentCpw);
-                    transaction.commit();
-                    break;
-                case Constants.PositionGcpw:
-                    bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
-                    fragmentGcpw.setArguments(bundle);
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                    transaction.replace(R.id.content_frame, fragmentGcpw);
-                    transaction.commit();
-                    break;
-                case Constants.PositionCoax:
-                    fragmentCoax.setArguments(bundle);
-                    transaction = fragmentManager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                    transaction.replace(R.id.content_frame, fragmentCoax);
-                    transaction.commit();
-                    break;
+                    default:
+                        fragmentMlin.setArguments(bundle);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                        transaction.replace(R.id.content_frame, fragmentMlin);
+                        transaction.commit();
+                        break;
+                    case Constants.PositionCmlin:
+                        fragmentCmlin.setArguments(bundle);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                        transaction.replace(R.id.content_frame, fragmentCmlin);
+                        transaction.commit();
+                        break;
+                    case Constants.PositionSlin:
+                        fragmentSlin.setArguments(bundle);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                        transaction.replace(R.id.content_frame, fragmentSlin);
+                        transaction.commit();
+                        break;
+                    case Constants.PositionCslin:
+                        fragmentCslin.setArguments(bundle);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                        transaction.replace(R.id.content_frame, fragmentCslin);
+                        transaction.commit();
+                        break;
+                    case Constants.PositionCpw:
+                        bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
+                        fragmentCpw.setArguments(bundle);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                        transaction.replace(R.id.content_frame, fragmentCpw);
+                        transaction.commit();
+                        break;
+                    case Constants.PositionGcpw:
+                        bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
+                        fragmentGcpw.setArguments(bundle);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                        transaction.replace(R.id.content_frame, fragmentGcpw);
+                        transaction.commit();
+                        break;
+                    case Constants.PositionCoax:
+                        fragmentCoax.setArguments(bundle);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                        transaction.replace(R.id.content_frame, fragmentCoax);
+                        transaction.commit();
+                        break;
                 }
 
                 mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
@@ -233,23 +221,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action buttons
-        switch (item.getItemId()) {
-        case R.id.menu_help:
+        if (item.getItemId() == R.id.menu_help) {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL, new String[] { "rookie.dev@gmail.com" });
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"rookie.dev@gmail.com"});
             i.putExtra(Intent.EXTRA_SUBJECT, "");
             i.putExtra(Intent.EXTRA_TEXT, "");
             try {
                 startActivity(Intent.createChooser(i, "Send email ..."));
-            } catch (android.content.ActivityNotFoundException ex) {
+            } catch (ActivityNotFoundException ex) {
                 Toast.makeText(this, getResources().getString(R.string.noEmail), Toast.LENGTH_SHORT)
                         .show();
             }
             return true;
-        default:
-            return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -283,62 +269,61 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-//        case R.id.nav_mlin:
-        default:
-            if (fragmentMlin == null) {
-                fragmentMlin = new MlinFragment();
-            }
-            pos = Constants.PositionMlin;
-            imageResource = R.drawable.vt_mlin;
-            break;
-        case R.id.nav_cmlin:
-            if (fragmentCmlin == null) {
-                fragmentCmlin = new CmlinFragment();
-            }
-            pos = Constants.PositionCmlin;
-            imageResource = R.drawable.vt_cmlin;
-            break;
-        case R.id.nav_slin:
-            if (fragmentSlin == null) {
-                fragmentSlin = new SlinFragment();
-            }
-            pos = Constants.PositionSlin;
-            imageResource = R.drawable.vt_slin;
-            break;
-        case R.id.nav_cslin:
-            if (fragmentCslin == null) {
-                fragmentCslin = new CslinFragment();
-            }
-            pos = Constants.PositionCslin;
-            imageResource = R.drawable.vt_cslin;
-            break;
-        case R.id.nav_cpw:
-            if (fragmentCpw == null) {
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
-                fragmentCpw = new CpwFragment();
-                fragmentCpw.setArguments(bundle);
-            }
-            pos = Constants.PositionCpw;
-            imageResource = R.drawable.vt_cpw;
-            break;
-        case R.id.nav_gcpw:
-            if (fragmentGcpw == null) {
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
-                fragmentGcpw = new CpwFragment();
-                fragmentGcpw.setArguments(bundle);
-            }
-            pos = Constants.PositionGcpw;
-            imageResource = R.drawable.vt_cpwg;
-            break;
-        case R.id.nav_coax:
-            if (fragmentCoax == null) {
-                fragmentCoax = new CoaxFragment();
-            }
-            pos = Constants.PositionCoax;
-            imageResource = R.drawable.vt_coax;
-            break;
+            default:
+                if (fragmentMlin == null) {
+                    fragmentMlin = new MlinFragment();
+                }
+                pos = Constants.PositionMlin;
+                imageResource = R.drawable.vt_mlin;
+                break;
+            case R.id.nav_cmlin:
+                if (fragmentCmlin == null) {
+                    fragmentCmlin = new CmlinFragment();
+                }
+                pos = Constants.PositionCmlin;
+                imageResource = R.drawable.vt_cmlin;
+                break;
+            case R.id.nav_slin:
+                if (fragmentSlin == null) {
+                    fragmentSlin = new SlinFragment();
+                }
+                pos = Constants.PositionSlin;
+                imageResource = R.drawable.vt_slin;
+                break;
+            case R.id.nav_cslin:
+                if (fragmentCslin == null) {
+                    fragmentCslin = new CslinFragment();
+                }
+                pos = Constants.PositionCslin;
+                imageResource = R.drawable.vt_cslin;
+                break;
+            case R.id.nav_cpw:
+                if (fragmentCpw == null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
+                    fragmentCpw = new CpwFragment();
+                    fragmentCpw.setArguments(bundle);
+                }
+                pos = Constants.PositionCpw;
+                imageResource = R.drawable.vt_cpw;
+                break;
+            case R.id.nav_gcpw:
+                if (fragmentGcpw == null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
+                    fragmentGcpw = new CpwFragment();
+                    fragmentGcpw.setArguments(bundle);
+                }
+                pos = Constants.PositionGcpw;
+                imageResource = R.drawable.vt_cpwg;
+                break;
+            case R.id.nav_coax:
+                if (fragmentCoax == null) {
+                    fragmentCoax = new CoaxFragment();
+                }
+                pos = Constants.PositionCoax;
+                imageResource = R.drawable.vt_coax;
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -348,58 +333,57 @@ public class MainActivity extends AppCompatActivity
     private void initFragment(int item) {
         Bundle bundle = new Bundle();
         switch (item) {
-//        case Constants.PositionMlin:
-        default:
-            fragmentMlin = new MlinFragment();
-            pos = Constants.PositionMlin;
-            imageResource = R.drawable.vt_mlin;
-            fragmentMlin.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
-            break;
-        case Constants.PositionCmlin:
-            fragmentCmlin = new CmlinFragment();
-            pos = Constants.PositionCmlin;
-            imageResource = R.drawable.vt_cmlin;
-            fragmentCmlin.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCmlin).commit();
-            break;
-        case Constants.PositionSlin:
-            fragmentSlin = new SlinFragment();
-            pos = Constants.PositionSlin;
-            imageResource = R.drawable.vt_slin;
-            fragmentSlin.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentSlin).commit();
-            break;
-        case Constants.PositionCslin:
-            fragmentCslin = new CslinFragment();
-            pos = Constants.PositionCslin;
-            imageResource = R.drawable.vt_cslin;
-            fragmentCslin.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCslin).commit();
-            break;
-        case Constants.PositionCpw:
-            bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
-            fragmentCpw = new CpwFragment();
-            fragmentCpw.setArguments(bundle);
-            pos = Constants.PositionCpw;
-            imageResource = R.drawable.vt_cpw;
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCpw).commit();
-            break;
-        case Constants.PositionGcpw:
-            bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
-            fragmentGcpw = new CpwFragment();
-            fragmentGcpw.setArguments(bundle);
-            pos = Constants.PositionGcpw;
-            imageResource = R.drawable.vt_cpwg;
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentGcpw).commit();
-            break;
-        case Constants.PositionCoax:
-            fragmentCoax = new CoaxFragment();
-            pos = Constants.PositionCoax;
-            imageResource = R.drawable.vt_coax;
-            fragmentCoax.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCoax).commit();
-            break;
+            default:
+                fragmentMlin = new MlinFragment();
+                pos = Constants.PositionMlin;
+                imageResource = R.drawable.vt_mlin;
+                fragmentMlin.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
+                break;
+            case Constants.PositionCmlin:
+                fragmentCmlin = new CmlinFragment();
+                pos = Constants.PositionCmlin;
+                imageResource = R.drawable.vt_cmlin;
+                fragmentCmlin.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCmlin).commit();
+                break;
+            case Constants.PositionSlin:
+                fragmentSlin = new SlinFragment();
+                pos = Constants.PositionSlin;
+                imageResource = R.drawable.vt_slin;
+                fragmentSlin.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentSlin).commit();
+                break;
+            case Constants.PositionCslin:
+                fragmentCslin = new CslinFragment();
+                pos = Constants.PositionCslin;
+                imageResource = R.drawable.vt_cslin;
+                fragmentCslin.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCslin).commit();
+                break;
+            case Constants.PositionCpw:
+                bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
+                fragmentCpw = new CpwFragment();
+                fragmentCpw.setArguments(bundle);
+                pos = Constants.PositionCpw;
+                imageResource = R.drawable.vt_cpw;
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCpw).commit();
+                break;
+            case Constants.PositionGcpw:
+                bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
+                fragmentGcpw = new CpwFragment();
+                fragmentGcpw.setArguments(bundle);
+                pos = Constants.PositionGcpw;
+                imageResource = R.drawable.vt_cpwg;
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentGcpw).commit();
+                break;
+            case Constants.PositionCoax:
+                fragmentCoax = new CoaxFragment();
+                pos = Constants.PositionCoax;
+                imageResource = R.drawable.vt_coax;
+                fragmentCoax.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCoax).commit();
+                break;
         }
     }
 
