@@ -80,7 +80,7 @@ public class SlinCalculator {
         double var = 0, varmax = 0, varmin = 0, varold = 0;
 
         // errors due to the above values for the optimization variable
-        double err = 0, errmax = 0, errmin = 0, errold = 0;
+        double err = 0, errmax, errmin, errold = 0;
 
         // derivative
         double deriv;
