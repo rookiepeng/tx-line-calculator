@@ -1,8 +1,8 @@
 package com.rookiedev.microwavetools.libs;
 
 public class CmlinModel {
-    private SubstrateModel substrate;
-    private MetalModel metal;
+    private final SubstrateModel substrate;
+    private final MetalModel metal;
     private double metalSpace;
     private double impedance, phase; // ohms, degree
     private double impedanceEven, impedanceOdd, couplingFactor;

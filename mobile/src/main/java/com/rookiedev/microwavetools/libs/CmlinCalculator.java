@@ -113,7 +113,7 @@ public class CmlinCalculator {
             // For best accuracy 0.1 < g < 10.0
             line.setWarningCode(Constants.WARNING.SPACE2HEIGHT_OUT_OF_RANGE);
         }
-        if ((dielectric < 1.0) || (dielectric > 18.0)) {
+        if (dielectric > 18.0) {
             // Warning: er is outside the range for highly accurate results
             // For best accuracy 1.0 < er < 18.0
             line.setWarningCode(Constants.WARNING.DIELECTRIC_OUT_OF_RANGE);
@@ -330,11 +330,11 @@ public class CmlinCalculator {
                     * (1.0 + 2.333 * (Math.pow((dielectric - 1.0), 2.0)) / (5.0 + Math.pow((dielectric - 1.0), 2.0)));
         } else {
             Q29 = 15.16 / (1.0 + 0.196);
-            Q28 = 0.149 / (94.5 + 0.038 * 1.0);
+            Q28 = 0.149 / (94.5 + 0.038);
             Q27 = 0.4 * Math.pow(spaceToHeight, 0.84) * (1.0 + 2.5 / (5.0 + 1.0));
             Q26 = 30.0 - 22.2 * ((1.0) / (1.0 + 3.0)) - Q29;
             Q25 = (0.3 * frequencyToHeight * frequencyToHeight / (10.0 + frequencyToHeight * frequencyToHeight))
-                    * (1.0 + 2.333 * (1.0) / (5.0 + 1.0));
+                    * (1.0 + 2.333 / (5.0 + 1.0));
         }
         Q24 = 2.506 * Q28 * Math.pow(widthToHeight, 0.894)
                 * (Math.pow(((1.0 + 1.3 * widthToHeight) * frequencyToHeight / 99.25), 4.29))
@@ -383,21 +383,21 @@ public class CmlinCalculator {
 
     private CmlinModel Synthesize(CmlinModel line, boolean use_z0k) {
 
-        double h, er, l, wmin, wmax, abstol, reltol;
+        double h, er, l;
         int maxiters;
         double z0, w;
         int iters;
         boolean done;
         double electricalLength; // degree
 
-        double s, smin, smax, z0e, z0o, k;
-        double loss, kev, kodd, delta, cval, err, d;
+        double s, z0e, z0o, k;
+        double delta, cval, err, d;
 
         double AW, F1, F2, F3;
 
-        double ai[] = { 1, -0.301, 3.209, -27.282, 56.609, -37.746 };
-        double bi[] = { 0.020, -0.623, 17.192, -68.946, 104.740, -16.148 };
-        double ci[] = { 0.002, -0.347, 7.171, -36.910, 76.132, -51.616 };
+        double[] ai = { 1, -0.301, 3.209, -27.282, 56.609, -37.746 };
+        double[] bi = { 0.020, -0.623, 17.192, -68.946, 104.740, -16.148 };
+        double[] ci = { 0.002, -0.347, 7.171, -36.910, 76.132, -51.616 };
 
         int i;
         double dw, ds;
@@ -462,7 +462,7 @@ public class CmlinCalculator {
 
         F3 = 0;
         for (i = 0; i <= 5; i++) {
-            F3 = F3 + (bi[i] - ci[i] * (9.6 - er)) * Math.pow((0.6 - k), (double) (i));
+            F3 = F3 + (bi[i] - ci[i] * (9.6 - er)) * Math.pow((0.6 - k), i);
         }
 
         w = h * Math.abs(F1 * F2);
