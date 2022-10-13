@@ -19,4 +19,4 @@ Supported transmission lines:
 
 ### Screenshots
 
-<img src="https://github.com/rookiepeng/tx-line-calculator/blob/master/pics/Tx-Line.gif?raw=true" width="300"></a>
+https://user-images.githubusercontent.com/471808/195701743-735c3ce3-2eec-46ff-b7aa-679990f71a23.mp4
