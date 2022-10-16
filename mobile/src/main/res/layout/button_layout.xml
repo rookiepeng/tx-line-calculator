@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="16dp"
     android:fitsSystemWindows="false">
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/button_syn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="16dp"
         android:padding="16dp"
         android:text="@string/Syn_button"
+        android:layout_weight="1"
         app:icon="@drawable/ic_arrow_upward"
         app:backgroundTint="@color/synthesizeColor"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,13 +29,13 @@
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/button_ana"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="10dp"
         android:padding="16dp"
         android:text="@string/Ana_button"
+        android:layout_weight="1"
         app:icon="@drawable/ic_arrow_downward"
         app:backgroundTint="@color/analyzeColor"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,4 +43,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_syn"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
