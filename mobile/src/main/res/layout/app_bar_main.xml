@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:contentDescription="RF Line Plots"/>
+                android:contentDescription="@string/rf_line_plots"/>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -53,8 +53,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/secondaryColor"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_restore_white_24dp" />
+        app:srcCompat="@drawable/ic_restore_white_24dp"
+        android:contentDescription="@string/reset" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
