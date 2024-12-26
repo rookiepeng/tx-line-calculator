@@ -1,0 +1,50 @@
+<resources>
+    <style name="AppTheme.Synthesize" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/synthesize_theme_primary</item>
+        <item name="colorOnPrimary">@color/synthesize_theme_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/synthesize_theme_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/synthesize_theme_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/synthesize_theme_secondary</item>
+        <item name="colorOnSecondary">@color/synthesize_theme_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/synthesize_theme_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/synthesize_theme_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/synthesize_theme_tertiary</item>
+        <item name="colorOnTertiary">@color/synthesize_theme_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/synthesize_theme_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/synthesize_theme_onTertiaryContainer</item>
+        <item name="colorError">@color/synthesize_theme_error</item>
+        <item name="colorOnError">@color/synthesize_theme_onError</item>
+        <item name="colorErrorContainer">@color/synthesize_theme_errorContainer</item>
+        <item name="colorOnErrorContainer">@color/synthesize_theme_onErrorContainer</item>
+        <item name="android:colorBackground">@color/synthesize_theme_background</item>
+        <item name="colorOnBackground">@color/synthesize_theme_onBackground</item>
+        <item name="colorSurface">@color/synthesize_theme_surface</item>
+        <item name="colorOnSurface">@color/synthesize_theme_onSurface</item>
+        <item name="colorSurfaceVariant">@color/synthesize_theme_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/synthesize_theme_onSurfaceVariant</item>
+        <item name="colorOutline">@color/synthesize_theme_outline</item>
+        <item name="colorOutlineVariant">@color/synthesize_theme_outlineVariant</item>
+        <item name="colorSurfaceInverse">@color/synthesize_theme_inverseSurface</item>
+        <item name="colorOnSurfaceInverse">@color/synthesize_theme_inverseOnSurface</item>
+        <item name="colorPrimaryInverse">@color/synthesize_theme_inversePrimary</item>
+        <item name="colorPrimaryFixed">@color/synthesize_theme_primaryFixed</item>
+        <item name="colorOnPrimaryFixed">@color/synthesize_theme_onPrimaryFixed</item>
+        <item name="colorPrimaryFixedDim">@color/synthesize_theme_primaryFixedDim</item>
+        <item name="colorOnPrimaryFixedVariant">@color/synthesize_theme_onPrimaryFixedVariant</item>
+        <item name="colorSecondaryFixed">@color/synthesize_theme_secondaryFixed</item>
+        <item name="colorOnSecondaryFixed">@color/synthesize_theme_onSecondaryFixed</item>
+        <item name="colorSecondaryFixedDim">@color/synthesize_theme_secondaryFixedDim</item>
+        <item name="colorOnSecondaryFixedVariant">@color/synthesize_theme_onSecondaryFixedVariant</item>
+        <item name="colorTertiaryFixed">@color/synthesize_theme_tertiaryFixed</item>
+        <item name="colorOnTertiaryFixed">@color/synthesize_theme_onTertiaryFixed</item>
+        <item name="colorTertiaryFixedDim">@color/synthesize_theme_tertiaryFixedDim</item>
+        <item name="colorOnTertiaryFixedVariant">@color/synthesize_theme_onTertiaryFixedVariant</item>
+        <item name="colorSurfaceDim">@color/synthesize_theme_surfaceDim</item>
+        <item name="colorSurfaceBright">@color/synthesize_theme_surfaceBright</item>
+        <item name="colorSurfaceContainerLowest">@color/synthesize_theme_surfaceContainerLowest</item>
+        <item name="colorSurfaceContainerLow">@color/synthesize_theme_surfaceContainerLow</item>
+        <item name="colorSurfaceContainer">@color/synthesize_theme_surfaceContainer</item>
+        <item name="colorSurfaceContainerHigh">@color/synthesize_theme_surfaceContainerHigh</item>
+        <item name="colorSurfaceContainerHighest">@color/synthesize_theme_surfaceContainerHighest</item>
+    </style>
+</resources>

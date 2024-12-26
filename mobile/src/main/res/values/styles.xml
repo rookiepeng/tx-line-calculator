@@ -10,12 +10,4 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="SynthesizeCardTheme" parent="AppTheme">
-        <item name="colorAccent">@color/synthesizeColorLight</item>
-    </style>
-
-    <style name="AnalyzeCardTheme" parent="AppTheme">
-        <item name="colorAccent">@color/analyzeColorLight</item>
-    </style>
-
 </resources>
