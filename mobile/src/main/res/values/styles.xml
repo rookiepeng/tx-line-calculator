@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="SynthesizeHintTextStyle" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/synthesizeColorLight</item>
         <item name="android:textSize">14sp</item>
@@ -29,15 +10,11 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="SynthesizeCardTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+    <style name="SynthesizeCardTheme" parent="AppTheme">
         <item name="colorAccent">@color/synthesizeColorLight</item>
     </style>
 
-    <style name="AnalyzeCardTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+    <style name="AnalyzeCardTheme" parent="AppTheme">
         <item name="colorAccent">@color/analyzeColorLight</item>
     </style>
 
