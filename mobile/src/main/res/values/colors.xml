@@ -2,8 +2,6 @@
 <resources>
     <color name="overlayBackground">#80808080</color>
 
-    <color name="viewBackground">#FFFFFF</color>
-
     <color name="hintColor">#757575</color>
 
     <color name="synthesizeColor">#43a047</color>
