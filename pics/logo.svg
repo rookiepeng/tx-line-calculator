@@ -18,6 +18,8 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs1" />
   <metadata
      id="metadata17">
     <rdf:RDF>
@@ -58,13 +60,6 @@
      inkscape:window-maximized="1" />
   <title
      id="title6">ic_launcher</title>
-  <rect
-     style="fill:#f0f0f0;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-dasharray:3, 3"
-     id="rect1"
-     width="600"
-     height="600"
-     x="0"
-     y="0" />
   <rect
      ry="10"
      rx="10"
