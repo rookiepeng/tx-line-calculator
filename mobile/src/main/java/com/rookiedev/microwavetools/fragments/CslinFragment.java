@@ -3,17 +3,6 @@ package com.rookiedev.microwavetools.fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,6 +12,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.RadioButton;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.rookiedev.microwavetools.R;
 import com.rookiedev.microwavetools.libs.Constants;
 import com.rookiedev.microwavetools.libs.CslinCalculator;
@@ -35,13 +32,10 @@ import java.util.Objects;
 public class CslinFragment extends Fragment {
     private Context mContext;
     private View viewRoot;
-    private TextInputEditText editTextW, editTextG, editTextL, editTextZ0, editTextK, editTextZ0o, editTextZ0e,
-            editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
-    private TextInputLayout textInputLayoutT, textInputLayoutH, textInputLayoutW, textInputLayoutG, textInputLayoutZ0,
-            textInputLayoutK, textInputLayoutZ0o, textInputLayoutZ0e, textInputLayoutEr, textInputLayoutF;
+    private TextInputEditText editTextW, editTextG, editTextL, editTextZ0, editTextK, editTextZ0o, editTextZ0e, editTextPhs, editTextFreq, editTextT, editTextH, editTextEr;
+    private TextInputLayout textInputLayoutT, textInputLayoutH, textInputLayoutW, textInputLayoutG, textInputLayoutZ0, textInputLayoutK, textInputLayoutZ0o, textInputLayoutZ0e, textInputLayoutEr, textInputLayoutF;
     private Button buttonSynthesize, buttonAnalyze;
-    private AutoCompleteTextView spinnerW, spinnerG, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerZ0o, spinnerZ0e, spinnerPhs,
-            spinnerFreq;
+    private AutoCompleteTextView spinnerW, spinnerG, spinnerL, spinnerT, spinnerH, spinnerZ0, spinnerZ0o, spinnerZ0e, spinnerPhs, spinnerFreq;
     private RadioButton radioButtonZ0, radioButtonZ0o, radioButtonK, radioButtonZ0e;
     private boolean useZ0k; // calculate with Z0, k, or Z0e, Z0o
     private CslinModel line;
@@ -65,25 +59,18 @@ public class CslinFragment extends Fragment {
         setRadioBtn();
 
         buttonAnalyze.setOnClickListener(view -> {
-            Constants.refreshAnimation(mContext, viewRoot.findViewById(R.id.analyze_reveal),
-                    Constants.ANALYZE);
+            Constants.refreshAnimation(mContext, viewRoot.findViewById(R.id.analyze_reveal), Constants.ANALYZE);
             clearEditTextErrors();
             if (analysisInputCheck()) {
-                line.setMetalWidth(Double.parseDouble(Objects.requireNonNull(editTextW.getText()).toString()),
-                        spinnerW.getText().toString());
-                line.setMetalSpace(Double.parseDouble(Objects.requireNonNull(editTextG.getText()).toString()),
-                        spinnerG.getText().toString());
-                line.setFrequency(Double.parseDouble(Objects.requireNonNull(editTextFreq.getText()).toString()),
-                        spinnerFreq.getText().toString());
+                line.setMetalWidth(Double.parseDouble(Objects.requireNonNull(editTextW.getText()).toString()), spinnerW.getText().toString());
+                line.setMetalSpace(Double.parseDouble(Objects.requireNonNull(editTextG.getText()).toString()), spinnerG.getText().toString());
+                line.setFrequency(Double.parseDouble(Objects.requireNonNull(editTextFreq.getText()).toString()), spinnerFreq.getText().toString());
                 line.setSubEpsilon(Double.parseDouble(Objects.requireNonNull(editTextEr.getText()).toString()));
-                line.setSubHeight(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()),
-                        spinnerH.getText().toString());
-                line.setMetalThick(Double.parseDouble(Objects.requireNonNull(editTextT.getText()).toString()),
-                        spinnerT.getText().toString());
+                line.setSubHeight(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()), spinnerH.getText().toString());
+                line.setMetalThick(Double.parseDouble(Objects.requireNonNull(editTextT.getText()).toString()), spinnerT.getText().toString());
 
                 if (editTextL.length() != 0) {
-                    line.setMetalLength(Double.parseDouble(Objects.requireNonNull(editTextL.getText()).toString()),
-                            spinnerL.getText().toString());
+                    line.setMetalLength(Double.parseDouble(Objects.requireNonNull(editTextL.getText()).toString()), spinnerL.getText().toString());
                 } else {
                     line.setMetalLength(0, spinnerL.getText().toString());
                 }
@@ -93,8 +80,7 @@ public class CslinFragment extends Fragment {
 
                 if (editTextL.length() != 0) {
                     BigDecimal Eeff_temp = BigDecimal.valueOf(line.getPhase());
-                    double Eeff = Eeff_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP)
-                            .doubleValue();
+                    double Eeff = Eeff_temp.setScale(Constants.DecimalLength, RoundingMode.HALF_UP).doubleValue();
                     editTextPhs.setText(String.valueOf(Eeff));
                 } else {
                     editTextPhs.setText("");
@@ -119,8 +105,7 @@ public class CslinFragment extends Fragment {
         });
 
         buttonSynthesize.setOnClickListener(view -> {
-            Constants.refreshAnimation(mContext, viewRoot.findViewById(R.id.synthesize_reveal),
-                    Constants.SYNTHESIZE);
+            Constants.refreshAnimation(mContext, viewRoot.findViewById(R.id.synthesize_reveal), Constants.SYNTHESIZE);
             clearEditTextErrors();
             if (synthesizeInputCheck()) {
                 synthesizeButton();
@@ -422,10 +407,8 @@ public class CslinFragment extends Fragment {
             editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
             editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
-            editTextZ0e
-                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
-            editTextZ0o
-                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
         });
         radioButtonK.setOnClickListener(arg0 -> {
             radioButtonZ0.setChecked(true);
@@ -443,10 +426,8 @@ public class CslinFragment extends Fragment {
             editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColorLight));
             editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
             editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
-            editTextZ0e
-                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
-            editTextZ0o
-                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
         });
         radioButtonZ0o.setOnClickListener(arg0 -> {
             radioButtonZ0o.setChecked(true);
@@ -462,10 +443,8 @@ public class CslinFragment extends Fragment {
             editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             editTextZ0e.setEnabled(true);
             editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-            editTextZ0
-                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
-            editTextK
-                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
             editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
             editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
         });
@@ -483,10 +462,8 @@ public class CslinFragment extends Fragment {
             editTextZ0o.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
             editTextZ0e.setEnabled(true);
             editTextZ0e.setTextColor(ContextCompat.getColor(mContext, R.color.analyzeColor));
-            editTextZ0
-                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
-            editTextK
-                    .setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextZ0.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
+            editTextK.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze_light));
             editTextZ0e.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
             editTextZ0o.setBackgroundTintList(AppCompatResources.getColorStateList(mContext, R.color.background_tint_analyze));
         });
@@ -528,8 +505,7 @@ public class CslinFragment extends Fragment {
     }
 
     private void readSharedPref() {
-        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
+        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
 
         editTextW.setText(prefs.getString(Constants.CSLIN_W, "0.59"));
         spinnerW.setText(Constants.validateUnit(Constants.adapterDimensionUnits(mContext), prefs.getString(Constants.CSLIN_W_UNIT, Constants.LengthUnit_mm)), false);
@@ -571,8 +547,7 @@ public class CslinFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE);
+        SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putString(Constants.CSLIN_W, Objects.requireNonNull(editTextW.getText()).toString());
@@ -610,8 +585,7 @@ public class CslinFragment extends Fragment {
         if (editTextW.length() == 0) {
             textInputLayoutW.setError(getText(R.string.Error_W_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextW.getText()).toString()),
-                spinnerW.getText().toString()) < Constants.MINI_LIMIT) {
+        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextW.getText()).toString()), spinnerW.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutW.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -619,8 +593,7 @@ public class CslinFragment extends Fragment {
         if (editTextG.length() == 0) {
             textInputLayoutG.setError(getText(R.string.Error_S_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextG.getText()).toString()),
-                spinnerG.getText().toString()) < Constants.MINI_LIMIT) {
+        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextG.getText()).toString()), spinnerG.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutG.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -636,8 +609,7 @@ public class CslinFragment extends Fragment {
         if (editTextH.length() == 0) {
             textInputLayoutH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()),
-                spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
+        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()), spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -679,8 +651,7 @@ public class CslinFragment extends Fragment {
         if (editTextH.length() == 0) {
             textInputLayoutH.setError(getText(R.string.Error_H_empty));
             checkResult = false;
-        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()),
-                spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
+        } else if (Constants.value2meter(Double.parseDouble(Objects.requireNonNull(editTextH.getText()).toString()), spinnerH.getText().toString()) < Constants.MINI_LIMIT) {
             textInputLayoutH.setError(getText(R.string.unreasonable_value));
             checkResult = false;
         }
@@ -775,8 +746,7 @@ public class CslinFragment extends Fragment {
                 editTextL.setText("");
             }
 
-            if ((Double.isNaN(line.getMetalWidth()) || Double.isInfinite(line.getMetalWidth()))
-                    || (Double.isNaN(line.getMetalSpace()) || Double.isInfinite(line.getMetalSpace()))) {
+            if ((Double.isNaN(line.getMetalWidth()) || Double.isInfinite(line.getMetalWidth())) || (Double.isNaN(line.getMetalSpace()) || Double.isInfinite(line.getMetalSpace()))) {
                 editTextW.setText("");
                 textInputLayoutW.setError(getString(R.string.synthesize_failed));
                 editTextW.requestFocus();

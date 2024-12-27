@@ -34,8 +34,7 @@ import com.rookiedev.microwavetools.fragments.SlinFragment;
 import com.rookiedev.microwavetools.libs.Constants;
 
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private int pos;
     private DrawerLayout drawer;
@@ -60,43 +59,41 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
             alertDialog.setTitle("Reset?");
             alertDialog.setMessage("Do you want to reset all the values?");
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
-                    (dialog, which) -> {
-                        switch (pos) {
-                            case Constants.PositionMlin:
-                                fragmentMlin.resetValues();
-                                break;
-                            case Constants.PositionCmlin:
-                                fragmentCmlin.resetValues();
-                                break;
-                            case Constants.PositionSlin:
-                                fragmentSlin.resetValues();
-                                break;
-                            case Constants.PositionCslin:
-                                fragmentCslin.resetValues();
-                                break;
-                            case Constants.PositionCpw:
-                                fragmentCpw.resetValues();
-                                break;
-                            case Constants.PositionGcpw:
-                                fragmentGcpw.resetValues();
-                                break;
-                            case Constants.PositionCoax:
-                                fragmentCoax.resetValues();
-                                break;
-                            default:
-                                break;
-                        }
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
-                    (dialog, which) -> dialog.dismiss());
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", (dialog, which) -> {
+                switch (pos) {
+                    case Constants.PositionMlin:
+                        fragmentMlin.resetValues();
+                        break;
+                    case Constants.PositionCmlin:
+                        fragmentCmlin.resetValues();
+                        break;
+                    case Constants.PositionSlin:
+                        fragmentSlin.resetValues();
+                        break;
+                    case Constants.PositionCslin:
+                        fragmentCslin.resetValues();
+                        break;
+                    case Constants.PositionCpw:
+                        fragmentCpw.resetValues();
+                        break;
+                    case Constants.PositionGcpw:
+                        fragmentGcpw.resetValues();
+                        break;
+                    case Constants.PositionCoax:
+                        fragmentCoax.resetValues();
+                        break;
+                    default:
+                        break;
+                }
+            });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.dismiss());
             alertDialog.show();
         });
 
@@ -111,8 +108,7 @@ public class MainActivity extends AppCompatActivity
         fragmentManager = getSupportFragmentManager();
 
         drawer = findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close) {
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
             }
@@ -126,13 +122,6 @@ public class MainActivity extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 FragmentTransaction transaction;
                 switch (pos) {
-                    default:
-                        fragmentMlin.setArguments(bundle);
-                        transaction = fragmentManager.beginTransaction();
-                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                        transaction.replace(R.id.content_frame, fragmentMlin);
-                        transaction.commit();
-                        break;
                     case Constants.PositionCmlin:
                         fragmentCmlin.setArguments(bundle);
                         transaction = fragmentManager.beginTransaction();
@@ -177,15 +166,19 @@ public class MainActivity extends AppCompatActivity
                         transaction.replace(R.id.content_frame, fragmentCoax);
                         transaction.commit();
                         break;
+                    default:
+                        fragmentMlin.setArguments(bundle);
+                        transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                        transaction.replace(R.id.content_frame, fragmentMlin);
+                        transaction.commit();
+                        break;
                 }
 
                 mCollapsingToolbarLayout.setTitle(navigationView.getMenu().getItem(pos).getTitle());
                 imageModel.setImageResource(imageResource);
             }
 
-            @Override
-            public void onDrawerStateChanged(int newState) {
-            }
         };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -203,15 +196,15 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -232,8 +225,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 startActivity(Intent.createChooser(i, "Send email ..."));
             } catch (ActivityNotFoundException ex) {
-                Toast.makeText(this, getResources().getString(R.string.noEmail), Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(this, getResources().getString(R.string.noEmail), Toast.LENGTH_SHORT).show();
             }
             return true;
         }
@@ -271,13 +263,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-            default:
-                if (fragmentMlin == null) {
-                    fragmentMlin = new MlinFragment();
-                }
-                pos = Constants.PositionMlin;
-                imageResource = R.drawable.vt_mlin;
-                break;
             case R.id.nav_cmlin:
                 if (fragmentCmlin == null) {
                     fragmentCmlin = new CmlinFragment();
@@ -326,6 +311,13 @@ public class MainActivity extends AppCompatActivity
                 pos = Constants.PositionCoax;
                 imageResource = R.drawable.vt_coax;
                 break;
+            default:
+                if (fragmentMlin == null) {
+                    fragmentMlin = new MlinFragment();
+                }
+                pos = Constants.PositionMlin;
+                imageResource = R.drawable.vt_mlin;
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -335,13 +327,6 @@ public class MainActivity extends AppCompatActivity
     private void initFragment(int item) {
         Bundle bundle = new Bundle();
         switch (item) {
-            default:
-                fragmentMlin = new MlinFragment();
-                pos = Constants.PositionMlin;
-                imageResource = R.drawable.vt_mlin;
-                fragmentMlin.setArguments(bundle);
-                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
-                break;
             case Constants.PositionCmlin:
                 fragmentCmlin = new CmlinFragment();
                 pos = Constants.PositionCmlin;
@@ -385,6 +370,13 @@ public class MainActivity extends AppCompatActivity
                 imageResource = R.drawable.vt_coax;
                 fragmentCoax.setArguments(bundle);
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentCoax).commit();
+                break;
+            default:
+                fragmentMlin = new MlinFragment();
+                pos = Constants.PositionMlin;
+                imageResource = R.drawable.vt_mlin;
+                fragmentMlin.setArguments(bundle);
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentMlin).commit();
                 break;
         }
     }
