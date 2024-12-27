@@ -262,62 +262,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
-        switch (item.getItemId()) {
-            case R.id.nav_cmlin:
-                if (fragmentCmlin == null) {
-                    fragmentCmlin = new CmlinFragment();
-                }
-                pos = Constants.PositionCmlin;
-                imageResource = R.drawable.vt_cmlin;
-                break;
-            case R.id.nav_slin:
-                if (fragmentSlin == null) {
-                    fragmentSlin = new SlinFragment();
-                }
-                pos = Constants.PositionSlin;
-                imageResource = R.drawable.vt_slin;
-                break;
-            case R.id.nav_cslin:
-                if (fragmentCslin == null) {
-                    fragmentCslin = new CslinFragment();
-                }
-                pos = Constants.PositionCslin;
-                imageResource = R.drawable.vt_cslin;
-                break;
-            case R.id.nav_cpw:
-                if (fragmentCpw == null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
-                    fragmentCpw = new CpwFragment();
-                    fragmentCpw.setArguments(bundle);
-                }
-                pos = Constants.PositionCpw;
-                imageResource = R.drawable.vt_cpw;
-                break;
-            case R.id.nav_gcpw:
-                if (fragmentGcpw == null) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
-                    fragmentGcpw = new CpwFragment();
-                    fragmentGcpw.setArguments(bundle);
-                }
-                pos = Constants.PositionGcpw;
-                imageResource = R.drawable.vt_cpwg;
-                break;
-            case R.id.nav_coax:
-                if (fragmentCoax == null) {
-                    fragmentCoax = new CoaxFragment();
-                }
-                pos = Constants.PositionCoax;
-                imageResource = R.drawable.vt_coax;
-                break;
-            default:
-                if (fragmentMlin == null) {
-                    fragmentMlin = new MlinFragment();
-                }
-                pos = Constants.PositionMlin;
-                imageResource = R.drawable.vt_mlin;
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_cmlin) {
+            if (fragmentCmlin == null) {
+                fragmentCmlin = new CmlinFragment();
+            }
+            pos = Constants.PositionCmlin;
+            imageResource = R.drawable.vt_cmlin;
+        } else if (itemId == R.id.nav_slin) {
+            if (fragmentSlin == null) {
+                fragmentSlin = new SlinFragment();
+            }
+            pos = Constants.PositionSlin;
+            imageResource = R.drawable.vt_slin;
+        } else if (itemId == R.id.nav_cslin) {
+            if (fragmentCslin == null) {
+                fragmentCslin = new CslinFragment();
+            }
+            pos = Constants.PositionCslin;
+            imageResource = R.drawable.vt_cslin;
+        } else if (itemId == R.id.nav_cpw) {
+            if (fragmentCpw == null) {
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.PARAMS_CPW, Constants.UNGROUNDED_CPW);
+                fragmentCpw = new CpwFragment();
+                fragmentCpw.setArguments(bundle);
+            }
+            pos = Constants.PositionCpw;
+            imageResource = R.drawable.vt_cpw;
+        } else if (itemId == R.id.nav_gcpw) {
+            if (fragmentGcpw == null) {
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.PARAMS_CPW, Constants.GROUNDED_CPW);
+                fragmentGcpw = new CpwFragment();
+                fragmentGcpw.setArguments(bundle);
+            }
+            pos = Constants.PositionGcpw;
+            imageResource = R.drawable.vt_cpwg;
+        } else if (itemId == R.id.nav_coax) {
+            if (fragmentCoax == null) {
+                fragmentCoax = new CoaxFragment();
+            }
+            pos = Constants.PositionCoax;
+            imageResource = R.drawable.vt_coax;
+        } else {
+            if (fragmentMlin == null) {
+                fragmentMlin = new MlinFragment();
+            }
+            pos = Constants.PositionMlin;
+            imageResource = R.drawable.vt_mlin;
         }
 
         drawer.closeDrawer(GravityCompat.START);
