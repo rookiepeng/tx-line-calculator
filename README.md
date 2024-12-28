@@ -18,9 +18,11 @@ A transmission line calculator for RF/microwave engineers.
 
 ## Screenshots
 
-<img src="https://github.com/rookiepeng/tx-line-calculator/blob/master/pics/tx_line_1.gif" width="300"></a>
-<img src="https://github.com/rookiepeng/tx-line-calculator/blob/master/pics/tx_line_2.gif" width="300"></a>
-<img src="https://github.com/rookiepeng/tx-line-calculator/blob/master/pics/tx_line_3.gif" width="300"></a>
+<img src="./pics/Screenshot_1.png" width="300"></a>
+<img src="./pics/Screenshot_2.png" width="300"></a>
+<img src="./pics/Screenshot_3.png" width="300"></a>
+<img src="./pics/Screenshot_4.png" width="300"></a>
+<img src="./pics/Screenshot_5.png" width="300"></a>
 
 ## License
 
