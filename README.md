@@ -23,7 +23,6 @@ A transmission line calculator for RF/microwave engineers.
 <img src="./pics/Screenshot_3.png" width="300"></a>
 <img src="./pics/Screenshot_4.png" width="300"></a>
 <img src="./pics/Screenshot_5.png" width="300"></a>
-[Screen_recording_20241227_192134.webm](https://github.com/user-attachments/assets/6c0b4a1f-5aaf-4ef9-a42c-cf33fbdf6328)
 
 ## License
 
