@@ -5,6 +5,12 @@ public class SlinCalculator {
     public SlinCalculator() {
     }
 
+    /**
+     * Analyzes the given SlinModel to calculate characteristic impedance and phase.
+     *
+     * @param line the SlinModel to analyze
+     * @return the analyzed SlinModel with calculated impedance and phase
+     */
     private SlinModel Analysis(SlinModel line) {
         // calculation variables
         double k, kp, r, kf, z0, m, deltaW, A, v;
@@ -71,6 +77,13 @@ public class SlinCalculator {
         return line;
     }
 
+    /**
+     * Synthesizes the given SlinModel to match the desired impedance by adjusting a specified parameter.
+     *
+     * @param line the SlinModel to synthesize
+     * @param flag the parameter to adjust (width, height, Er, or length)
+     * @return the synthesized SlinModel with adjusted parameter
+     */
     private SlinModel Synthesize(SlinModel line, int flag) {
         double l;
         double v, len;
@@ -266,10 +279,23 @@ public class SlinCalculator {
         return line;
     }
 
+    /**
+     * Gets the analysis result for the given SlinModel.
+     *
+     * @param line the SlinModel to analyze
+     * @return the analyzed SlinModel
+     */
     public SlinModel getAnaResult(SlinModel line) {
         return Analysis(line);
     }
 
+    /**
+     * Gets the synthesis result for the given SlinModel by adjusting a specified parameter.
+     *
+     * @param line the SlinModel to synthesize
+     * @param flag the parameter to adjust (width, height, Er, or length)
+     * @return the synthesized SlinModel
+     */
     public SlinModel getSynResult(SlinModel line, int flag) {
         return Synthesize(line, flag);
     }

@@ -7,6 +7,12 @@ public class CslinCalculator {
     public CslinCalculator() {
     }
 
+    /**
+     * Calculates the ratio of k over kp.
+     * 
+     * @param k the input value for k
+     * @return the calculated ratio
+     */
     private double k_over_kp(double k) {
         double kp, r, kf;
         int i = 0;
@@ -29,7 +35,12 @@ public class CslinCalculator {
         return r;
     }
 
-    // Zero thickness characteristic impedance
+    /**
+     * Calculates the zero thickness characteristic impedance.
+     * 
+     * @param line the CslinModel object containing line parameters
+     * @return the updated CslinModel object with calculated impedances
+     */
     private CslinModel impedance_zeroThickness(CslinModel line) {
         double ke, ko;
 
@@ -46,6 +57,12 @@ public class CslinCalculator {
         return line;
     }
 
+    /**
+     * Analyzes the given CslinModel line and calculates its properties.
+     * 
+     * @param line the CslinModel object containing line parameters
+     * @return the updated CslinModel object with calculated properties
+     */
     private CslinModel Analysis(CslinModel line) {
         // zero thickness even and odd impedances
         double z0e_0t, z0o_0t;
@@ -161,6 +178,13 @@ public class CslinCalculator {
         return line;
     }
 
+    /**
+     * Synthesizes the given CslinModel line based on the provided parameters.
+     * 
+     * @param line the CslinModel object containing line parameters
+     * @param use_z0k flag indicating whether to use z0 and k for calculations
+     * @return the updated CslinModel object with synthesized properties
+     */
     private CslinModel Synthesize(CslinModel line, boolean use_z0k) {
 
         double h, er, l, wmin, wmax, abstol, reltol;
@@ -356,10 +380,23 @@ public class CslinCalculator {
         return line;
     }
 
+    /**
+     * Gets the analysis result for the given CslinModel line.
+     * 
+     * @param line the CslinModel object containing line parameters
+     * @return the updated CslinModel object with analysis results
+     */
     public CslinModel getAnaResult(CslinModel line) {
         return Analysis(line);
     }
 
+    /**
+     * Gets the synthesis result for the given CslinModel line.
+     * 
+     * @param line the CslinModel object containing line parameters
+     * @param use_z0k flag indicating whether to use z0 and k for calculations
+     * @return the updated CslinModel object with synthesis results
+     */
     public CslinModel getSynResult(CslinModel line, boolean use_z0k) {
         return Synthesize(line, use_z0k);
     }

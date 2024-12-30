@@ -5,6 +5,12 @@ public class CoaxCalculator {
     public CoaxCalculator() {
     }
 
+    /**
+     * Analyzes the given CoaxModel line and calculates its impedance and phase.
+     * 
+     * @param line The CoaxModel line to be analyzed.
+     * @return The analyzed CoaxModel line with updated impedance and phase.
+     */
     private CoaxModel Analysis(CoaxModel line) {
         double x;
         double v;
@@ -57,6 +63,13 @@ public class CoaxCalculator {
         return line;
     }
 
+    /**
+     * Synthesizes the given CoaxModel line based on the specified flag.
+     * 
+     * @param line The CoaxModel line to be synthesized.
+     * @param flag The parameter to be synthesized.
+     * @return The synthesized CoaxModel line with updated parameters.
+     */
     private CoaxModel Synthesize(CoaxModel line, int flag) {
         double Ro;
         double v;
@@ -245,10 +258,23 @@ public class CoaxCalculator {
         return line;
     }
 
+    /**
+     * Returns the analysis result of the given CoaxModel line.
+     * 
+     * @param line The CoaxModel line to be analyzed.
+     * @return The analyzed CoaxModel line.
+     */
     public CoaxModel getAnaResult(CoaxModel line) {
         return Analysis(line);
     }
 
+    /**
+     * Returns the synthesis result of the given CoaxModel line based on the specified flag.
+     * 
+     * @param line The CoaxModel line to be synthesized.
+     * @param flag The parameter to be synthesized.
+     * @return The synthesized CoaxModel line.
+     */
     public CoaxModel getSynResult(CoaxModel line, int flag) {
         return Synthesize(line, flag);
     }

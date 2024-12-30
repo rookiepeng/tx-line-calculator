@@ -187,10 +187,10 @@ public class Constants {
     public static final String COAX_TARGET = "COAX_TARGET";
 
     /**
-     * Array adapters for spinners
+     * Array adapters for dimension units spinner
      *
      * @param mContext context
-     * @return adapters
+     * @return ArrayAdapter for dimension units
      */
     public static ArrayAdapter<CharSequence> adapterDimensionUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterLength = ArrayAdapter.createFromResource(mContext, R.array.list_units_Length,
@@ -199,6 +199,12 @@ public class Constants {
         return adapterLength;
     }
 
+    /**
+     * Array adapters for impedance units spinner
+     *
+     * @param mContext context
+     * @return ArrayAdapter for impedance units
+     */
     public static ArrayAdapter<CharSequence> adapterImpedanceUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterImpedance = ArrayAdapter.createFromResource(mContext,
                 R.array.list_units_Impedance, R.layout.dropdown_menu_popup_item);
@@ -206,6 +212,12 @@ public class Constants {
         return adapterImpedance;
     }
 
+    /**
+     * Array adapters for phase units spinner
+     *
+     * @param mContext context
+     * @return ArrayAdapter for phase units
+     */
     public static ArrayAdapter<CharSequence> adapterPhaseUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterPhase = ArrayAdapter.createFromResource(mContext, R.array.list_units_Phase,
                 R.layout.dropdown_menu_popup_item);
@@ -213,6 +225,12 @@ public class Constants {
         return adapterPhase;
     }
 
+    /**
+     * Array adapters for frequency units spinner
+     *
+     * @param mContext context
+     * @return ArrayAdapter for frequency units
+     */
     public static ArrayAdapter<CharSequence> adapterFrequencyUnits(Context mContext) {
         ArrayAdapter<CharSequence> adapterFreq = ArrayAdapter.createFromResource(mContext, R.array.list_units_Frequency,
                 R.layout.dropdown_menu_popup_item);
@@ -220,6 +238,13 @@ public class Constants {
         return adapterFreq;
     }
 
+    /**
+     * Validates the unit against the adapter's items
+     *
+     * @param adapter ArrayAdapter containing units
+     * @param unit    unit to validate
+     * @return validated unit
+     */
     public static String validateUnit(ArrayAdapter<CharSequence> adapter, String unit) {
         int len = adapter.getCount();
         int idx = 0;
@@ -234,7 +259,13 @@ public class Constants {
     }
 
 
-    // unit conversion
+    /**
+     * Converts value to meters based on the length unit
+     *
+     * @param value      value to convert
+     * @param lengthUnit unit of the value
+     * @return value in meters
+     */
     public static double value2meter(double value, String lengthUnit) {
         double l = 0;
         switch (lengthUnit) {
@@ -258,6 +289,13 @@ public class Constants {
         return l;
     }
 
+    /**
+     * Converts value to Hertz based on the frequency unit
+     *
+     * @param value    value to convert
+     * @param freqUnit unit of the value
+     * @return value in Hertz
+     */
     public static double value2Hz(double value, String freqUnit) {
         double f = 0;
         switch (freqUnit) {
@@ -277,6 +315,13 @@ public class Constants {
         return f;
     }
 
+    /**
+     * Converts value from meters to other units
+     *
+     * @param value      value in meters
+     * @param lengthUnit target unit
+     * @return value in target unit
+     */
     public static double meter2others(double value, String lengthUnit) {
         double l = 0;
         switch (lengthUnit) {
@@ -302,6 +347,13 @@ public class Constants {
 
     public static final int ANALYZE = 0, SYNTHESIZE = 1;
 
+    /**
+     * Refreshes the animation for a given view
+     *
+     * @param mContext context
+     * @param view     view to animate
+     * @param flag     flag to determine animation type
+     */
     public static void refreshAnimation(Context mContext, final ImageView view, int flag) {
         int cx, cy;
         if (flag == ANALYZE) {

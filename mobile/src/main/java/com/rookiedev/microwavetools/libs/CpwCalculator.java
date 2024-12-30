@@ -5,9 +5,15 @@ import android.util.Log;
 public class CpwCalculator {
 
     public CpwCalculator() {
-
+        // Constructor
     }
 
+    /**
+     * Calculates the complete elliptic integral of the first kind.
+     *
+     * @param k The modulus of the elliptic integral.
+     * @return The value of the complete elliptic integral of the first kind.
+     */
     private double k_over_kp(double k) {
         double kp, r, kf;
         int i = 0;
@@ -30,6 +36,13 @@ public class CpwCalculator {
         return r;
     }
 
+    /**
+     * Analyzes the coplanar waveguide (CPW) model.
+     *
+     * @param line The CPW model to analyze.
+     * @param withGround Whether the CPW has a ground plane.
+     * @return The analyzed CPW model with updated parameters.
+     */
     private CpwModel Analysis(CpwModel line, boolean withGround) {
 
         // calculation variables
@@ -135,6 +148,14 @@ public class CpwCalculator {
         return line;
     }
 
+    /**
+     * Synthesizes the coplanar waveguide (CPW) model.
+     *
+     * @param line The CPW model to synthesize.
+     * @param flag The parameter to synthesize (e.g., width, gap, height, or dielectric constant).
+     * @param withGround Whether the CPW has a ground plane.
+     * @return The synthesized CPW model with updated parameters.
+     */
     private CpwModel Synthesize(CpwModel line, int flag, boolean withGround) {
         double Ro, Xo;
         double v, len;
@@ -334,10 +355,25 @@ public class CpwCalculator {
         return line;
     }
 
+    /**
+     * Gets the analysis result of the CPW model.
+     *
+     * @param line The CPW model to analyze.
+     * @param withGround Whether the CPW has a ground plane.
+     * @return The analyzed CPW model with updated parameters.
+     */
     public CpwModel getAnaResult(CpwModel line, boolean withGround) {
         return Analysis(line, withGround);
     }
 
+    /**
+     * Gets the synthesis result of the CPW model.
+     *
+     * @param line The CPW model to synthesize.
+     * @param flag The parameter to synthesize (e.g., width, gap, height, or dielectric constant).
+     * @param withGround Whether the CPW has a ground plane.
+     * @return The synthesized CPW model with updated parameters.
+     */
     public CpwModel getSynResult(CpwModel line, int flag, boolean withGround) {
         return Synthesize(line, flag, withGround);
     }

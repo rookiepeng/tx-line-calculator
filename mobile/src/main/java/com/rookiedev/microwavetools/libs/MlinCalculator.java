@@ -6,6 +6,12 @@ public class MlinCalculator {
     public MlinCalculator() {
     }
 
+    /**
+     * Analyzes the given microstrip line model and calculates its properties.
+     *
+     * @param line The microstrip line model to analyze.
+     * @return The analyzed microstrip line model with updated properties.
+     */
     private MlinModel Analysis(MlinModel line) {
         double width, length, height, epsilon, thickness;
         double impedance, phase;
@@ -147,6 +153,13 @@ public class MlinCalculator {
         return line;
     }
 
+    /**
+     * Synthesizes the given microstrip line model based on the specified flag.
+     *
+     * @param line The microstrip line model to synthesize.
+     * @param flag The flag indicating which parameter to synthesize.
+     * @return The synthesized microstrip line model with updated properties.
+     */
     private MlinModel Synthesize(MlinModel line, int flag) {
         double length;
         double impedance;
@@ -345,6 +358,13 @@ public class MlinCalculator {
         return line;
     }
 
+    /**
+     * Calculates the effective dielectric constant for the given width-to-height ratio and dielectric constant.
+     *
+     * @param widthToHeight The width-to-height ratio of the microstrip line.
+     * @param dielectricConstant The dielectric constant of the substrate.
+     * @return The effective dielectric constant.
+     */
     private static double EffectiveDielectricConstant_Effer(double widthToHeight, double dielectricConstant) {
         double A, B, E0;
 
@@ -365,7 +385,12 @@ public class MlinCalculator {
         return E0;
     }
 
-    // Characteristic impedance from (1) and (2) in Hammerstad and Jensen
+    /**
+     * Calculates the characteristic impedance for the given width-to-height ratio.
+     *
+     * @param widthToHeight The width-to-height ratio of the microstrip line.
+     * @return The characteristic impedance.
+     */
     private static double CharacteristicImpedance_Z0(double widthToHeight) {
         double F, z01;
 
@@ -379,10 +404,23 @@ public class MlinCalculator {
         return z01;
     }
 
+    /**
+     * Returns the analysis result for the given microstrip line model.
+     *
+     * @param MLINLine The microstrip line model to analyze.
+     * @return The analyzed microstrip line model with updated properties.
+     */
     public MlinModel getAnaResult(MlinModel MLINLine) {
         return Analysis(MLINLine);
     }
 
+    /**
+     * Returns the synthesis result for the given microstrip line model based on the specified flag.
+     *
+     * @param MLINLine The microstrip line model to synthesize.
+     * @param flag The flag indicating which parameter to synthesize.
+     * @return The synthesized microstrip line model with updated properties.
+     */
     public MlinModel getSynResult(MlinModel MLINLine, int flag) {
         return Synthesize(MLINLine, flag);
     }
