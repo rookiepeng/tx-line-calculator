@@ -51,6 +51,13 @@ public class CoaxFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_coax, container, false);
@@ -195,6 +202,9 @@ public class CoaxFragment extends Fragment {
         return viewRoot;
     }
 
+    /**
+     * Initialize the UI components.
+     */
     private void initUI() {
         line = new CoaxModel();
 
@@ -377,6 +387,9 @@ public class CoaxFragment extends Fragment {
         spinnerFreq.setAdapter(Constants.adapterFrequencyUnits(mContext));
     }
 
+    /**
+     * Read shared preferences and set the initial values for the UI components.
+     */
     private void readSharedPref() {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);// get the header_parameters from the Shared
 
@@ -406,6 +419,9 @@ public class CoaxFragment extends Fragment {
         target = Integer.parseInt(prefs.getString(Constants.COAX_TARGET, Integer.toString(Constants.Synthesize_CoreRadius)));
     }
 
+    /**
+     * Set the radio buttons based on the target value.
+     */
     private void setRadioBtn() {
         if (target == Constants.Synthesize_CoreRadius) {
             radioButtonA.setChecked(true);
@@ -513,6 +529,10 @@ public class CoaxFragment extends Fragment {
         editor.apply();
     }
 
+    /**
+     * Check the input values for the analysis operation.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean analysisInputCheck() {
         boolean checkResult = true;
         if (editTextA.length() == 0) {
@@ -560,6 +580,10 @@ public class CoaxFragment extends Fragment {
         return checkResult;
     }
 
+    /**
+     * Check the input values for the synthesis operation.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean synthesizeInputCheck() {
         boolean checkResult = true;
         if (editTextZ0.length() == 0) {
@@ -630,6 +654,9 @@ public class CoaxFragment extends Fragment {
         return checkResult;
     }
 
+    /**
+     * Clear all error messages from the input fields.
+     */
     private void clearEditTextErrors() {
         textInputLayoutA.setError(null);
         textInputLayoutA.setErrorEnabled(false);
@@ -645,6 +672,9 @@ public class CoaxFragment extends Fragment {
         textInputLayoutF.setErrorEnabled(false);
     }
 
+    /**
+     * Reset all input fields to their default values.
+     */
     public void resetValues() {
         editTextA.setText("0.167");
         spinnerA.setText(Constants.LengthUnit_mm);

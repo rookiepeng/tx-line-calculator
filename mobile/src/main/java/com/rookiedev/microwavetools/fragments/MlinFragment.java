@@ -51,6 +51,13 @@ public class MlinFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_mlin, container, false);
@@ -165,6 +172,9 @@ public class MlinFragment extends Fragment {
         return viewRoot;
     }
 
+    /**
+     * Initialize the user interface components.
+     */
     private void initUI() {
         line = new MlinModel();
 
@@ -341,6 +351,9 @@ public class MlinFragment extends Fragment {
         spinnerFreq.setAdapter(Constants.adapterFrequencyUnits(mContext));
     }
 
+    /**
+     * Read shared preferences and set the values to the corresponding UI components.
+     */
     private void readSharedPref() {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
 
@@ -370,6 +383,9 @@ public class MlinFragment extends Fragment {
         target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, Integer.toString(Constants.Synthesize_Width)));
     }
 
+    /**
+     * Set the radio buttons for selecting the target parameter for synthesis.
+     */
     private void setRadioBtn() {
         if (target == Constants.Synthesize_Width) {
             radioButtonW.setChecked(true);
@@ -434,6 +450,10 @@ public class MlinFragment extends Fragment {
         editor.apply();
     }
 
+    /**
+     * Check if the input fields for analysis are empty or contain invalid values.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean analysisInputEmptyCheck() {
         boolean checkResult = true;
         if (editTextT.length() == 0) {
@@ -477,6 +497,10 @@ public class MlinFragment extends Fragment {
         return checkResult;
     }
 
+    /**
+     * Check if the input fields for synthesis are empty or contain invalid values.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean synthesizeInputEmptyCheck() {
         boolean checkResult = true;
         if (editTextZ0.length() == 0) {
@@ -529,6 +553,9 @@ public class MlinFragment extends Fragment {
         return checkResult;
     }
 
+    /**
+     * Clear all error messages from the input fields.
+     */
     private void clearEditTextErrors() {
         textInputLayoutW.setError(null);
         textInputLayoutW.setErrorEnabled(false);
@@ -542,6 +569,9 @@ public class MlinFragment extends Fragment {
         textInputLayoutF.setErrorEnabled(false);
     }
 
+    /**
+     * Reset all input fields to their default values.
+     */
     public void resetValues() {
         editTextW.setText("2.9");
         spinnerW.setText(Constants.LengthUnit_mm);

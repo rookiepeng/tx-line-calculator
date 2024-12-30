@@ -50,6 +50,13 @@ public class CmlinFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_cmlin, container, false);
@@ -116,6 +123,9 @@ public class CmlinFragment extends Fragment {
         return viewRoot;
     }
 
+    /**
+     * Initialize the UI components and set up listeners.
+     */
     private void initUI() {
         line = new CmlinModel();
 
@@ -375,6 +385,9 @@ public class CmlinFragment extends Fragment {
         spinnerFreq.setAdapter(Constants.adapterFrequencyUnits(mContext));
     }
 
+    /**
+     * Set the radio button behavior for selecting calculation mode.
+     */
     private void setRadioBtn() {
         radioButtonZ0.setOnClickListener(arg0 -> {
             radioButtonZ0.setChecked(true);
@@ -489,6 +502,9 @@ public class CmlinFragment extends Fragment {
         }
     }
 
+    /**
+     * Read shared preferences and set the UI components accordingly.
+     */
     private void readSharedPref() {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
 
@@ -560,6 +576,10 @@ public class CmlinFragment extends Fragment {
         editor.apply();
     }
 
+    /**
+     * Check the input fields for the analysis operation.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean analysisInputCheck() {
         boolean checkResult = true;
         if (editTextW.length() == 0) {
@@ -612,6 +632,10 @@ public class CmlinFragment extends Fragment {
         return checkResult;
     }
 
+    /**
+     * Check the input fields for the synthesis operation.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean synthesizeInputCheck() {
         boolean checkResult = true;
         if (editTextFreq.length() == 0) {
@@ -680,6 +704,9 @@ public class CmlinFragment extends Fragment {
         return checkResult;
     }
 
+    /**
+     * Perform the synthesis operation based on the input values.
+     */
     private void synthesizeButton() {
         if (useZ0k) {
             line.setImpedance(Double.parseDouble(Objects.requireNonNull(editTextZ0.getText()).toString()));
@@ -775,6 +802,9 @@ public class CmlinFragment extends Fragment {
         }
     }
 
+    /**
+     * Clear all error messages from the input fields.
+     */
     private void clearEditTextErrors() {
         textInputLayoutW.setError(null);
         textInputLayoutW.setErrorEnabled(false);
@@ -796,6 +826,9 @@ public class CmlinFragment extends Fragment {
         textInputLayoutF.setErrorEnabled(false);
     }
 
+    /**
+     * Reset all input fields to their default values.
+     */
     public void resetValues() {
         editTextW.setText("2.7");
         spinnerW.setText(Constants.LengthUnit_mm);

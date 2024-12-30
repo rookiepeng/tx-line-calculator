@@ -55,6 +55,13 @@ public class CpwFragment extends Fragment {
         }
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewRoot = inflater.inflate(R.layout.fragment_cpw, container, false);
@@ -204,6 +211,9 @@ public class CpwFragment extends Fragment {
         return viewRoot;
     }
 
+    /**
+     * Initializes the UI components and sets up listeners.
+     */
     private void initUI() {
         line = new CpwModel();
 
@@ -412,6 +422,9 @@ public class CpwFragment extends Fragment {
         spinnerFreq.setAdapter(Constants.adapterFrequencyUnits(mContext));
     }
 
+    /**
+     * Reads shared preferences and sets the initial values for the UI components.
+     */
     private void readSharedPref() {
         SharedPreferences prefs = mContext.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
 
@@ -470,6 +483,9 @@ public class CpwFragment extends Fragment {
         target = Integer.parseInt(prefs.getString(Constants.MLIN_TARGET, Integer.toString(Constants.Synthesize_Width)));
     }
 
+    /**
+     * Sets the radio buttons based on the target value.
+     */
     private void setRadioBtn() {
         if (target == Constants.Synthesize_Width) {
             radioButtonW.setChecked(true);
@@ -599,6 +615,10 @@ public class CpwFragment extends Fragment {
         editor.apply();
     }
 
+    /**
+     * Checks the input values for the analysis operation.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean analysisInputCheck() {
         boolean checkResult = true;
         if (editTextW.length() == 0) {
@@ -655,6 +675,10 @@ public class CpwFragment extends Fragment {
         return checkResult;
     }
 
+    /**
+     * Checks the input values for the synthesis operation.
+     * @return true if all inputs are valid, false otherwise.
+     */
     private boolean synthesizeInputCheck() {
         boolean checkResult = true;
         if (editTextZ0.length() == 0) {
@@ -753,6 +777,9 @@ public class CpwFragment extends Fragment {
         return checkResult;
     }
 
+    /**
+     * Clears all error messages from the input fields.
+     */
     private void clearEditTextErrors() {
         textInputLayoutW.setError(null);
         textInputLayoutW.setErrorEnabled(false);
@@ -770,6 +797,9 @@ public class CpwFragment extends Fragment {
         textInputLayoutT.setErrorEnabled(false);
     }
 
+    /**
+     * Resets the input fields to their default values.
+     */
     public void resetValues() {
         if (withGround) {
             editTextW.setText("1");
