@@ -33,7 +33,10 @@ import com.rookiedev.microwavetools.fragments.MlinFragment;
 import com.rookiedev.microwavetools.fragments.SlinFragment;
 import com.rookiedev.microwavetools.libs.Constants;
 
-
+/**
+ * Main activity for the Microwave Tools application.
+ * Handles navigation and fragment transactions.
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private int pos;
@@ -53,6 +56,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int imageResource;
 
 
+    /**
+     * Called when the activity is first created.
+     * Initializes the UI components and sets up the navigation drawer.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         EdgeToEdge.enable(this);
@@ -206,6 +215,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        }
 //    }
 
+    /**
+     * Initializes the options menu.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return true if the menu was successfully created.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -213,6 +228,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Handles item selections in the options menu.
+     *
+     * @param item The menu item that was selected.
+     * @return true if the item selection was handled.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action buttons
@@ -232,6 +253,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Called after onRestoreInstanceState(Bundle) when the activity is being re-initialized.
+     *
+     * @param savedInstanceState The data most recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -239,11 +265,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
     }
 
+    /**
+     * Called by the system when the device configuration changes while your activity is running.
+     *
+     * @param newConfig The new device configuration.
+     */
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
 
+    /**
+     * Called when the activity is no longer visible to the user.
+     * Saves the current position to shared preferences.
+     */
     @Override
     public void onStop() {
         super.onStop();
@@ -254,11 +289,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editor.apply();
     }
 
+    /**
+     * Reads the shared preferences to get the last saved position.
+     */
     private void readSharedPref() {
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
         pos = Integer.parseInt(prefs.getString(Constants.PREFS_POSITION, "0"));
     }
 
+    /**
+     * Handles navigation item selections.
+     *
+     * @param item The selected menu item.
+     * @return true if the item selection was handled.
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -317,6 +361,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Initializes the fragment based on the selected item.
+     *
+     * @param item The selected item position.
+     */
     private void initFragment(int item) {
         Bundle bundle = new Bundle();
         switch (item) {
@@ -374,6 +423,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Checks if this is the first run of the application.
+     *
+     * @return true if this is the first run, false otherwise.
+     */
     private boolean isFirstRun() {
         SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE);
         if (prefs.getString(Constants.PREFS_ISFIRSTRUN, "true").equals("true")) {
