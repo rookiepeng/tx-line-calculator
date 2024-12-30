@@ -5,7 +5,13 @@ public class CmlinCalculator {
     public CmlinCalculator() {
     }
 
-    // Effective dielectric constant from Hammerstad and Jensen
+    /**
+     * Calculates the effective dielectric constant using Hammerstad and Jensen's method.
+     *
+     * @param widthToHeight The width to height ratio.
+     * @param dielectricConstant The dielectric constant.
+     * @return The effective dielectric constant.
+     */
     private static double EffectiveDielectricConstant_Effer(double widthToHeight, double dielectricConstant) {
         double A, B;
         // (4) from Hammerstad and Jensen
@@ -22,7 +28,12 @@ public class CmlinCalculator {
                 + ((dielectricConstant - 1.0) / 2.0) * Math.pow((1.0 + 10.0 / widthToHeight), (-A * B)));
     }
 
-    // Characteristic impedance from (1) and (2) in Hammerstad and Jensen
+    /**
+     * Calculates the characteristic impedance using Hammerstad and Jensen's method.
+     *
+     * @param widthToHeight The width to height ratio.
+     * @return The characteristic impedance.
+     */
     private static double CharacteristicImpedance_Z0(double widthToHeight) {
         double F, z01;
 
@@ -38,6 +49,12 @@ public class CmlinCalculator {
         return z01;
     }
 
+    /**
+     * Analyzes the given CmlinModel to calculate various parameters.
+     *
+     * @param line The CmlinModel to analyze.
+     * @return The analyzed CmlinModel with updated parameters.
+     */
     private CmlinModel Analysis(CmlinModel line) {
         // input physical dimensions
         double width, length, space;
@@ -381,6 +398,13 @@ public class CmlinCalculator {
         return line;
     }
 
+    /**
+     * Synthesizes the given CmlinModel to calculate width and space based on impedance and coupling factor.
+     *
+     * @param line The CmlinModel to synthesize.
+     * @param use_z0k Flag to indicate whether to use z0 and k for calculations.
+     * @return The synthesized CmlinModel with updated parameters.
+     */
     private CmlinModel Synthesize(CmlinModel line, boolean use_z0k) {
 
         double h, er, l;
@@ -562,10 +586,23 @@ public class CmlinCalculator {
         return line;
     }
 
+    /**
+     * Gets the analysis result for the given CmlinModel.
+     *
+     * @param line The CmlinModel to analyze.
+     * @return The analyzed CmlinModel with updated parameters.
+     */
     public CmlinModel getAnaResult(CmlinModel line) {
         return Analysis(line);
     }
 
+    /**
+     * Gets the synthesis result for the given CmlinModel.
+     *
+     * @param line The CmlinModel to synthesize.
+     * @param use_z0k Flag to indicate whether to use z0 and k for calculations.
+     * @return The synthesized CmlinModel with updated parameters.
+     */
     public CmlinModel getSynResult(CmlinModel line, boolean use_z0k) {
         return Synthesize(line, use_z0k);
     }
