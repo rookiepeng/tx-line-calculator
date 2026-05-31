@@ -6,6 +6,11 @@
 
 A transmission line calculator for RF/microwave engineers.
 
+## Features
+
+- **Analyze** mode: calculate electrical parameters from physical dimensions
+- **Synthesize** mode: calculate physical dimensions from electrical parameters
+
 ## Supported Transmission Lines
 
 - Microstrip Line
@@ -15,6 +20,11 @@ A transmission line calculator for RF/microwave engineers.
 - Coplanar Waveguide
 - Grounded Coplanar Waveguide
 - Coaxial
+
+## Requirements
+
+- Android 11 (API level 30) or higher
+- Java 17
 
 ## Screenshots
 
@@ -30,7 +40,7 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 
 ## Building the Project
 
-To build this project, use the Gradle wrapper scripts provided:
+This project requires the Android SDK and Java 17. Build using the Gradle wrapper scripts provided:
 
 ```sh
 ./gradlew build
