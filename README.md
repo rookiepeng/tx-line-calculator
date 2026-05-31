@@ -6,6 +6,12 @@
 
 A transmission line calculator for RF/microwave engineers.
 
+## Background
+
+This project started as a part-time hobby during my undergraduate studies. I was taking an RF/Microwave circuits course at the time, and Android was just emerging as a mobile platform. It was a natural exercise to combine what I was learning in class — transmission line theory and microwave circuit design — with the challenge of building an Android app from scratch.
+
+The project has been kept alive and occasionally updated ever since.
+
 ## Features
 
 - **Analyze** mode: calculate electrical parameters from physical dimensions
