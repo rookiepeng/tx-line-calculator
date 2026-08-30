@@ -13,3 +13,24 @@ updates:
       github-actions:
         patterns:
           - "*"
+
+  # Covers gradle/libs.versions.toml, build.gradle, settings.gradle and the
+  # :mobile subproject, which Dependabot discovers via settings.gradle.
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
+      - "gradle"
+    groups:
+      # Batch low-risk bumps; majors (e.g. AGP) still get their own PR.
+      gradle-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
