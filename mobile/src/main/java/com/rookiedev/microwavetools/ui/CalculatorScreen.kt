@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -33,6 +34,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -62,7 +65,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
@@ -117,16 +119,15 @@ fun CalculatorScreen(
 ) {
     val line = vm.line
     val state = vm.state
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    // The header slides away while scrolling down and comes back as soon as you scroll up.
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val focus = LocalFocusManager.current
     var confirmReset by rememberSaveable { mutableStateOf(false) }
     val fieldFocus = remember(line) { FieldFocus(line.fields) }
     val imeVisible = WindowInsets.isImeVisible
 
     Scaffold(
-        // Only the collapsing bar uses the scroll behavior; attached without it, the behavior would
-        // swallow every upward scroll trying to collapse a bar that isn't there.
-        modifier = if (compactTopBar) Modifier else Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             val title = @Composable {
                 Text(stringResource(line.title), maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -149,20 +150,19 @@ fun CalculatorScreen(
                 containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
                 scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
             )
-            // Short (landscape phone) screens get a single-row bar to leave room for the inputs.
-            if (compactTopBar) {
-                // On short screens the header also steps aside while typing, leaving the most room
-                // for the field being edited.
-                AnimatedVisibility(visible = !imeVisible, enter = expandVertically(), exit = shrinkVertically()) {
-                    TopAppBar(title = title, navigationIcon = navigationIcon, actions = actions, colors = barColors)
-                }
-            } else {
-                MediumTopAppBar(
+            // A single-row bar so it can slide fully out of view; a two-row bar only collapses.
+            // On short screens it also steps aside while typing, leaving room for the field.
+            AnimatedVisibility(
+                visible = !(compactTopBar && imeVisible),
+                enter = expandVertically(),
+                exit = shrinkVertically(),
+            ) {
+                TopAppBar(
                     title = title,
                     navigationIcon = navigationIcon,
                     actions = actions,
-                    scrollBehavior = scrollBehavior,
                     colors = barColors,
+                    scrollBehavior = scrollBehavior,
                 )
             }
         },
@@ -228,6 +228,15 @@ fun CalculatorScreen(
                 }
                 Spacer(Modifier.size(8.dp))
             }
+
+            // Keep the status bar readable when the header has scrolled away.
+            Box(
+                Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .windowInsetsTopHeight(WindowInsets.statusBars)
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.85f))
+            )
 
             // While editing with the main diagram scrolled away, pin a compact copy under the header
             // so the highlight stays in view.
