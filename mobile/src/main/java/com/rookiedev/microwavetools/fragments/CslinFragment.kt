@@ -74,10 +74,6 @@ class CslinFragment : Fragment() {
     private var useZ0k = false // calculate with Z0, k, or Z0e, Z0o
     private var line: CslinModel? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     /**
      * Called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
@@ -97,7 +93,7 @@ class CslinFragment : Fragment() {
         readSharedPref() // read shared preferences
         setRadioBtn()
 
-        buttonAnalyze!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonAnalyze!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext!!,
                 viewRoot!!.findViewById<ImageView>(R.id.analyze_reveal)!!,
@@ -169,7 +165,7 @@ class CslinFragment : Fragment() {
             }
         })
 
-        buttonSynthesize!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonSynthesize!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext!!,
                 viewRoot!!.findViewById<ImageView>(R.id.synthesize_reveal)!!,
@@ -452,7 +448,7 @@ class CslinFragment : Fragment() {
      * Set the radio button behavior.
      */
     private fun setRadioBtn() {
-        radioButtonZ0!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonZ0!!.setOnClickListener(View.OnClickListener {
             radioButtonZ0!!.setChecked(true)
             radioButtonK!!.setChecked(true)
             radioButtonZ0o!!.setChecked(false)
@@ -501,7 +497,7 @@ class CslinFragment : Fragment() {
                 )
             )
         })
-        radioButtonK!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonK!!.setOnClickListener(View.OnClickListener {
             radioButtonZ0!!.setChecked(true)
             radioButtonK!!.setChecked(true)
             radioButtonZ0o!!.setChecked(false)
@@ -550,7 +546,7 @@ class CslinFragment : Fragment() {
                 )
             )
         })
-        radioButtonZ0o!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonZ0o!!.setOnClickListener(View.OnClickListener {
             radioButtonZ0o!!.setChecked(true)
             radioButtonZ0e!!.setChecked(true)
             radioButtonZ0!!.setChecked(false)
@@ -589,7 +585,7 @@ class CslinFragment : Fragment() {
                 )
             )
         })
-        radioButtonZ0e!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonZ0e!!.setOnClickListener(View.OnClickListener {
             radioButtonZ0o!!.setChecked(true)
             radioButtonZ0e!!.setChecked(true)
             radioButtonZ0!!.setChecked(false)

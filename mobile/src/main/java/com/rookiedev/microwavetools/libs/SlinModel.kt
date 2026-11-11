@@ -3,49 +3,13 @@ package com.rookiedev.microwavetools.libs
 import com.rookiedev.microwavetools.libs.Constants.ERROR
 
 class SlinModel {
-    /**
-     * Gets the substrate model.
-     * 
-     * @return the substrate model
-     */
-    /**
-     * Sets the substrate model.
-     * 
-     * @param substrate the substrate model
-     */
+    /** Substrate model. */
     var substrate: SubstrateModel
-    /**
-     * Gets the metal model.
-     * 
-     * @return the metal model
-     */
-    /**
-     * Sets the metal model.
-     * 
-     * @param metal the metal model
-     */
+    /** Metal model. */
     var metal: MetalModel
-    /**
-     * Gets the impedance.
-     * 
-     * @return the impedance
-     */
-    /**
-     * Sets the impedance.
-     * 
-     * @param impedance the impedance value
-     */
+    /** Impedance. */
     var impedance: Double = 0.0
-    /**
-     * Gets the phase.
-     * 
-     * @return the phase
-     */
-    /**
-     * Sets the phase.
-     * 
-     * @param phase the phase value
-     */
+    /** Phase. */
     var phase: Double = 0.0 // ohms, degree
 
     /**
@@ -55,16 +19,7 @@ class SlinModel {
      */
     var frequency: Double = 0.0 // Hz
         private set
-    /**
-     * Gets the error code.
-     * 
-     * @return the error code
-     */
-    /**
-     * Sets the error code.
-     * 
-     * @param errorCode the error code
-     */
+    /** Error code. */
     var errorCode: ERROR? = null
 
     /**

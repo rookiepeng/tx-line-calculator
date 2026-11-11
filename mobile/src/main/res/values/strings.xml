@@ -65,11 +65,9 @@
     <string name="cancel">Cancel</string>
 
     <!-- feedback -->
-    <string name="calculator">Calculator</string>
     <string name="noEmail">Can\'t find an email client!</string>
 
     <string name="menu_help">Help &amp; feedback</string>
-    <string name="menu_shop">Ad free</string>
 
     <!-- icons -->
     <string name="reset">Reset</string>

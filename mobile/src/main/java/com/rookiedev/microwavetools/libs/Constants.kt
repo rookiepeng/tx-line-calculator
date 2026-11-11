@@ -42,13 +42,8 @@ object Constants {
     const val Synthesize_CoreRadius: Int = 5
     const val Synthesize_CoreOffset: Int = 6
     val Synthesize_SubRadius: Int = Synthesize_Height
-    const val LengthUnit_mil: String = "mil"
     const val LengthUnit_mm: String = "mm"
-    const val LengthUnit_cm: String = "cm"
-    const val LengthUnit_m: String = "m"
-    const val FreqUnit_MHz: String = "MHz"
     const val FreqUnit_GHz: String = "GHz"
-    const val FreqUnit_Hz: String = "Hz"
     const val ImpedanceUnit_Ohm: String = "Ω"
     const val PhaseUnit_Degree: String = "Deg"
 
@@ -59,8 +54,6 @@ object Constants {
     const val PositionCpw: Int = 4
     const val PositionGcpw: Int = 5
     const val PositionCoax: Int = 6
-
-    const val IS_AD_FREE: String = "IS_AD_FREE"
 
     const val MLIN_W: String = "MLIN_W"
     const val MLIN_W_UNIT: String = "MLIN_W_UNIT"
@@ -99,8 +92,6 @@ object Constants {
     const val CMLIN_ER: String = "CMLIN_ER"
     const val CMLIN_H: String = "CMLIN_H"
     const val CMLIN_H_UNIT: String = "CMLIN_H_UNIT"
-    const val CMLIN_T: String = "CMLIN_T"
-    const val CMLIN_T_UNIT: String = "CMLIN_T_UNIT"
     const val CMLIN_USEZ0K: String = "CMLIN_USEZ0K"
 
     const val SLIN_W: String = "SLIN_W"
@@ -271,17 +262,11 @@ object Constants {
      * @return validated unit
      */
     fun validateUnit(adapter: ArrayAdapter<CharSequence?>, unit: String): String {
-        val len = adapter.getCount()
-        var idx = 0
-
-        idx = 0
-        while (idx < len) {
-            if (unit == Objects.requireNonNull<CharSequence?>(adapter.getItem(idx)).toString()) {
+        for (idx in 0 until adapter.count) {
+            if (unit == adapter.getItem(idx).toString()) {
                 return unit
             }
-            idx++
         }
-
         return Objects.requireNonNull<CharSequence?>(adapter.getItem(0)).toString()
     }
 
@@ -381,34 +366,18 @@ object Constants {
         )
         animFadeOut.setInterpolator(AccelerateInterpolator())
 
-        /*
-         * ValueAnimator animFadeOut= ValueAnimator.ofFloat(1f, 0.2f);
-         * animFadeOut.setDuration(mContext.getResources().getInteger(android.R.integer.
-         * config_mediumAnimTime)); animFadeOut.setInterpolator(new
-         * DecelerateInterpolator()); animFadeOut.addUpdateListener(new
-         * ValueAnimator.AnimatorUpdateListener() {
-         *
-         * @Override public void onAnimationUpdate(ValueAnimator animation) {
-         * view.setAlpha((Float) animation.getAnimatedValue()); } });
-         */
         animCircularReveal.start()
         animFadeOut.start()
     }
 
-    enum class ERROR(private val errorCode: Int) {
-        NO_ERROR(0), DIMENSION_MINIMAL_LIMIT(1), ER_MINIMAL_LIMIT(2), COULD_NOT_BRACKET_SOLUTION(3), MAX_ITERATIONS(
-            4
-        ),
-        WIDTH_MINIMAL_LIMIT(5), HEIGHT_MINIMAL_LIMIT(6), SPACE_MINIMAL_LIMIT(7), K_OUT_OF_RANGE(8), Z0E_Z0O_MISTAKE(
-            9
-        ),
-        SUBSTRATE_TOO_LARGE(10), OFFSET_TOO_LARGE(11)
+    enum class ERROR {
+        NO_ERROR, ER_MINIMAL_LIMIT, COULD_NOT_BRACKET_SOLUTION, MAX_ITERATIONS,
+        WIDTH_MINIMAL_LIMIT, HEIGHT_MINIMAL_LIMIT, SPACE_MINIMAL_LIMIT, K_OUT_OF_RANGE,
+        Z0E_Z0O_MISTAKE, SUBSTRATE_TOO_LARGE, OFFSET_TOO_LARGE
     }
 
-    enum class WARNING(private val warningCode: Int) {
-        NO_WARNING(0), WIDTH2HEIGHT_OUT_OF_RANGE(1), SPACE2HEIGHT_OUT_OF_RANGE(2), DIELECTRIC_OUT_OF_RANGE(
-            3
-        ),
-        FREQUENCY2HEIGHT_OUT_OF_RANGE(4)
+    enum class WARNING {
+        NO_WARNING, WIDTH2HEIGHT_OUT_OF_RANGE, SPACE2HEIGHT_OUT_OF_RANGE, DIELECTRIC_OUT_OF_RANGE,
+        FREQUENCY2HEIGHT_OUT_OF_RANGE
     }
 }

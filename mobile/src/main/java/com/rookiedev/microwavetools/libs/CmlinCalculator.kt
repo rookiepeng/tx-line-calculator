@@ -551,7 +551,6 @@ class CmlinCalculator {
             // use z0e and z0o to calculate z0 and k
             z0 = sqrt(z0e * z0o)
             k = (z0e - z0o) / (z0e + z0o)
-            //Log.v("CmlinCalculator", "k=" + Double.toString(k));
             line.impedance = z0
             line.couplingFactor = k
             if (k <= 0 || k >= 1) {
@@ -564,8 +563,6 @@ class CmlinCalculator {
         l = 1000.0
         line.setMetalLength(l, "m")
 
-        // width relative convergence tolerance (mils) (set to 0.1 micron)
-        // reltol = Constants.MICRON2MIL(0.1);
         maxiters = 50
 
         // Initial guess at a solution
@@ -678,7 +675,6 @@ class CmlinCalculator {
         /*
          * one last calculation and this time we find the loss too.
          */
-        // line = Analysis(line);
         line.errorCode = ERROR.NO_ERROR
         return line
     }
@@ -747,9 +743,6 @@ class CmlinCalculator {
             F = 6.0 + (2.0 * Constants.Pi - 6.0) * exp(-(30.666 / widthToHeight).pow(0.7528))
 
             // (1) from Hammerstad and Jensen
-            // TODO XXX decide on which to use here
-            // z01 = (Constants.FREESPACEZ0 / (2 * Constants.Pi)) * Math.log(F / u +
-            // Math.sqrt(1.0 + Math.pow((2 / u), 2.0)));
             z01 = ((377.0 / (2 * Constants.Pi))
                     * ln(F / widthToHeight + sqrt(1.0 + (2 / widthToHeight).pow(2.0))))
             return z01

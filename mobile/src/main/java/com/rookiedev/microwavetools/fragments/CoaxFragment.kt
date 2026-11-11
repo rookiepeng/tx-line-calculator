@@ -65,10 +65,6 @@ class CoaxFragment : Fragment() {
     private var line: CoaxModel? = null
     private var defaultEditTextColor: ColorStateList? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     /**
      * Called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
@@ -88,7 +84,7 @@ class CoaxFragment : Fragment() {
         readSharedPref()
         setRadioBtn()
 
-        buttonAnalyze!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonAnalyze!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext!!,
                 viewRoot!!.findViewById(R.id.analyze_reveal),
@@ -156,7 +152,7 @@ class CoaxFragment : Fragment() {
             }
         })
 
-        buttonSynthesize!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonSynthesize!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext!!,
                 viewRoot!!.findViewById(R.id.synthesize_reveal),
@@ -662,7 +658,7 @@ class CoaxFragment : Fragment() {
             )
             editTextC!!.setTextColor(defaultEditTextColor)
         }
-        radioButtonA!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonA!!.setOnClickListener(View.OnClickListener {
             radioButtonA!!.setChecked(true)
             editTextA!!.setBackgroundTintList(
                 AppCompatResources.getColorStateList(
@@ -689,7 +685,7 @@ class CoaxFragment : Fragment() {
             editTextC!!.setTextColor(defaultEditTextColor)
             target = Constants.Synthesize_CoreRadius
         })
-        radioButtonB!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonB!!.setOnClickListener(View.OnClickListener {
             radioButtonA!!.setChecked(false)
             editTextA!!.setBackgroundTintList(
                 AppCompatResources.getColorStateList(
@@ -716,7 +712,7 @@ class CoaxFragment : Fragment() {
             editTextC!!.setTextColor(defaultEditTextColor)
             target = Constants.Synthesize_Height
         })
-        radioButtonC!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonC!!.setOnClickListener(View.OnClickListener {
             radioButtonA!!.setChecked(false)
             editTextA!!.setBackgroundTintList(
                 AppCompatResources.getColorStateList(

@@ -1,14 +1,9 @@
 package com.rookiedev.microwavetools
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -62,8 +57,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<Toolbar?>(R.id.toolbar)
-
-        //        setSupportActionBar(toolbar);
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
             val alertDialog = AlertDialog.Builder(this@MainActivity).create()
@@ -109,12 +102,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         ) {
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            }
-
-            override fun onDrawerOpened(drawerView: View) {
-            }
-
             override fun onDrawerClosed(drawerView: View) {
                 val bundle = Bundle()
                 val transaction: FragmentTransaction?
@@ -199,52 +186,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    //    @Override
-    //    public void onBackPressed() {
-    //        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-    //        if (drawer.isDrawerOpen(GravityCompat.START)) {
-    //            drawer.closeDrawer(GravityCompat.START);
-    //        } else {
-    //            super.onBackPressed();
-    //        }
-    //    }
-    /**
-     * Initializes the options menu.
-     * 
-     * @param menu The options menu in which you place your items.
-     * @return true if the menu was successfully created.
-     */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.action_menu, menu)
-        return true
-    }
-
-    /**
-     * Handles item selections in the options menu.
-     * 
-     * @param item The menu item that was selected.
-     * @return true if the item selection was handled.
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action buttons
-        if (item.getItemId() == R.id.menu_help) {
-            val i = Intent(Intent.ACTION_SEND)
-            i.setType("message/rfc822")
-            i.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("rookie.dev@gmail.com"))
-            i.putExtra(Intent.EXTRA_SUBJECT, "")
-            i.putExtra(Intent.EXTRA_TEXT, "")
-            try {
-                startActivity(Intent.createChooser(i, "Send email ..."))
-            } catch (ex: ActivityNotFoundException) {
-                Toast.makeText(this, getResources().getString(R.string.noEmail), Toast.LENGTH_SHORT)
-                    .show()
-            }
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     /**
      * Called after onRestoreInstanceState(Bundle) when the activity is being re-initialized.
      * 
@@ -254,15 +195,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onPostCreate(savedInstanceState)
         // Sync the toggle state after onRestoreInstanceState has occurred.
         toggle!!.syncState()
-    }
-
-    /**
-     * Called by the system when the device configuration changes while your activity is running.
-     * 
-     * @param newConfig The new device configuration.
-     */
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
     }
 
     /**

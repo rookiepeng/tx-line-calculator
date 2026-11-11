@@ -71,10 +71,6 @@ class CmlinFragment : Fragment() {
     private var radioButtonZ0e: RadioButton? = null
     private var useZ0k = false // calculate with Z0, k, or Z0e, Z0o
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     /**
      * Called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
@@ -93,7 +89,7 @@ class CmlinFragment : Fragment() {
         readSharedPref()
         setRadioBtn()
 
-        buttonAnalyze!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonAnalyze!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext,
                 viewRoot!!.findViewById<ImageView>(R.id.analyze_reveal)!!,
@@ -161,7 +157,7 @@ class CmlinFragment : Fragment() {
             }
         })
 
-        buttonSynthesize!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonSynthesize!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext,
                 viewRoot!!.findViewById<ImageView>(R.id.synthesize_reveal)!!,
@@ -429,7 +425,7 @@ class CmlinFragment : Fragment() {
      * Set the radio button behavior for selecting calculation mode.
      */
     private fun setRadioBtn() {
-        radioButtonZ0!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonZ0!!.setOnClickListener(View.OnClickListener {
             radioButtonZ0!!.isChecked = true
             radioButtonK!!.isChecked = true
             radioButtonZ0o!!.isChecked = false
@@ -474,7 +470,7 @@ class CmlinFragment : Fragment() {
                     R.color.background_tint_analyze_light
                 )
         })
-        radioButtonK!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonK!!.setOnClickListener(View.OnClickListener {
             radioButtonZ0!!.isChecked = true
             radioButtonK!!.isChecked = true
             radioButtonZ0o!!.isChecked = false
@@ -519,7 +515,7 @@ class CmlinFragment : Fragment() {
                     R.color.background_tint_analyze_light
                 )
         })
-        radioButtonZ0o!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonZ0o!!.setOnClickListener(View.OnClickListener {
             radioButtonZ0o!!.isChecked = true
             radioButtonZ0e!!.isChecked = true
             radioButtonZ0!!.isChecked = false
@@ -554,7 +550,7 @@ class CmlinFragment : Fragment() {
                     R.color.background_tint_analyze
                 )
         })
-        radioButtonZ0e!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonZ0e!!.setOnClickListener(View.OnClickListener {
             radioButtonZ0o!!.isChecked = true
             radioButtonZ0e!!.isChecked = true
             radioButtonZ0!!.isChecked = false

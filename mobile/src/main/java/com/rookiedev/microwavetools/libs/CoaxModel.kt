@@ -4,27 +4,9 @@ import com.rookiedev.microwavetools.libs.Constants.ERROR
 
 class CoaxModel {
     private val substrate: SubstrateModel
-    /**
-     * Gets the impedance.
-     * 
-     * @return the impedance in ohms
-     */
-    /**
-     * Sets the impedance.
-     * 
-     * @param impedance the impedance in ohms
-     */
+    /** Impedance. */
     var impedance: Double = 0.0
-    /**
-     * Gets the phase.
-     * 
-     * @return the phase in degrees
-     */
-    /**
-     * Sets the phase.
-     * 
-     * @param phase the phase in degrees
-     */
+    /** Phase. */
     var phase: Double = 0.0 // ohms, degree
 
     /**
@@ -58,16 +40,7 @@ class CoaxModel {
      */
     var metalLength: Double = 0.0
         private set
-    /**
-     * Gets the error code.
-     * 
-     * @return the error code
-     */
-    /**
-     * Sets the error code.
-     * 
-     * @param errorCode the error code
-     */
+    /** Error code. */
     var errorCode: ERROR? = null
 
     /**

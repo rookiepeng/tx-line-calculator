@@ -8,27 +8,9 @@ import com.rookiedev.microwavetools.libs.Constants.ERROR
 class MlinModel {
     private val substrate: SubstrateModel
     private val metal: MetalModel
-    /**
-     * Gets the impedance.
-     * 
-     * @return the impedance
-     */
-    /**
-     * Sets the impedance.
-     * 
-     * @param impedance the impedance value
-     */
+    /** Impedance. */
     var impedance: Double = 0.0
-    /**
-     * Gets the phase.
-     * 
-     * @return the phase
-     */
-    /**
-     * Sets the phase.
-     * 
-     * @param electricalLength the electrical length value
-     */
+    /** Phase. */
     var phase: Double = 0.0 // ohms, degree
 
     /**
@@ -38,21 +20,9 @@ class MlinModel {
      */
     var frequency: Double = 0.0 // Hz
         private set
-    /**
-     * Gets the error code.
-     * 
-     * @return the error code
-     */
-    /**
-     * Sets the error code.
-     * 
-     * @param errorCode the error code
-     */
+    /** Error code. */
     var errorCode: ERROR? = null
 
-    /**
-     * Default constructor initializing substrate and metal models.
-     */
     init {
         substrate = SubstrateModel()
         metal = MetalModel()

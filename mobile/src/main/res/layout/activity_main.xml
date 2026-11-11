@@ -20,6 +20,5 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
-        <!--app:itemBackground="?attr/selectableItemBackground"-->
 
 </androidx.drawerlayout.widget.DrawerLayout>

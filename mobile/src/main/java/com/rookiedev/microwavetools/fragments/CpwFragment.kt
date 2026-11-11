@@ -71,7 +71,7 @@ class CpwFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (getArguments() != null) {
-            withGround = getArguments()!!.getString(Constants.PARAMS_CPW) == Constants.GROUNDED_CPW
+            withGround = requireArguments().getString(Constants.PARAMS_CPW) == Constants.GROUNDED_CPW
         }
     }
 
@@ -94,7 +94,7 @@ class CpwFragment : Fragment() {
         readSharedPref()
         setRadioBtn()
 
-        buttonAnalyze!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonAnalyze!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext!!,
                 viewRoot!!.findViewById<ImageView>(R.id.analyze_reveal)!!,
@@ -156,7 +156,7 @@ class CpwFragment : Fragment() {
             }
         })
 
-        buttonSynthesize!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonSynthesize!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext!!,
                 viewRoot!!.findViewById<ImageView>(R.id.synthesize_reveal)!!,
@@ -778,7 +778,7 @@ class CpwFragment : Fragment() {
             editTextH!!.setTextColor(defaultEditTextColor)
             target = Constants.Synthesize_Width
         }
-        radioButtonW!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonW!!.setOnClickListener(View.OnClickListener {
             radioButtonW!!.setChecked(true)
             editTextW!!.setBackgroundTintList(
                 AppCompatResources.getColorStateList(
@@ -805,7 +805,7 @@ class CpwFragment : Fragment() {
             editTextH!!.setTextColor(defaultEditTextColor)
             target = Constants.Synthesize_Width
         })
-        radioButtonG!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonG!!.setOnClickListener(View.OnClickListener {
             radioButtonW!!.setChecked(false)
             editTextW!!.setBackgroundTintList(
                 AppCompatResources.getColorStateList(
@@ -832,7 +832,7 @@ class CpwFragment : Fragment() {
             editTextH!!.setTextColor(defaultEditTextColor)
             target = Constants.Synthesize_Gap
         })
-        radioButtonH!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonH!!.setOnClickListener(View.OnClickListener {
             radioButtonW!!.setChecked(false)
             editTextW!!.setBackgroundTintList(
                 AppCompatResources.getColorStateList(

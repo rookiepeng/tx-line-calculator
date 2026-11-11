@@ -1,6 +1,5 @@
 package com.rookiedev.microwavetools.libs
 
-import android.util.Log
 import com.rookiedev.microwavetools.libs.Constants.ERROR
 import kotlin.math.abs
 import kotlin.math.ln
@@ -110,7 +109,6 @@ class CpwCalculator {
             if (bt <= at) {
                 at = a
                 bt = b
-                // alert("Warning: bt <= at so I am reverting to zero thickness equations\n");
             }
 
             // Wadell (3.4.1.6)
@@ -177,7 +175,6 @@ class CpwCalculator {
     private fun Synthesize(line: CpwModel, flag: Int, withGround: Boolean): CpwModel {
         var line = line
         val Ro: Double
-        var Xo: Double
         var v: Double
         val len: Double
 
@@ -228,7 +225,6 @@ class CpwCalculator {
                 varmax = 100.0 * line.subHeight
                 varmin = 0.001 * line.subHeight
                 `var` = line.subHeight
-                Log.v("TAG", "Synthesize_Gap")
             }
 
             Constants.Synthesize_Height -> {
@@ -256,7 +252,6 @@ class CpwCalculator {
         len = line.phase /* remember what electrical length we want */
         line.setMetalLength(1.0, "m")
 
-        Log.v("TAG", "1")
         if (!done) {
             // Initialize the various error values
             line.setSynthesizeParameter(varmin, flag)
@@ -266,8 +261,6 @@ class CpwCalculator {
                 return line
             }
             errmin = line.impedance - Ro
-            Log.v("MIN Imp", line.impedance.toString())
-            Log.v("TAG", "2")
             line.setSynthesizeParameter(varmax, flag)
             line = Analysis(line, withGround)
             if (line.errorCode != ERROR.NO_ERROR) {
@@ -275,8 +268,6 @@ class CpwCalculator {
                 return line
             }
             errmax = line.impedance - Ro
-            Log.v("MAX Imp", line.impedance.toString())
-            Log.v("TAG", "3")
             line.setSynthesizeParameter(`var`, flag)
             line = Analysis(line, withGround)
             if (line.errorCode != ERROR.NO_ERROR) {
@@ -284,7 +275,6 @@ class CpwCalculator {
                 return line
             }
             err = line.impedance - Ro
-            Log.v("TAG", "4")
             varold = 0.99 * `var`
             line.setSynthesizeParameter(varold, flag)
             line = Analysis(line, withGround)
@@ -293,19 +283,12 @@ class CpwCalculator {
                 return line
             }
             errold = line.impedance - Ro
-            Log.v("TAG", "5")
 
-            Log.v("MAX", errmax.toString())
-            Log.v("MIN", errmin.toString())
             // see if we've actually been able to bracket the solution
             if (errmax * errmin > 0) {
-                /*
-                 * alert("Could not bracket the solution.\n" "Synthesis failed.\n"); return -1;
-                 */
                 line.errorCode = ERROR.COULD_NOT_BRACKET_SOLUTION
                 return line
             }
-            Log.v("TAG", "6")
             // figure out the slope of the error vs variable
             if (errmax > 0) sign = 1.0
             else sign = -1.0
@@ -318,7 +301,6 @@ class CpwCalculator {
             // update the interation count
             iters = iters + 1
 
-            Log.v("TAG", iters.toString())
             // calculate an estimate of the derivative
             deriv = (err - errold) / (`var` - varold)
 
@@ -356,11 +338,6 @@ class CpwCalculator {
             } else if (abs((`var` - varold) / `var`) < reltol) {
                 done = true
             } else if (iters >= maxiters) {
-                /*
-                 * alert("Synthesis failed to converge in\n"
-                 * "%d iterations.  Final optimization header_parameters:\n" "  min = %g\n"
-                 * "  val = %g\n" "  max = %g\n", maxiters, varmin, var, varmax); return -1;
-                 */
                 line.errorCode = ERROR.MAX_ITERATIONS
                 return line
             }
@@ -370,7 +347,6 @@ class CpwCalculator {
         // velocity on line
         line = Analysis(line, withGround)
 
-        // v = Constants.LIGHTSPEED / Math.sqrt(line.getSubEpsilon());
         line.setMetalLength(line.metalLength * len / line.phase, "m")
 
         line.errorCode = ERROR.NO_ERROR

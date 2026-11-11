@@ -63,10 +63,6 @@ class MlinFragment : Fragment() {
     private var target = 0
     private var defaultEditTextColor: ColorStateList? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     /**
      * Called to have the fragment instantiate its user interface view.
      * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
@@ -86,7 +82,7 @@ class MlinFragment : Fragment() {
         readSharedPref() // read shared preferences
         setRadioBtn()
 
-        buttonAnalyze!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonAnalyze!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext!!,
                 viewRoot!!.findViewById<ImageView>(R.id.analyze_reveal)!!,
@@ -139,7 +135,7 @@ class MlinFragment : Fragment() {
             }
         })
 
-        buttonSynthesize!!.setOnClickListener(View.OnClickListener { view: View? ->
+        buttonSynthesize!!.setOnClickListener(View.OnClickListener {
             Constants.refreshAnimation(
                 mContext!!,
                 viewRoot!!.findViewById<ImageView>(R.id.synthesize_reveal)!!,
@@ -541,7 +537,7 @@ class MlinFragment : Fragment() {
             editTextH!!.setTextColor(ContextCompat.getColor(mContext!!, R.color.synthesizeColor))
         }
 
-        radioButtonW!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonW!!.setOnClickListener(View.OnClickListener {
             radioButtonW!!.setChecked(true)
             editTextW!!.setBackgroundTintList(
                 AppCompatResources.getColorStateList(
@@ -560,7 +556,7 @@ class MlinFragment : Fragment() {
             editTextH!!.setTextColor(defaultEditTextColor)
             target = Constants.Synthesize_Width
         })
-        radioButtonH!!.setOnClickListener(View.OnClickListener { arg0: View? ->
+        radioButtonH!!.setOnClickListener(View.OnClickListener {
             radioButtonW!!.setChecked(false)
             editTextW!!.setBackgroundTintList(
                 AppCompatResources.getColorStateList(
