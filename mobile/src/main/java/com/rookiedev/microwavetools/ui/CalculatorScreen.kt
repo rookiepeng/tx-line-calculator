@@ -1,6 +1,12 @@
 package com.rookiedev.microwavetools.ui
 
 import androidx.compose.animation.core.Animatable
+import kotlin.math.hypot
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.clip
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -198,6 +204,7 @@ private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState) {
         title = stringResource(R.string.Dim),
         subtitle = stringResource(if (line.coupled) R.string.dim_subtitle_coupled else R.string.dim_subtitle_pick),
         accent = LocalAccents.current.synthesize,
+        reveal = Reveal(state.runId, state.lastAction == Action.SYNTHESIZE, fromBottomStart = true),
     ) {
         val hasRadios = line.targets.isNotEmpty()
         for (id in line.dimensions) {
@@ -240,6 +247,7 @@ private fun ParametersCard(vm: CalculatorViewModel, state: CalculatorState) {
         title = stringResource(R.string.Par),
         subtitle = stringResource(R.string.par_subtitle),
         accent = LocalAccents.current.analyze,
+        reveal = Reveal(state.runId, state.lastAction == Action.ANALYZE, fromBottomStart = false),
     ) {
         if (line.coupled) {
             Text(
@@ -274,17 +282,45 @@ private fun ParametersCard(vm: CalculatorViewModel, state: CalculatorState) {
     }
 }
 
+/** When and where a card plays its reveal animation. */
+private data class Reveal(val runId: Int, val active: Boolean, val fromBottomStart: Boolean)
+
 @Composable
 private fun SectionCard(
     icon: Int,
     title: String,
     subtitle: String,
     accent: Color,
+    reveal: Reveal,
     content: @Composable () -> Unit,
 ) {
+    // Circular reveal from the original app: a circle of the action's color grows from a
+    // corner across the card while fading out.
+    val progress = remember { Animatable(1f) }
+    LaunchedEffect(reveal.runId) {
+        if (reveal.active && reveal.runId > 0) {
+            progress.snapTo(0f)
+            progress.animateTo(1f, tween(durationMillis = 450, easing = LinearEasing))
+        }
+    }
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(CardDefaults.shape)
+            .drawWithContent {
+                drawContent()
+                val p = progress.value
+                if (p < 1f) {
+                    val origin = if (reveal.fromBottomStart) Offset(0f, size.height) else Offset(size.width, 0f)
+                    drawCircle(
+                        color = accent,
+                        radius = hypot(size.width, size.height) * FastOutSlowInEasing.transform(p),
+                        center = origin,
+                        alpha = 1f - p * p,
+                    )
+                }
+            },
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {

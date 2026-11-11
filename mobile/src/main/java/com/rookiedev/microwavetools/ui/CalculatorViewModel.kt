@@ -25,6 +25,8 @@ data class CalculatorState(
     val updated: Set<FieldId> = emptySet(),
     /** Increments on every calculation so the UI can replay the highlight. */
     val runId: Int = 0,
+    /** The action behind [runId], so the UI knows which card plays its reveal. */
+    val lastAction: Action? = null,
 ) {
     fun field(id: FieldId) = fields.getValue(id)
 }
@@ -106,7 +108,7 @@ class CalculatorViewModel(
                 newFields[id] = f.copy(text = format(fromSi(id, value, f.unit)), error = null)
             }
             for ((id, msg) in result.errors) newFields[id] = newFields.getValue(id).copy(error = msg)
-            copy(fields = newFields, updated = result.values.keys, runId = runId + 1)
+            copy(fields = newFields, updated = result.values.keys, runId = runId + 1, lastAction = action)
         }
     }
 
