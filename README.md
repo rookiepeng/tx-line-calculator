@@ -70,6 +70,10 @@ Run the calculator tests with:
 - `mobile/src/main/java/.../ui/` — the Jetpack Compose UI: one shared calculator screen, line diagrams and theme
 - `pics/play-store/` — Google Play feature graphic and phone screenshots
 
+## Privacy
+
+The app collects no personal data. See the [Privacy Policy](PRIVACY.md).
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
