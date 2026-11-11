@@ -117,10 +117,11 @@ fun CalculatorScreen(
                     Icon(painterResource(R.drawable.ic_restore_white_24dp), stringResource(R.string.reset))
                 }
             }
-            // Transparent in both states so the bar blends into the page, even when scrolled.
+            // Semi-transparent: content scrolling behind the bar stays faintly visible
+            // while the title remains readable.
             val barColors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = Color.Transparent,
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+                scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.85f),
             )
             // Short (landscape phone) screens get a single-row bar to leave room for the inputs.
             if (compactTopBar) {
