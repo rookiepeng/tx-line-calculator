@@ -7,6 +7,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -234,6 +235,8 @@ fun LineDiagram(
     onSelect: (FieldId) -> Unit,
     contentDescription: String,
     modifier: Modifier = Modifier,
+    /** Fixed short height (for the pinned copy) instead of the natural aspect ratio. */
+    compact: Boolean = false,
 ) {
     val scene = remember(line) { line.scene() }
     val bounds = remember(scene) { scene.bounds() }
@@ -258,7 +261,7 @@ fun LineDiagram(
     Canvas(
         modifier
             .fillMaxWidth()
-            .aspectRatio(aspect)
+            .then(if (compact) Modifier.height(112.dp) else Modifier.aspectRatio(aspect))
             .semantics { this.contentDescription = contentDescription }
             .pointerInput(line) {
                 detectTapGestures { pos ->

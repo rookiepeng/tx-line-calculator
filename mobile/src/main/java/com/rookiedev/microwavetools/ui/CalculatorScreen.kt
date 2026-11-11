@@ -1,5 +1,15 @@
 package com.rookiedev.microwavetools.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.animation.core.Animatable
 import kotlin.math.hypot
 import androidx.compose.ui.geometry.Offset
@@ -153,12 +163,24 @@ fun CalculatorScreen(
         // Skip the top inset here and add it inside the scrolling column instead, so the cards
         // start below the header but scroll up behind the transparent bar.
         val layoutDirection = LocalLayoutDirection.current
+        // Where the main diagram sits on screen, to know when it has scrolled under the header.
+        var viewportTop by remember { mutableFloatStateOf(0f) }
+        var diagramBottom by remember { mutableFloatStateOf(Float.MAX_VALUE) }
+        var diagramHeight by remember { mutableIntStateOf(0) }
+        val headerPx = with(LocalDensity.current) { padding.calculateTopPadding().toPx() }
+        val diagramHidden = diagramBottom < viewportTop + headerPx + diagramHeight * 0.5f
+        val trackDiagram = Modifier.onGloballyPositioned {
+            diagramBottom = it.positionInRoot().y + it.size.height
+            diagramHeight = it.size.height
+        }
         BoxWithConstraints(
-            Modifier.padding(
-                start = padding.calculateStartPadding(layoutDirection),
-                end = padding.calculateEndPadding(layoutDirection),
-                bottom = padding.calculateBottomPadding(),
-            )
+            Modifier
+                .padding(
+                    start = padding.calculateStartPadding(layoutDirection),
+                    end = padding.calculateEndPadding(layoutDirection),
+                    bottom = padding.calculateBottomPadding(),
+                )
+                .onGloballyPositioned { viewportTop = it.positionInRoot().y }
         ) {
             val wide = maxWidth >= 720.dp
             val scroll = rememberScrollState()
@@ -174,17 +196,43 @@ fun CalculatorScreen(
                 if (wide) {
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Diagram(line, fieldFocus)
+                            Diagram(line, fieldFocus, trackDiagram)
                             dimensions()
                         }
                         Column(Modifier.weight(1f)) { parameters() }
                     }
                 } else {
-                    Diagram(line, fieldFocus)
+                    Diagram(line, fieldFocus, trackDiagram)
                     dimensions()
                     parameters()
                 }
                 Spacer(Modifier.size(8.dp))
+            }
+
+            // While editing with the main diagram scrolled away, pin a compact copy under the header
+            // so the highlight stays in view.
+            AnimatedVisibility(
+                visible = fieldFocus.focused != null && diagramHidden,
+                enter = fadeIn() + slideInVertically { -it / 2 },
+                exit = fadeOut() + slideOutVertically { -it / 2 },
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = padding.calculateTopPadding() + 4.dp)
+                    .padding(horizontal = 16.dp),
+            ) {
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                ) {
+                    LineDiagram(
+                        line = line,
+                        highlight = fieldFocus.focused,
+                        onSelect = { fieldFocus.requesters[it]?.requestFocus() },
+                        contentDescription = stringResource(R.string.diagram_description, stringResource(line.title)),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        compact = true,
+                    )
+                }
             }
         }
     }
@@ -212,10 +260,10 @@ private class FieldFocus(fields: List<FieldId>) {
 }
 
 @Composable
-private fun Diagram(line: LineType, focus: FieldFocus) {
+private fun Diagram(line: LineType, focus: FieldFocus, modifier: Modifier = Modifier) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     ) {
         LineDiagram(
             line = line,
