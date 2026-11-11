@@ -31,6 +31,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -102,7 +106,7 @@ import com.rookiedev.microwavetools.ui.theme.LocalAccents
  * One screen for every line type: a cross-section diagram, a Dimensions card (solved by
  * Synthesize) and a Parameters card (solved by Analyze), with the two actions pinned at the bottom.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun CalculatorScreen(
     vm: CalculatorViewModel,
@@ -115,9 +119,12 @@ fun CalculatorScreen(
     val focus = LocalFocusManager.current
     var confirmReset by rememberSaveable { mutableStateOf(false) }
     val fieldFocus = remember(line) { FieldFocus(line.fields) }
+    val imeVisible = WindowInsets.isImeVisible
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        // Only the collapsing bar uses the scroll behavior; attached without it, the behavior would
+        // swallow every upward scroll trying to collapse a bar that isn't there.
+        modifier = if (compactTopBar) Modifier else Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             val title = @Composable {
                 Text(stringResource(line.title), maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -154,10 +161,14 @@ fun CalculatorScreen(
             }
         },
         bottomBar = {
-            ActionBar(
-                onSynthesize = { focus.clearFocus(); vm.synthesize() },
-                onAnalyze = { focus.clearFocus(); vm.analyze() },
-            )
+            // On short screens the keyboard leaves almost no room, so give the action bar's space
+            // to the field being edited; the bar returns when the keyboard closes.
+            if (!(compactTopBar && imeVisible)) {
+                ActionBar(
+                    onSynthesize = { focus.clearFocus(); vm.synthesize() },
+                    onAnalyze = { focus.clearFocus(); vm.analyze() },
+                )
+            }
         },
     ) { padding ->
         // Skip the top inset here and add it inside the scrolling column instead, so the cards
@@ -181,6 +192,9 @@ fun CalculatorScreen(
                     bottom = padding.calculateBottomPadding(),
                 )
                 .onGloballyPositioned { viewportTop = it.positionInRoot().y }
+                // Keeps content above the keyboard when the action bar (which normally does it) is hidden.
+                .consumeWindowInsets(padding)
+                .imePadding()
         ) {
             val wide = maxWidth >= 720.dp
             val scroll = rememberScrollState()
@@ -212,7 +226,7 @@ fun CalculatorScreen(
             // While editing with the main diagram scrolled away, pin a compact copy under the header
             // so the highlight stays in view.
             AnimatedVisibility(
-                visible = fieldFocus.focused != null && diagramHidden,
+                visible = fieldFocus.focused != null && diagramHidden && !compactTopBar,
                 enter = fadeIn() + slideInVertically { -it / 2 },
                 exit = fadeOut() + slideOutVertically { -it / 2 },
                 modifier = Modifier
