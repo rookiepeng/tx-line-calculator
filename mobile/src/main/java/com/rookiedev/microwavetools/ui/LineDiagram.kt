@@ -69,6 +69,8 @@ private sealed interface Dim { val field: FieldId; val label: String }
 private data class Linear(
     override val field: FieldId, override val label: String,
     val a: V3, val b: V3, val off: V3, val labelDir: V3 = off,
+    /** Draw a small cross at [a] and [b] (for center-to-center dimensions). */
+    val centerMarks: Boolean = false,
 ) : Dim
 
 /** A radius from [center] at [angleDeg] in the xy plane. */
@@ -171,12 +173,17 @@ private fun coaxScene(): Scene {
         shapes = listOf(
             Tube(0f, 0f, shield, 2f, length, Part.GROUND),
             Tube(0f, 0f, b, 1f, 2f, Part.DIELECTRIC),
-            Tube(0f, c, a, 0f, 1f, Part.SIGNAL),
+            // Core face sits on the dielectric face, so a, b and c all measure in one plane.
+            Tube(0f, c, a, 1f, 1f, Part.SIGNAL),
         ),
         dims = listOf(
             Radial(FieldId.B, "b", V3(0f, 0f, 1f), b, 225f),
-            Radial(FieldId.A, "a", V3(0f, c, 0f), a, 20f),
-            Linear(FieldId.C, "c", V3(0f, 0f, 1f), V3(0f, c, 1f), V3(-1.8f, 0f, 0f)),
+            Radial(FieldId.A, "a", V3(0f, c, 1f), a, 135f),
+            // Offset from the cable axis to the core center, measured to the right of the core.
+            Linear(
+                FieldId.C, "c", V3(0f, 0f, 1f), V3(0f, c, 1f), V3(a + 0.9f, 0f, 0f),
+                centerMarks = true,
+            ),
             Linear(FieldId.L, "L", V3(0f, shield, 2f), V3(0f, shield, length), V3(0f, 0.9f, 0f)),
         ),
     )
@@ -349,6 +356,13 @@ private fun DrawScope.arrow(tip: Offset, dir: Offset, color: Color) {
 private fun DrawScope.drawLinear(d: Linear, p: (V3) -> Offset, color: Color, stroke: Float): Anchor {
     val a0 = p(d.a); val b0 = p(d.b)
     val a = p(d.a + d.off); val b = p(d.b + d.off)
+    if (d.centerMarks) {
+        val m = 5.dp.toPx()
+        for (c in listOf(a0, b0)) {
+            drawLine(color, c - Offset(m, 0f), c + Offset(m, 0f), strokeWidth = stroke * 0.8f)
+            drawLine(color, c - Offset(0f, m), c + Offset(0f, m), strokeWidth = stroke * 0.8f)
+        }
+    }
     val ext = (a - a0).unit() * 4.dp.toPx()
     if (a != a0) {
         drawLine(color, a0, a + ext, strokeWidth = stroke * 0.6f)
