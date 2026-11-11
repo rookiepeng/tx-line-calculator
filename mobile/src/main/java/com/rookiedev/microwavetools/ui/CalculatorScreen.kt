@@ -1,7 +1,9 @@
 package com.rookiedev.microwavetools.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -149,7 +151,11 @@ fun CalculatorScreen(
             )
             // Short (landscape phone) screens get a single-row bar to leave room for the inputs.
             if (compactTopBar) {
-                TopAppBar(title = title, navigationIcon = navigationIcon, actions = actions, colors = barColors)
+                // On short screens the header also steps aside while typing, leaving the most room
+                // for the field being edited.
+                AnimatedVisibility(visible = !imeVisible, enter = expandVertically(), exit = shrinkVertically()) {
+                    TopAppBar(title = title, navigationIcon = navigationIcon, actions = actions, colors = barColors)
+                }
             } else {
                 MediumTopAppBar(
                     title = title,
