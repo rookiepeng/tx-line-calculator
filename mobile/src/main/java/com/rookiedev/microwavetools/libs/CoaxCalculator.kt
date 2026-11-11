@@ -19,18 +19,10 @@ class CoaxCalculator {
 
         // qualify the inputs some
         if (line.subRadius <= line.coreRadius) {
-            /*
-             * alert("Error: b (%g) must be > a (%g)\r\n" "for a coax_fragment line\r\n");
-             * return -1;
-             */
             line.errorCode = ERROR.SUBSTRATE_TOO_LARGE
             return line
         }
         if (line.coreOffset >= (line.subRadius - 2 * line.coreRadius)) {
-            /*
-             * alert("Error:  c (%g)  must be < b - a (%g)\r\n"
-             * "for a coax_fragment line\r\n",line->c,line->b-line->a); return -1;
-             */
             line.errorCode = ERROR.OFFSET_TOO_LARGE
             return line
         }
@@ -119,7 +111,6 @@ class CoaxCalculator {
          */
         when (flag) {
             Constants.Synthesize_CoreRadius -> {
-                // varmax = 0.999 * line.getSubRadius();
                 varmin = 0.001 * line.subRadius
                 varmax = (line.subRadius - line.coreOffset) / 2 * 0.999
                 `var` = 0.2 * line.subRadius
@@ -127,7 +118,6 @@ class CoaxCalculator {
 
             Constants.Synthesize_SubRadius -> {
                 varmax = 1000.0 * line.coreRadius
-                // varmin = 1.001 * line.getCoreRadius();
                 varmin = (2 * line.coreRadius + line.coreOffset) * 1.001
                 `var` = 5 * line.coreRadius
             }
@@ -191,9 +181,6 @@ class CoaxCalculator {
 
             // see if we've actually been able to bracket the solution
             if (errmax * errmin > 0) {
-                /*
-                 * alert("Could not bracket the solution.\n" "Synthesis failed.\n"); return -1;
-                 */
                 line.errorCode = ERROR.COULD_NOT_BRACKET_SOLUTION
                 return line
             }
@@ -247,10 +234,6 @@ class CoaxCalculator {
             } else if (abs((`var` - varold) / `var`) < reltol) {
                 done = true
             } else if (iters >= maxiters) {
-                /*
-                 * alert("Synthesis failed to converge in\n" "%d iterations\n", maxiters);
-                 * return -1;
-                 */
                 line.errorCode = ERROR.MAX_ITERATIONS
                 return line
             }

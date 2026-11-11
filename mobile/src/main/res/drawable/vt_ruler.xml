@@ -13,7 +13,7 @@
             android:strokeLineJoin="miter"
             android:strokeLineCap="butt"
             android:strokeMiterLimit="4"
-            android:strokeColor="@color/synthesizeColor" />
+            android:strokeColor="#FF000000" />
         <group
             android:rotation="45"
             android:translateX="93.42551"

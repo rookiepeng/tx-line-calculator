@@ -1,6 +1,5 @@
 package com.rookiedev.microwavetools.libs
 
-import android.util.Log
 import com.rookiedev.microwavetools.libs.Constants.ERROR
 import kotlin.math.abs
 import kotlin.math.exp
@@ -123,7 +122,6 @@ class CslinCalculator {
             lineSlin.setMetalLength(line.metalLength, "m")
             lineSlin.setFrequency(line.frequency, "Hz")
 
-            Log.v("TAG", "1")
             val slin = SlinCalculator()
             lineSlin = slin.getAnaResult(lineSlin)
             if (lineSlin.errorCode != ERROR.NO_ERROR) {
@@ -131,7 +129,6 @@ class CslinCalculator {
                 return line
             }
             z0s = lineSlin.impedance
-            Log.v("TAG", "2")
             lineSlin.setMetalThick(0.0, "m")
             lineSlin = slin.getAnaResult(lineSlin)
             if (lineSlin.errorCode != ERROR.NO_ERROR) {
@@ -144,7 +141,6 @@ class CslinCalculator {
                 line.errorCode = ERROR.COULD_NOT_BRACKET_SOLUTION
                 return line
             }
-            Log.v("TAG", "3")
             // fringing capacitance
             cf_t = ((Constants.FREESPACE_E0 * line.subEpsilon / Math.PI)
                     * ((2.0 / (1.0 - line.metalThick / line.subHeight))
@@ -153,11 +149,9 @@ class CslinCalculator {
                 (1.0 / (1.0 - line.metalThick / line.subHeight).pow(2.0)) - 1.0
             )))
 
-            Log.v("TAG", "4")
             // zero thickness fringing capacitance
             cf_0 = (Constants.FREESPACE_E0 * line.subEpsilon / Math.PI) * 2.0 * ln(2.0)
 
-            Log.v("TAG", "5")
             // (18) from Cohn, (4.6.5.1) in Wadell
             line.impedanceEven = 1.0 / ((1.0 / z0s) - (cf_t / cf_0) * ((1.0 / z0s_0t) - (1.0 / z0e_0t)))
 
@@ -174,7 +168,6 @@ class CslinCalculator {
                             * (cf_t / Constants.FREESPACE_E0 - cf_0 / Constants.FREESPACE_E0)
                             + (2.0 * line.metalThick) / (Constants.FREESPACEZ0 * line.metalSpace))
             }
-            Log.v("TAG", "6")
         }
 
         // find impedance and coupling coefficient
@@ -209,10 +202,6 @@ class CslinCalculator {
         val h: Double
         val er: Double
         var l: Double
-        var wmin: Double
-        var wmax: Double
-        var abstol: Double
-        var reltol: Double
         val maxiters: Int
         var z0: Double
         var w: Double
@@ -221,8 +210,6 @@ class CslinCalculator {
         val len: Double
 
         var s: Double
-        var smin: Double
-        var smax: Double
         var z0e: Double
         var z0o: Double
         var k: Double
@@ -294,20 +281,6 @@ class CslinCalculator {
         l = 1000.0
         line.setMetalLength(l, "m")
 
-        // FIXME - change limits to be normalized to substrate thickness limits on the
-        // allowed range for w
-        // wmin = MIL2M(0.5);
-        // wmax = MIL2M(1000);
-
-        // limits on the allowed range for s
-        // smin = MIL2M(0.5);
-        // smax = MIL2M(1000);
-
-        // impedance convergence tolerance (ohms)
-        // abstol = 1e-6;
-
-        // width relative convergence tolerance (mils) (set to 0.1 micron)
-        // reltol = MICRON2MIL(0.1);
         maxiters = 50
 
         // Initial guess at a solution -- FIXME: This is an initial guess for coupled

@@ -7,27 +7,9 @@ import com.rookiedev.microwavetools.libs.Constants.WARNING
  * Represents a coupled stripline model with various parameters.
  */
 class CslinModel {
-    /**
-     * Gets the substrate model.
-     * 
-     * @return the substrate model
-     */
-    /**
-     * Sets the substrate model.
-     * 
-     * @param substrate the substrate model
-     */
+    /** Substrate model. */
     var substrate: SubstrateModel
-    /**
-     * Gets the metal model.
-     * 
-     * @return the metal model
-     */
-    /**
-     * Sets the metal model.
-     * 
-     * @param metal the metal model
-     */
+    /** Metal model. */
     var metal: MetalModel
 
     /**
@@ -37,60 +19,15 @@ class CslinModel {
      */
     var metalSpace: Double = 0.0
         private set
-    /**
-     * Gets the impedance.
-     * 
-     * @return the impedance
-     */
-    /**
-     * Sets the impedance.
-     * 
-     * @param impedance the impedance value
-     */
+    /** Impedance. */
     var impedance: Double = 0.0
-    /**
-     * Gets the phase.
-     * 
-     * @return the phase
-     */
-    /**
-     * Sets the phase.
-     * 
-     * @param phase the phase value
-     */
+    /** Phase. */
     var phase: Double = 0.0 // ohms, degree
-    /**
-     * Gets the even mode impedance.
-     * 
-     * @return the even mode impedance
-     */
-    /**
-     * Sets the even mode impedance.
-     * 
-     * @param impedanceEven the even mode impedance value
-     */
+    /** Even mode impedance. */
     var impedanceEven: Double = 0.0
-    /**
-     * Gets the odd mode impedance.
-     * 
-     * @return the odd mode impedance
-     */
-    /**
-     * Sets the odd mode impedance.
-     * 
-     * @param impedanceOdd the odd mode impedance value
-     */
+    /** Odd mode impedance. */
     var impedanceOdd: Double = 0.0
-    /**
-     * Gets the coupling factor.
-     * 
-     * @return the coupling factor
-     */
-    /**
-     * Sets the coupling factor.
-     * 
-     * @param couplingFactor the coupling factor value
-     */
+    /** Coupling factor. */
     var couplingFactor: Double = 0.0
 
     /**
@@ -100,32 +37,11 @@ class CslinModel {
      */
     var frequency: Double = 0.0 // Hz
         private set
-    /**
-     * Gets the error code.
-     * 
-     * @return the error code
-     */
-    /**
-     * Sets the error code.
-     * 
-     * @param errorCode the error code
-     */
+    /** Error code. */
     var errorCode: ERROR? = null
-    /**
-     * Gets the warning code.
-     * 
-     * @return the warning code
-     */
-    /**
-     * Sets the warning code.
-     * 
-     * @param warningCode the warning code
-     */
+    /** Warning code. */
     var warningCode: WARNING? = null
 
-    /**
-     * Default constructor initializing substrate and metal models.
-     */
     init {
         substrate = SubstrateModel()
         metal = MetalModel()

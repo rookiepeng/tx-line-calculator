@@ -183,8 +183,6 @@ class MlinCalculator {
         // effective relative permittivity
         effectiveEr = EF
 
-        // this.effectiveEr = effectiveEr;
-        // MLINLine.setkEff(eeff);
         line.phase = phase
 
         // store results
@@ -322,11 +320,8 @@ class MlinCalculator {
 
             // see if we've actually been able to bracket the solution
             if (errmax * errmin > 0) {
-                // alert("Could not bracket the solution.\n"
-                // "Synthesis failed.\n");
                 line.errorCode = ERROR.COULD_NOT_BRACKET_SOLUTION
                 return line
-                // return -1;
             }
 
             // figure out the slope of the error vs variable
@@ -383,9 +378,6 @@ class MlinCalculator {
             } else if (abs((`var` - varOld) / `var`) < reltol) {
                 done = true
             } else if (iters >= maxiters) {
-                // alert("Synthesis failed to converge in\n"
-                // "%d iterations\n", maxiters);
-                // return -1;
                 line.errorCode = ERROR.MAX_ITERATIONS
                 return line
             }
