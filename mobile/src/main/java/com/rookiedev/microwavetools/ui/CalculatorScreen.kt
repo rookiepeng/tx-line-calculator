@@ -8,7 +8,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -20,7 +19,11 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -65,10 +68,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -98,6 +104,7 @@ fun CalculatorScreen(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val focus = LocalFocusManager.current
     var confirmReset by rememberSaveable { mutableStateOf(false) }
+    val fieldFocus = remember(line) { FieldFocus(line.fields) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -155,8 +162,8 @@ fun CalculatorScreen(
         ) {
             val wide = maxWidth >= 720.dp
             val scroll = rememberScrollState()
-            val dimensions = @Composable { DimensionsCard(vm, state) }
-            val parameters = @Composable { ParametersCard(vm, state) }
+            val dimensions = @Composable { DimensionsCard(vm, state, fieldFocus) }
+            val parameters = @Composable { ParametersCard(vm, state, fieldFocus) }
             Column(
                 Modifier
                     .verticalScroll(scroll)
@@ -167,13 +174,13 @@ fun CalculatorScreen(
                 if (wide) {
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Diagram(line)
+                            Diagram(line, fieldFocus)
                             dimensions()
                         }
                         Column(Modifier.weight(1f)) { parameters() }
                     }
                 } else {
-                    Diagram(line)
+                    Diagram(line, fieldFocus)
                     dimensions()
                     parameters()
                 }
@@ -197,26 +204,31 @@ fun CalculatorScreen(
     }
 }
 
+/** Which field is being edited, and a way to move focus to any field (from the diagram). */
+@Stable
+private class FieldFocus(fields: List<FieldId>) {
+    val requesters = fields.associateWith { FocusRequester() }
+    var focused by mutableStateOf<FieldId?>(null)
+}
+
 @Composable
-private fun Diagram(line: LineType) {
+private fun Diagram(line: LineType, focus: FieldFocus) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Image(
-            painter = painterResource(line.diagram),
+        LineDiagram(
+            line = line,
+            highlight = focus.focused,
+            onSelect = { focus.requesters[it]?.requestFocus() },
             contentDescription = stringResource(R.string.diagram_description, stringResource(line.title)),
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 200.dp)
-                .padding(16.dp),
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         )
     }
 }
 
 @Composable
-private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState) {
+private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState, focus: FieldFocus) {
     val line = vm.line
     val outputs = vm.outputsOf(Action.SYNTHESIZE)
     SectionCard(
@@ -231,6 +243,7 @@ private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState) {
             FieldRow(
                 vm = vm,
                 id = id,
+                fieldFocus = focus,
                 field = state.field(id),
                 solvedBy = if (id in outputs) Action.SYNTHESIZE else null,
                 flash = id in state.updated,
@@ -259,7 +272,7 @@ private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ParametersCard(vm: CalculatorViewModel, state: CalculatorState) {
+private fun ParametersCard(vm: CalculatorViewModel, state: CalculatorState, focus: FieldFocus) {
     val line = vm.line
     val anaOutputs = vm.outputsOf(Action.ANALYZE)
     SectionCard(
@@ -292,6 +305,7 @@ private fun ParametersCard(vm: CalculatorViewModel, state: CalculatorState) {
             FieldRow(
                 vm = vm,
                 id = id,
+                fieldFocus = focus,
                 field = state.field(id),
                 solvedBy = if (id in anaOutputs) Action.ANALYZE else null,
                 flash = id in state.updated,
@@ -366,6 +380,7 @@ private fun SectionCard(
 private fun FieldRow(
     vm: CalculatorViewModel,
     id: FieldId,
+    fieldFocus: FieldFocus,
     field: FieldState,
     solvedBy: Action?,
     flash: Boolean,
@@ -422,7 +437,13 @@ private fun FieldRow(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }),
             colors = colors,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .focusRequester(fieldFocus.requesters.getValue(id))
+                .onFocusChanged {
+                    if (it.isFocused) fieldFocus.focused = id
+                    else if (fieldFocus.focused == id) fieldFocus.focused = null
+                },
         )
         if (id.unitKind.selectable) {
             Spacer(Modifier.width(8.dp))
@@ -472,7 +493,8 @@ private fun ActionBar(onSynthesize: () -> Unit, onAnalyze: () -> Unit) {
         Row(
             Modifier
                 .fillMaxWidth()
-                .navigationBarsPadding()
+                // Sit above the keyboard when it is open, otherwise above the navigation bar.
+                .windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.ime))
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {

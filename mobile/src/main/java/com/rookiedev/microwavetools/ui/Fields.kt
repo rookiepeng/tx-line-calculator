@@ -58,7 +58,6 @@ private fun plain(v: String) = Default(v)
 enum class LineType(
     @param:StringRes val title: Int,
     val navIcon: Int,
-    val diagram: Int,
     /** SharedPreferences key prefix used by earlier app versions; kept so saved values survive. */
     val prefPrefix: String,
     val dimensions: List<FieldId>,
@@ -68,7 +67,7 @@ enum class LineType(
     val defaults: Map<FieldId, Default>,
 ) {
     MLIN(
-        R.string.full_name_mlin, R.drawable.ic_menu_mlin, R.drawable.vt_mlin, "MLIN",
+        R.string.full_name_mlin, R.drawable.ic_menu_mlin, "MLIN",
         dimensions = listOf(FieldId.T, FieldId.H, FieldId.W, FieldId.L),
         parameters = listOf(FieldId.Z0, FieldId.PHS, FieldId.ER, FieldId.FREQ),
         targets = listOf(FieldId.H, FieldId.W),
@@ -78,7 +77,7 @@ enum class LineType(
         ),
     ),
     CMLIN(
-        R.string.full_name_cmlin, R.drawable.ic_menu_cmlin, R.drawable.vt_cmlin, "CMLIN",
+        R.string.full_name_cmlin, R.drawable.ic_menu_cmlin, "CMLIN",
         dimensions = listOf(FieldId.H, FieldId.W, FieldId.S, FieldId.L),
         parameters = listOf(FieldId.Z0, FieldId.K, FieldId.Z0O, FieldId.Z0E, FieldId.PHS, FieldId.ER, FieldId.FREQ),
         targets = emptyList(),
@@ -89,7 +88,7 @@ enum class LineType(
         ),
     ),
     SLIN(
-        R.string.full_name_slin, R.drawable.ic_menu_slin, R.drawable.vt_slin, "SLIN",
+        R.string.full_name_slin, R.drawable.ic_menu_slin, "SLIN",
         dimensions = listOf(FieldId.T, FieldId.H, FieldId.W, FieldId.L),
         parameters = listOf(FieldId.Z0, FieldId.PHS, FieldId.ER, FieldId.FREQ),
         targets = listOf(FieldId.H, FieldId.W),
@@ -99,7 +98,7 @@ enum class LineType(
         ),
     ),
     CSLIN(
-        R.string.full_name_cslin, R.drawable.ic_menu_cslin, R.drawable.vt_cslin, "CSLIN",
+        R.string.full_name_cslin, R.drawable.ic_menu_cslin, "CSLIN",
         dimensions = listOf(FieldId.T, FieldId.H, FieldId.W, FieldId.S, FieldId.L),
         parameters = listOf(FieldId.Z0, FieldId.K, FieldId.Z0O, FieldId.Z0E, FieldId.PHS, FieldId.ER, FieldId.FREQ),
         targets = emptyList(),
@@ -110,7 +109,7 @@ enum class LineType(
         ),
     ),
     CPW(
-        R.string.full_name_cpw, R.drawable.ic_menu_cpw, R.drawable.vt_cpw, "CPW",
+        R.string.full_name_cpw, R.drawable.ic_menu_cpw, "CPW",
         dimensions = listOf(FieldId.T, FieldId.H, FieldId.W, FieldId.S, FieldId.L),
         parameters = listOf(FieldId.Z0, FieldId.PHS, FieldId.ER, FieldId.FREQ),
         targets = listOf(FieldId.H, FieldId.W, FieldId.S),
@@ -121,7 +120,7 @@ enum class LineType(
         ),
     ),
     GCPW(
-        R.string.full_name_gcpw, R.drawable.ic_menu_gcpw, R.drawable.vt_cpwg, "GCPW",
+        R.string.full_name_gcpw, R.drawable.ic_menu_gcpw, "GCPW",
         dimensions = listOf(FieldId.H, FieldId.W, FieldId.S, FieldId.L),
         parameters = listOf(FieldId.Z0, FieldId.PHS, FieldId.ER, FieldId.FREQ),
         targets = listOf(FieldId.H, FieldId.W, FieldId.S),
@@ -131,7 +130,7 @@ enum class LineType(
         ),
     ),
     COAX(
-        R.string.full_name_coax, R.drawable.ic_menu_coax, R.drawable.vt_coax, "COAX",
+        R.string.full_name_coax, R.drawable.ic_menu_coax, "COAX",
         dimensions = listOf(FieldId.A, FieldId.B, FieldId.C, FieldId.L),
         parameters = listOf(FieldId.Z0, FieldId.PHS, FieldId.ER, FieldId.FREQ),
         targets = listOf(FieldId.A, FieldId.B, FieldId.C),
