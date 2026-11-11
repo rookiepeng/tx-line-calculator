@@ -171,9 +171,10 @@ private fun coaxScene(): Scene {
         zx = 0.7f * cos(Math.toRadians(20.0)).toFloat(),
         zy = 0.7f * sin(Math.toRadians(20.0)).toFloat(),
         shapes = listOf(
-            Tube(0f, 0f, shield, 2f, length, Part.GROUND),
-            Tube(0f, 0f, b, 1f, 2f, Part.DIELECTRIC),
-            // Core face sits on the dielectric face, so a, b and c all measure in one plane.
+            // A clean cut end: shield, dielectric and core faces all lie in the z = 1 plane,
+            // so a, b and c measure in one plane.
+            Tube(0f, 0f, shield, 1f, length, Part.GROUND),
+            Tube(0f, 0f, b, 1f, 1f, Part.DIELECTRIC),
             Tube(0f, c, a, 1f, 1f, Part.SIGNAL),
         ),
         dims = listOf(
@@ -184,7 +185,7 @@ private fun coaxScene(): Scene {
                 FieldId.C, "c", V3(0f, 0f, 1f), V3(0f, c, 1f), V3(a + 0.9f, 0f, 0f),
                 centerMarks = true,
             ),
-            Linear(FieldId.L, "L", V3(0f, shield, 2f), V3(0f, shield, length), V3(0f, 0.9f, 0f)),
+            Linear(FieldId.L, "L", V3(0f, shield, 1f), V3(0f, shield, length), V3(0f, 0.9f, 0f)),
         ),
     )
 }
