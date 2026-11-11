@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Tx-Line Calculator</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- error -->
-    <string name="error_er_empty">Error: Dielectric constant can\'t be empty.</string>
-    <string name="error_Z0_empty">Error: Impedance can\'t be empty.</string>
-    <string name="error_Z0e_empty">Error: Even mode impedance can\'t be empty.</string>
-    <string name="error_Z0o_empty">Error: Odd mode impedance can\'t be empty.</string>
-    <string name="Error_W_empty">Error: Metal width can\'t be empty.</string>
-    <string name="Error_S_empty">Error: Gap can\'t be empty.</string>
-    <string name="Error_Freq_empty">Error: Frequency can\'t be empty.</string>
-    <string name="Error_H_empty">Error: Substrate height can\'t be empty.</string>
-    <string name="Error_T_empty">Error: Metal thickness can\'t be empty.</string>
-    <string name="Error_k_empty">Error: Coupling coefficient can\'t be empty.</string>
-    <string name="Error_a_empty">Error: Core radius can\'t be empty.</string>
-    <string name="Error_b_empty">Error: Substrate radius can\'t be empty.</string>
-    <string name="Error_c_empty">Error: Core offset can\'t be empty.</string>
-    <string name="error_zero_frequency">Error: Frequency can\'t be 0.</string>
-    <string name="unreasonable_value">Error: Please put a reasonable value here.</string>
-    <string name="synthesize_failed">Error: Unable to obtain a value, please check your inputs.</string>
-    <string name="k_out_of_range">Error: Coupling coefficient should be within (0,1).</string>
-    <string name="Z0e_larger_Z0o">Error: Z0e must be larger than Z0o.</string>
-    <string name="substrate_too_large">Error: Metal core must be smaller than the substrate.</string>
-    <string name="offset_too_large">Error: Metal core is out of the substrate.</string>
+    <string name="error_er_empty">Dielectric constant can\'t be empty.</string>
+    <string name="error_Z0_empty">Impedance can\'t be empty.</string>
+    <string name="error_Z0e_empty">Even mode impedance can\'t be empty.</string>
+    <string name="error_Z0o_empty">Odd mode impedance can\'t be empty.</string>
+    <string name="Error_W_empty">Metal width can\'t be empty.</string>
+    <string name="Error_S_empty">Gap can\'t be empty.</string>
+    <string name="Error_Freq_empty">Frequency can\'t be empty.</string>
+    <string name="Error_H_empty">Substrate height can\'t be empty.</string>
+    <string name="Error_T_empty">Metal thickness can\'t be empty.</string>
+    <string name="Error_k_empty">Coupling coefficient can\'t be empty.</string>
+    <string name="Error_a_empty">Core radius can\'t be empty.</string>
+    <string name="Error_b_empty">Substrate radius can\'t be empty.</string>
+    <string name="Error_c_empty">Core offset can\'t be empty.</string>
+    <string name="error_zero_frequency">Frequency can\'t be 0.</string>
+    <string name="unreasonable_value">Please put a reasonable value here.</string>
+    <string name="synthesize_failed">Unable to obtain a value, please check your inputs.</string>
+    <string name="k_out_of_range">Coupling coefficient should be within (0,1).</string>
+    <string name="Z0e_larger_Z0o">Z0e must be larger than Z0o.</string>
+    <string name="substrate_too_large">Metal core must be smaller than the substrate.</string>
+    <string name="offset_too_large">Metal core is out of the substrate.</string>
 
-    <!-- actionbar -->
+    <!-- line types -->
     <string name="full_name_mlin">Microstrip Line</string>
     <string name="full_name_cmlin">Coupled Microstrip Line</string>
     <string name="full_name_slin">Stripline</string>
@@ -44,24 +43,36 @@
     <string name="Syn_button">Synthesize</string>
     <string name="Ana_button">Analyze</string>
 
-    <!-- parameters -->
-    <string name="text_a">a:</string>
-    <string name="text_b">b:</string>
-    <string name="text_c">c:</string>
-    <string name="text_W">W:</string>
-    <string name="text_H">H:</string>
-    <string name="text_L">L:</string>
-    <string name="text_S">S:</string>
-    <string name="text_T">T:</string>
-    <string name="text_k">k:</string>
-    <string name="text_er">εr:</string>
-    <string name="text_Z0">Z0:</string>
-    <string name="text_phi">φ:</string>
-    <string name="text_Z0o">Z0o:</string>
-    <string name="text_Z0e">Z0e:</string>
-    <string name="text_Freq">Freq:</string>
+    <!-- field labels -->
+    <string name="label_t">(T) Metal Thickness</string>
+    <string name="label_h">(H) Substrate Height</string>
+    <string name="label_w">(W) Metal Width</string>
+    <string name="label_s">(G) Gap</string>
+    <string name="label_a">(a) Core Radius</string>
+    <string name="label_b">(b) Substrate Radius</string>
+    <string name="label_c" tools:ignore="TypographyOther">(c) Core Offset</string>
+    <string name="label_l">(L) Length</string>
+    <string name="label_z0">(Z0) Impedance</string>
+    <string name="label_k">(k) Coupling Coefficient</string>
+    <string name="label_z0o">(Z0o) Odd Mode Impedance</string>
+    <string name="label_z0e">(Z0e) Even Mode Impedance</string>
+    <string name="label_phs">(φ) Phase</string>
+    <string name="label_er">(εr) Dielectric Constant</string>
+    <string name="label_freq">(f) Frequency</string>
+    <string name="unit">Unit</string>
 
-    <string name="ok">OK</string>
+    <!-- screen -->
+    <string name="dim_subtitle_pick">Pick what Synthesize solves for</string>
+    <string name="dim_subtitle_coupled">W, G and L are solved by Synthesize</string>
+    <string name="par_subtitle">Solved by Analyze</string>
+    <string name="synthesize_from">Synthesize from</string>
+    <string name="mode_z0k">Z0 and k</string>
+    <string name="mode_z0eo">Z0e and Z0o</string>
+    <string name="solve_for">Solve for %1$s</string>
+    <string name="diagram_description">Cross-section of a %1$s</string>
+    <string name="reset_title">Reset values?</string>
+    <string name="reset_message">All values on this screen go back to their defaults.</string>
+
     <string name="cancel">Cancel</string>
 
     <!-- feedback -->
@@ -71,6 +82,5 @@
 
     <!-- icons -->
     <string name="reset">Reset</string>
-    <string name="rf_line_plots">RF Line Plots</string>
 
 </resources>
