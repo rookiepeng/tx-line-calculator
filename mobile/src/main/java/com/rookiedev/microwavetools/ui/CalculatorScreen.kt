@@ -114,15 +114,21 @@ fun CalculatorScreen(
                     Icon(painterResource(R.drawable.ic_restore_white_24dp), stringResource(R.string.reset))
                 }
             }
+            // Transparent in both states so the bar blends into the page, even when scrolled.
+            val barColors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                scrolledContainerColor = Color.Transparent,
+            )
             // Short (landscape phone) screens get a single-row bar to leave room for the inputs.
             if (compactTopBar) {
-                TopAppBar(title = title, navigationIcon = navigationIcon, actions = actions)
+                TopAppBar(title = title, navigationIcon = navigationIcon, actions = actions, colors = barColors)
             } else {
                 MediumTopAppBar(
                     title = title,
                     navigationIcon = navigationIcon,
                     actions = actions,
                     scrollBehavior = scrollBehavior,
+                    colors = barColors,
                 )
             }
         },
