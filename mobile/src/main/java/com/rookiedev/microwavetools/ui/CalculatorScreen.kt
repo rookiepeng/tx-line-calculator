@@ -11,6 +11,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,6 +70,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -139,7 +142,16 @@ fun CalculatorScreen(
             )
         },
     ) { padding ->
-        BoxWithConstraints(Modifier.padding(padding)) {
+        // Skip the top inset here and add it inside the scrolling column instead, so the cards
+        // start below the header but scroll up behind the transparent bar.
+        val layoutDirection = LocalLayoutDirection.current
+        BoxWithConstraints(
+            Modifier.padding(
+                start = padding.calculateStartPadding(layoutDirection),
+                end = padding.calculateEndPadding(layoutDirection),
+                bottom = padding.calculateBottomPadding(),
+            )
+        ) {
             val wide = maxWidth >= 720.dp
             val scroll = rememberScrollState()
             val dimensions = @Composable { DimensionsCard(vm, state) }
@@ -147,6 +159,7 @@ fun CalculatorScreen(
             Column(
                 Modifier
                     .verticalScroll(scroll)
+                    .padding(top = padding.calculateTopPadding())
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
