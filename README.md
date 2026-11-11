@@ -1,4 +1,4 @@
-<img src="https://github.com/rookiepeng/tx-line-calculator/blob/master/pics/promote.png" width="600"></a>
+<img src="./pics/play-store/feature_graphic.png" width="720" alt="Tx-Line Calculator">
 
 # Tx-Line Calculator
 
@@ -15,7 +15,11 @@ The project has been kept alive and occasionally updated ever since.
 ## Features
 
 - **Analyze** mode: calculate electrical parameters from physical dimensions
-- **Synthesize** mode: calculate physical dimensions from electrical parameters
+- **Synthesize** mode: calculate physical dimensions from electrical parameters, solving for the dimension you pick
+- **Interactive diagrams**: editing a field highlights the matching part of the line; tap a label on the diagram to jump to its field
+- **Units**: mil, mm or cm for dimensions; MHz or GHz for frequency
+- **Coupled lines**: synthesize from Z0 and k, or from the even and odd mode impedances
+- Values are saved between sessions; Material 3 design with dark mode and dynamic color
 
 ## Supported Transmission Lines
 
@@ -27,22 +31,18 @@ The project has been kept alive and occasionally updated ever since.
 - Grounded Coplanar Waveguide
 - Coaxial
 
+## Screenshots
+
+<img src="./pics/play-store/phone_1.png" width="200" alt="Microstrip line after Synthesize">
+<img src="./pics/play-store/phone_2.png" width="200" alt="Editing the substrate height highlights it on the diagram">
+<img src="./pics/play-store/phone_3.png" width="200" alt="Coupled microstrip line parameters">
+<img src="./pics/play-store/phone_4.png" width="200" alt="Coaxial line in dark mode">
+<img src="./pics/play-store/phone_5.png" width="200" alt="Navigation drawer with all line types">
+
 ## Requirements
 
 - Android 11 (API level 30) or higher
-- Java 17
-
-## Screenshots
-
-<img src="./pics/Screenshot_1.png" width="300"></a>
-<img src="./pics/Screenshot_2.png" width="300"></a>
-<img src="./pics/Screenshot_3.png" width="300"></a>
-<img src="./pics/Screenshot_4.png" width="300"></a>
-<img src="./pics/Screenshot_5.png" width="300"></a>
-
-## License
-
-This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
+- Java 17 to build
 
 ## Building the Project
 
@@ -57,3 +57,19 @@ On Windows, use:
 ```sh
 gradlew.bat build
 ```
+
+Run the calculator tests with:
+
+```sh
+./gradlew :mobile:testDebugUnitTest
+```
+
+## Project Structure
+
+- `mobile/src/main/java/.../libs/` — the transmission line models and calculators
+- `mobile/src/main/java/.../ui/` — the Jetpack Compose UI: one shared calculator screen, line diagrams and theme
+- `pics/play-store/` — Google Play feature graphic and phone screenshots
+
+## License
+
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
