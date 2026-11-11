@@ -269,7 +269,7 @@ fun LineDiagram(
     Canvas(
         modifier
             .fillMaxWidth()
-            .then(if (compact) Modifier.height(112.dp) else Modifier.aspectRatio(aspect))
+            .then(if (compact) Modifier.height(140.dp) else Modifier.aspectRatio(aspect))
             .semantics { this.contentDescription = contentDescription }
             .pointerInput(line) {
                 detectTapGestures { pos ->
@@ -278,7 +278,13 @@ fun LineDiagram(
                 }
             },
     ) {
-        val scale = min(size.width / (bounds.width + 2 * MARGIN), size.height / (bounds.height + 2 * MARGIN))
+        // Fit the drawing with room for labels around it. The world-unit margin scales with the
+        // drawing, so also keep a fixed on-screen margin; that one matters in the short pinned copy.
+        val labelPad = 24.dp.toPx()
+        val scale = min(
+            min(size.width / (bounds.width + 2 * MARGIN), size.height / (bounds.height + 2 * MARGIN)),
+            min((size.width - 2 * labelPad) / bounds.width, (size.height - 2 * labelPad) / bounds.height),
+        )
         val ox = (size.width - bounds.width * scale) / 2 - bounds.left * scale
         val oy = (size.height - bounds.height * scale) / 2 + bounds.bottom * scale
         fun p(v: V3): Offset = scene.project(v).let { Offset(ox + it.x * scale, oy - it.y * scale) }
