@@ -75,6 +75,8 @@ Run the calculator tests with:
 ./gradlew :mobile:testDebugUnitTest
 ```
 
+Every calculator is checked against independent implementations of the published theory, exact closed forms, textbook examples and physical limits; see the [validation report](docs/validation.md).
+
 ## Project Structure
 
 - `mobile/src/main/java/.../libs/` — the transmission line models and calculators

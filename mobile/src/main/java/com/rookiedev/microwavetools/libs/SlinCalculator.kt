@@ -66,7 +66,9 @@ class SlinCalculator {
                 kf = (1.0 + k) / (1.0 + kp)
             }
 
-            z0 = 29.976 * Math.PI * r / sqrt(line.subEpsilon)
+            // Cohn's exact result, Z0 = η0 / (4√εr) · K(k)/K(k'). (This was 29.976π, a rounded
+            // η0/4 = π·29.979 that made every thin stripline 0.011% low.)
+            z0 = Constants.FREESPACEZ0 / 4.0 * r / sqrt(line.subEpsilon)
         } else {
             // Finite strip case:
             m =

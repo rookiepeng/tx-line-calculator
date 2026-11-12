@@ -197,13 +197,15 @@ class CalculatorGoldenTest {
             "cmlin.syn.w" to 2.7649710686592,
             "cmlin.syn.s" to 0.831006249555381,
             "cmlin.syn.l" to 40.85647855466745,
-            "cslin.ana.z0" to 49.97078990310951,
-            "cslin.ana.k" to 0.19916631900124723,
-            "cslin.ana.z0e" to 61.1483524930422,
-            "cslin.ana.z0o" to 40.836420634960575,
+            // Coupled stripline values updated when the thin-stripline constant was corrected
+            // from 29.976π to η0/4 (Cohn); the thickness correction builds on that result.
+            "cslin.ana.z0" to 49.96530546998198,
+            "cslin.ana.k" to 0.19914532689499656,
+            "cslin.ana.z0e" to 61.14030480440315,
+            "cslin.ana.z0o" to 40.832831283641525,
             "cslin.ana.phase" to 89.8847760362337,
-            "cslin.syn.w" to 0.5889366212121305,
-            "cslin.syn.s" to 0.35833681603434486,
+            "cslin.syn.w" to 0.5887933894265548,
+            "cslin.syn.s" to 0.3583251124834213,
             "cslin.syn.l" to 34.94473856989779
         )
 
