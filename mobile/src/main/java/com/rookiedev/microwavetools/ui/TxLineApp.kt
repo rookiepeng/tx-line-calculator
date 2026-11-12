@@ -29,7 +29,9 @@ import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -58,6 +60,9 @@ import kotlinx.coroutines.launch
 
 private const val FEEDBACK_EMAIL = "rookie.dev@gmail.com"
 
+/** What the main area shows. Only the line type is remembered across launches. */
+private enum class Page { LINE, SAVED, TOOLS }
+
 /** App shell: a navigation drawer listing the line types (permanent on wide screens) and the calculator. */
 @Composable
 fun TxLineApp() {
@@ -83,6 +88,42 @@ fun TxLineApp() {
         factory = viewModelFactory { initializer { CalculatorViewModel(current, prefs) } },
     )
 
+    var page by rememberSaveable { mutableStateOf(Page.LINE) }
+    val store = remember { DesignStore(context.getSharedPreferences("designs", Context.MODE_PRIVATE)) }
+    // Work to run on the calculator once the line it targets is showing (loading a design, say).
+    var pending by remember { mutableStateOf<((CalculatorViewModel) -> Unit)?>(null) }
+    LaunchedEffect(vm, pending) { pending?.let { it(vm); pending = null } }
+    BackHandler(enabled = page != Page.LINE) { page = Page.LINE }
+
+    val content = @Composable { openDrawer: (() -> Unit)?, shortScreen: Boolean ->
+        when (page) {
+            Page.LINE -> key(current) {
+                CalculatorScreen(
+                    vm, onOpenDrawer = openDrawer, compactTopBar = shortScreen,
+                    onSave = { name ->
+                        store.add(vm.snapshot(name))
+                        Toast.makeText(context, context.getString(R.string.saved_toast, name), Toast.LENGTH_SHORT).show()
+                    },
+                )
+            }
+            Page.SAVED -> SavedScreen(store, openDrawer) { d ->
+                select(d.line); pending = { it.loadDesign(d) }; page = Page.LINE
+            }
+            Page.TOOLS -> ToolsScreen(openDrawer) { z ->
+                select(LineType.MLIN); pending = { it.prepareWidthSynthesis(z) }; page = Page.LINE
+            }
+        }
+    }
+    val drawer = @Composable { close: () -> Unit ->
+        DrawerContent(
+            current = current.takeIf { page == Page.LINE },
+            page = page,
+            onSelect = { select(it); page = Page.LINE; close() },
+            onPage = { page = it; close() },
+            onFeedback = { close(); sendFeedback(context) },
+        )
+    }
+
     val windowSize = LocalWindowInfo.current.containerSize
     val (windowWidth, windowHeight) = with(LocalDensity.current) { windowSize.width.toDp() to windowSize.height.toDp() }
     // Tablets get a permanent drawer; phones (including landscape) use a modal one.
@@ -91,12 +132,10 @@ fun TxLineApp() {
     if (wide) {
         PermanentNavigationDrawer(
             drawerContent = {
-                PermanentDrawerSheet(Modifier.width(300.dp)) {
-                    DrawerContent(current, onSelect = select, onFeedback = { sendFeedback(context) })
-                }
+                PermanentDrawerSheet(Modifier.width(300.dp)) { drawer {} }
             },
         ) {
-            key(current) { CalculatorScreen(vm, onOpenDrawer = null, compactTopBar = shortScreen) }
+            content(null, shortScreen)
         }
     } else {
         val drawerState = rememberDrawerState(if (firstRun) DrawerValue.Open else DrawerValue.Closed)
@@ -104,22 +143,22 @@ fun TxLineApp() {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ModalDrawerSheet(drawerState = drawerState) {
-                    DrawerContent(
-                        current,
-                        onSelect = { select(it); scope.launch { drawerState.close() } },
-                        onFeedback = { scope.launch { drawerState.close() }; sendFeedback(context) },
-                    )
-                }
+                ModalDrawerSheet(drawerState = drawerState) { drawer { scope.launch { drawerState.close() } } }
             },
         ) {
-            key(current) { CalculatorScreen(vm, onOpenDrawer = { scope.launch { drawerState.open() } }, compactTopBar = shortScreen) }
+            content({ scope.launch { drawerState.open() } }, shortScreen)
         }
     }
 }
 
 @Composable
-private fun DrawerContent(current: LineType, onSelect: (LineType) -> Unit, onFeedback: () -> Unit) {
+private fun DrawerContent(
+    current: LineType?,
+    page: Page,
+    onSelect: (LineType) -> Unit,
+    onPage: (Page) -> Unit,
+    onFeedback: () -> Unit,
+) {
     Column(
         Modifier
             .fillMaxHeight()
@@ -138,16 +177,34 @@ private fun DrawerContent(current: LineType, onSelect: (LineType) -> Unit, onFee
             Spacer(Modifier.width(16.dp))
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
         }
-        for (type in LineType.entries) {
-            NavigationDrawerItem(
-                label = { Text(stringResource(type.title)) },
-                icon = { Icon(painterResource(type.navIcon), contentDescription = null) },
-                selected = type == current,
-                onClick = { onSelect(type) },
-                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-            )
+        for ((header, types) in DRAWER_GROUPS) {
+            DrawerHeader(stringResource(header))
+            for (type in types) {
+                NavigationDrawerItem(
+                    label = { Text(stringResource(type.title)) },
+                    icon = { Icon(painterResource(type.navIcon), contentDescription = null) },
+                    selected = type == current,
+                    onClick = { onSelect(type) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                )
+            }
         }
-        HorizontalDivider(Modifier.padding(vertical = 12.dp, horizontal = 16.dp))
+        HorizontalDivider(Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp))
+        DrawerHeader(stringResource(R.string.group_more))
+        NavigationDrawerItem(
+            label = { Text(stringResource(R.string.saved_title)) },
+            icon = { Icon(painterResource(R.drawable.ic_bookmark), contentDescription = null) },
+            selected = page == Page.SAVED,
+            onClick = { onPage(Page.SAVED) },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        )
+        NavigationDrawerItem(
+            label = { Text(stringResource(R.string.tools_title)) },
+            icon = { Icon(painterResource(R.drawable.ic_build), contentDescription = null) },
+            selected = page == Page.TOOLS,
+            onClick = { onPage(Page.TOOLS) },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        )
         NavigationDrawerItem(
             label = { Text(stringResource(R.string.menu_help)) },
             icon = { Icon(painterResource(R.drawable.ic_help), contentDescription = null) },
@@ -156,6 +213,28 @@ private fun DrawerContent(current: LineType, onSelect: (LineType) -> Unit, onFee
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
         )
     }
+}
+
+/**
+ * Line types in the drawer, grouped by family. This order is for display only: the selected line
+ * is saved by [LineType] ordinal, so the enum itself keeps its original order.
+ */
+internal val DRAWER_GROUPS: List<Pair<Int, List<LineType>>> = listOf(
+    R.string.group_microstrip to listOf(LineType.MLIN, LineType.CMLIN),
+    R.string.group_stripline to listOf(LineType.SLIN, LineType.ASLIN, LineType.CSLIN),
+    R.string.group_coplanar to listOf(LineType.CPW, LineType.GCPW, LineType.ECPW),
+    R.string.group_other to listOf(LineType.COAX, LineType.TWP, LineType.WG),
+)
+
+/** A small section label lined up with the drawer items' icons. */
+@Composable
+private fun DrawerHeader(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 28.dp, end = 28.dp, top = 16.dp, bottom = 8.dp),
+    )
 }
 
 private fun sendFeedback(context: Context) {

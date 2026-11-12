@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Only the export folder in the app cache is shared, for sweep CSV files. -->
+<paths>
+    <cache-path name="exports" path="exports/" />
+</paths>

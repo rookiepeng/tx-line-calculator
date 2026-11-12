@@ -37,6 +37,7 @@ object Constants {
         var l = 0.0
         when (lengthUnit) {
             "mil" -> l = value / 39370.0787402
+            "µm" -> l = value / 1e6
             "mm" -> l = value / 1000
             "cm" -> l = value / 100
             "m" -> l = value
@@ -72,6 +73,7 @@ object Constants {
         var l = 0.0
         when (lengthUnit) {
             "mil" -> l = value * 1000 * 39.37007874
+            "µm" -> l = value * 1e6
             "mm" -> l = value * 1000
             "cm" -> l = value * 100
             "m" -> l = value

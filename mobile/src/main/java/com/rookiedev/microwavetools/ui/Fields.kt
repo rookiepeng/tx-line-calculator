@@ -9,6 +9,10 @@ enum class UnitKind(val choices: List<String>, val suffix: String? = null) {
     FREQUENCY(listOf("MHz", "GHz")),
     IMPEDANCE(listOf("Ω"), suffix = "Ω"),
     PHASE(listOf("Deg"), suffix = "°"),
+    CONDUCTIVITY(listOf("MS/m"), suffix = "MS/m"),
+    ROUGHNESS(listOf("µm", "mil")),
+    /** Twists per unit length. */
+    TWIST(listOf("/cm", "/in")),
     NONE(emptyList());
 
     /** True when the user can pick between several units. */
@@ -30,8 +34,12 @@ enum class FieldId(
 ) {
     T(R.string.label_t, UnitKind.LENGTH, "T", R.string.Error_T_empty),
     H(R.string.label_h, UnitKind.LENGTH, "H", R.string.Error_H_empty, mustBePositive = true),
+    /** Asymmetric stripline: strip top to the upper ground. */
+    H2(R.string.label_h2, UnitKind.LENGTH, "H2", R.string.Error_H_empty, mustBePositive = true),
     W(R.string.label_w, UnitKind.LENGTH, "W", R.string.Error_W_empty, mustBePositive = true),
     S(R.string.label_s, UnitKind.LENGTH, "S", R.string.Error_S_empty, mustBePositive = true),
+    /** Edge-coupled CPW: strip to coplanar ground gap (S is the strip-to-strip spacing there). */
+    G2(R.string.label_g2, UnitKind.LENGTH, "G2", R.string.Error_S_empty, mustBePositive = true),
     A(R.string.label_a, UnitKind.LENGTH, "A", R.string.Error_a_empty, mustBePositive = true),
     B(R.string.label_b, UnitKind.LENGTH, "B", R.string.Error_b_empty, mustBePositive = true),
     C(R.string.label_c, UnitKind.LENGTH, "C", R.string.Error_c_empty),
@@ -43,7 +51,23 @@ enum class FieldId(
     PHS(R.string.label_phs, UnitKind.PHASE, "PHS", 0),
     ER(R.string.label_er, UnitKind.NONE, "ER", R.string.error_er_empty),
     FREQ(R.string.label_freq, UnitKind.FREQUENCY, "FREQ", R.string.Error_Freq_empty),
+    /** Twisted pair: twists per unit length (0 for straight parallel wires). */
+    TWIST(R.string.label_twist, UnitKind.TWIST, "TWIST", R.string.error_twist_empty),
+
+    // Material properties used only for loss; all optional.
+    TAND(R.string.label_tand, UnitKind.NONE, "TAND", 0),
+    SIGMA(R.string.label_sigma, UnitKind.CONDUCTIVITY, "SIGMA", 0),
+    ROUGH(R.string.label_rough, UnitKind.ROUGHNESS, "ROUGH", 0),
 }
+
+/** Loss inputs shown on every line type, in the Materials card. */
+val MATERIAL_FIELDS: List<FieldId> = listOf(FieldId.TAND, FieldId.SIGMA, FieldId.ROUGH)
+
+private val MATERIAL_DEFAULTS: Map<FieldId, Default> = mapOf(
+    FieldId.TAND to Default("0.02"),
+    FieldId.SIGMA to Default("58", "MS/m"),
+    FieldId.ROUGH to Default("0", "µm"),
+)
 
 /** Default value and unit for a field. */
 data class Default(val text: String, val unit: String = "")
@@ -65,6 +89,8 @@ enum class LineType(
     /** Dimensions the user can pick as the synthesis target. Empty for coupled lines (W and S are both solved). */
     val targets: List<FieldId>,
     val defaults: Map<FieldId, Default>,
+    /** Labels that differ from the field's own on this line type. */
+    val labels: Map<FieldId, Int> = emptyMap(),
 ) {
     MLIN(
         R.string.full_name_mlin, R.drawable.ic_menu_mlin, "MLIN",
@@ -138,10 +164,73 @@ enum class LineType(
             FieldId.A to mm("0.167"), FieldId.B to mm("1.00"), FieldId.C to mm("0.00"), FieldId.L to mm("34.945"),
             FieldId.Z0 to ohm("50"), FieldId.PHS to deg("90"), FieldId.ER to plain("4.6"), FieldId.FREQ to GHz,
         ),
+    ),
+    /** Stripline with the strip off-center: H is the gap below the strip, H2 the gap above. */
+    ASLIN(
+        R.string.full_name_aslin, R.drawable.ic_menu_aslin, "ASLIN",
+        dimensions = listOf(FieldId.T, FieldId.H, FieldId.H2, FieldId.W, FieldId.L),
+        parameters = listOf(FieldId.Z0, FieldId.PHS, FieldId.ER, FieldId.FREQ),
+        targets = listOf(FieldId.H, FieldId.W),
+        defaults = mapOf(
+            FieldId.T to mm("0.035"), FieldId.H to mm("0.4"), FieldId.H2 to mm("1.2"), FieldId.W to mm("0.482"),
+            FieldId.L to mm("34.945"), FieldId.Z0 to ohm("50"), FieldId.PHS to deg("90"), FieldId.ER to plain("4.6"),
+            FieldId.FREQ to GHz,
+        ),
+        labels = mapOf(FieldId.H to R.string.label_h1),
+    ),
+    /** Edge-coupled CPW: two strips spaced S, each G2 from a coplanar ground; no ground plane below. */
+    ECPW(
+        R.string.full_name_ecpw, R.drawable.ic_menu_ecpw, "ECPW",
+        dimensions = listOf(FieldId.H, FieldId.W, FieldId.S, FieldId.G2, FieldId.L),
+        parameters = listOf(FieldId.Z0, FieldId.K, FieldId.Z0O, FieldId.Z0E, FieldId.PHS, FieldId.ER, FieldId.FREQ),
+        targets = emptyList(),
+        defaults = mapOf(
+            FieldId.H to mm("1.6"), FieldId.W to mm("0.5"), FieldId.S to mm("0.2"), FieldId.G2 to mm("0.2"),
+            FieldId.L to mm("45.082"), FieldId.Z0 to ohm("73.161"), FieldId.K to plain("0.374"), FieldId.Z0O to ohm("49.36"),
+            FieldId.Z0E to ohm("108.439"), FieldId.PHS to deg("90"), FieldId.ER to plain("4.6"), FieldId.FREQ to GHz,
+        ),
+        labels = mapOf(FieldId.S to R.string.label_ecpw_s),
+    ),
+    /**
+     * Twisted pair (or parallel wires with no twist). A is the wire diameter and B the center
+     * spacing; εr is the insulation's.
+     */
+    TWP(
+        R.string.full_name_twp, R.drawable.ic_menu_twp, "TWP",
+        dimensions = listOf(FieldId.A, FieldId.B, FieldId.TWIST, FieldId.L),
+        parameters = listOf(FieldId.Z0, FieldId.PHS, FieldId.ER, FieldId.FREQ),
+        targets = listOf(FieldId.A, FieldId.B),
+        defaults = mapOf(
+            FieldId.A to mm("0.511"), FieldId.B to mm("0.771"), FieldId.TWIST to Default("0.66", "/cm"),
+            FieldId.L to mm("644.157"), FieldId.Z0 to ohm("100"), FieldId.PHS to deg("90"), FieldId.ER to plain("2.25"),
+            FieldId.FREQ to Default("100", "MHz"), FieldId.TAND to plain("0.0002"),
+        ),
+        labels = mapOf(
+            FieldId.A to R.string.label_twp_d, FieldId.B to R.string.label_twp_s, FieldId.ER to R.string.label_twp_er,
+        ),
+    ),
+    /** Rectangular waveguide, TE10 mode. a and b reuse the A and B fields; Z0 is the TE10 wave impedance. */
+    WG(
+        R.string.full_name_wg, R.drawable.ic_menu_wg, "WG",
+        dimensions = listOf(FieldId.A, FieldId.B, FieldId.L),
+        parameters = listOf(FieldId.Z0, FieldId.PHS, FieldId.ER, FieldId.FREQ),
+        targets = listOf(FieldId.A),
+        defaults = mapOf(
+            FieldId.A to mm("22.86"), FieldId.B to mm("10.16"), FieldId.L to mm("9.927"),
+            FieldId.Z0 to ohm("499"), FieldId.PHS to deg("90"), FieldId.ER to plain("1"),
+            FieldId.FREQ to Default("10", "GHz"), FieldId.TAND to plain("0"),
+        ),
+        labels = mapOf(
+            FieldId.A to R.string.label_wg_a, FieldId.B to R.string.label_wg_b, FieldId.Z0 to R.string.label_wg_z,
+        ),
     );
 
     val coupled: Boolean get() = targets.isEmpty()
-    val fields: List<FieldId> get() = dimensions + parameters
+    val fields: List<FieldId> get() = dimensions + parameters + MATERIAL_FIELDS
+    @StringRes
+    fun labelOf(id: FieldId): Int = labels[id] ?: id.label
+
+    fun defaultOf(id: FieldId): Default = defaults[id] ?: MATERIAL_DEFAULTS.getValue(id)
     val defaultTarget: FieldId? get() = targets.firstOrNull { it == FieldId.W || it == FieldId.A }
 
     /** Fields Analyze fills in. */

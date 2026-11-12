@@ -103,7 +103,24 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import android.content.Intent
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import com.rookiedev.microwavetools.R
+import com.rookiedev.microwavetools.libs.Constants
+import com.rookiedev.microwavetools.libs.Materials
+import com.rookiedev.microwavetools.libs.Substrate
+import java.math.BigDecimal
+import java.math.MathContext
+import kotlin.math.abs
 import com.rookiedev.microwavetools.ui.theme.LocalAccents
 
 /**
@@ -116,13 +133,23 @@ fun CalculatorScreen(
     vm: CalculatorViewModel,
     onOpenDrawer: (() -> Unit)?,
     compactTopBar: Boolean = false,
+    /** Saves the current inputs under the given name. */
+    onSave: (String) -> Unit = {},
 ) {
     val line = vm.line
     val state = vm.state
+    val context = LocalContext.current
+    var naming by rememberSaveable { mutableStateOf(false) }
     // The header slides away while scrolling down and comes back as soon as you scroll up.
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val focus = LocalFocusManager.current
     var confirmReset by rememberSaveable { mutableStateOf(false) }
+    var showSweep by rememberSaveable { mutableStateOf(false) }
+    var showMaterials by rememberSaveable { mutableStateOf(false) }
+    var showResults by rememberSaveable { mutableStateOf(false) }
+    // A material value the last calculation rejected would be out of sight, so open its sheet.
+    val materialError = MATERIAL_FIELDS.any { state.field(it).error != null }
+    LaunchedEffect(materialError) { if (materialError) showMaterials = true }
     val fieldFocus = remember(line) { FieldFocus(line.fields) }
     val imeVisible = WindowInsets.isImeVisible
 
@@ -140,6 +167,19 @@ fun CalculatorScreen(
                 }
             }
             val actions: @Composable RowScope.() -> Unit = {
+                IconButton(onClick = { naming = true }) {
+                    Icon(painterResource(R.drawable.ic_bookmark_add), stringResource(R.string.save_design))
+                }
+                IconButton(onClick = {
+                    val text = designSummary(line, state) { context.getString(it) }
+                    val send = Intent(Intent.ACTION_SEND)
+                        .setType("text/plain")
+                        .putExtra(Intent.EXTRA_SUBJECT, context.getString(line.title))
+                        .putExtra(Intent.EXTRA_TEXT, text)
+                    context.startActivity(Intent.createChooser(send, context.getString(R.string.share_design)))
+                }) {
+                    Icon(painterResource(R.drawable.ic_share), stringResource(R.string.share_design))
+                }
                 IconButton(onClick = { confirmReset = true }) {
                     Icon(painterResource(R.drawable.ic_restore_white_24dp), stringResource(R.string.reset))
                 }
@@ -204,8 +244,20 @@ fun CalculatorScreen(
         ) {
             val wide = maxWidth >= 720.dp
             val scroll = rememberScrollState()
+            val diagram = @Composable {
+                Diagram(line, fieldFocus, trackDiagram) {
+                    SheetChips(
+                        materialError = materialError,
+                        resultsReady = state.extras.isNotEmpty(),
+                        onMaterials = { focus.clearFocus(); showMaterials = true },
+                        onResults = { focus.clearFocus(); showResults = true },
+                    )
+                }
+            }
             val dimensions = @Composable { DimensionsCard(vm, state, fieldFocus) }
-            val parameters = @Composable { ParametersCard(vm, state, fieldFocus) }
+            val parameters = @Composable {
+                ParametersCard(vm, state, fieldFocus)
+            }
             Column(
                 Modifier
                     .verticalScroll(scroll)
@@ -216,13 +268,13 @@ fun CalculatorScreen(
                 if (wide) {
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Diagram(line, fieldFocus, trackDiagram)
+                            diagram()
                             dimensions()
                         }
                         Column(Modifier.weight(1f)) { parameters() }
                     }
                 } else {
-                    Diagram(line, fieldFocus, trackDiagram)
+                    diagram()
                     dimensions()
                     parameters()
                 }
@@ -241,7 +293,9 @@ fun CalculatorScreen(
             // While editing with the main diagram scrolled away, pin a compact copy under the header
             // so the highlight stays in view.
             AnimatedVisibility(
-                visible = fieldFocus.focused != null && diagramHidden && !compactTopBar,
+                // Material fields live in a sheet that covers the screen, and aren't on the diagram.
+                visible = fieldFocus.focused.let { it != null && it !in MATERIAL_FIELDS } &&
+                    diagramHidden && !compactTopBar,
                 enter = fadeIn() + slideInVertically { -it / 2 },
                 exit = fadeOut() + slideOutVertically { -it / 2 },
                 modifier = Modifier
@@ -264,6 +318,40 @@ fun CalculatorScreen(
                 }
             }
         }
+    }
+
+    if (showMaterials) {
+        MaterialsSheet(vm, state, fieldFocus, onDismiss = { focus.clearFocus(); showMaterials = false })
+    }
+
+    if (showResults && state.extras.isNotEmpty()) {
+        ResultsSheet(
+            state,
+            onSweep = { showResults = false; showSweep = true },
+            onDismiss = { showResults = false },
+        )
+    }
+
+    val sweepBase = state.lastInputs
+    if (showSweep && sweepBase != null) {
+        SweepDialog(
+            line = line,
+            base = sweepBase,
+            freqUnit = state.field(FieldId.FREQ).unit,
+            perLength = lossUnit(state),
+            onDismiss = { showSweep = false },
+        )
+    }
+
+    if (naming) {
+        val title = stringResource(line.title)
+        val z0 = state.field(FieldId.Z0).text.trim()
+        NameDialog(
+            title = stringResource(R.string.save_design),
+            initial = if (z0.isEmpty()) title else "$title, $z0 Ω",
+            onConfirm = { onSave(it); naming = false },
+            onDismiss = { naming = false },
+        )
     }
 
     if (confirmReset) {
@@ -289,7 +377,12 @@ private class FieldFocus(fields: List<FieldId>) {
 }
 
 @Composable
-private fun Diagram(line: LineType, focus: FieldFocus, modifier: Modifier = Modifier) {
+private fun Diagram(
+    line: LineType,
+    focus: FieldFocus,
+    modifier: Modifier = Modifier,
+    footer: @Composable () -> Unit,
+) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         modifier = modifier.fillMaxWidth(),
@@ -301,6 +394,7 @@ private fun Diagram(line: LineType, focus: FieldFocus, modifier: Modifier = Modi
             contentDescription = stringResource(R.string.diagram_description, stringResource(line.title)),
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         )
+        Box(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)) { footer() }
     }
 }
 
@@ -311,11 +405,34 @@ private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState, focu
     SectionCard(
         icon = R.drawable.vt_ruler,
         title = stringResource(R.string.Dim),
-        subtitle = stringResource(if (line.coupled) R.string.dim_subtitle_coupled else R.string.dim_subtitle_pick),
+        subtitle = stringResource(
+            when {
+                line == LineType.ECPW -> R.string.dim_subtitle_ecpw
+                line.coupled -> R.string.dim_subtitle_coupled
+                else -> R.string.dim_subtitle_pick
+            },
+        ),
         accent = LocalAccents.current.synthesize,
         reveal = Reveal(state.runId, state.lastAction == Action.SYNTHESIZE, fromBottomStart = true),
     ) {
         val hasRadios = line.targets.isNotEmpty()
+        if (line == LineType.TWP) {
+            PresetMenu(
+                label = stringResource(R.string.preset_awg),
+                items = Materials.wireGauges.map { (awg, d) ->
+                    "AWG $awg · ${presetNumber(d * 1e3)} mm" to { vm.applyLength(FieldId.A, d) }
+                },
+            )
+        }
+        if (line == LineType.WG) {
+            PresetMenu(
+                label = stringResource(R.string.preset_wr),
+                items = Materials.waveguides.map { wg ->
+                    "${wg.name} · ${presetNumber(wg.bandLow / 1e9)}–${presetNumber(wg.bandHigh / 1e9)} GHz" to
+                        { vm.applyWaveguide(wg.a, wg.b) }
+                },
+            )
+        }
         for (id in line.dimensions) {
             FieldRow(
                 vm = vm,
@@ -328,7 +445,7 @@ private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState, focu
                 leading = if (!hasRadios) null else {
                     {
                         if (id in line.targets) {
-                            val solveFor = stringResource(R.string.solve_for, stringResource(id.label))
+                            val solveFor = stringResource(R.string.solve_for, stringResource(line.labelOf(id)))
                             RadioButton(
                                 selected = state.target == id,
                                 onClick = { vm.onTargetChange(id) },
@@ -392,6 +509,220 @@ private fun ParametersCard(vm: CalculatorViewModel, state: CalculatorState, focu
         }
     }
 }
+
+/** A bottom sheet with the same header as the cards, for content kept off the main screen. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InfoSheet(
+    icon: Int,
+    title: String,
+    subtitle: String,
+    onDismiss: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    ) {
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            val accent = MaterialTheme.colorScheme.tertiary
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(painterResource(icon), contentDescription = null, tint = accent, modifier = Modifier.size(32.dp))
+                Spacer(Modifier.width(12.dp))
+                Column {
+                    Text(title, style = MaterialTheme.typography.titleLarge)
+                    Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = accent)
+                }
+            }
+            HorizontalDivider(Modifier.padding(vertical = 4.dp))
+            content()
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun MaterialsSheet(vm: CalculatorViewModel, state: CalculatorState, focus: FieldFocus, onDismiss: () -> Unit) {
+    val line = vm.line
+    var showSubstrates by rememberSaveable { mutableStateOf(false) }
+    InfoSheet(
+        icon = R.drawable.vt_layers,
+        title = stringResource(R.string.materials_title),
+        subtitle = stringResource(R.string.materials_subtitle),
+        onDismiss = onDismiss,
+    ) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            AssistChip(onClick = { showSubstrates = true }, label = { Text(stringResource(R.string.preset_substrate)) })
+            PresetMenu(
+                label = stringResource(R.string.preset_metal),
+                items = Metal.entries.map { m ->
+                    "${stringResource(m.label)} · ${presetNumber(m.msPerM)} MS/m" to { vm.applyMetal(m) }
+                },
+            )
+            if (FieldId.T in line.fields) {
+                PresetMenu(
+                    label = stringResource(R.string.preset_copper),
+                    items = Materials.copperWeights.map { (name, t) ->
+                        "$name · ${presetNumber(t * 1e6)} µm" to { vm.applyThickness(t) }
+                    },
+                )
+            }
+        }
+        for (id in MATERIAL_FIELDS) {
+            FieldRow(
+                vm = vm,
+                id = id,
+                fieldFocus = focus,
+                field = state.field(id),
+                solvedBy = null,
+                flash = false,
+                runId = state.runId,
+                leading = null,
+            )
+        }
+    }
+    if (showSubstrates) {
+        val hUnit = if (FieldId.H in line.fields) state.field(FieldId.H).unit else null
+        SubstrateDialog(
+            heightUnit = hUnit,
+            onPick = { sub, h -> vm.applySubstrate(sub.er, sub.lossTangent, h); showSubstrates = false },
+            onDismiss = { showSubstrates = false },
+        )
+    }
+}
+
+/** A chip that opens a menu of presets. */
+@Composable
+private fun PresetMenu(label: String, items: List<Pair<String, () -> Unit>>) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        AssistChip(onClick = { expanded = true }, label = { Text(label) })
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            for ((text, action) in items) {
+                DropdownMenuItem(text = { Text(text) }, onClick = { action(); expanded = false })
+            }
+        }
+    }
+}
+
+/** Lists substrate presets; tapping a thickness also sets H (shown in [heightUnit], or hidden when null). */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun SubstrateDialog(heightUnit: String?, onPick: (Substrate, Double?) -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.presets_title)) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                Text(
+                    stringResource(R.string.presets_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                for (sub in Materials.substrates) {
+                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(MaterialTheme.shapes.small)
+                            .clickable { onPick(sub, null) }
+                            .padding(vertical = 4.dp),
+                    ) {
+                        Text(sub.name, style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            stringResource(R.string.preset_values, presetNumber(sub.er), presetNumber(sub.lossTangent)),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    if (heightUnit != null && sub.thicknesses.isNotEmpty()) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            for (h in sub.thicknesses) {
+                                SuggestionChip(
+                                    onClick = { onPick(sub, h) },
+                                    label = { Text("${presetNumber(Constants.meter2others(h, heightUnit))} $heightUnit") },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel_presets)) } },
+    )
+}
+
+/** εeff and losses from the last calculation; loss per length follows L's unit (dB/in for mil, else dB/cm). */
+@Composable
+private fun ResultsSheet(state: CalculatorState, onSweep: () -> Unit, onDismiss: () -> Unit) {
+    InfoSheet(
+        icon = R.drawable.vt_chart,
+        title = stringResource(R.string.results_title),
+        subtitle = stringResource(R.string.results_subtitle),
+        onDismiss = onDismiss,
+    ) {
+        for ((out, value) in state.extras.entries.sortedBy { it.key.ordinal }) {
+            Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(out.label),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f),
+                )
+                Spacer(Modifier.width(12.dp))
+                Text(formatOutput(out, value, state), style = MaterialTheme.typography.bodyLarge)
+            }
+        }
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+            FilledTonalButton(onClick = onSweep) {
+                Icon(painterResource(R.drawable.vt_chart), contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.sweep_button))
+            }
+        }
+    }
+}
+
+/**
+ * A result with its unit, as shown in the Results sheet and shared summaries. Per-length values
+ * follow L's unit (per inch for mil, else per cm); frequencies follow the frequency field.
+ */
+internal fun formatOutput(out: Output, value: Double, state: CalculatorState): String {
+    val (scale, perLength) = lossUnit(state)
+    val lUnit = state.fields[FieldId.L]?.unit ?: "mm"
+    val delayPer = if (lUnit == "mil") "ps/in" else "ps/cm"
+    val fUnit = state.fields[FieldId.FREQ]?.unit ?: "GHz"
+    val (shown, unit) = when (out.unit) {
+        OutputUnit.NONE -> value to ""
+        OutputUnit.DB_PER_LENGTH -> value * scale to perLength
+        OutputUnit.DB -> value to "dB"
+        OutputUnit.LENGTH -> Constants.meter2others(value, lUnit) to lUnit
+        OutputUnit.DELAY_PER_LENGTH -> value * 1e12 * scale to delayPer
+        OutputUnit.MICRONS -> value * 1e6 to "µm"
+        OutputUnit.FREQUENCY -> value / Constants.value2Hz(1.0, fUnit) to fUnit
+        OutputUnit.OHMS -> value to "Ω"
+    }
+    return "${resultNumber(shown)} $unit".trim()
+}
+
+/** Loss per length follows L's unit: dB/in for mil, else dB/cm. Returns (scale from per-metre, label). */
+internal fun lossUnit(state: CalculatorState): Pair<Double, String> =
+    if (state.fields[FieldId.L]?.unit == "mil") 0.0254 to "dB/in" else 0.01 to "dB/cm"
+
+/** Four significant digits for read-only results. */
+internal fun resultNumber(v: Double): String =
+    if (v == 0.0) "0" else BigDecimal(v).round(MathContext(4)).stripTrailingZeros().let {
+        if (abs(v) >= 1e-4 && abs(v) < 1e7) it.toPlainString() else it.toString()
+    }
+
+/** Up to six significant digits, as preset values are filled into fields. */
+private fun presetNumber(v: Double): String =
+    BigDecimal.valueOf(v).round(MathContext(6)).stripTrailingZeros().toPlainString()
 
 /** When and where a card plays its reveal animation. */
 private data class Reveal(val runId: Int, val active: Boolean, val fromBottomStart: Boolean)
@@ -506,7 +837,7 @@ private fun FieldRow(
         OutlinedTextField(
             value = field.text,
             onValueChange = { vm.onTextChange(id, it) },
-            label = { Text(stringResource(id.label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            label = { Text(stringResource(vm.line.labelOf(id)), maxLines = 1, overflow = TextOverflow.Ellipsis) },
             suffix = id.unitKind.suffix?.let { { Text(it) } },
             isError = field.error != null,
             supportingText = field.error?.let { { Text(stringResource(it)) } },
@@ -598,5 +929,51 @@ private fun ActionBar(onSynthesize: () -> Unit, onAnalyze: () -> Unit) {
                 Text(stringResource(R.string.Ana_button))
             }
         }
+    }
+}
+
+/** Opens the loss inputs and the extra results, kept in sheets so the screen stays short. */
+@Composable
+private fun SheetChips(
+    materialError: Boolean,
+    resultsReady: Boolean,
+    onMaterials: () -> Unit,
+    onResults: () -> Unit,
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        val errorColor = MaterialTheme.colorScheme.error
+        AssistChip(
+            onClick = onMaterials,
+            label = { Text(stringResource(R.string.materials_title)) },
+            leadingIcon = {
+                Icon(
+                    painterResource(R.drawable.vt_layers),
+                    contentDescription = null,
+                    modifier = Modifier.size(AssistChipDefaults.IconSize),
+                )
+            },
+            colors = if (materialError) {
+                AssistChipDefaults.assistChipColors(labelColor = errorColor, leadingIconContentColor = errorColor)
+            } else {
+                AssistChipDefaults.assistChipColors(leadingIconContentColor = MaterialTheme.colorScheme.tertiary)
+            },
+            border = if (materialError) AssistChipDefaults.assistChipBorder(true, borderColor = errorColor) else
+                AssistChipDefaults.assistChipBorder(true),
+            modifier = Modifier.weight(1f),
+        )
+        AssistChip(
+            onClick = onResults,
+            enabled = resultsReady,
+            label = { Text(stringResource(R.string.results_title)) },
+            leadingIcon = {
+                Icon(
+                    painterResource(R.drawable.vt_chart),
+                    contentDescription = null,
+                    modifier = Modifier.size(AssistChipDefaults.IconSize),
+                )
+            },
+            colors = AssistChipDefaults.assistChipColors(leadingIconContentColor = MaterialTheme.colorScheme.tertiary),
+            modifier = Modifier.weight(1f),
+        )
     }
 }

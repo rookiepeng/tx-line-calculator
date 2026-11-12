@@ -16,12 +16,24 @@ SEVEN LINE TYPES
 • Coplanar waveguide (CPW)
 • Grounded coplanar waveguide (GCPW)
 • Coaxial line
+• Asymmetric (offset) stripline
+• Coupled (edge-coupled) coplanar waveguide, with differential and common mode impedance
+• Twisted pair and parallel wires, with wire gauge (AWG) presets
+• Rectangular waveguide (TE10), with standard WR sizes
 
 ANALYZE AND SYNTHESIZE
 • Analyze: from width, gap, substrate height, metal thickness, dielectric constant and frequency, calculate the characteristic impedance (Z0) and the electrical length (phase) for a given physical length.
 • Synthesize: from a target Z0 and electrical length, calculate the physical dimension you choose to solve for, such as trace width, gap or substrate height, plus the physical length.
 • Coupled lines: work from Z0 and the coupling coefficient (k), or directly from the even and odd mode impedances (Z0e, Z0o).
 • Coaxial lines: solve for the inner conductor radius, the dielectric radius or the core offset.
+• Waveguides: solve for the broad wall width from a target TE10 wave impedance; see the TE10 and next-mode cutoffs.
+• Loss: effective dielectric constant, conductor loss (with surface roughness) and dielectric loss, per unit length and over the line.
+• More results: guided wavelength, propagation delay and skin depth.
+• Frequency sweep: plot Z0, effective dielectric constant or loss against frequency, read values with a cursor, and export the data as CSV.
+• Saved designs: name and keep any design, then reopen it later.
+• Share a text summary of a design's inputs and results.
+• Quick tools: VSWR, return loss and mismatch loss; dBm, mW and volts; and a quarter-wave transformer you can send straight to microstrip synthesis.
+• Presets: common substrates (FR-4, Rogers, Isola, alumina, PTFE), conductor metals and copper weights.
 
 INTERACTIVE DIAGRAMS
 Every line type has a clear 3D cross-section diagram. Edit a field and the matching part of the line lights up on the diagram, so you always know what W, G, H, T, a, b or c refers to. Tap a label on the diagram to jump straight to its field.
