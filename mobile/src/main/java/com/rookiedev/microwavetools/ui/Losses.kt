@@ -25,7 +25,7 @@ enum class OutputUnit {
     OHMS,
 }
 
-/** Read-only quantities shown in the Results card after a calculation. */
+/** Read-only quantities shown in the Results sheet after a calculation. */
 enum class Output(@param:StringRes val label: Int, val unit: OutputUnit) {
     FC(R.string.out_fc, OutputUnit.FREQUENCY),
     FC_NEXT(R.string.out_fc_next, OutputUnit.FREQUENCY),

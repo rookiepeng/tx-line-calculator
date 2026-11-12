@@ -111,6 +111,9 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import com.rookiedev.microwavetools.R
 import com.rookiedev.microwavetools.libs.Constants
 import com.rookiedev.microwavetools.libs.Materials
@@ -142,6 +145,11 @@ fun CalculatorScreen(
     val focus = LocalFocusManager.current
     var confirmReset by rememberSaveable { mutableStateOf(false) }
     var showSweep by rememberSaveable { mutableStateOf(false) }
+    var showMaterials by rememberSaveable { mutableStateOf(false) }
+    var showResults by rememberSaveable { mutableStateOf(false) }
+    // A material value the last calculation rejected would be out of sight, so open its sheet.
+    val materialError = MATERIAL_FIELDS.any { state.field(it).error != null }
+    LaunchedEffect(materialError) { if (materialError) showMaterials = true }
     val fieldFocus = remember(line) { FieldFocus(line.fields) }
     val imeVisible = WindowInsets.isImeVisible
 
@@ -236,13 +244,19 @@ fun CalculatorScreen(
         ) {
             val wide = maxWidth >= 720.dp
             val scroll = rememberScrollState()
+            val diagram = @Composable {
+                Diagram(line, fieldFocus, trackDiagram) {
+                    SheetChips(
+                        materialError = materialError,
+                        resultsReady = state.extras.isNotEmpty(),
+                        onMaterials = { focus.clearFocus(); showMaterials = true },
+                        onResults = { focus.clearFocus(); showResults = true },
+                    )
+                }
+            }
             val dimensions = @Composable { DimensionsCard(vm, state, fieldFocus) }
             val parameters = @Composable {
-                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    ParametersCard(vm, state, fieldFocus)
-                    if (state.extras.isNotEmpty()) ResultsCard(state, onSweep = { showSweep = true })
-                    MaterialsCard(vm, state, fieldFocus)
-                }
+                ParametersCard(vm, state, fieldFocus)
             }
             Column(
                 Modifier
@@ -254,13 +268,13 @@ fun CalculatorScreen(
                 if (wide) {
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Diagram(line, fieldFocus, trackDiagram)
+                            diagram()
                             dimensions()
                         }
                         Column(Modifier.weight(1f)) { parameters() }
                     }
                 } else {
-                    Diagram(line, fieldFocus, trackDiagram)
+                    diagram()
                     dimensions()
                     parameters()
                 }
@@ -279,7 +293,9 @@ fun CalculatorScreen(
             // While editing with the main diagram scrolled away, pin a compact copy under the header
             // so the highlight stays in view.
             AnimatedVisibility(
-                visible = fieldFocus.focused != null && diagramHidden && !compactTopBar,
+                // Material fields live in a sheet that covers the screen, and aren't on the diagram.
+                visible = fieldFocus.focused.let { it != null && it !in MATERIAL_FIELDS } &&
+                    diagramHidden && !compactTopBar,
                 enter = fadeIn() + slideInVertically { -it / 2 },
                 exit = fadeOut() + slideOutVertically { -it / 2 },
                 modifier = Modifier
@@ -302,6 +318,18 @@ fun CalculatorScreen(
                 }
             }
         }
+    }
+
+    if (showMaterials) {
+        MaterialsSheet(vm, state, fieldFocus, onDismiss = { focus.clearFocus(); showMaterials = false })
+    }
+
+    if (showResults && state.extras.isNotEmpty()) {
+        ResultsSheet(
+            state,
+            onSweep = { showResults = false; showSweep = true },
+            onDismiss = { showResults = false },
+        )
     }
 
     val sweepBase = state.lastInputs
@@ -349,7 +377,12 @@ private class FieldFocus(fields: List<FieldId>) {
 }
 
 @Composable
-private fun Diagram(line: LineType, focus: FieldFocus, modifier: Modifier = Modifier) {
+private fun Diagram(
+    line: LineType,
+    focus: FieldFocus,
+    modifier: Modifier = Modifier,
+    footer: @Composable () -> Unit,
+) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         modifier = modifier.fillMaxWidth(),
@@ -361,6 +394,7 @@ private fun Diagram(line: LineType, focus: FieldFocus, modifier: Modifier = Modi
             contentDescription = stringResource(R.string.diagram_description, stringResource(line.title)),
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         )
+        Box(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)) { footer() }
     }
 }
 
@@ -476,17 +510,51 @@ private fun ParametersCard(vm: CalculatorViewModel, state: CalculatorState, focu
     }
 }
 
+/** A bottom sheet with the same header as the cards, for content kept off the main screen. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InfoSheet(
+    icon: Int,
+    title: String,
+    subtitle: String,
+    onDismiss: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    ) {
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            val accent = MaterialTheme.colorScheme.tertiary
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(painterResource(icon), contentDescription = null, tint = accent, modifier = Modifier.size(32.dp))
+                Spacer(Modifier.width(12.dp))
+                Column {
+                    Text(title, style = MaterialTheme.typography.titleLarge)
+                    Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = accent)
+                }
+            }
+            HorizontalDivider(Modifier.padding(vertical = 4.dp))
+            content()
+        }
+    }
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun MaterialsCard(vm: CalculatorViewModel, state: CalculatorState, focus: FieldFocus) {
+private fun MaterialsSheet(vm: CalculatorViewModel, state: CalculatorState, focus: FieldFocus, onDismiss: () -> Unit) {
     val line = vm.line
     var showSubstrates by rememberSaveable { mutableStateOf(false) }
-    SectionCard(
+    InfoSheet(
         icon = R.drawable.vt_layers,
         title = stringResource(R.string.materials_title),
         subtitle = stringResource(R.string.materials_subtitle),
-        accent = MaterialTheme.colorScheme.tertiary,
-        reveal = Reveal(state.runId, active = false, fromBottomStart = false),
+        onDismiss = onDismiss,
     ) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             AssistChip(onClick = { showSubstrates = true }, label = { Text(stringResource(R.string.preset_substrate)) })
@@ -591,13 +659,12 @@ private fun SubstrateDialog(heightUnit: String?, onPick: (Substrate, Double?) ->
 
 /** εeff and losses from the last calculation; loss per length follows L's unit (dB/in for mil, else dB/cm). */
 @Composable
-private fun ResultsCard(state: CalculatorState, onSweep: () -> Unit) {
-    SectionCard(
+private fun ResultsSheet(state: CalculatorState, onSweep: () -> Unit, onDismiss: () -> Unit) {
+    InfoSheet(
         icon = R.drawable.vt_chart,
         title = stringResource(R.string.results_title),
         subtitle = stringResource(R.string.results_subtitle),
-        accent = MaterialTheme.colorScheme.tertiary,
-        reveal = Reveal(state.runId, active = true, fromBottomStart = state.lastAction == Action.SYNTHESIZE),
+        onDismiss = onDismiss,
     ) {
         for ((out, value) in state.extras.entries.sortedBy { it.key.ordinal }) {
             Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -622,7 +689,7 @@ private fun ResultsCard(state: CalculatorState, onSweep: () -> Unit) {
 }
 
 /**
- * A result with its unit, as shown in the Results card and shared summaries. Per-length values
+ * A result with its unit, as shown in the Results sheet and shared summaries. Per-length values
  * follow L's unit (per inch for mil, else per cm); frequencies follow the frequency field.
  */
 internal fun formatOutput(out: Output, value: Double, state: CalculatorState): String {
@@ -862,5 +929,51 @@ private fun ActionBar(onSynthesize: () -> Unit, onAnalyze: () -> Unit) {
                 Text(stringResource(R.string.Ana_button))
             }
         }
+    }
+}
+
+/** Opens the loss inputs and the extra results, kept in sheets so the screen stays short. */
+@Composable
+private fun SheetChips(
+    materialError: Boolean,
+    resultsReady: Boolean,
+    onMaterials: () -> Unit,
+    onResults: () -> Unit,
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        val errorColor = MaterialTheme.colorScheme.error
+        AssistChip(
+            onClick = onMaterials,
+            label = { Text(stringResource(R.string.materials_title)) },
+            leadingIcon = {
+                Icon(
+                    painterResource(R.drawable.vt_layers),
+                    contentDescription = null,
+                    modifier = Modifier.size(AssistChipDefaults.IconSize),
+                )
+            },
+            colors = if (materialError) {
+                AssistChipDefaults.assistChipColors(labelColor = errorColor, leadingIconContentColor = errorColor)
+            } else {
+                AssistChipDefaults.assistChipColors(leadingIconContentColor = MaterialTheme.colorScheme.tertiary)
+            },
+            border = if (materialError) AssistChipDefaults.assistChipBorder(true, borderColor = errorColor) else
+                AssistChipDefaults.assistChipBorder(true),
+            modifier = Modifier.weight(1f),
+        )
+        AssistChip(
+            onClick = onResults,
+            enabled = resultsReady,
+            label = { Text(stringResource(R.string.results_title)) },
+            leadingIcon = {
+                Icon(
+                    painterResource(R.drawable.vt_chart),
+                    contentDescription = null,
+                    modifier = Modifier.size(AssistChipDefaults.IconSize),
+                )
+            },
+            colors = AssistChipDefaults.assistChipColors(leadingIconContentColor = MaterialTheme.colorScheme.tertiary),
+            modifier = Modifier.weight(1f),
+        )
     }
 }
