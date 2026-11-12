@@ -1,6 +1,11 @@
 package com.rookiedev.microwavetools.ui
 
+import android.content.Context
+import android.content.Intent
 import androidx.annotation.StringRes
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
+import java.io.File
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -227,12 +232,50 @@ fun SweepDialog(
                     Text(stringResource(R.string.sweep_no_data), color = MaterialTheme.colorScheme.error)
                 }
 
-                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                    val context = LocalContext.current
+                    TextButton(
+                        onClick = {
+                            val csv = sweepCsv(data.orEmpty(), line.coupled, freqUnit, perLength)
+                            shareCsv(context, csv, context.getString(R.string.sweep_title))
+                        },
+                        enabled = !data.isNullOrEmpty(),
+                    ) { Text(stringResource(R.string.sweep_export)) }
                     TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel_presets)) }
                 }
             }
         }
     }
+}
+
+/**
+ * Sweep points as CSV: frequency in [freqUnit], then Z0, εeff and loss (in [perLength]'s unit)
+ * per mode. Values a point lacks are left empty. Numbers use '.' whatever the locale.
+ */
+fun sweepCsv(points: List<SweepPoint>, coupled: Boolean, freqUnit: String, perLength: Pair<Double, String>): String {
+    val modes = if (coupled) listOf("even", "odd") else listOf("")
+    fun col(name: String, unit: String) = modes.map { m -> listOf(name, m).filter { it.isNotEmpty() }.joinToString(" ") + if (unit.isEmpty()) "" else " ($unit)" }
+    val header = listOf("f ($freqUnit)") + col("Z0", "Ohm") + col("eeff", "") + col("loss", perLength.second)
+    val fScale = Constants.value2Hz(1.0, freqUnit)
+    fun num(x: Double) = String.format(java.util.Locale.US, "%.6g", x)
+    fun cells(values: List<Double>, scale: Double = 1.0) = modes.indices.map { i -> values.getOrNull(i)?.let { num(it * scale) } ?: "" }
+    val rows = points.map { p ->
+        listOf(num(p.f / fScale)) + cells(p.z0) + cells(p.eeff) + cells(p.loss, perLength.first)
+    }
+    return (listOf(header) + rows).joinToString("\n") { it.joinToString(",") } + "\n"
+}
+
+/** Writes [csv] to the app cache and opens the share sheet for it. */
+private fun shareCsv(context: Context, csv: String, subject: String) {
+    val dir = File(context.cacheDir, "exports").apply { mkdirs() }
+    val file = File(dir, "sweep.csv").apply { writeText(csv) }
+    val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
+    val send = Intent(Intent.ACTION_SEND)
+        .setType("text/csv")
+        .putExtra(Intent.EXTRA_STREAM, uri)
+        .putExtra(Intent.EXTRA_SUBJECT, subject)
+        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    context.startActivity(Intent.createChooser(send, subject))
 }
 
 @Composable
@@ -269,7 +312,15 @@ internal fun niceStep(range: Double, target: Int): Double {
     }
 }
 
-private fun tickLabel(t: Double, step: Double) = if (abs(t) < step * 1e-6) "0" else resultNumber(t)
+/**
+ * A tick value with just enough decimals to tell neighbouring ticks apart: a fixed number of
+ * significant digits fails on a nearly flat curve, where every tick would print the same.
+ */
+internal fun tickLabel(t: Double, step: Double): String {
+    if (abs(t) < step * 1e-6) return "0"
+    val decimals = ceil(-log10(step) - 1e-9).toInt().coerceIn(0, 12)
+    return java.math.BigDecimal(t).setScale(decimals, java.math.RoundingMode.HALF_UP).stripTrailingZeros().toPlainString()
+}
 
 /**
  * Line chart of [series] over evenly spaced [xs], with a grid, tick labels and a cursor

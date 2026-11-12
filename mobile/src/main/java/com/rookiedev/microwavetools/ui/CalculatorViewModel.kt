@@ -10,6 +10,7 @@ import com.rookiedev.microwavetools.R
 import com.rookiedev.microwavetools.libs.Constants
 import java.math.BigDecimal
 import java.math.MathContext
+import java.util.UUID
 import java.math.RoundingMode
 
 data class FieldState(val text: String, val unit: String, val error: Int? = null)
@@ -63,6 +64,37 @@ class CalculatorViewModel(
     fun onModeChange(useZ0k: Boolean) = update { copy(useZ0k = useZ0k) }
 
     fun reset() = update { defaults() }
+
+    /** The current inputs as a design named [name]. */
+    fun snapshot(name: String) = SavedDesign(
+        id = UUID.randomUUID().toString(),
+        name = name,
+        line = line,
+        fields = state.fields.entries.associate { (id, f) -> id.prefName to (f.text to f.unit) },
+        target = state.target,
+        useZ0k = state.useZ0k,
+        savedAt = System.currentTimeMillis(),
+    )
+
+    /** Replaces the inputs with a saved design's; results are cleared until the next calculation. */
+    fun loadDesign(d: SavedDesign) = update {
+        val f = fields.mapValues { (id, fs) ->
+            val saved = d.fields[id.prefName] ?: return@mapValues fs.copy(error = null)
+            fs.copy(text = saved.first, unit = saved.second.takeIf { it in id.unitKind.choices } ?: fs.unit, error = null)
+        }
+        copy(
+            fields = f, target = d.target?.takeIf { it in line.targets } ?: target, useZ0k = d.useZ0k,
+            updated = emptySet(), extras = emptyMap(), lastInputs = null,
+        )
+    }
+
+    /** Sets a target impedance and picks W as the synthesis target (from the quarter-wave tool). */
+    fun prepareWidthSynthesis(z0: Double) = update {
+        copy(
+            fields = fields + (FieldId.Z0 to field(FieldId.Z0).copy(text = presetText(z0), error = null)),
+            target = FieldId.W.takeIf { it in line.targets } ?: target,
+        )
+    }
 
     /** Fills εr and tanδ from a preset and, when given and the line has one, the substrate height (m). */
     fun applySubstrate(er: Double, lossTangent: Double, height: Double?) = update {

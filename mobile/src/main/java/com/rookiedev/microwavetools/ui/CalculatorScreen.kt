@@ -103,7 +103,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import android.content.Intent
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.DropdownMenu
@@ -128,9 +130,13 @@ fun CalculatorScreen(
     vm: CalculatorViewModel,
     onOpenDrawer: (() -> Unit)?,
     compactTopBar: Boolean = false,
+    /** Saves the current inputs under the given name. */
+    onSave: (String) -> Unit = {},
 ) {
     val line = vm.line
     val state = vm.state
+    val context = LocalContext.current
+    var naming by rememberSaveable { mutableStateOf(false) }
     // The header slides away while scrolling down and comes back as soon as you scroll up.
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val focus = LocalFocusManager.current
@@ -153,6 +159,19 @@ fun CalculatorScreen(
                 }
             }
             val actions: @Composable RowScope.() -> Unit = {
+                IconButton(onClick = { naming = true }) {
+                    Icon(painterResource(R.drawable.ic_bookmark_add), stringResource(R.string.save_design))
+                }
+                IconButton(onClick = {
+                    val text = designSummary(line, state) { context.getString(it) }
+                    val send = Intent(Intent.ACTION_SEND)
+                        .setType("text/plain")
+                        .putExtra(Intent.EXTRA_SUBJECT, context.getString(line.title))
+                        .putExtra(Intent.EXTRA_TEXT, text)
+                    context.startActivity(Intent.createChooser(send, context.getString(R.string.share_design)))
+                }) {
+                    Icon(painterResource(R.drawable.ic_share), stringResource(R.string.share_design))
+                }
                 IconButton(onClick = { confirmReset = true }) {
                     Icon(painterResource(R.drawable.ic_restore_white_24dp), stringResource(R.string.reset))
                 }
@@ -293,6 +312,17 @@ fun CalculatorScreen(
             freqUnit = state.field(FieldId.FREQ).unit,
             perLength = lossUnit(state),
             onDismiss = { showSweep = false },
+        )
+    }
+
+    if (naming) {
+        val title = stringResource(line.title)
+        val z0 = state.field(FieldId.Z0).text.trim()
+        NameDialog(
+            title = stringResource(R.string.save_design),
+            initial = if (z0.isEmpty()) title else "$title, $z0 Ω",
+            onConfirm = { onSave(it); naming = false },
+            onDismiss = { naming = false },
         )
     }
 
@@ -562,10 +592,6 @@ private fun SubstrateDialog(heightUnit: String?, onPick: (Substrate, Double?) ->
 /** εeff and losses from the last calculation; loss per length follows L's unit (dB/in for mil, else dB/cm). */
 @Composable
 private fun ResultsCard(state: CalculatorState, onSweep: () -> Unit) {
-    val (scale, perLength) = lossUnit(state)
-    val lUnit = state.fields[FieldId.L]?.unit ?: "mm"
-    val delayPer = if (lUnit == "mil") "ps/in" else "ps/cm"
-    val fUnit = state.field(FieldId.FREQ).unit
     SectionCard(
         icon = R.drawable.vt_chart,
         title = stringResource(R.string.results_title),
@@ -574,16 +600,6 @@ private fun ResultsCard(state: CalculatorState, onSweep: () -> Unit) {
         reveal = Reveal(state.runId, active = true, fromBottomStart = state.lastAction == Action.SYNTHESIZE),
     ) {
         for ((out, value) in state.extras.entries.sortedBy { it.key.ordinal }) {
-            val (shown, unit) = when (out.unit) {
-                OutputUnit.NONE -> value to ""
-                OutputUnit.DB_PER_LENGTH -> value * scale to perLength
-                OutputUnit.DB -> value to "dB"
-                OutputUnit.LENGTH -> Constants.meter2others(value, lUnit) to lUnit
-                OutputUnit.DELAY_PER_LENGTH -> value * 1e12 * scale to delayPer
-                OutputUnit.MICRONS -> value * 1e6 to "µm"
-                OutputUnit.FREQUENCY -> value / Constants.value2Hz(1.0, fUnit) to fUnit
-                OutputUnit.OHMS -> value to "Ω"
-            }
             Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     stringResource(out.label),
@@ -592,7 +608,7 @@ private fun ResultsCard(state: CalculatorState, onSweep: () -> Unit) {
                     modifier = Modifier.weight(1f),
                 )
                 Spacer(Modifier.width(12.dp))
-                Text("${resultNumber(shown)} $unit".trim(), style = MaterialTheme.typography.bodyLarge)
+                Text(formatOutput(out, value, state), style = MaterialTheme.typography.bodyLarge)
             }
         }
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
@@ -605,8 +621,30 @@ private fun ResultsCard(state: CalculatorState, onSweep: () -> Unit) {
     }
 }
 
+/**
+ * A result with its unit, as shown in the Results card and shared summaries. Per-length values
+ * follow L's unit (per inch for mil, else per cm); frequencies follow the frequency field.
+ */
+internal fun formatOutput(out: Output, value: Double, state: CalculatorState): String {
+    val (scale, perLength) = lossUnit(state)
+    val lUnit = state.fields[FieldId.L]?.unit ?: "mm"
+    val delayPer = if (lUnit == "mil") "ps/in" else "ps/cm"
+    val fUnit = state.fields[FieldId.FREQ]?.unit ?: "GHz"
+    val (shown, unit) = when (out.unit) {
+        OutputUnit.NONE -> value to ""
+        OutputUnit.DB_PER_LENGTH -> value * scale to perLength
+        OutputUnit.DB -> value to "dB"
+        OutputUnit.LENGTH -> Constants.meter2others(value, lUnit) to lUnit
+        OutputUnit.DELAY_PER_LENGTH -> value * 1e12 * scale to delayPer
+        OutputUnit.MICRONS -> value * 1e6 to "µm"
+        OutputUnit.FREQUENCY -> value / Constants.value2Hz(1.0, fUnit) to fUnit
+        OutputUnit.OHMS -> value to "Ω"
+    }
+    return "${resultNumber(shown)} $unit".trim()
+}
+
 /** Loss per length follows L's unit: dB/in for mil, else dB/cm. Returns (scale from per-metre, label). */
-private fun lossUnit(state: CalculatorState): Pair<Double, String> =
+internal fun lossUnit(state: CalculatorState): Pair<Double, String> =
     if (state.fields[FieldId.L]?.unit == "mil") 0.0254 to "dB/in" else 0.01 to "dB/cm"
 
 /** Four significant digits for read-only results. */

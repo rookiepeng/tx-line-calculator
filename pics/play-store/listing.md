@@ -29,7 +29,10 @@ ANALYZE AND SYNTHESIZE
 • Waveguides: solve for the broad wall width from a target TE10 wave impedance; see the TE10 and next-mode cutoffs.
 • Loss: effective dielectric constant, conductor loss (with surface roughness) and dielectric loss, per unit length and over the line.
 • More results: guided wavelength, propagation delay and skin depth.
-• Frequency sweep: plot Z0, effective dielectric constant or loss against frequency and read values with a cursor.
+• Frequency sweep: plot Z0, effective dielectric constant or loss against frequency, read values with a cursor, and export the data as CSV.
+• Saved designs: name and keep any design, then reopen it later.
+• Share a text summary of a design's inputs and results.
+• Quick tools: VSWR, return loss and mismatch loss; dBm, mW and volts; and a quarter-wave transformer you can send straight to microstrip synthesis.
 • Presets: common substrates (FR-4, Rogers, Isola, alumina, PTFE), conductor metals and copper weights.
 
 INTERACTIVE DIAGRAMS

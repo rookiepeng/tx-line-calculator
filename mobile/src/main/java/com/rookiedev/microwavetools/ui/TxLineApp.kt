@@ -29,7 +29,9 @@ import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -58,6 +60,9 @@ import kotlinx.coroutines.launch
 
 private const val FEEDBACK_EMAIL = "rookie.dev@gmail.com"
 
+/** What the main area shows. Only the line type is remembered across launches. */
+private enum class Page { LINE, SAVED, TOOLS }
+
 /** App shell: a navigation drawer listing the line types (permanent on wide screens) and the calculator. */
 @Composable
 fun TxLineApp() {
@@ -83,6 +88,42 @@ fun TxLineApp() {
         factory = viewModelFactory { initializer { CalculatorViewModel(current, prefs) } },
     )
 
+    var page by rememberSaveable { mutableStateOf(Page.LINE) }
+    val store = remember { DesignStore(context.getSharedPreferences("designs", Context.MODE_PRIVATE)) }
+    // Work to run on the calculator once the line it targets is showing (loading a design, say).
+    var pending by remember { mutableStateOf<((CalculatorViewModel) -> Unit)?>(null) }
+    LaunchedEffect(vm, pending) { pending?.let { it(vm); pending = null } }
+    BackHandler(enabled = page != Page.LINE) { page = Page.LINE }
+
+    val content = @Composable { openDrawer: (() -> Unit)?, shortScreen: Boolean ->
+        when (page) {
+            Page.LINE -> key(current) {
+                CalculatorScreen(
+                    vm, onOpenDrawer = openDrawer, compactTopBar = shortScreen,
+                    onSave = { name ->
+                        store.add(vm.snapshot(name))
+                        Toast.makeText(context, context.getString(R.string.saved_toast, name), Toast.LENGTH_SHORT).show()
+                    },
+                )
+            }
+            Page.SAVED -> SavedScreen(store, openDrawer) { d ->
+                select(d.line); pending = { it.loadDesign(d) }; page = Page.LINE
+            }
+            Page.TOOLS -> ToolsScreen(openDrawer) { z ->
+                select(LineType.MLIN); pending = { it.prepareWidthSynthesis(z) }; page = Page.LINE
+            }
+        }
+    }
+    val drawer = @Composable { close: () -> Unit ->
+        DrawerContent(
+            current = current.takeIf { page == Page.LINE },
+            page = page,
+            onSelect = { select(it); page = Page.LINE; close() },
+            onPage = { page = it; close() },
+            onFeedback = { close(); sendFeedback(context) },
+        )
+    }
+
     val windowSize = LocalWindowInfo.current.containerSize
     val (windowWidth, windowHeight) = with(LocalDensity.current) { windowSize.width.toDp() to windowSize.height.toDp() }
     // Tablets get a permanent drawer; phones (including landscape) use a modal one.
@@ -91,12 +132,10 @@ fun TxLineApp() {
     if (wide) {
         PermanentNavigationDrawer(
             drawerContent = {
-                PermanentDrawerSheet(Modifier.width(300.dp)) {
-                    DrawerContent(current, onSelect = select, onFeedback = { sendFeedback(context) })
-                }
+                PermanentDrawerSheet(Modifier.width(300.dp)) { drawer {} }
             },
         ) {
-            key(current) { CalculatorScreen(vm, onOpenDrawer = null, compactTopBar = shortScreen) }
+            content(null, shortScreen)
         }
     } else {
         val drawerState = rememberDrawerState(if (firstRun) DrawerValue.Open else DrawerValue.Closed)
@@ -104,22 +143,22 @@ fun TxLineApp() {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ModalDrawerSheet(drawerState = drawerState) {
-                    DrawerContent(
-                        current,
-                        onSelect = { select(it); scope.launch { drawerState.close() } },
-                        onFeedback = { scope.launch { drawerState.close() }; sendFeedback(context) },
-                    )
-                }
+                ModalDrawerSheet(drawerState = drawerState) { drawer { scope.launch { drawerState.close() } } }
             },
         ) {
-            key(current) { CalculatorScreen(vm, onOpenDrawer = { scope.launch { drawerState.open() } }, compactTopBar = shortScreen) }
+            content({ scope.launch { drawerState.open() } }, shortScreen)
         }
     }
 }
 
 @Composable
-private fun DrawerContent(current: LineType, onSelect: (LineType) -> Unit, onFeedback: () -> Unit) {
+private fun DrawerContent(
+    current: LineType?,
+    page: Page,
+    onSelect: (LineType) -> Unit,
+    onPage: (Page) -> Unit,
+    onFeedback: () -> Unit,
+) {
     Column(
         Modifier
             .fillMaxHeight()
@@ -148,6 +187,20 @@ private fun DrawerContent(current: LineType, onSelect: (LineType) -> Unit, onFee
             )
         }
         HorizontalDivider(Modifier.padding(vertical = 12.dp, horizontal = 16.dp))
+        NavigationDrawerItem(
+            label = { Text(stringResource(R.string.saved_title)) },
+            icon = { Icon(painterResource(R.drawable.ic_bookmark), contentDescription = null) },
+            selected = page == Page.SAVED,
+            onClick = { onPage(Page.SAVED) },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        )
+        NavigationDrawerItem(
+            label = { Text(stringResource(R.string.tools_title)) },
+            icon = { Icon(painterResource(R.drawable.ic_build), contentDescription = null) },
+            selected = page == Page.TOOLS,
+            onClick = { onPage(Page.TOOLS) },
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+        )
         NavigationDrawerItem(
             label = { Text(stringResource(R.string.menu_help)) },
             icon = { Icon(painterResource(R.drawable.ic_help), contentDescription = null) },

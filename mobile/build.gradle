@@ -40,4 +40,6 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.compose
     debugImplementation libs.androidx.compose.ui.tooling
     testImplementation libs.junit
+    // Android's org.json is a stub in local unit tests; use the real one to test design storage.
+    testImplementation libs.json
 }

@@ -19,7 +19,10 @@ The project has been kept alive and occasionally updated ever since.
 - **Interactive diagrams**: editing a field highlights the matching part of the line; tap a label on the diagram to jump to its field
 - **Loss**: effective dielectric constant, conductor loss (Wheeler's incremental inductance rule, with Hammerstad surface roughness) and dielectric loss, in dB per length and over the line
 - **More results**: guided wavelength, propagation delay and skin depth
-- **Frequency sweep**: plot Z0, εeff or loss against frequency, with a tap-and-drag cursor
+- **Frequency sweep**: plot Z0, εeff or loss against frequency, with a tap-and-drag cursor; export the data as CSV
+- **Saved designs**: name and keep any calculator's inputs, then reopen, rename or delete them
+- **Share**: send a text summary of the inputs and results
+- **Quick tools**: VSWR / return loss / reflection coefficient / mismatch loss, dBm / mW / volts (50 Ω), and a quarter-wave transformer that hands off to microstrip synthesis
 - **Presets**: common substrates, metals and copper weights fill in εr, tanδ, H, σ and T
 - **Units**: mil, mm or cm for dimensions; MHz or GHz for frequency
 - **Coupled lines**: synthesize from Z0 and k, or from the even and odd mode impedances
