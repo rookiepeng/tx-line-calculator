@@ -9,236 +9,255 @@ Each run writes mobile/build/reports/theory-validation.md; copy it here to refre
 Each row compares the app's result with an independent implementation of the published theory
 (written separately in the test), an exact closed form, a textbook example, or a physical limit.
 Agreement shows the app implements each model correctly; it does not measure the models' own
-accuracy against field solvers or measurement.
+accuracy against field solvers or measurement. Numbers in the Ref. column point to the
+[references](#references); round trips check synthesis against the app's own analysis.
 
 227 of 227 comparisons within tolerance.
 
-| Line | Check | Case | App | Theory | Rel. error | Tolerance | Source |
-|---|---|---|---|---|---|---|---|
-| ASLIN | Synthesize H | defaults | 0.000400000 | 0.000400000 | 6.78e-16 | 1e-04 | Round trip: analysis → synthesis |
-| ASLIN | Synthesize L | for H | 0.0349450 | 0.0349450 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| ASLIN | Synthesize W | defaults | 0.000482000 | 0.000482000 | 3.37e-16 | 1e-04 | Round trip: analysis → synthesis |
-| ASLIN | Synthesize L | for W | 0.0349450 | 0.0349450 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| ASLIN | Z0, centered | H1=H2=0.8 mm, T=0 | 54.3193 | 54.3193 | 1.31e-16 | 1e-06 | Limit: Cohn exact stripline |
-| CMLIN | Synthesize W | from Z0, k | 0.00270000 | 0.00270000 | 1.69e-09 | 1e-04 | Round trip: analysis → synthesis |
-| CMLIN | Synthesize S | from Z0, k | 0.000800000 | 0.000800000 | 1.35e-07 | 1e-04 | Round trip: analysis → synthesis |
-| CMLIN | Synthesize L | from Z0, k | 0.0409000 | 0.0409000 | 9.77e-10 | 1e-04 | Round trip: analysis → synthesis |
-| CMLIN | Synthesize W | from Z0e, Z0o | 0.00270000 | 0.00270000 | 1.69e-09 | 1e-04 | Round trip: analysis → synthesis |
-| CMLIN | Synthesize S | from Z0e, Z0o | 0.000800000 | 0.000800000 | 1.35e-07 | 1e-04 | Round trip: analysis → synthesis |
-| CMLIN | Synthesize L | from Z0e, Z0o | 0.0409000 | 0.0409000 | 9.77e-10 | 1e-04 | Round trip: analysis → synthesis |
-| CMLIN | Z0e → single | S/h=10 | 50.8409 | 50.6246 | 4.27e-03 | 2e-02 | Limit: uncoupled (K&J vs H&J) |
-| CMLIN | Z0o → single | S/h=10 | 50.4027 | 50.6246 | 4.38e-03 | 2e-02 | Limit: uncoupled (K&J vs H&J) |
-| COAX | αc | a=0.5 b=1.75 mm Cu 1 GHz | 0.282901 | 0.282901 | 2.65e-09 | 1e-04 | Exact coax |
-| COAX | αd | tanδ=2e-4 | 0.0263805 | 0.0263805 | 2.63e-16 | 1e-09 | Exact TEM: k·tanδ/2 |
-| COAX | Skin depth | Cu 1 GHz | 2.08981e-06 | 2.08981e-06 | 0.00e+00 | 1e-12 | δ = 1/√(πfμσ) |
-| COAX | Synthesize A | defaults | 0.000167000 | 0.000167000 | 8.41e-14 | 1e-04 | Round trip: analysis → synthesis |
-| COAX | Synthesize L | for A | 0.0349450 | 0.0349450 | 3.97e-16 | 1e-04 | Round trip: analysis → synthesis |
-| COAX | Synthesize B | defaults | 0.00100000 | 0.00100000 | 5.68e-14 | 1e-04 | Round trip: analysis → synthesis |
-| COAX | Synthesize L | for B | 0.0349450 | 0.0349450 | 3.97e-16 | 1e-04 | Round trip: analysis → synthesis |
-| COAX | Synthesize C | defaults | 0.000100000 | 0.000100000 | 2.44e-09 | 1e-04 | Round trip: analysis → synthesis |
-| COAX | Synthesize L | for C | 0.0349450 | 0.0349450 | 3.97e-16 | 1e-04 | Round trip: analysis → synthesis |
-| COAX | Z0 | a=0.5 b=1.75 c=0.0 mm εr=1.0 | 75.1138 | 75.1138 | 0.00e+00 | 1e-09 | Exact (eccentric coax) |
-| COAX | Z0 | a=0.5 b=1.75 c=0.0 mm εr=2.1 | 51.8334 | 51.8334 | 1.37e-16 | 1e-09 | Exact (eccentric coax) |
-| COAX | Z0 | a=0.3 b=2.0 c=0.0 mm εr=1.0 | 113.748 | 113.748 | 1.25e-16 | 1e-09 | Exact (eccentric coax) |
-| COAX | Z0 | a=0.3 b=2.0 c=0.0 mm εr=2.1 | 78.4939 | 78.4939 | 3.62e-16 | 1e-09 | Exact (eccentric coax) |
-| COAX | Z0 | a=0.5 b=1.75 c=0.6 mm εr=1.0 | 66.7832 | 66.7832 | 0.00e+00 | 1e-09 | Exact (eccentric coax) |
-| COAX | Z0 | a=0.5 b=1.75 c=0.6 mm εr=2.1 | 46.0848 | 46.0848 | 1.54e-16 | 1e-09 | Exact (eccentric coax) |
-| COAX | Z0 | a=0.2 b=3.0 c=2.0 mm εr=1.0 | 126.737 | 126.737 | 2.24e-16 | 1e-09 | Exact (eccentric coax) |
-| COAX | Z0 | a=0.2 b=3.0 c=2.0 mm εr=2.1 | 87.4569 | 87.4569 | 3.25e-16 | 1e-09 | Exact (eccentric coax) |
-| COAX | b/a for 50 Ω | air | 2.30230 | 2.30200 | 1.32e-04 | 1e-03 | Textbook: b/a = 2.302 |
-| COAX | Phase | L=100 mm, 1 GHz, εr=2.1 | 174.017 | 174.017 | 0.00e+00 | 1e-09 | TEM: 360·L·√εr·f/c |
-| CPW | Synthesize H | defaults | 0.00160000 | 0.00160000 | 7.17e-12 | 1e-04 | Round trip: analysis → synthesis |
-| CPW | Synthesize L | for H | 0.0444640 | 0.0444640 | 1.44e-13 | 1e-04 | Round trip: analysis → synthesis |
-| CPW | Synthesize W | defaults | 0.00100000 | 0.00100000 | 9.45e-14 | 1e-04 | Round trip: analysis → synthesis |
-| CPW | Synthesize L | for W | 0.0444640 | 0.0444640 | 7.80e-16 | 1e-04 | Round trip: analysis → synthesis |
-| CPW | Synthesize S | defaults | 0.000244000 | 0.000244000 | 1.27e-13 | 1e-04 | Round trip: analysis → synthesis |
-| CPW | Synthesize L | for S | 0.0444640 | 0.0444640 | 4.37e-15 | 1e-04 | Round trip: analysis → synthesis |
-| CPW | Z0, T=0 | W=0.2 S=0.1 h=0.254 mm | 74.2263 | 74.2263 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, T=0 | W=0.2 S=0.1 h=0.254 mm | 2.63478 | 2.63478 | 3.37e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | Z0, T=0 | W=0.2 S=0.1 h=1.6 mm | 72.0671 | 72.0671 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, T=0 | W=0.2 S=0.1 h=1.6 mm | 2.79503 | 2.79503 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | Z0, T=0 | W=1.0 S=0.244 h=0.254 mm | 69.1912 | 69.1912 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, T=0 | W=1.0 S=0.244 h=0.254 mm | 2.02452 | 2.02452 | 2.19e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | Z0, T=0 | W=1.0 S=0.244 h=1.6 mm | 59.5535 | 59.5535 | 1.19e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, T=0 | W=1.0 S=0.244 h=1.6 mm | 2.73281 | 2.73281 | 3.25e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | Z0, T=0 | W=2.0 S=0.5 h=0.254 mm | 76.8179 | 76.8179 | 3.70e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, T=0 | W=2.0 S=0.5 h=0.254 mm | 1.66442 | 1.66442 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | Z0, T=0 | W=2.0 S=0.5 h=1.6 mm | 61.7233 | 61.7233 | 1.15e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, T=0 | W=2.0 S=0.5 h=1.6 mm | 2.57804 | 2.57804 | 3.45e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | Z0, T=0 | W=0.5 S=1.0 h=0.254 mm | 137.072 | 137.072 | 2.86e-14 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, T=0 | W=0.5 S=1.0 h=0.254 mm | 1.70553 | 1.70553 | 5.56e-14 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | Z0, T=0 | W=0.5 S=1.0 h=1.6 mm | 109.561 | 109.561 | 6.49e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, T=0 | W=0.5 S=1.0 h=1.6 mm | 2.66957 | 2.66957 | 1.66e-16 | 1e-06 | Conformal map (Wadell §3.4.1) |
-| CPW | εeff, h→∞ | W=0.5 S=0.2 mm | 2.80000 | 2.80000 | 2.37e-08 | 1e-06 | Limit: (εr+1)/2 |
-| CSLIN | Z0e, T=0 | W=0.3 S=0.1 mm | 101.158 | 101.158 | 1.55e-15 | 1e-06 | Cohn exact (coupled) |
-| CSLIN | Z0o, T=0 | W=0.3 S=0.1 mm | 40.5314 | 40.5314 | 0.00e+00 | 1e-06 | Cohn exact (coupled) |
-| CSLIN | Z0e, T=0 | W=0.6 S=0.36 mm | 63.9673 | 63.9673 | 0.00e+00 | 1e-06 | Cohn exact (coupled) |
-| CSLIN | Z0o, T=0 | W=0.6 S=0.36 mm | 43.2550 | 43.2550 | 1.64e-16 | 1e-06 | Cohn exact (coupled) |
-| CSLIN | Z0e, T=0 | W=1.0 S=0.5 mm | 45.5357 | 45.5357 | 3.12e-16 | 1e-06 | Cohn exact (coupled) |
-| CSLIN | Z0o, T=0 | W=1.0 S=0.5 mm | 36.2102 | 36.2102 | 1.96e-16 | 1e-06 | Cohn exact (coupled) |
-| CSLIN | Z0e, T=0 | W=0.5 S=2.0 mm | 59.6526 | 59.6526 | 3.57e-16 | 1e-06 | Cohn exact (coupled) |
-| CSLIN | Z0o, T=0 | W=0.5 S=2.0 mm | 58.7241 | 58.7241 | 1.21e-16 | 1e-06 | Cohn exact (coupled) |
-| CSLIN | Z0e → single | S/b=5 | 54.3193 | 54.3193 | 5.65e-08 | 1e-03 | Limit: uncoupled strips |
-| CSLIN | Z0o → single | S/b=5 | 54.3193 | 54.3193 | 5.65e-08 | 1e-03 | Limit: uncoupled strips |
-| CSLIN | Synthesize W | from Z0, k | 0.000590000 | 0.000590000 | 2.83e-12 | 1e-04 | Round trip: analysis → synthesis |
-| CSLIN | Synthesize S | from Z0, k | 0.000360000 | 0.000360000 | 6.38e-13 | 1e-04 | Round trip: analysis → synthesis |
-| CSLIN | Synthesize L | from Z0, k | 0.0349000 | 0.0349000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| CSLIN | Synthesize W | from Z0e, Z0o | 0.000590000 | 0.000590000 | 2.83e-12 | 1e-04 | Round trip: analysis → synthesis |
-| CSLIN | Synthesize S | from Z0e, Z0o | 0.000360000 | 0.000360000 | 6.44e-13 | 1e-04 | Round trip: analysis → synthesis |
-| CSLIN | Synthesize L | from Z0e, Z0o | 0.0349000 | 0.0349000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| ECPW | Synthesize W | from Z0, k | 0.000500000 | 0.000500000 | 1.95e-15 | 1e-04 | Round trip: analysis → synthesis |
-| ECPW | Synthesize S | from Z0, k | 0.000200000 | 0.000200000 | 2.57e-15 | 1e-04 | Round trip: analysis → synthesis |
-| ECPW | Synthesize L | from Z0, k | 0.0450820 | 0.0450820 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| ECPW | Synthesize W | from Z0e, Z0o | 0.000500000 | 0.000500000 | 1.95e-15 | 1e-04 | Round trip: analysis → synthesis |
-| ECPW | Synthesize S | from Z0e, Z0o | 0.000200000 | 0.000200000 | 2.57e-15 | 1e-04 | Round trip: analysis → synthesis |
-| ECPW | Synthesize L | from Z0e, Z0o | 0.0450820 | 0.0450820 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| ECPW | Z0e, S→0 | W=0.5 G=0.2 h=1.6 mm | 112.738 | 112.738 | 2.52e-07 | 1e-03 | Limit: one CPW of width 2W |
-| GCPW | Synthesize H | defaults | 0.00160000 | 0.00160000 | 3.51e-12 | 1e-04 | Round trip: analysis → synthesis |
-| GCPW | Synthesize L | for H | 0.0443800 | 0.0443800 | 5.93e-14 | 1e-04 | Round trip: analysis → synthesis |
-| GCPW | Synthesize W | defaults | 0.00100000 | 0.00100000 | 5.30e-11 | 1e-04 | Round trip: analysis → synthesis |
-| GCPW | Synthesize L | for W | 0.0443800 | 0.0443800 | 6.68e-13 | 1e-04 | Round trip: analysis → synthesis |
-| GCPW | Synthesize S | defaults | 0.000150000 | 0.000150000 | 2.11e-09 | 1e-04 | Round trip: analysis → synthesis |
-| GCPW | Synthesize L | for S | 0.0443800 | 0.0443800 | 9.05e-12 | 1e-04 | Round trip: analysis → synthesis |
-| GCPW | Z0 | W=0.2 S=0.1 h=0.254 mm | 63.8814 | 63.8814 | 1.11e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | εeff | W=0.2 S=0.1 h=0.254 mm | 2.95847 | 2.95847 | 3.00e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | Z0 | W=0.2 S=0.1 h=1.6 mm | 71.7409 | 71.7409 | 1.98e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | εeff | W=0.2 S=0.1 h=1.6 mm | 2.80496 | 2.80496 | 1.58e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | Z0 | W=1.0 S=0.244 h=0.254 mm | 29.4256 | 29.4256 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | εeff | W=1.0 S=0.244 h=0.254 mm | 3.58179 | 3.58179 | 1.24e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | Z0 | W=1.0 S=0.244 h=1.6 mm | 55.9910 | 55.9910 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | εeff | W=1.0 S=0.244 h=1.6 mm | 2.86671 | 2.86671 | 1.55e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | Z0 | W=2.0 S=0.5 h=0.254 mm | 17.7661 | 17.7661 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | εeff | W=2.0 S=0.5 h=0.254 mm | 3.95803 | 3.95803 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | Z0 | W=2.0 S=0.5 h=1.6 mm | 50.1243 | 50.1243 | 2.84e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | εeff | W=2.0 S=0.5 h=1.6 mm | 3.01835 | 3.01835 | 2.94e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | Z0 | W=0.5 S=1.0 h=0.254 mm | 50.6658 | 50.6658 | 1.40e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | εeff | W=0.5 S=1.0 h=0.254 mm | 3.62942 | 3.62942 | 1.22e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | Z0 | W=0.5 S=1.0 h=1.6 mm | 97.9033 | 97.9033 | 2.90e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| GCPW | εeff | W=0.5 S=1.0 h=1.6 mm | 2.91827 | 2.91827 | 3.04e-16 | 1e-06 | Conformal map (Wadell §3.4.3) |
-| MLIN | Z0 static | W/h=0.1 εr=2.2 T=0.0 µm | 202.685 | 202.685 | 2.55e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.1 εr=2.2 T=0.0 µm | 1.68062 | 1.68062 | 6.66e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.1 εr=2.2 T=35.0 µm | 185.390 | 185.390 | 3.05e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.1 εr=2.2 T=35.0 µm | 1.62733 | 1.62733 | 7.61e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.1 εr=4.6 T=0.0 µm | 151.075 | 151.075 | 5.10e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.1 εr=4.6 T=0.0 µm | 3.02503 | 3.02503 | 2.26e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.1 εr=4.6 T=35.0 µm | 140.166 | 140.166 | 6.23e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.1 εr=4.6 T=35.0 µm | 2.84686 | 2.84686 | 2.67e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.1 εr=9.8 T=0.0 µm | 107.914 | 107.914 | 1.00e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.1 εr=9.8 T=0.0 µm | 5.92869 | 5.92869 | 5.54e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.1 εr=9.8 T=35.0 µm | 101.073 | 101.073 | 1.23e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.1 εr=9.8 T=35.0 µm | 5.47492 | 5.47492 | 6.70e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.3 εr=2.2 T=0.0 µm | 150.705 | 150.705 | 3.90e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.3 εr=2.2 T=0.0 µm | 1.70937 | 1.70937 | 1.05e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.3 εr=2.2 T=35.0 µm | 143.573 | 143.573 | 4.36e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.3 εr=2.2 T=35.0 µm | 1.67780 | 1.67780 | 1.14e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.3 εr=4.6 T=0.0 µm | 111.753 | 111.753 | 7.86e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.3 εr=4.6 T=0.0 µm | 3.10864 | 3.10864 | 3.53e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.3 εr=4.6 T=35.0 µm | 107.336 | 107.336 | 8.88e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.3 εr=4.6 T=35.0 µm | 3.00190 | 3.00190 | 3.92e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.3 εr=9.8 T=0.0 µm | 79.5853 | 79.5853 | 1.54e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.3 εr=9.8 T=0.0 µm | 6.12951 | 6.12951 | 8.63e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=0.3 εr=9.8 T=35.0 µm | 76.8482 | 76.8482 | 1.75e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=0.3 εr=9.8 T=35.0 µm | 5.85623 | 5.85623 | 9.70e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=1.0 εr=2.2 T=0.0 µm | 94.9631 | 94.9631 | 6.70e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=1.0 εr=2.2 T=0.0 µm | 1.77235 | 1.77235 | 2.05e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=1.0 εr=2.2 T=35.0 µm | 92.7489 | 92.7489 | 7.09e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=1.0 εr=2.2 T=35.0 µm | 1.75680 | 1.75680 | 2.15e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=1.0 εr=4.6 T=0.0 µm | 69.6536 | 69.6536 | 1.37e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=1.0 εr=4.6 T=0.0 µm | 3.29436 | 3.29436 | 6.78e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=1.0 εr=4.6 T=35.0 µm | 68.2993 | 68.2993 | 1.47e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=1.0 εr=4.6 T=35.0 µm | 3.23972 | 3.23972 | 7.18e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=1.0 εr=9.8 T=0.0 µm | 49.2888 | 49.2888 | 2.77e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=1.0 εr=9.8 T=0.0 µm | 6.57903 | 6.57903 | 1.64e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=1.0 εr=9.8 T=35.0 µm | 48.4564 | 48.4564 | 2.97e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=1.0 εr=9.8 T=35.0 µm | 6.43631 | 6.43631 | 1.75e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=3.0 εr=2.2 T=0.0 µm | 50.9172 | 50.9172 | 7.74e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=3.0 εr=2.2 T=0.0 µm | 1.87822 | 1.87822 | 3.81e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=3.0 εr=2.2 T=35.0 µm | 50.3456 | 50.3456 | 8.00e-14 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=3.0 εr=2.2 T=35.0 µm | 1.87013 | 1.87013 | 3.93e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=3.0 εr=4.6 T=0.0 µm | 36.7172 | 36.7172 | 1.67e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=3.0 εr=4.6 T=0.0 µm | 3.61190 | 3.61190 | 1.22e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=3.0 εr=4.6 T=35.0 µm | 36.3751 | 36.3751 | 1.74e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=3.0 εr=4.6 T=35.0 µm | 3.58250 | 3.58250 | 1.27e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=3.0 εr=9.8 T=0.0 µm | 25.7308 | 25.7308 | 3.65e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=3.0 εr=9.8 T=0.0 µm | 7.35474 | 7.35474 | 2.91e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=3.0 εr=9.8 T=35.0 µm | 25.5233 | 25.5233 | 3.82e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=3.0 εr=9.8 T=35.0 µm | 7.27650 | 7.27650 | 3.03e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=10.0 εr=2.2 T=0.0 µm | 20.4392 | 20.4392 | 1.17e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=10.0 εr=2.2 T=0.0 µm | 2.01599 | 2.01599 | 6.43e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=10.0 εr=2.2 T=35.0 µm | 20.3519 | 20.3519 | 1.20e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=10.0 εr=2.2 T=35.0 µm | 2.01239 | 2.01239 | 6.57e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=10.0 εr=4.6 T=0.0 µm | 14.4533 | 14.4533 | 2.54e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=10.0 εr=4.6 T=0.0 µm | 4.03164 | 4.03164 | 1.99e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=10.0 εr=4.6 T=35.0 µm | 14.4026 | 14.4026 | 2.61e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=10.0 εr=4.6 T=35.0 µm | 4.01829 | 4.01829 | 2.05e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=10.0 εr=9.8 T=0.0 µm | 10.0197 | 10.0197 | 5.58e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=10.0 εr=9.8 T=0.0 µm | 8.38898 | 8.38898 | 4.65e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | Z0 static | W/h=10.0 εr=9.8 T=35.0 µm | 9.98940 | 9.98940 | 5.74e-13 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | εeff static | W/h=10.0 εr=9.8 T=35.0 µm | 8.35299 | 8.35299 | 4.79e-12 | 1e-06 | Hammerstad–Jensen 1980 |
-| MLIN | W/d for 50 Ω | d=1.58 mm εr=2.2 | 3.08279 | 3.08100 | 5.81e-04 | 2e-02 | Pozar Ex. 3.7 (Wheeler-type formula) |
-| MLIN | εeff for 50 Ω | d=1.58 mm εr=2.2 | 1.88127 | 1.87000 | 6.03e-03 | 1e-02 | Pozar Ex. 3.7 |
-| MLIN | Synthesize H | defaults | 0.00160000 | 0.00160000 | 4.37e-12 | 1e-04 | Round trip: analysis → synthesis |
-| MLIN | Synthesize L | for H | 0.0400000 | 0.0400000 | 1.75e-13 | 1e-04 | Round trip: analysis → synthesis |
-| MLIN | Synthesize W | defaults | 0.00290000 | 0.00290000 | 1.04e-11 | 1e-04 | Round trip: analysis → synthesis |
-| MLIN | Synthesize L | for W | 0.0400000 | 0.0400000 | 4.88e-13 | 1e-04 | Round trip: analysis → synthesis |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=0.5 1.0 GHz | 6.28587 | 6.28587 | 2.83e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=0.5 10.0 GHz | 6.53050 | 6.53050 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=0.5 30.0 GHz | 7.30609 | 7.30609 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=1.0 1.0 GHz | 6.59307 | 6.59307 | 2.69e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=1.0 10.0 GHz | 6.92819 | 6.92819 | 2.56e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=1.0 30.0 GHz | 7.82911 | 7.82911 | 1.13e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=2.0 1.0 GHz | 7.05518 | 7.05518 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=2.0 10.0 GHz | 7.51228 | 7.51228 | 5.91e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=2.0 30.0 GHz | 8.46789 | 8.46789 | 2.10e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=0.5 1.0 GHz | 3.17727 | 3.17727 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=0.5 10.0 GHz | 3.36763 | 3.36763 | 5.27e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=0.5 30.0 GHz | 3.85879 | 3.85879 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=1.0 1.0 GHz | 3.30577 | 3.30577 | 1.34e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=1.0 10.0 GHz | 3.55317 | 3.55317 | 3.75e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=1.0 30.0 GHz | 4.05415 | 4.05415 | 2.19e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=2.0 1.0 GHz | 3.49805 | 3.49805 | 1.27e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=2.0 10.0 GHz | 3.81181 | 3.81181 | 2.33e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=2.0 30.0 GHz | 4.26639 | 4.26639 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=0.5 1.0 GHz | 1.73038 | 1.73038 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=0.5 10.0 GHz | 1.73678 | 1.73678 | 3.84e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=0.5 30.0 GHz | 1.76261 | 1.76261 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=1.0 1.0 GHz | 1.77269 | 1.77269 | 5.01e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=1.0 10.0 GHz | 1.78178 | 1.78178 | 2.49e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=1.0 30.0 GHz | 1.81618 | 1.81618 | 1.22e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=2.0 1.0 GHz | 1.83524 | 1.83524 | 2.42e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=2.0 10.0 GHz | 1.84844 | 1.84844 | 2.40e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=2.0 30.0 GHz | 1.89408 | 1.89408 | 1.17e-16 | 1e-06 | Kirschning–Jansen 1982 |
-| SLIN | αd | εr=4.6 tanδ=0.02 1 GHz | 3.90438 | 3.90438 | 5.69e-16 | 1e-09 | Exact TEM: k·tanδ/2 |
-| SLIN | Synthesize H | defaults | 0.00160000 | 0.00160000 | 3.03e-11 | 1e-04 | Round trip: analysis → synthesis |
-| SLIN | Synthesize L | for H | 0.0349000 | 0.0349000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| SLIN | Synthesize W | defaults | 0.000600000 | 0.000600000 | 2.00e-13 | 1e-04 | Round trip: analysis → synthesis |
-| SLIN | Synthesize L | for W | 0.0349000 | 0.0349000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| SLIN | Z0, T=0 | W/b=0.1 εr=2.2 | 130.947 | 130.947 | 0.00e+00 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=0.1 εr=4.6 | 90.5585 | 90.5585 | 1.57e-16 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=0.3 εr=2.2 | 87.1782 | 87.1782 | 9.78e-16 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=0.3 εr=4.6 | 60.2893 | 60.2893 | 8.25e-16 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=0.6 εr=2.2 | 61.0898 | 61.0898 | 0.00e+00 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=0.6 εr=4.6 | 42.2475 | 42.2475 | 0.00e+00 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=1.0 εr=2.2 | 44.0614 | 44.0614 | 0.00e+00 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=1.0 εr=4.6 | 30.4713 | 30.4713 | 1.17e-16 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=2.0 εr=2.2 | 26.0102 | 26.0102 | 1.37e-15 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=2.0 εr=4.6 | 17.9877 | 17.9877 | 1.38e-15 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=4.0 εr=2.2 | 14.2972 | 14.2972 | 8.23e-13 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0, T=0 | W/b=4.0 εr=4.6 | 9.88745 | 9.88745 | 8.23e-13 | 1e-06 | Cohn exact (conformal map) |
-| SLIN | Z0 branch continuity | W/b=0.3, T=b/999 vs exact T=0 | 86.8240 | 87.1782 | 4.06e-03 | 1e-02 | Wheeler thick-strip formula vs Cohn exact |
-| SLIN | Z0 branch continuity | W/b=1.0, T=b/999 vs exact T=0 | 43.8477 | 44.0614 | 4.85e-03 | 1e-02 | Wheeler thick-strip formula vs Cohn exact |
-| SLIN | Z0 branch continuity | W/b=3.0, T=b/999 vs exact T=0 | 18.3593 | 18.4519 | 5.01e-03 | 1e-02 | Wheeler thick-strip formula vs Cohn exact |
-| SLIN | W for 50 Ω | b=3.2 mm εr=2.2 | 2.65319 | 2.66000 | 2.56e-03 | 2e-02 | Pozar Ex. 3.5 (approx. formula, ±1%) |
-| SLIN | Phase | L=50 mm, 2 GHz, εr=4.6 | 257.550 | 257.550 | 2.21e-16 | 1e-09 | TEM: 360·L·√εr·f/c |
-| TWP | αc | d=0.5 D=1.5 mm Cu 1 GHz | 0.228911 | 0.228911 | 1.28e-08 | 1e-04 | Exact twin lead |
-| TWP | Synthesize A | defaults | 0.000511000 | 0.000511000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| TWP | Synthesize L | for A | 0.644157 | 0.644157 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| TWP | Synthesize B | defaults | 0.000771000 | 0.000771000 | 7.03e-16 | 1e-04 | Round trip: analysis → synthesis |
-| TWP | Synthesize L | for B | 0.644157 | 0.644157 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| TWP | Z0 | d=0.5 D=1.5 mm air | 211.383 | 211.383 | 0.00e+00 | 1e-09 | Exact twin lead |
-| WG | αc | WR-90 Cu 10 GHz | 0.108385 | 0.108385 | 0.00e+00 | 1e-09 | Pozar (3.96) |
-| WG | Synthesize A | defaults | 0.0228600 | 0.0228600 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| WG | Synthesize L | for A | 0.00992700 | 0.00992700 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis |
-| WG | Z_TE10 | WR-90 10 GHz | 498.974 | 498.974 | 0.00e+00 | 1e-09 | Exact TE10 |
-| WG | Phase | WR-90 10 GHz L=100 mm | 906.638 | 906.638 | 1.25e-16 | 1e-09 | Exact TE10: β = k·√(1−(fc/f)²) |
-| WG | fc | WR-90 | 6.55714e+09 | 6.55700e+09 | 2.14e-05 | 1e-03 | Published WR-90 cutoff 6.557 GHz |
+| Line | Check | Case | App | Theory | Rel. error | Tolerance | Source | Ref. |
+|---|---|---|---|---|---|---|---|---|
+| ASLIN | Synthesize H | defaults | 0.000400000 | 0.000400000 | 6.78e-16 | 1e-04 | Round trip: analysis → synthesis | — |
+| ASLIN | Synthesize L | for H | 0.0349450 | 0.0349450 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| ASLIN | Synthesize W | defaults | 0.000482000 | 0.000482000 | 3.37e-16 | 1e-04 | Round trip: analysis → synthesis | — |
+| ASLIN | Synthesize L | for W | 0.0349450 | 0.0349450 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| ASLIN | Z0, centered | H1=H2=0.8 mm, T=0 | 54.3193 | 54.3193 | 1.31e-16 | 1e-06 | Limit: Cohn exact stripline | [1] |
+| CMLIN | Synthesize W | from Z0, k | 0.00270000 | 0.00270000 | 1.69e-09 | 1e-04 | Round trip: analysis → synthesis | — |
+| CMLIN | Synthesize S | from Z0, k | 0.000800000 | 0.000800000 | 1.35e-07 | 1e-04 | Round trip: analysis → synthesis | — |
+| CMLIN | Synthesize L | from Z0, k | 0.0409000 | 0.0409000 | 9.77e-10 | 1e-04 | Round trip: analysis → synthesis | — |
+| CMLIN | Synthesize W | from Z0e, Z0o | 0.00270000 | 0.00270000 | 1.69e-09 | 1e-04 | Round trip: analysis → synthesis | — |
+| CMLIN | Synthesize S | from Z0e, Z0o | 0.000800000 | 0.000800000 | 1.35e-07 | 1e-04 | Round trip: analysis → synthesis | — |
+| CMLIN | Synthesize L | from Z0e, Z0o | 0.0409000 | 0.0409000 | 9.77e-10 | 1e-04 | Round trip: analysis → synthesis | — |
+| CMLIN | Z0e → single | S/h=10 | 50.8409 | 50.6246 | 4.27e-03 | 2e-02 | Limit: uncoupled (K&J vs H&J) | [5], [3] |
+| CMLIN | Z0o → single | S/h=10 | 50.4027 | 50.6246 | 4.38e-03 | 2e-02 | Limit: uncoupled (K&J vs H&J) | [5], [3] |
+| COAX | αc | a=0.5 b=1.75 mm Cu 1 GHz | 0.282901 | 0.282901 | 2.65e-09 | 1e-04 | Exact coax | [7] |
+| COAX | αd | tanδ=2e-4 | 0.0263805 | 0.0263805 | 2.63e-16 | 1e-09 | Exact TEM: k·tanδ/2 | [7] |
+| COAX | Skin depth | Cu 1 GHz | 2.08981e-06 | 2.08981e-06 | 0.00e+00 | 1e-12 | δ = 1/√(πfμσ) | [7] |
+| COAX | Synthesize A | defaults | 0.000167000 | 0.000167000 | 8.41e-14 | 1e-04 | Round trip: analysis → synthesis | — |
+| COAX | Synthesize L | for A | 0.0349450 | 0.0349450 | 3.97e-16 | 1e-04 | Round trip: analysis → synthesis | — |
+| COAX | Synthesize B | defaults | 0.00100000 | 0.00100000 | 5.68e-14 | 1e-04 | Round trip: analysis → synthesis | — |
+| COAX | Synthesize L | for B | 0.0349450 | 0.0349450 | 3.97e-16 | 1e-04 | Round trip: analysis → synthesis | — |
+| COAX | Synthesize C | defaults | 0.000100000 | 0.000100000 | 2.44e-09 | 1e-04 | Round trip: analysis → synthesis | — |
+| COAX | Synthesize L | for C | 0.0349450 | 0.0349450 | 3.97e-16 | 1e-04 | Round trip: analysis → synthesis | — |
+| COAX | Z0 | a=0.5 b=1.75 c=0.0 mm εr=1.0 | 75.1138 | 75.1138 | 0.00e+00 | 1e-09 | Exact (eccentric coax) | [6] |
+| COAX | Z0 | a=0.5 b=1.75 c=0.0 mm εr=2.1 | 51.8334 | 51.8334 | 1.37e-16 | 1e-09 | Exact (eccentric coax) | [6] |
+| COAX | Z0 | a=0.3 b=2.0 c=0.0 mm εr=1.0 | 113.748 | 113.748 | 1.25e-16 | 1e-09 | Exact (eccentric coax) | [6] |
+| COAX | Z0 | a=0.3 b=2.0 c=0.0 mm εr=2.1 | 78.4939 | 78.4939 | 3.62e-16 | 1e-09 | Exact (eccentric coax) | [6] |
+| COAX | Z0 | a=0.5 b=1.75 c=0.6 mm εr=1.0 | 66.7832 | 66.7832 | 0.00e+00 | 1e-09 | Exact (eccentric coax) | [6] |
+| COAX | Z0 | a=0.5 b=1.75 c=0.6 mm εr=2.1 | 46.0848 | 46.0848 | 1.54e-16 | 1e-09 | Exact (eccentric coax) | [6] |
+| COAX | Z0 | a=0.2 b=3.0 c=2.0 mm εr=1.0 | 126.737 | 126.737 | 2.24e-16 | 1e-09 | Exact (eccentric coax) | [6] |
+| COAX | Z0 | a=0.2 b=3.0 c=2.0 mm εr=2.1 | 87.4569 | 87.4569 | 3.25e-16 | 1e-09 | Exact (eccentric coax) | [6] |
+| COAX | b/a for 50 Ω | air | 2.30230 | 2.30200 | 1.32e-04 | 1e-03 | Textbook: b/a = 2.302 | [7] |
+| COAX | Phase | L=100 mm, 1 GHz, εr=2.1 | 174.017 | 174.017 | 0.00e+00 | 1e-09 | TEM: 360·L·√εr·f/c | [7] |
+| CPW | Synthesize H | defaults | 0.00160000 | 0.00160000 | 7.17e-12 | 1e-04 | Round trip: analysis → synthesis | — |
+| CPW | Synthesize L | for H | 0.0444640 | 0.0444640 | 1.44e-13 | 1e-04 | Round trip: analysis → synthesis | — |
+| CPW | Synthesize W | defaults | 0.00100000 | 0.00100000 | 9.45e-14 | 1e-04 | Round trip: analysis → synthesis | — |
+| CPW | Synthesize L | for W | 0.0444640 | 0.0444640 | 7.80e-16 | 1e-04 | Round trip: analysis → synthesis | — |
+| CPW | Synthesize S | defaults | 0.000244000 | 0.000244000 | 1.27e-13 | 1e-04 | Round trip: analysis → synthesis | — |
+| CPW | Synthesize L | for S | 0.0444640 | 0.0444640 | 4.37e-15 | 1e-04 | Round trip: analysis → synthesis | — |
+| CPW | Z0, T=0 | W=0.2 S=0.1 h=0.254 mm | 74.2263 | 74.2263 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, T=0 | W=0.2 S=0.1 h=0.254 mm | 2.63478 | 2.63478 | 3.37e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | Z0, T=0 | W=0.2 S=0.1 h=1.6 mm | 72.0671 | 72.0671 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, T=0 | W=0.2 S=0.1 h=1.6 mm | 2.79503 | 2.79503 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | Z0, T=0 | W=1.0 S=0.244 h=0.254 mm | 69.1912 | 69.1912 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, T=0 | W=1.0 S=0.244 h=0.254 mm | 2.02452 | 2.02452 | 2.19e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | Z0, T=0 | W=1.0 S=0.244 h=1.6 mm | 59.5535 | 59.5535 | 1.19e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, T=0 | W=1.0 S=0.244 h=1.6 mm | 2.73281 | 2.73281 | 3.25e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | Z0, T=0 | W=2.0 S=0.5 h=0.254 mm | 76.8179 | 76.8179 | 3.70e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, T=0 | W=2.0 S=0.5 h=0.254 mm | 1.66442 | 1.66442 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | Z0, T=0 | W=2.0 S=0.5 h=1.6 mm | 61.7233 | 61.7233 | 1.15e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, T=0 | W=2.0 S=0.5 h=1.6 mm | 2.57804 | 2.57804 | 3.45e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | Z0, T=0 | W=0.5 S=1.0 h=0.254 mm | 137.072 | 137.072 | 2.86e-14 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, T=0 | W=0.5 S=1.0 h=0.254 mm | 1.70553 | 1.70553 | 5.56e-14 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | Z0, T=0 | W=0.5 S=1.0 h=1.6 mm | 109.561 | 109.561 | 6.49e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, T=0 | W=0.5 S=1.0 h=1.6 mm | 2.66957 | 2.66957 | 1.66e-16 | 1e-06 | Conformal map (Wadell §3.4.1) | [6] |
+| CPW | εeff, h→∞ | W=0.5 S=0.2 mm | 2.80000 | 2.80000 | 2.37e-08 | 1e-06 | Limit: (εr+1)/2 | [6] |
+| CSLIN | Z0e, T=0 | W=0.3 S=0.1 mm | 101.158 | 101.158 | 1.55e-15 | 1e-06 | Cohn exact (coupled) | [2] |
+| CSLIN | Z0o, T=0 | W=0.3 S=0.1 mm | 40.5314 | 40.5314 | 0.00e+00 | 1e-06 | Cohn exact (coupled) | [2] |
+| CSLIN | Z0e, T=0 | W=0.6 S=0.36 mm | 63.9673 | 63.9673 | 0.00e+00 | 1e-06 | Cohn exact (coupled) | [2] |
+| CSLIN | Z0o, T=0 | W=0.6 S=0.36 mm | 43.2550 | 43.2550 | 1.64e-16 | 1e-06 | Cohn exact (coupled) | [2] |
+| CSLIN | Z0e, T=0 | W=1.0 S=0.5 mm | 45.5357 | 45.5357 | 3.12e-16 | 1e-06 | Cohn exact (coupled) | [2] |
+| CSLIN | Z0o, T=0 | W=1.0 S=0.5 mm | 36.2102 | 36.2102 | 1.96e-16 | 1e-06 | Cohn exact (coupled) | [2] |
+| CSLIN | Z0e, T=0 | W=0.5 S=2.0 mm | 59.6526 | 59.6526 | 3.57e-16 | 1e-06 | Cohn exact (coupled) | [2] |
+| CSLIN | Z0o, T=0 | W=0.5 S=2.0 mm | 58.7241 | 58.7241 | 1.21e-16 | 1e-06 | Cohn exact (coupled) | [2] |
+| CSLIN | Z0e → single | S/b=5 | 54.3193 | 54.3193 | 5.65e-08 | 1e-03 | Limit: uncoupled strips | [2], [1] |
+| CSLIN | Z0o → single | S/b=5 | 54.3193 | 54.3193 | 5.65e-08 | 1e-03 | Limit: uncoupled strips | [2], [1] |
+| CSLIN | Synthesize W | from Z0, k | 0.000590000 | 0.000590000 | 2.83e-12 | 1e-04 | Round trip: analysis → synthesis | — |
+| CSLIN | Synthesize S | from Z0, k | 0.000360000 | 0.000360000 | 6.38e-13 | 1e-04 | Round trip: analysis → synthesis | — |
+| CSLIN | Synthesize L | from Z0, k | 0.0349000 | 0.0349000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| CSLIN | Synthesize W | from Z0e, Z0o | 0.000590000 | 0.000590000 | 2.83e-12 | 1e-04 | Round trip: analysis → synthesis | — |
+| CSLIN | Synthesize S | from Z0e, Z0o | 0.000360000 | 0.000360000 | 6.44e-13 | 1e-04 | Round trip: analysis → synthesis | — |
+| CSLIN | Synthesize L | from Z0e, Z0o | 0.0349000 | 0.0349000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| ECPW | Synthesize W | from Z0, k | 0.000500000 | 0.000500000 | 1.95e-15 | 1e-04 | Round trip: analysis → synthesis | — |
+| ECPW | Synthesize S | from Z0, k | 0.000200000 | 0.000200000 | 2.57e-15 | 1e-04 | Round trip: analysis → synthesis | — |
+| ECPW | Synthesize L | from Z0, k | 0.0450820 | 0.0450820 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| ECPW | Synthesize W | from Z0e, Z0o | 0.000500000 | 0.000500000 | 1.95e-15 | 1e-04 | Round trip: analysis → synthesis | — |
+| ECPW | Synthesize S | from Z0e, Z0o | 0.000200000 | 0.000200000 | 2.57e-15 | 1e-04 | Round trip: analysis → synthesis | — |
+| ECPW | Synthesize L | from Z0e, Z0o | 0.0450820 | 0.0450820 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| ECPW | Z0e, S→0 | W=0.5 G=0.2 h=1.6 mm | 112.738 | 112.738 | 2.52e-07 | 1e-03 | Limit: one CPW of width 2W | [6] |
+| GCPW | Synthesize H | defaults | 0.00160000 | 0.00160000 | 3.51e-12 | 1e-04 | Round trip: analysis → synthesis | — |
+| GCPW | Synthesize L | for H | 0.0443800 | 0.0443800 | 5.93e-14 | 1e-04 | Round trip: analysis → synthesis | — |
+| GCPW | Synthesize W | defaults | 0.00100000 | 0.00100000 | 5.30e-11 | 1e-04 | Round trip: analysis → synthesis | — |
+| GCPW | Synthesize L | for W | 0.0443800 | 0.0443800 | 6.68e-13 | 1e-04 | Round trip: analysis → synthesis | — |
+| GCPW | Synthesize S | defaults | 0.000150000 | 0.000150000 | 2.11e-09 | 1e-04 | Round trip: analysis → synthesis | — |
+| GCPW | Synthesize L | for S | 0.0443800 | 0.0443800 | 9.05e-12 | 1e-04 | Round trip: analysis → synthesis | — |
+| GCPW | Z0 | W=0.2 S=0.1 h=0.254 mm | 63.8814 | 63.8814 | 1.11e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | εeff | W=0.2 S=0.1 h=0.254 mm | 2.95847 | 2.95847 | 3.00e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | Z0 | W=0.2 S=0.1 h=1.6 mm | 71.7409 | 71.7409 | 1.98e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | εeff | W=0.2 S=0.1 h=1.6 mm | 2.80496 | 2.80496 | 1.58e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | Z0 | W=1.0 S=0.244 h=0.254 mm | 29.4256 | 29.4256 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | εeff | W=1.0 S=0.244 h=0.254 mm | 3.58179 | 3.58179 | 1.24e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | Z0 | W=1.0 S=0.244 h=1.6 mm | 55.9910 | 55.9910 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | εeff | W=1.0 S=0.244 h=1.6 mm | 2.86671 | 2.86671 | 1.55e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | Z0 | W=2.0 S=0.5 h=0.254 mm | 17.7661 | 17.7661 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | εeff | W=2.0 S=0.5 h=0.254 mm | 3.95803 | 3.95803 | 0.00e+00 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | Z0 | W=2.0 S=0.5 h=1.6 mm | 50.1243 | 50.1243 | 2.84e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | εeff | W=2.0 S=0.5 h=1.6 mm | 3.01835 | 3.01835 | 2.94e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | Z0 | W=0.5 S=1.0 h=0.254 mm | 50.6658 | 50.6658 | 1.40e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | εeff | W=0.5 S=1.0 h=0.254 mm | 3.62942 | 3.62942 | 1.22e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | Z0 | W=0.5 S=1.0 h=1.6 mm | 97.9033 | 97.9033 | 2.90e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| GCPW | εeff | W=0.5 S=1.0 h=1.6 mm | 2.91827 | 2.91827 | 3.04e-16 | 1e-06 | Conformal map (Wadell §3.4.3) | [6] |
+| MLIN | Z0 static | W/h=0.1 εr=2.2 T=0.0 µm | 202.685 | 202.685 | 2.55e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.1 εr=2.2 T=0.0 µm | 1.68062 | 1.68062 | 6.66e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.1 εr=2.2 T=35.0 µm | 185.390 | 185.390 | 3.05e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.1 εr=2.2 T=35.0 µm | 1.62733 | 1.62733 | 7.61e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.1 εr=4.6 T=0.0 µm | 151.075 | 151.075 | 5.10e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.1 εr=4.6 T=0.0 µm | 3.02503 | 3.02503 | 2.26e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.1 εr=4.6 T=35.0 µm | 140.166 | 140.166 | 6.23e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.1 εr=4.6 T=35.0 µm | 2.84686 | 2.84686 | 2.67e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.1 εr=9.8 T=0.0 µm | 107.914 | 107.914 | 1.00e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.1 εr=9.8 T=0.0 µm | 5.92869 | 5.92869 | 5.54e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.1 εr=9.8 T=35.0 µm | 101.073 | 101.073 | 1.23e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.1 εr=9.8 T=35.0 µm | 5.47492 | 5.47492 | 6.70e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.3 εr=2.2 T=0.0 µm | 150.705 | 150.705 | 3.90e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.3 εr=2.2 T=0.0 µm | 1.70937 | 1.70937 | 1.05e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.3 εr=2.2 T=35.0 µm | 143.573 | 143.573 | 4.36e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.3 εr=2.2 T=35.0 µm | 1.67780 | 1.67780 | 1.14e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.3 εr=4.6 T=0.0 µm | 111.753 | 111.753 | 7.86e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.3 εr=4.6 T=0.0 µm | 3.10864 | 3.10864 | 3.53e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.3 εr=4.6 T=35.0 µm | 107.336 | 107.336 | 8.88e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.3 εr=4.6 T=35.0 µm | 3.00190 | 3.00190 | 3.92e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.3 εr=9.8 T=0.0 µm | 79.5853 | 79.5853 | 1.54e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.3 εr=9.8 T=0.0 µm | 6.12951 | 6.12951 | 8.63e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=0.3 εr=9.8 T=35.0 µm | 76.8482 | 76.8482 | 1.75e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=0.3 εr=9.8 T=35.0 µm | 5.85623 | 5.85623 | 9.70e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=1.0 εr=2.2 T=0.0 µm | 94.9631 | 94.9631 | 6.70e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=1.0 εr=2.2 T=0.0 µm | 1.77235 | 1.77235 | 2.05e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=1.0 εr=2.2 T=35.0 µm | 92.7489 | 92.7489 | 7.09e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=1.0 εr=2.2 T=35.0 µm | 1.75680 | 1.75680 | 2.15e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=1.0 εr=4.6 T=0.0 µm | 69.6536 | 69.6536 | 1.37e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=1.0 εr=4.6 T=0.0 µm | 3.29436 | 3.29436 | 6.78e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=1.0 εr=4.6 T=35.0 µm | 68.2993 | 68.2993 | 1.47e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=1.0 εr=4.6 T=35.0 µm | 3.23972 | 3.23972 | 7.18e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=1.0 εr=9.8 T=0.0 µm | 49.2888 | 49.2888 | 2.77e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=1.0 εr=9.8 T=0.0 µm | 6.57903 | 6.57903 | 1.64e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=1.0 εr=9.8 T=35.0 µm | 48.4564 | 48.4564 | 2.97e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=1.0 εr=9.8 T=35.0 µm | 6.43631 | 6.43631 | 1.75e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=3.0 εr=2.2 T=0.0 µm | 50.9172 | 50.9172 | 7.74e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=3.0 εr=2.2 T=0.0 µm | 1.87822 | 1.87822 | 3.81e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=3.0 εr=2.2 T=35.0 µm | 50.3456 | 50.3456 | 8.00e-14 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=3.0 εr=2.2 T=35.0 µm | 1.87013 | 1.87013 | 3.93e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=3.0 εr=4.6 T=0.0 µm | 36.7172 | 36.7172 | 1.67e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=3.0 εr=4.6 T=0.0 µm | 3.61190 | 3.61190 | 1.22e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=3.0 εr=4.6 T=35.0 µm | 36.3751 | 36.3751 | 1.74e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=3.0 εr=4.6 T=35.0 µm | 3.58250 | 3.58250 | 1.27e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=3.0 εr=9.8 T=0.0 µm | 25.7308 | 25.7308 | 3.65e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=3.0 εr=9.8 T=0.0 µm | 7.35474 | 7.35474 | 2.91e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=3.0 εr=9.8 T=35.0 µm | 25.5233 | 25.5233 | 3.82e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=3.0 εr=9.8 T=35.0 µm | 7.27650 | 7.27650 | 3.03e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=10.0 εr=2.2 T=0.0 µm | 20.4392 | 20.4392 | 1.17e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=10.0 εr=2.2 T=0.0 µm | 2.01599 | 2.01599 | 6.43e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=10.0 εr=2.2 T=35.0 µm | 20.3519 | 20.3519 | 1.20e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=10.0 εr=2.2 T=35.0 µm | 2.01239 | 2.01239 | 6.57e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=10.0 εr=4.6 T=0.0 µm | 14.4533 | 14.4533 | 2.54e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=10.0 εr=4.6 T=0.0 µm | 4.03164 | 4.03164 | 1.99e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=10.0 εr=4.6 T=35.0 µm | 14.4026 | 14.4026 | 2.61e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=10.0 εr=4.6 T=35.0 µm | 4.01829 | 4.01829 | 2.05e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=10.0 εr=9.8 T=0.0 µm | 10.0197 | 10.0197 | 5.58e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=10.0 εr=9.8 T=0.0 µm | 8.38898 | 8.38898 | 4.65e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | Z0 static | W/h=10.0 εr=9.8 T=35.0 µm | 9.98940 | 9.98940 | 5.74e-13 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | εeff static | W/h=10.0 εr=9.8 T=35.0 µm | 8.35299 | 8.35299 | 4.79e-12 | 1e-06 | Hammerstad–Jensen 1980 | [3] |
+| MLIN | W/d for 50 Ω | d=1.58 mm εr=2.2 | 3.08279 | 3.08100 | 5.81e-04 | 2e-02 | Pozar Ex. 3.7 (Wheeler-type formula) | [7] |
+| MLIN | εeff for 50 Ω | d=1.58 mm εr=2.2 | 1.88127 | 1.87000 | 6.03e-03 | 1e-02 | Pozar Ex. 3.7 | [7] |
+| MLIN | Synthesize H | defaults | 0.00160000 | 0.00160000 | 4.37e-12 | 1e-04 | Round trip: analysis → synthesis | — |
+| MLIN | Synthesize L | for H | 0.0400000 | 0.0400000 | 1.75e-13 | 1e-04 | Round trip: analysis → synthesis | — |
+| MLIN | Synthesize W | defaults | 0.00290000 | 0.00290000 | 1.04e-11 | 1e-04 | Round trip: analysis → synthesis | — |
+| MLIN | Synthesize L | for W | 0.0400000 | 0.0400000 | 4.88e-13 | 1e-04 | Round trip: analysis → synthesis | — |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=0.5 1.0 GHz | 6.28587 | 6.28587 | 2.83e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=0.5 10.0 GHz | 6.53050 | 6.53050 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=0.5 30.0 GHz | 7.30609 | 7.30609 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=1.0 1.0 GHz | 6.59307 | 6.59307 | 2.69e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=1.0 10.0 GHz | 6.92819 | 6.92819 | 2.56e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=1.0 30.0 GHz | 7.82911 | 7.82911 | 1.13e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=2.0 1.0 GHz | 7.05518 | 7.05518 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=2.0 10.0 GHz | 7.51228 | 7.51228 | 5.91e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=9.8 h=0.635 mm W/h=2.0 30.0 GHz | 8.46789 | 8.46789 | 2.10e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=0.5 1.0 GHz | 3.17727 | 3.17727 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=0.5 10.0 GHz | 3.36763 | 3.36763 | 5.27e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=0.5 30.0 GHz | 3.85879 | 3.85879 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=1.0 1.0 GHz | 3.30577 | 3.30577 | 1.34e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=1.0 10.0 GHz | 3.55317 | 3.55317 | 3.75e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=1.0 30.0 GHz | 4.05415 | 4.05415 | 2.19e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=2.0 1.0 GHz | 3.49805 | 3.49805 | 1.27e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=2.0 10.0 GHz | 3.81181 | 3.81181 | 2.33e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=4.6 h=1.6 mm W/h=2.0 30.0 GHz | 4.26639 | 4.26639 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=0.5 1.0 GHz | 1.73038 | 1.73038 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=0.5 10.0 GHz | 1.73678 | 1.73678 | 3.84e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=0.5 30.0 GHz | 1.76261 | 1.76261 | 0.00e+00 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=1.0 1.0 GHz | 1.77269 | 1.77269 | 5.01e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=1.0 10.0 GHz | 1.78178 | 1.78178 | 2.49e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=1.0 30.0 GHz | 1.81618 | 1.81618 | 1.22e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=2.0 1.0 GHz | 1.83524 | 1.83524 | 2.42e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=2.0 10.0 GHz | 1.84844 | 1.84844 | 2.40e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| MLIN | εeff(f) | εr=2.2 h=0.508 mm W/h=2.0 30.0 GHz | 1.89408 | 1.89408 | 1.17e-16 | 1e-06 | Kirschning–Jansen 1982 | [4] |
+| SLIN | αd | εr=4.6 tanδ=0.02 1 GHz | 3.90438 | 3.90438 | 5.69e-16 | 1e-09 | Exact TEM: k·tanδ/2 | [7] |
+| SLIN | Synthesize H | defaults | 0.00160000 | 0.00160000 | 3.03e-11 | 1e-04 | Round trip: analysis → synthesis | — |
+| SLIN | Synthesize L | for H | 0.0349000 | 0.0349000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| SLIN | Synthesize W | defaults | 0.000600000 | 0.000600000 | 2.00e-13 | 1e-04 | Round trip: analysis → synthesis | — |
+| SLIN | Synthesize L | for W | 0.0349000 | 0.0349000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| SLIN | Z0, T=0 | W/b=0.1 εr=2.2 | 130.947 | 130.947 | 0.00e+00 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=0.1 εr=4.6 | 90.5585 | 90.5585 | 1.57e-16 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=0.3 εr=2.2 | 87.1782 | 87.1782 | 9.78e-16 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=0.3 εr=4.6 | 60.2893 | 60.2893 | 8.25e-16 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=0.6 εr=2.2 | 61.0898 | 61.0898 | 0.00e+00 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=0.6 εr=4.6 | 42.2475 | 42.2475 | 0.00e+00 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=1.0 εr=2.2 | 44.0614 | 44.0614 | 0.00e+00 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=1.0 εr=4.6 | 30.4713 | 30.4713 | 1.17e-16 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=2.0 εr=2.2 | 26.0102 | 26.0102 | 1.37e-15 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=2.0 εr=4.6 | 17.9877 | 17.9877 | 1.38e-15 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=4.0 εr=2.2 | 14.2972 | 14.2972 | 8.23e-13 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0, T=0 | W/b=4.0 εr=4.6 | 9.88745 | 9.88745 | 8.23e-13 | 1e-06 | Cohn exact (conformal map) | [1] |
+| SLIN | Z0 branch continuity | W/b=0.3, T=b/999 vs exact T=0 | 86.8240 | 87.1782 | 4.06e-03 | 1e-02 | Wheeler thick-strip formula vs Cohn exact | [8], [1] |
+| SLIN | Z0 branch continuity | W/b=1.0, T=b/999 vs exact T=0 | 43.8477 | 44.0614 | 4.85e-03 | 1e-02 | Wheeler thick-strip formula vs Cohn exact | [8], [1] |
+| SLIN | Z0 branch continuity | W/b=3.0, T=b/999 vs exact T=0 | 18.3593 | 18.4519 | 5.01e-03 | 1e-02 | Wheeler thick-strip formula vs Cohn exact | [8], [1] |
+| SLIN | W for 50 Ω | b=3.2 mm εr=2.2 | 2.65319 | 2.66000 | 2.56e-03 | 2e-02 | Pozar Ex. 3.5 (approx. formula, ±1%) | [7] |
+| SLIN | Phase | L=50 mm, 2 GHz, εr=4.6 | 257.550 | 257.550 | 2.21e-16 | 1e-09 | TEM: 360·L·√εr·f/c | [7] |
+| TWP | αc | d=0.5 D=1.5 mm Cu 1 GHz | 0.228911 | 0.228911 | 1.28e-08 | 1e-04 | Exact twin lead | [6] |
+| TWP | Synthesize A | defaults | 0.000511000 | 0.000511000 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| TWP | Synthesize L | for A | 0.644157 | 0.644157 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| TWP | Synthesize B | defaults | 0.000771000 | 0.000771000 | 7.03e-16 | 1e-04 | Round trip: analysis → synthesis | — |
+| TWP | Synthesize L | for B | 0.644157 | 0.644157 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| TWP | Z0 | d=0.5 D=1.5 mm air | 211.383 | 211.383 | 0.00e+00 | 1e-09 | Exact twin lead | [6] |
+| WG | αc | WR-90 Cu 10 GHz | 0.108385 | 0.108385 | 0.00e+00 | 1e-09 | Pozar (3.96) | [7] |
+| WG | Synthesize A | defaults | 0.0228600 | 0.0228600 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| WG | Synthesize L | for A | 0.00992700 | 0.00992700 | 0.00e+00 | 1e-04 | Round trip: analysis → synthesis | — |
+| WG | Z_TE10 | WR-90 10 GHz | 498.974 | 498.974 | 0.00e+00 | 1e-09 | Exact TE10 | [7] |
+| WG | Phase | WR-90 10 GHz L=100 mm | 906.638 | 906.638 | 1.25e-16 | 1e-09 | Exact TE10: β = k·√(1−(fc/f)²) | [7] |
+| WG | fc | WR-90 | 6.55714e+09 | 6.55700e+09 | 2.14e-05 | 1e-03 | Published WR-90 cutoff 6.557 GHz | [9] |
+
+## References
+
+1. S. B. Cohn, "Characteristic impedance of the shielded-strip transmission line," *IRE Trans. Microwave Theory Tech.*, vol. MTT-2, no. 2, pp. 52–57, Jul. 1954.
+2. S. B. Cohn, "Shielded coupled-strip transmission line," *IRE Trans. Microwave Theory Tech.*, vol. MTT-3, no. 5, pp. 29–38, Oct. 1955.
+3. E. Hammerstad and Ø. Jensen, "Accurate models for microstrip computer-aided design," *IEEE MTT-S Int. Microwave Symp. Dig.*, pp. 407–409, May 1980.
+4. M. Kirschning and R. H. Jansen, "Accurate model for effective dielectric constant of microstrip with validity up to millimetre-wave frequencies," *Electronics Letters*, vol. 18, no. 6, pp. 272–273, Mar. 1982.
+5. M. Kirschning and R. H. Jansen, "Accurate wide-range design equations for the frequency-dependent characteristic of parallel coupled microstrip lines," *IEEE Trans. Microwave Theory Tech.*, vol. MTT-32, no. 1, pp. 83–90, Jan. 1984.
+6. B. C. Wadell, *Transmission Line Design Handbook*. Norwood, MA: Artech House, 1991 (§3.4.1 coplanar waveguide, §3.4.3 conductor-backed CPW, eccentric coax, parallel wires).
+7. D. M. Pozar, *Microwave Engineering*, 4th ed. Hoboken, NJ: Wiley, 2012 (§2.7 and §3.1 TEM lines and loss, §3.3 rectangular waveguide, eq. (3.96), Examples 3.5 and 3.7).
+8. H. A. Wheeler, "Transmission-line properties of a strip line between parallel planes," *IEEE Trans. Microwave Theory Tech.*, vol. MTT-26, no. 11, pp. 866–876, Nov. 1978.
+9. EIA RS-261-B, *Rectangular Waveguides (WR3 to WR2300)*, Electronic Industries Association, 1979 (WR-90: 22.86 × 10.16 mm, TE10 cutoff 6.557 GHz).
+
+Also used by the app, but not checked independently here (Wheeler's rule only on the exact coax and twin-lead cases):
+
+- H. A. Wheeler, "Formulas for the skin effect," *Proc. IRE*, vol. 30, no. 9, pp. 412–424, Sep. 1942 (incremental-inductance rule for conductor loss).
+- E. Hammerstad and Ø. Bekkadal, *Microstrip Handbook*, ELAB Report STF44 A74169, University of Trondheim, 1975 (surface-roughness correction).
+- P. Lefferson, "Twisted magnet wire transmission line," *IEEE Trans. Parts, Hybrids, and Packaging*, vol. PHP-7, no. 4, pp. 148–154, Dec. 1971 (twisted-pair effective permittivity).

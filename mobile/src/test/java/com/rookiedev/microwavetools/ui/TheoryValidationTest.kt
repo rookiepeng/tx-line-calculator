@@ -136,6 +136,56 @@ class TheoryValidationTest {
     companion object {
         private val rows = mutableListOf<Row>()
 
+        /** Numbered in the report in this order; [refsFor] maps each row's source to these numbers. */
+        private val REFERENCES = listOf(
+            "S. B. Cohn, \"Characteristic impedance of the shielded-strip transmission line,\" " +
+                "*IRE Trans. Microwave Theory Tech.*, vol. MTT-2, no. 2, pp. 52–57, Jul. 1954.",
+            "S. B. Cohn, \"Shielded coupled-strip transmission line,\" " +
+                "*IRE Trans. Microwave Theory Tech.*, vol. MTT-3, no. 5, pp. 29–38, Oct. 1955.",
+            "E. Hammerstad and Ø. Jensen, \"Accurate models for microstrip computer-aided design,\" " +
+                "*IEEE MTT-S Int. Microwave Symp. Dig.*, pp. 407–409, May 1980.",
+            "M. Kirschning and R. H. Jansen, \"Accurate model for effective dielectric constant of microstrip " +
+                "with validity up to millimetre-wave frequencies,\" *Electronics Letters*, vol. 18, no. 6, " +
+                "pp. 272–273, Mar. 1982.",
+            "M. Kirschning and R. H. Jansen, \"Accurate wide-range design equations for the frequency-dependent " +
+                "characteristic of parallel coupled microstrip lines,\" *IEEE Trans. Microwave Theory Tech.*, " +
+                "vol. MTT-32, no. 1, pp. 83–90, Jan. 1984.",
+            "B. C. Wadell, *Transmission Line Design Handbook*. Norwood, MA: Artech House, 1991 " +
+                "(§3.4.1 coplanar waveguide, §3.4.3 conductor-backed CPW, eccentric coax, parallel wires).",
+            "D. M. Pozar, *Microwave Engineering*, 4th ed. Hoboken, NJ: Wiley, 2012 " +
+                "(§2.7 and §3.1 TEM lines and loss, §3.3 rectangular waveguide, eq. (3.96), Examples 3.5 and 3.7).",
+            "H. A. Wheeler, \"Transmission-line properties of a strip line between parallel planes,\" " +
+                "*IEEE Trans. Microwave Theory Tech.*, vol. MTT-26, no. 11, pp. 866–876, Nov. 1978.",
+            "EIA RS-261-B, *Rectangular Waveguides (WR3 to WR2300)*, Electronic Industries Association, 1979 " +
+                "(WR-90: 22.86 × 10.16 mm, TE10 cutoff 6.557 GHz).",
+        )
+
+        private val ALSO_USED = listOf(
+            "H. A. Wheeler, \"Formulas for the skin effect,\" *Proc. IRE*, vol. 30, no. 9, pp. 412–424, " +
+                "Sep. 1942 (incremental-inductance rule for conductor loss).",
+            "E. Hammerstad and Ø. Bekkadal, *Microstrip Handbook*, ELAB Report STF44 A74169, " +
+                "University of Trondheim, 1975 (surface-roughness correction).",
+            "P. Lefferson, \"Twisted magnet wire transmission line,\" *IEEE Trans. Parts, Hybrids, and Packaging*, " +
+                "vol. PHP-7, no. 4, pp. 148–154, Dec. 1971 (twisted-pair effective permittivity).",
+        )
+
+        /** 1-based indices into [REFERENCES] for a row's source text. */
+        private fun refsFor(source: String): List<Int> = when {
+            source.startsWith("Round trip") -> emptyList()
+            source.startsWith("Wheeler thick-strip") -> listOf(8, 1)
+            source.contains("Cohn exact (coupled)") -> listOf(2)
+            source.contains("Cohn") -> listOf(1)
+            source.startsWith("Limit: uncoupled strips") -> listOf(2, 1)
+            source.contains("K&J vs H&J") -> listOf(5, 3)
+            source.contains("Hammerstad") -> listOf(3)
+            source.contains("Kirschning") -> listOf(4)
+            source.contains("Wadell") || source.startsWith("Limit: one CPW") ||
+                source == "Limit: (εr+1)/2" -> listOf(6)
+            source.contains("eccentric") || source.contains("twin lead") -> listOf(6)
+            source.contains("WR-90") -> listOf(9)
+            else -> listOf(7) // Pozar: TE10, TEM loss and phase, coax, skin depth, worked examples
+        }
+
         @JvmStatic
         @AfterClass
         fun writeReport() {
@@ -144,14 +194,29 @@ class TheoryValidationTest {
             out.writeText(buildString {
                 appendLine("# Theory validation")
                 appendLine()
+                appendLine("Each row compares the app's result with an independent implementation of the published theory")
+                appendLine("(written separately in the test), an exact closed form, a textbook example, or a physical limit.")
+                appendLine("Agreement shows the app implements each model correctly; it does not measure the models' own")
+                appendLine("accuracy against field solvers or measurement. Numbers in the Ref. column point to the")
+                appendLine("[references](#references); round trips check synthesis against the app's own analysis.")
+                appendLine()
                 appendLine("${rows.count { it.pass }} of ${rows.size} comparisons within tolerance.")
                 appendLine()
-                appendLine("| Line | Check | Case | App | Theory | Rel. error | Tolerance | Source |")
-                appendLine("|---|---|---|---|---|---|---|---|")
+                appendLine("| Line | Check | Case | App | Theory | Rel. error | Tolerance | Source | Ref. |")
+                appendLine("|---|---|---|---|---|---|---|---|---|")
                 for (r in rows.sortedBy { it.line }) {
+                    val refs = refsFor(r.source).joinToString(", ") { "[$it]" }.ifEmpty { "—" }
                     appendLine("| ${r.line} | ${r.check} | ${r.case} | ${"%.6g".format(r.app)} | ${"%.6g".format(r.theory)} | " +
-                        "${"%.2e".format(r.err)} | ${"%.0e".format(r.tol)} | ${r.source} |")
+                        "${"%.2e".format(r.err)} | ${"%.0e".format(r.tol)} | ${r.source} | $refs |")
                 }
+                appendLine()
+                appendLine("## References")
+                appendLine()
+                REFERENCES.forEachIndexed { i, ref -> appendLine("${i + 1}. $ref") }
+                appendLine()
+                appendLine("Also used by the app, but not checked independently here (Wheeler's rule only on the exact coax and twin-lead cases):")
+                appendLine()
+                ALSO_USED.forEach { appendLine("- $it") }
             })
             println("Theory validation report: ${out.absolutePath}")
         }
