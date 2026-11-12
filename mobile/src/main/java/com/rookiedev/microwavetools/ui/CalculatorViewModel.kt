@@ -30,6 +30,8 @@ data class CalculatorState(
     val lastAction: Action? = null,
     /** Read-only results (εeff, losses) of the last successful calculation. */
     val extras: Map<Output, Double> = emptyMap(),
+    /** SI inputs and solved values of the last successful calculation; the base for a frequency sweep. */
+    val lastInputs: Map<FieldId, Double>? = null,
 ) {
     fun field(id: FieldId) = fields.getValue(id)
 }
@@ -77,10 +79,24 @@ class CalculatorViewModel(
         copy(fields = fields + (FieldId.SIGMA to field(FieldId.SIGMA).copy(text = presetText(metal.msPerM), error = null)))
     }
 
+    /** Sets the waveguide's inner dimensions (m) in their current units. */
+    fun applyWaveguide(a: Double, b: Double) = update {
+        val fa = field(FieldId.A)
+        val fb = field(FieldId.B)
+        copy(
+            fields = fields +
+                (FieldId.A to fa.copy(text = presetText(fromSi(FieldId.A, a, fa.unit)), error = null)) +
+                (FieldId.B to fb.copy(text = presetText(fromSi(FieldId.B, b, fb.unit)), error = null)),
+        )
+    }
+
     /** Sets the metal thickness (m) in its current unit. */
-    fun applyThickness(thickness: Double) = update {
-        val t = field(FieldId.T)
-        copy(fields = fields + (FieldId.T to t.copy(text = presetText(fromSi(FieldId.T, thickness, t.unit)), error = null)))
+    fun applyThickness(thickness: Double) = applyLength(FieldId.T, thickness)
+
+    /** Sets a length field from metres, in its current unit. */
+    fun applyLength(id: FieldId, meters: Double) = update {
+        val f = field(id)
+        copy(fields = fields + (id to f.copy(text = presetText(fromSi(id, meters, f.unit)), error = null)))
     }
 
     fun analyze() = run(Action.ANALYZE)
@@ -132,8 +148,12 @@ class CalculatorViewModel(
                 newFields[id] = f.copy(text = format(fromSi(id, value, f.unit)), error = null)
             }
             for ((id, msg) in result.errors) newFields[id] = newFields.getValue(id).copy(error = msg)
-            val extras = if (result.errors.isEmpty()) lossOutputs(line, si + result.values) else emptyMap()
-            copy(fields = newFields, updated = result.values.keys, runId = runId + 1, lastAction = action, extras = extras)
+            val solved = if (result.errors.isEmpty()) si + result.values else null
+            val extras = solved?.let { lossOutputs(line, it) } ?: emptyMap()
+            copy(
+                fields = newFields, updated = result.values.keys, runId = runId + 1, lastAction = action,
+                extras = extras, lastInputs = solved,
+            )
         }
     }
 
@@ -144,6 +164,7 @@ class CalculatorViewModel(
         id == FieldId.TAND -> if (value < 0.0) R.string.unreasonable_value else null
         id == FieldId.SIGMA -> if (value <= 0.0) R.string.unreasonable_value else null
         id.unitKind == UnitKind.IMPEDANCE -> if (value <= 0.0) R.string.unreasonable_value else null
+        id.unitKind == UnitKind.TWIST -> if (value < 0.0) R.string.unreasonable_value else null
         id.mustBePositive -> if (Constants.value2meter(value, unit) < Constants.MINI_LIMIT) R.string.unreasonable_value else null
         id.unitKind == UnitKind.LENGTH || id.unitKind == UnitKind.ROUGHNESS ->
             if (value < 0.0) R.string.unreasonable_value else null
@@ -154,6 +175,7 @@ class CalculatorViewModel(
         UnitKind.LENGTH, UnitKind.ROUGHNESS -> Constants.value2meter(value, unit)
         UnitKind.FREQUENCY -> Constants.value2Hz(value, unit)
         UnitKind.CONDUCTIVITY -> value * 1e6
+        UnitKind.TWIST -> if (unit == "/in") value / 0.0254 else value * 100.0
         else -> value
     }
 

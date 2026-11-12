@@ -18,6 +18,8 @@ The project has been kept alive and occasionally updated ever since.
 - **Synthesize** mode: calculate physical dimensions from electrical parameters, solving for the dimension you pick
 - **Interactive diagrams**: editing a field highlights the matching part of the line; tap a label on the diagram to jump to its field
 - **Loss**: effective dielectric constant, conductor loss (Wheeler's incremental inductance rule, with Hammerstad surface roughness) and dielectric loss, in dB per length and over the line
+- **More results**: guided wavelength, propagation delay and skin depth
+- **Frequency sweep**: plot Z0, εeff or loss against frequency, with a tap-and-drag cursor
 - **Presets**: common substrates, metals and copper weights fill in εr, tanδ, H, σ and T
 - **Units**: mil, mm or cm for dimensions; MHz or GHz for frequency
 - **Coupled lines**: synthesize from Z0 and k, or from the even and odd mode impedances
@@ -32,6 +34,10 @@ The project has been kept alive and occasionally updated ever since.
 - Coplanar Waveguide
 - Grounded Coplanar Waveguide
 - Coaxial
+- Asymmetric (Offset) Stripline
+- Coupled (Edge-Coupled) Coplanar Waveguide, with differential and common mode impedance
+- Twisted Pair and parallel wires, with wire gauge presets
+- Rectangular Waveguide (TE10, with standard WR sizes)
 
 ## Screenshots
 

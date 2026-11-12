@@ -5,6 +5,7 @@ import com.rookiedev.microwavetools.libs.CmlinCalculator
 import com.rookiedev.microwavetools.libs.CmlinModel
 import com.rookiedev.microwavetools.libs.CoaxCalculator
 import com.rookiedev.microwavetools.libs.CoaxModel
+import com.rookiedev.microwavetools.libs.CoupledCpw
 import com.rookiedev.microwavetools.libs.Constants
 import com.rookiedev.microwavetools.libs.Constants.ERROR
 import com.rookiedev.microwavetools.libs.CpwCalculator
@@ -15,6 +16,14 @@ import com.rookiedev.microwavetools.libs.MlinCalculator
 import com.rookiedev.microwavetools.libs.MlinModel
 import com.rookiedev.microwavetools.libs.SlinCalculator
 import com.rookiedev.microwavetools.libs.SlinModel
+import com.rookiedev.microwavetools.libs.Waveguide
+import kotlin.math.PI
+import kotlin.math.acosh
+import kotlin.math.atan
+import kotlin.math.cosh
+import kotlin.math.exp
+import kotlin.math.ln
+import kotlin.math.sqrt
 
 /**
  * Result of a calculation. [values] are in SI units (m, Hz, Ω, degrees);
@@ -42,6 +51,10 @@ fun LineType.engine(): LineEngine = when (this) {
     LineType.COAX -> CoaxEngine
     LineType.CMLIN -> CoupledEngine(stripline = false)
     LineType.CSLIN -> CoupledEngine(stripline = true)
+    LineType.WG -> WgEngine
+    LineType.ASLIN -> AslinEngine
+    LineType.ECPW -> EcpwEngine
+    LineType.TWP -> TwpEngine
 }
 
 /** The calculator flag for a synthesis target (also the value saved in preferences). */
@@ -234,6 +247,211 @@ private object CoaxEngine : LineEngine {
             putIfGiven(FieldId.PHS in v, FieldId.L, line.metalLength)
         }
         return solved(line.errorCode, values, listOf(t))
+    }
+}
+
+/**
+ * Asymmetric stripline. Each side of the strip holds half the capacitance of a centered stripline
+ * with ground spacing 2·h + t, so Z0 = 2·Z1·Z2 / (Z1 + Z2) (Wadell §3.5.3). Exact when H = H2.
+ */
+private object AslinEngine : LineEngine {
+    /** Symmetric stripline impedance for ground spacing [b], or null if the model rejects it. */
+    private fun symmetric(w: Double, t: Double, b: Double, er: Double, f: Double): Double? =
+        SlinModel().apply {
+            setMetalWidth(w, "m"); setMetalLength(0.0, "m"); setMetalThick(t, "m")
+            setSubHeight(b, "m"); subEpsilon = er; setFrequency(f, "Hz")
+        }.let { SlinCalculator().getAnaResult(it) }
+            .takeIf { it.errorCode == ERROR.NO_ERROR && it.impedance.isUsable() && it.impedance > 0.0 }?.impedance
+
+    fun impedance(w: Double, t: Double, h1: Double, h2: Double, er: Double, f: Double): Double? {
+        val z1 = symmetric(w, t, 2 * h1 + t, er, f) ?: return null
+        val z2 = symmetric(w, t, 2 * h2 + t, er, f) ?: return null
+        return 2 * z1 * z2 / (z1 + z2)
+    }
+
+    /** Homogeneous dielectric: phase depends only on εr. */
+    private fun degPerMeter(er: Double, f: Double) = 360.0 * f * sqrt(er) / Constants.LIGHTSPEED
+
+    override fun analyze(v: Map<FieldId, Double>): EngineResult {
+        val er = v.getValue(FieldId.ER)
+        val f = v.getValue(FieldId.FREQ)
+        val z = impedance(v.getValue(FieldId.W), v.getValue(FieldId.T), v.getValue(FieldId.H), v.getValue(FieldId.H2), er, f)
+            ?: return EngineResult(errors = mapOf(FieldId.W to R.string.unreasonable_value))
+        return EngineResult(buildMap {
+            put(FieldId.Z0, z)
+            v[FieldId.L]?.let { put(FieldId.PHS, it * degPerMeter(er, f)) }
+        })
+    }
+
+    override fun synthesize(v: Map<FieldId, Double>, target: FieldId?, useZ0k: Boolean): EngineResult {
+        val t = requireNotNull(target)
+        val er = v.getValue(FieldId.ER)
+        val f = v.getValue(FieldId.FREQ)
+        val zTarget = v.getValue(FieldId.Z0)
+        val thick = v.getValue(FieldId.T)
+        val z: (Double) -> Double? = { x ->
+            if (t == FieldId.W) impedance(x, thick, v.getValue(FieldId.H), v.getValue(FieldId.H2), er, f)
+            else impedance(v.getValue(FieldId.W), thick, x, v.getValue(FieldId.H2), er, f)
+        }
+        // Z0 falls as W grows and rises as H grows.
+        val x = bisectLog(1e-7, 1.0, increasing = t == FieldId.H, target = zTarget, f = z)
+            ?: return EngineResult(errors = mapOf(t to R.string.synthesize_failed))
+        return EngineResult(buildMap {
+            put(t, x)
+            v[FieldId.PHS]?.let { put(FieldId.L, it / degPerMeter(er, f)) }
+        })
+    }
+}
+
+/**
+ * Finds x in [lo, hi] (bisecting in log space) where the monotonic [f] equals [target],
+ * or null when the target is outside the bracket.
+ */
+private fun bisectLog(lo: Double, hi: Double, increasing: Boolean, target: Double, f: (Double) -> Double?): Double? {
+    var a = ln(lo); var b = ln(hi)
+    val fa = f(lo) ?: return null
+    val fb = f(hi) ?: return null
+    if ((fa - target) * (fb - target) > 0) return null
+    repeat(100) {
+        val m = (a + b) / 2
+        val fm = f(exp(m)) ?: return null
+        if ((fm < target) == increasing) a = m else b = m
+    }
+    return exp((a + b) / 2)
+}
+
+/** Edge-coupled CPW (zero thickness). Synthesize solves W and S with G2 and H fixed. */
+private object EcpwEngine : LineEngine {
+    private data class Result(val z0e: Double, val z0o: Double, val eeffE: Double, val eeffO: Double) {
+        val z0 get() = sqrt(z0e * z0o)
+        val k get() = (z0e - z0o) / (z0e + z0o)
+    }
+
+    private fun run(w: Double, s: Double, v: Map<FieldId, Double>): Result? =
+        CoupledCpw.analyze(w, s, v.getValue(FieldId.G2), v.getValue(FieldId.H), v.getValue(FieldId.ER))
+            ?.let { (e, o) -> Result(e.z0, o.z0, e.eeff, o.eeff) }
+            ?.takeIf { listOf(it.z0e, it.z0o, it.eeffE, it.eeffO).all { x -> x.isUsable() } }
+
+    /** Same convention as the other coupled lines: phase from the geometric mean of the modal εeff. */
+    private fun degPerMeter(r: Result, f: Double) = 360.0 * f * sqrt(sqrt(r.eeffE * r.eeffO)) / Constants.LIGHTSPEED
+
+    override fun analyze(v: Map<FieldId, Double>): EngineResult {
+        val r = run(v.getValue(FieldId.W), v.getValue(FieldId.S), v)
+            ?: return EngineResult(errors = mapOf(FieldId.W to R.string.unreasonable_value))
+        return EngineResult(buildMap {
+            put(FieldId.Z0, r.z0); put(FieldId.K, r.k); put(FieldId.Z0O, r.z0o); put(FieldId.Z0E, r.z0e)
+            v[FieldId.L]?.let { put(FieldId.PHS, it * degPerMeter(r, v.getValue(FieldId.FREQ))) }
+        })
+    }
+
+    override fun synthesize(v: Map<FieldId, Double>, target: FieldId?, useZ0k: Boolean): EngineResult {
+        val (z0, k) = if (useZ0k) {
+            v.getValue(FieldId.Z0) to v.getValue(FieldId.K)
+        } else {
+            val ze = v.getValue(FieldId.Z0E)
+            val zo = v.getValue(FieldId.Z0O)
+            if (ze <= zo) {
+                return EngineResult(errors = mapOf(FieldId.Z0E to R.string.Z0e_larger_Z0o, FieldId.Z0O to R.string.Z0e_larger_Z0o))
+            }
+            sqrt(ze * zo) to (ze - zo) / (ze + zo)
+        }
+        if (k <= 0.0 || k >= 1.0) return EngineResult(errors = mapOf(FieldId.K to R.string.k_out_of_range))
+        val failed = EngineResult(errors = mapOf(FieldId.W to R.string.synthesize_failed, FieldId.S to R.string.synthesize_failed))
+
+        // For a spacing S, the width that gives Z0 (Z0 falls as W grows).
+        fun widthFor(s: Double): Double? = bisectLog(1e-7, 1.0, increasing = false, target = z0) { w -> run(w, s, v)?.z0 }
+        // Coupling falls as the strips move apart.
+        val s = bisectLog(1e-7, 1.0, increasing = false, target = k) { s -> widthFor(s)?.let { run(it, s, v)?.k } }
+            ?: return failed
+        val w = widthFor(s) ?: return failed
+        val r = run(w, s, v) ?: return failed
+        return EngineResult(buildMap {
+            put(FieldId.W, w); put(FieldId.S, s)
+            v[FieldId.PHS]?.let { put(FieldId.L, it / degPerMeter(r, v.getValue(FieldId.FREQ))) }
+            if (useZ0k) { put(FieldId.Z0O, r.z0o); put(FieldId.Z0E, r.z0e) } else { put(FieldId.Z0, r.z0); put(FieldId.K, r.k) }
+        })
+    }
+}
+
+/**
+ * Twisted pair: parallel wires, Z0 = (η0 / π√εeff)·acosh(D/d), with Lefferson's effective
+ * permittivity εeff = 1 + q(εr − 1), q = 0.25 + 0.0004·θ² and twist angle θ = atan(T·π·D) in
+ * degrees (Wadell §3.3.4). T is twists per metre.
+ */
+private object TwpEngine : LineEngine {
+    fun eeff(er: Double, twist: Double, spacing: Double): Double {
+        val theta = Math.toDegrees(atan(twist * PI * spacing))
+        return 1.0 + (0.25 + 0.0004 * theta * theta) * (er - 1.0)
+    }
+
+    fun impedance(d: Double, spacing: Double, er: Double, twist: Double): Double =
+        Constants.FREESPACEZ0 / (PI * sqrt(eeff(er, twist, spacing))) * acosh(spacing / d)
+
+    private fun degPerMeter(er: Double, twist: Double, spacing: Double, f: Double) =
+        360.0 * f * sqrt(eeff(er, twist, spacing)) / Constants.LIGHTSPEED
+
+    private val tooClose = EngineResult(errors = mapOf(FieldId.B to R.string.twp_spacing_too_small))
+
+    override fun analyze(v: Map<FieldId, Double>): EngineResult {
+        val d = v.getValue(FieldId.A)
+        val s = v.getValue(FieldId.B)
+        if (s <= d) return tooClose
+        val er = v.getValue(FieldId.ER)
+        val twist = v.getValue(FieldId.TWIST)
+        return EngineResult(buildMap {
+            put(FieldId.Z0, impedance(d, s, er, twist))
+            v[FieldId.L]?.let { put(FieldId.PHS, it * degPerMeter(er, twist, s, v.getValue(FieldId.FREQ))) }
+        })
+    }
+
+    override fun synthesize(v: Map<FieldId, Double>, target: FieldId?, useZ0k: Boolean): EngineResult {
+        val t = requireNotNull(target)
+        val z0 = v.getValue(FieldId.Z0)
+        val er = v.getValue(FieldId.ER)
+        val twist = v.getValue(FieldId.TWIST)
+        val (d, s) = if (t == FieldId.A) {
+            // εeff does not depend on the diameter, so invert acosh directly.
+            val s = v.getValue(FieldId.B)
+            s / cosh(z0 * PI * sqrt(eeff(er, twist, s)) / Constants.FREESPACEZ0) to s
+        } else {
+            // The twist angle depends on the spacing, so solve numerically; Z0 grows with spacing.
+            val d = v.getValue(FieldId.A)
+            val s = bisectLog(d * (1 + 1e-9), 100.0, increasing = true, target = z0) { impedance(d, it, er, twist) }
+                ?: return EngineResult(errors = mapOf(FieldId.B to R.string.synthesize_failed))
+            d to s
+        }
+        if (s <= d) return tooClose
+        return EngineResult(buildMap {
+            put(t, if (t == FieldId.A) d else s)
+            v[FieldId.PHS]?.let { put(FieldId.L, it / degPerMeter(er, twist, s, v.getValue(FieldId.FREQ))) }
+        })
+    }
+}
+
+/** Rectangular waveguide, TE10: Z0 is the wave impedance and Synthesize solves for the broad wall a. */
+private object WgEngine : LineEngine {
+    override fun analyze(v: Map<FieldId, Double>): EngineResult {
+        val a = v.getValue(FieldId.A)
+        val er = v.getValue(FieldId.ER)
+        val f = v.getValue(FieldId.FREQ)
+        if (v.getValue(FieldId.B) >= a) return EngineResult(errors = mapOf(FieldId.B to R.string.wg_b_too_large))
+        if (f <= Waveguide.cutoff(a, er)) return EngineResult(errors = mapOf(FieldId.FREQ to R.string.wg_below_cutoff))
+        return EngineResult(buildMap {
+            put(FieldId.Z0, Waveguide.waveImpedance(f, a, er))
+            v[FieldId.L]?.let { put(FieldId.PHS, Math.toDegrees(Waveguide.beta(f, a, er) * it)) }
+        })
+    }
+
+    override fun synthesize(v: Map<FieldId, Double>, target: FieldId?, useZ0k: Boolean): EngineResult {
+        val er = v.getValue(FieldId.ER)
+        val f = v.getValue(FieldId.FREQ)
+        val a = Waveguide.widthFor(v.getValue(FieldId.Z0), f, er)
+        if (a.isNaN()) return EngineResult(errors = mapOf(FieldId.Z0 to R.string.wg_z_too_low))
+        if (v.getValue(FieldId.B) >= a) return EngineResult(errors = mapOf(FieldId.B to R.string.wg_b_too_large))
+        return EngineResult(buildMap {
+            put(FieldId.A, a)
+            v[FieldId.PHS]?.let { put(FieldId.L, Math.toRadians(it) / Waveguide.beta(f, a, er)) }
+        })
     }
 }
 

@@ -12,6 +12,38 @@ import kotlin.math.sqrt
 
 class LossTest {
 
+    @Test
+    fun sweepCoversRangeAndTracksDispersion() {
+        val v = mapOf(
+            FieldId.W to 1.1e-3, FieldId.H to 0.508e-3, FieldId.T to 35e-6, FieldId.ER to 3.66,
+            FieldId.FREQ to 10e9, FieldId.TAND to 0.0037, FieldId.SIGMA to copper,
+        )
+        val pts = sweep(LineType.MLIN, v, 1e9, 20e9, 20)
+        assertEquals(20, pts.size)
+        assertEquals(1e9, pts.first().f, 1.0)
+        assertEquals(20e9, pts.last().f, 1.0)
+        // Microstrip εeff and loss both rise with frequency.
+        assertTrue(pts.last().eeff.single() > pts.first().eeff.single())
+        assertTrue(pts.last().loss.single() > pts.first().loss.single())
+
+        val coupled = sweep(
+            LineType.CSLIN,
+            mapOf(
+                FieldId.W to 0.59e-3, FieldId.S to 0.36e-3, FieldId.H to 1.6e-3, FieldId.T to 35e-6,
+                FieldId.ER to 4.6, FieldId.FREQ to 1e9,
+            ),
+            0.5e9, 2e9, 5,
+        )
+        assertTrue(coupled.all { it.z0.size == 2 && it.eeff.size == 2 && it.loss.isEmpty() })
+    }
+
+    @Test
+    fun niceSteps() {
+        assertEquals(0.5, niceStep(2.0, 4), 1e-12)
+        assertEquals(5.0, niceStep(19.0, 4), 1e-12)
+        assertEquals(0.002, niceStep(0.01, 4), 1e-15)
+    }
+
     private fun assertRel(expected: Double, actual: Double?, rel: Double, msg: String = "") {
         requireNotNull(actual) { "missing $msg" }
         assertEquals(msg, expected, actual, kotlin.math.abs(expected) * rel)
@@ -54,6 +86,9 @@ class LossTest {
         assertRel(PI * f * sqrt(er) * tand / Constants.LIGHTSPEED * Loss.NP_TO_DB, out[Output.ALPHA_D], 1e-6, "alpha_d")
         assertTrue(out.getValue(Output.ALPHA_C) > 0.0)
         assertFalse("no L, no insertion loss", Output.LOSS in out)
+        assertRel(Constants.LIGHTSPEED / (f * sqrt(er)), out[Output.LAMBDA_G], 1e-6, "lambda_g")
+        assertRel(sqrt(er) / Constants.LIGHTSPEED, out[Output.DELAY], 1e-6, "delay")
+        assertRel(1 / sqrt(PI * f * Constants.FREESPACE_MU0 * copper), out[Output.SKIN_DEPTH], 1e-12, "skin depth")
     }
 
     /**
@@ -83,9 +118,10 @@ class LossTest {
         val v = mapOf(
             FieldId.W to 1.1e-3, FieldId.H to 0.508e-3, FieldId.T to 35e-6, FieldId.ER to 3.66, FieldId.FREQ to f,
         )
-        assertEquals(setOf(Output.EEFF), lossOutputs(LineType.MLIN, v).keys)
+        val always = setOf(Output.EEFF, Output.LAMBDA_G, Output.DELAY)
+        assertEquals(always, lossOutputs(LineType.MLIN, v).keys)
         assertEquals(
-            setOf(Output.EEFF, Output.ALPHA_D, Output.ALPHA),
+            always + setOf(Output.ALPHA_D, Output.ALPHA),
             lossOutputs(LineType.MLIN, v + (FieldId.TAND to 0.002)).keys,
         )
     }
@@ -116,16 +152,28 @@ class LossTest {
                     UnitKind.LENGTH, UnitKind.ROUGHNESS -> Constants.value2meter(x, d.unit)
                     UnitKind.FREQUENCY -> Constants.value2Hz(x, d.unit)
                     UnitKind.CONDUCTIVITY -> x * 1e6
+                    UnitKind.TWIST -> x * 100.0 // defaults are in twists per cm
                     else -> x
                 }
             }
             val out = lossOutputs(line, v)
-            val expected = if (line.coupled) Output.entries.filter { it.name.endsWith("_E") || it.name.endsWith("_O") }
-            else listOf(Output.EEFF, Output.ALPHA_C, Output.ALPHA_D, Output.ALPHA, Output.LOSS)
+            val waveguideOnly = setOf(Output.FC, Output.FC_NEXT)
+            val expected = Output.entries.filter {
+                when {
+                    it == Output.SKIN_DEPTH -> true
+                    it in waveguideOnly -> line == LineType.WG
+                    else -> (it.name.endsWith("_E") || it.name.endsWith("_O") || it == Output.Z_DIFF || it == Output.Z_CM) ==
+                        line.coupled
+                }
+            }
             assertEquals(line.name, expected.toSet(), out.keys)
-            assertTrue("${line.name}: $out", out.values.all { it.isFinite() && it > 0.0 })
+            // The air-filled waveguide default has tanδ = 0, so its dielectric loss is exactly zero.
+            assertTrue("${line.name}: $out", out.values.all { it.isFinite() && it >= 0.0 })
+            assertTrue("${line.name}: $out", (out[Output.ALPHA] ?: out.getValue(Output.ALPHA_E)) > 0.0)
             val eeff = out[Output.EEFF] ?: out.getValue(Output.EEFF_O)
-            assertTrue("${line.name} eeff $eeff", eeff in 1.0..4.6 + 1e-9)
+            // A waveguide's (β/k0)² is below εr; TEM lines lie between 1 and εr.
+            val range = if (line == LineType.WG) 0.0..1.0 else 1.0..4.6 + 1e-9
+            assertTrue("${line.name} eeff $eeff", eeff in range)
         }
     }
 }

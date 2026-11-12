@@ -4,26 +4,51 @@ import androidx.annotation.StringRes
 import com.rookiedev.microwavetools.R
 import com.rookiedev.microwavetools.libs.Constants
 import com.rookiedev.microwavetools.libs.Loss
+import com.rookiedev.microwavetools.libs.Waveguide
 import kotlin.math.max
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 /** How a read-only result is displayed. Values are stored in SI: dB/m for per-length loss. */
-enum class OutputUnit { NONE, DB_PER_LENGTH, DB }
+enum class OutputUnit {
+    NONE,
+    DB_PER_LENGTH,
+    DB,
+    /** Metres, shown in L's unit. */
+    LENGTH,
+    /** Seconds per metre, shown as ps per inch or per cm. */
+    DELAY_PER_LENGTH,
+    /** Metres, shown in µm. */
+    MICRONS,
+    /** Hz, shown in the frequency field's unit. */
+    FREQUENCY,
+    OHMS,
+}
 
 /** Read-only quantities shown in the Results card after a calculation. */
 enum class Output(@param:StringRes val label: Int, val unit: OutputUnit) {
+    FC(R.string.out_fc, OutputUnit.FREQUENCY),
+    FC_NEXT(R.string.out_fc_next, OutputUnit.FREQUENCY),
     EEFF(R.string.out_eeff, OutputUnit.NONE),
+    LAMBDA_G(R.string.out_lambda_g, OutputUnit.LENGTH),
+    DELAY(R.string.out_delay, OutputUnit.DELAY_PER_LENGTH),
     ALPHA_C(R.string.out_alpha_c, OutputUnit.DB_PER_LENGTH),
     ALPHA_D(R.string.out_alpha_d, OutputUnit.DB_PER_LENGTH),
     ALPHA(R.string.out_alpha, OutputUnit.DB_PER_LENGTH),
     LOSS(R.string.out_loss, OutputUnit.DB),
 
+    Z_DIFF(R.string.out_zdiff, OutputUnit.OHMS),
+    Z_CM(R.string.out_zcm, OutputUnit.OHMS),
     EEFF_E(R.string.out_eeff_e, OutputUnit.NONE),
     EEFF_O(R.string.out_eeff_o, OutputUnit.NONE),
+    DELAY_E(R.string.out_delay_e, OutputUnit.DELAY_PER_LENGTH),
+    DELAY_O(R.string.out_delay_o, OutputUnit.DELAY_PER_LENGTH),
     ALPHA_E(R.string.out_alpha_e, OutputUnit.DB_PER_LENGTH),
     ALPHA_O(R.string.out_alpha_o, OutputUnit.DB_PER_LENGTH),
     LOSS_E(R.string.out_loss_e, OutputUnit.DB),
     LOSS_O(R.string.out_loss_o, OutputUnit.DB),
+
+    SKIN_DEPTH(R.string.out_skin_depth, OutputUnit.MICRONS),
 }
 
 /** Conductor presets, conductivity in MS/m. */
@@ -83,13 +108,31 @@ private fun LineType.recede(v: Map<FieldId, Double>, d: Double): Map<FieldId, Do
             add(FieldId.A, -d)
             add(FieldId.B, d)
         }
+        LineType.TWP -> {
+            // Each wire's surface recedes: the diameter shrinks, the centers stay put.
+            add(FieldId.A, -2 * d)
+        }
+        LineType.ECPW -> {
+            // Zero-thickness strips: both edges of each strip recede, widening both gaps.
+            add(FieldId.W, -2 * d)
+            add(FieldId.S, 2 * d)
+            add(FieldId.G2, 2 * d)
+        }
+        LineType.ASLIN -> {
+            // H and H2 each grow as their ground recedes and, for a thick strip, as the strip face recedes.
+            add(FieldId.W, -2 * d)
+            add(FieldId.H, if (thick) 2 * d else d)
+            add(FieldId.H2, if (thick) 2 * d else d)
+            if (thick) add(FieldId.T, -2 * d)
+        }
+        LineType.WG -> error("Waveguide loss uses its own closed form")
     }
     return m
 }
 
 /** A finite-difference step small against every metal dimension. */
 private fun step(v: Map<FieldId, Double>): Double {
-    val sizes = listOf(FieldId.W, FieldId.S, FieldId.H, FieldId.T, FieldId.A, FieldId.B)
+    val sizes = listOf(FieldId.W, FieldId.S, FieldId.G2, FieldId.H, FieldId.H2, FieldId.T, FieldId.A, FieldId.B)
         .mapNotNull { v[it] }.filter { it > 0.0 }
     return (sizes.minOrNull() ?: return 0.0) * 1e-4
 }
@@ -100,6 +143,7 @@ private fun step(v: Map<FieldId, Double>): Double {
  * tanδ; outputs whose inputs are missing are left out. Total loss over the line needs L.
  */
 fun lossOutputs(line: LineType, v: Map<FieldId, Double>): Map<Output, Double> {
+    if (line == LineType.WG) return waveguideOutputs(v)
     val f = v[FieldId.FREQ] ?: return emptyMap()
     val er = v[FieldId.ER] ?: return emptyMap()
     val real = line.modes(v, er) ?: return emptyMap()
@@ -132,18 +176,56 @@ fun lossOutputs(line: LineType, v: Map<FieldId, Double>): Map<Output, Double> {
         )
     }
 
+    val c = Constants.LIGHTSPEED
     return buildMap {
+        sigma?.let { put(Output.SKIN_DEPTH, Loss.skinDepth(f, it)) }
         if (line.coupled) {
             val (e, o) = perMode
+            put(Output.Z_DIFF, 2 * real[1].z0); put(Output.Z_CM, real[0].z0 / 2)
             put(Output.EEFF_E, e.eeff); put(Output.EEFF_O, o.eeff)
+            put(Output.DELAY_E, sqrt(e.eeff) / c); put(Output.DELAY_O, sqrt(o.eeff) / c)
             e.total?.let { put(Output.ALPHA_E, it); if (length != null) put(Output.LOSS_E, it * length) }
             o.total?.let { put(Output.ALPHA_O, it); if (length != null) put(Output.LOSS_O, it * length) }
         } else {
             val m = perMode.single()
             put(Output.EEFF, m.eeff)
+            put(Output.LAMBDA_G, c / (f * sqrt(m.eeff)))
+            put(Output.DELAY, sqrt(m.eeff) / c)
             m.ac?.let { put(Output.ALPHA_C, it) }
             m.ad?.let { put(Output.ALPHA_D, it) }
             m.total?.let { put(Output.ALPHA, it); if (length != null) put(Output.LOSS, it * length) }
         }
+    }.filterValues { it.isFinite() }
+}
+
+/**
+ * TE10 cutoffs, εeff = (β/k0)², guided wavelength, group delay and wall/dielectric loss of a
+ * rectangular waveguide. Empty below cutoff or when b >= a.
+ */
+private fun waveguideOutputs(v: Map<FieldId, Double>): Map<Output, Double> {
+    val a = v[FieldId.A] ?: return emptyMap()
+    val b = v[FieldId.B] ?: return emptyMap()
+    val er = v[FieldId.ER] ?: return emptyMap()
+    val f = v[FieldId.FREQ] ?: return emptyMap()
+    if (b >= a || f <= Waveguide.cutoff(a, er)) return emptyMap()
+    val beta = Waveguide.beta(f, a, er)
+    val k0 = Waveguide.k(f, 1.0)
+    val sigma = v[FieldId.SIGMA]?.takeIf { it > 0.0 }
+    val ac = sigma?.let {
+        Waveguide.conductorLoss(f, a, b, er, Loss.surfaceResistance(f, it, v[FieldId.ROUGH] ?: 0.0)) * Loss.NP_TO_DB
+    }
+    val ad = v[FieldId.TAND]?.let { Waveguide.dielectricLoss(f, a, er, it) * Loss.NP_TO_DB }
+    val total = if (ac == null && ad == null) null else (ac ?: 0.0) + (ad ?: 0.0)
+    val length = v[FieldId.L]?.takeIf { it > 0.0 }
+    return buildMap {
+        put(Output.FC, Waveguide.cutoff(a, er))
+        put(Output.FC_NEXT, Waveguide.nextCutoff(a, b, er))
+        put(Output.EEFF, (beta / k0).pow(2))
+        put(Output.LAMBDA_G, 2 * Math.PI / beta)
+        put(Output.DELAY, Waveguide.groupDelay(f, a, er))
+        ac?.let { put(Output.ALPHA_C, it) }
+        ad?.let { put(Output.ALPHA_D, it) }
+        total?.let { put(Output.ALPHA, it); if (length != null) put(Output.LOSS, it * length) }
+        sigma?.let { put(Output.SKIN_DEPTH, Loss.skinDepth(f, it)) }
     }.filterValues { it.isFinite() }
 }

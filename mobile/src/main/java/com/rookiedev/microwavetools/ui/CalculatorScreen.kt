@@ -107,6 +107,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.SuggestionChip
 import com.rookiedev.microwavetools.R
 import com.rookiedev.microwavetools.libs.Constants
@@ -134,6 +135,7 @@ fun CalculatorScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val focus = LocalFocusManager.current
     var confirmReset by rememberSaveable { mutableStateOf(false) }
+    var showSweep by rememberSaveable { mutableStateOf(false) }
     val fieldFocus = remember(line) { FieldFocus(line.fields) }
     val imeVisible = WindowInsets.isImeVisible
 
@@ -219,7 +221,7 @@ fun CalculatorScreen(
             val parameters = @Composable {
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     ParametersCard(vm, state, fieldFocus)
-                    if (state.extras.isNotEmpty()) ResultsCard(state)
+                    if (state.extras.isNotEmpty()) ResultsCard(state, onSweep = { showSweep = true })
                     MaterialsCard(vm, state, fieldFocus)
                 }
             }
@@ -283,6 +285,17 @@ fun CalculatorScreen(
         }
     }
 
+    val sweepBase = state.lastInputs
+    if (showSweep && sweepBase != null) {
+        SweepDialog(
+            line = line,
+            base = sweepBase,
+            freqUnit = state.field(FieldId.FREQ).unit,
+            perLength = lossUnit(state),
+            onDismiss = { showSweep = false },
+        )
+    }
+
     if (confirmReset) {
         AlertDialog(
             onDismissRequest = { confirmReset = false },
@@ -328,11 +341,34 @@ private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState, focu
     SectionCard(
         icon = R.drawable.vt_ruler,
         title = stringResource(R.string.Dim),
-        subtitle = stringResource(if (line.coupled) R.string.dim_subtitle_coupled else R.string.dim_subtitle_pick),
+        subtitle = stringResource(
+            when {
+                line == LineType.ECPW -> R.string.dim_subtitle_ecpw
+                line.coupled -> R.string.dim_subtitle_coupled
+                else -> R.string.dim_subtitle_pick
+            },
+        ),
         accent = LocalAccents.current.synthesize,
         reveal = Reveal(state.runId, state.lastAction == Action.SYNTHESIZE, fromBottomStart = true),
     ) {
         val hasRadios = line.targets.isNotEmpty()
+        if (line == LineType.TWP) {
+            PresetMenu(
+                label = stringResource(R.string.preset_awg),
+                items = Materials.wireGauges.map { (awg, d) ->
+                    "AWG $awg · ${presetNumber(d * 1e3)} mm" to { vm.applyLength(FieldId.A, d) }
+                },
+            )
+        }
+        if (line == LineType.WG) {
+            PresetMenu(
+                label = stringResource(R.string.preset_wr),
+                items = Materials.waveguides.map { wg ->
+                    "${wg.name} · ${presetNumber(wg.bandLow / 1e9)}–${presetNumber(wg.bandHigh / 1e9)} GHz" to
+                        { vm.applyWaveguide(wg.a, wg.b) }
+                },
+            )
+        }
         for (id in line.dimensions) {
             FieldRow(
                 vm = vm,
@@ -345,7 +381,7 @@ private fun DimensionsCard(vm: CalculatorViewModel, state: CalculatorState, focu
                 leading = if (!hasRadios) null else {
                     {
                         if (id in line.targets) {
-                            val solveFor = stringResource(R.string.solve_for, stringResource(id.label))
+                            val solveFor = stringResource(R.string.solve_for, stringResource(line.labelOf(id)))
                             RadioButton(
                                 selected = state.target == id,
                                 onClick = { vm.onTargetChange(id) },
@@ -525,10 +561,11 @@ private fun SubstrateDialog(heightUnit: String?, onPick: (Substrate, Double?) ->
 
 /** εeff and losses from the last calculation; loss per length follows L's unit (dB/in for mil, else dB/cm). */
 @Composable
-private fun ResultsCard(state: CalculatorState) {
-    val inches = state.fields[FieldId.L]?.unit == "mil"
-    val perLength = if (inches) "dB/in" else "dB/cm"
-    val scale = if (inches) 0.0254 else 0.01
+private fun ResultsCard(state: CalculatorState, onSweep: () -> Unit) {
+    val (scale, perLength) = lossUnit(state)
+    val lUnit = state.fields[FieldId.L]?.unit ?: "mm"
+    val delayPer = if (lUnit == "mil") "ps/in" else "ps/cm"
+    val fUnit = state.field(FieldId.FREQ).unit
     SectionCard(
         icon = R.drawable.vt_chart,
         title = stringResource(R.string.results_title),
@@ -541,6 +578,11 @@ private fun ResultsCard(state: CalculatorState) {
                 OutputUnit.NONE -> value to ""
                 OutputUnit.DB_PER_LENGTH -> value * scale to perLength
                 OutputUnit.DB -> value to "dB"
+                OutputUnit.LENGTH -> Constants.meter2others(value, lUnit) to lUnit
+                OutputUnit.DELAY_PER_LENGTH -> value * 1e12 * scale to delayPer
+                OutputUnit.MICRONS -> value * 1e6 to "µm"
+                OutputUnit.FREQUENCY -> value / Constants.value2Hz(1.0, fUnit) to fUnit
+                OutputUnit.OHMS -> value to "Ω"
             }
             Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(
@@ -553,11 +595,22 @@ private fun ResultsCard(state: CalculatorState) {
                 Text("${resultNumber(shown)} $unit".trim(), style = MaterialTheme.typography.bodyLarge)
             }
         }
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+            FilledTonalButton(onClick = onSweep) {
+                Icon(painterResource(R.drawable.vt_chart), contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.sweep_button))
+            }
+        }
     }
 }
 
+/** Loss per length follows L's unit: dB/in for mil, else dB/cm. Returns (scale from per-metre, label). */
+private fun lossUnit(state: CalculatorState): Pair<Double, String> =
+    if (state.fields[FieldId.L]?.unit == "mil") 0.0254 to "dB/in" else 0.01 to "dB/cm"
+
 /** Four significant digits for read-only results. */
-private fun resultNumber(v: Double): String =
+internal fun resultNumber(v: Double): String =
     if (v == 0.0) "0" else BigDecimal(v).round(MathContext(4)).stripTrailingZeros().let {
         if (abs(v) >= 1e-4 && abs(v) < 1e7) it.toPlainString() else it.toString()
     }
@@ -679,7 +732,7 @@ private fun FieldRow(
         OutlinedTextField(
             value = field.text,
             onValueChange = { vm.onTextChange(id, it) },
-            label = { Text(stringResource(id.label), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            label = { Text(stringResource(vm.line.labelOf(id)), maxLines = 1, overflow = TextOverflow.Ellipsis) },
             suffix = id.unitKind.suffix?.let { { Text(it) } },
             isError = field.error != null,
             supportingText = field.error?.let { { Text(stringResource(it)) } },

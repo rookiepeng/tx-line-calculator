@@ -139,6 +139,72 @@ private fun striplineScene(coupled: Boolean): Scene {
     )
 }
 
+private fun offsetStriplineScene(): Scene {
+    val (x0, x1) = 4.5f to 7.5f
+    val (y0, y1) = 1.2f to 1.7f
+    val b = 4.4f
+    return Scene(
+        shapes = listOf(
+            Block(0f, 12f, -0.4f, 0f, 0f, DEPTH, Part.GROUND),
+            Block(0f, 12f, 0f, b, 0f, DEPTH, Part.DIELECTRIC),
+            Block(0f, 12f, b, b + 0.4f, 0f, DEPTH, Part.GROUND),
+            Block(x0, x1, y0, y1, 0f, 0f, Part.SIGNAL, frontOnly = true),
+        ),
+        dims = listOf(
+            Linear(FieldId.W, "W", V3(x0, y1, 0f), V3(x1, y1, 0f), V3(0f, 0.9f, 0f)),
+            Linear(FieldId.T, "T", V3(x1, y0, 0f), V3(x1, y1, 0f), V3(1.2f, 0f, 0f)),
+            Linear(FieldId.H, "H1", V3(0f, 0f, 0f), V3(0f, y0, 0f), V3(-1f, 0f, 0f)),
+            Linear(FieldId.H2, "H2", V3(0f, y1, 0f), V3(0f, b, 0f), V3(-1f, 0f, 0f)),
+            Linear(FieldId.L, "L", V3(x0, b + 0.4f, 0f), V3(x0, b + 0.4f, DEPTH), V3(-1.6f, 0f, 0f)),
+        ),
+    )
+}
+
+private fun twistedPairScene(): Scene {
+    val r = 0.9f
+    val ins = 1.5f
+    val sep = 3.4f
+    val length = 6f
+    return Scene(
+        zx = 0.7f * cos(Math.toRadians(20.0)).toFloat(),
+        zy = 0.7f * sin(Math.toRadians(20.0)).toFloat(),
+        shapes = listOf(
+            // Left wire first: its body recedes up and to the right, behind the right wire's end face.
+            Tube(0f, 0f, ins, 1f, length, Part.DIELECTRIC),
+            Tube(0f, 0f, r, 1f, 1f, Part.SIGNAL),
+            Tube(sep, 0f, ins, 1f, length, Part.DIELECTRIC),
+            Tube(sep, 0f, r, 1f, 1f, Part.SIGNAL),
+        ),
+        dims = listOf(
+            Linear(FieldId.A, "d", V3(-r, 0f, 1f), V3(r, 0f, 1f), V3(0f, -ins - 0.9f, 0f)),
+            Linear(FieldId.B, "D", V3(0f, 0f, 1f), V3(sep, 0f, 1f), V3(0f, -ins - 2.6f, 0f), centerMarks = true),
+            Linear(FieldId.L, "L", V3(0f, ins, 1f), V3(0f, ins, length), V3(0f, 0.9f, 0f)),
+        ),
+    )
+}
+
+private fun coupledCpwScene(): Scene {
+    val h = 2.4f
+    val top = h + 0.3f // zero-thickness model; drawn thin
+    // Ground | G | strip | S | strip | G | ground. W is dimensioned above its strip so the three
+    // labels never share a row.
+    val strips = listOf(5f to 8f, 10f to 13f)
+    return Scene(
+        shapes = listOf(
+            Block(0f, 18f, 0f, h, 0f, DEPTH, Part.DIELECTRIC),
+            Block(0f, 3f, h, top, 0f, DEPTH, Part.GROUND),
+            Block(15f, 18f, h, top, 0f, DEPTH, Part.GROUND),
+        ) + strips.map { (x0, x1) -> Block(x0, x1, h, top, 0f, DEPTH, Part.SIGNAL) },
+        dims = listOf(
+            Linear(FieldId.W, "W", V3(5f, top, 0f), V3(8f, top, 0f), V3(0f, 1.1f, 0f)),
+            Linear(FieldId.S, "S", V3(8f, h, 0f), V3(10f, h, 0f), BELOW),
+            Linear(FieldId.G2, "G", V3(3f, h, 0f), V3(5f, h, 0f), BELOW),
+            Linear(FieldId.H, "H", V3(0f, 0f, 0f), V3(0f, h, 0f), V3(-1f, 0f, 0f)),
+            Linear(FieldId.L, "L", V3(2f, top, 0f), V3(2f, top, DEPTH), V3(0f, 0f, 0f), labelDir = V3(-1f, 0f, 0f)),
+        ),
+    )
+}
+
 private fun cpwScene(grounded: Boolean): Scene {
     val h = 2.4f
     val top = h + 0.5f
@@ -190,6 +256,27 @@ private fun coaxScene(): Scene {
     )
 }
 
+private fun waveguideScene(): Scene {
+    val wall = 0.5f
+    val (x0, x1) = wall to 10f + wall
+    val (y0, y1) = wall to 4.5f + wall
+    return Scene(
+        shapes = listOf(
+            // Back to front, so nearer walls paint over farther ones; the walls carry the current.
+            Block(0f, x1 + wall, 0f, y0, 0f, DEPTH, Part.SIGNAL),
+            Block(0f, x0, y0, y1, 0f, DEPTH, Part.SIGNAL),
+            Block(x0, x1, y0, y1, 0f, 0f, Part.DIELECTRIC, frontOnly = true),
+            Block(x1, x1 + wall, y0, y1, 0f, DEPTH, Part.SIGNAL),
+            Block(0f, x1 + wall, y1, y1 + wall, 0f, DEPTH, Part.SIGNAL),
+        ),
+        dims = listOf(
+            Linear(FieldId.A, "a", V3(x0, y0, 0f), V3(x1, y0, 0f), V3(0f, -1.4f, 0f)),
+            Linear(FieldId.B, "b", V3(x0, y0, 0f), V3(x0, y1, 0f), V3(-1.4f, 0f, 0f)),
+            Linear(FieldId.L, "L", V3(0f, y1 + wall, 0f), V3(0f, y1 + wall, DEPTH), V3(-1.6f, 0f, 0f)),
+        ),
+    )
+}
+
 private fun LineType.scene(): Scene = when (this) {
     LineType.MLIN -> microstripScene(coupled = false)
     LineType.CMLIN -> microstripScene(coupled = true)
@@ -198,6 +285,10 @@ private fun LineType.scene(): Scene = when (this) {
     LineType.CPW -> cpwScene(grounded = false)
     LineType.GCPW -> cpwScene(grounded = true)
     LineType.COAX -> coaxScene()
+    LineType.WG -> waveguideScene()
+    LineType.ASLIN -> offsetStriplineScene()
+    LineType.ECPW -> coupledCpwScene()
+    LineType.TWP -> twistedPairScene()
 }
 
 /** Which physical parts light up while a field is being edited. */
@@ -205,7 +296,7 @@ private fun partsFor(field: FieldId?): Set<Part> = when (field) {
     FieldId.W, FieldId.L, FieldId.T, FieldId.A, FieldId.C,
     FieldId.Z0, FieldId.K, FieldId.Z0O, FieldId.Z0E, FieldId.PHS,
     FieldId.SIGMA, FieldId.ROUGH -> setOf(Part.SIGNAL)
-    FieldId.H, FieldId.B, FieldId.ER, FieldId.TAND -> setOf(Part.DIELECTRIC)
+    FieldId.H, FieldId.H2, FieldId.B, FieldId.ER, FieldId.TAND -> setOf(Part.DIELECTRIC)
     else -> emptySet()
 }
 
