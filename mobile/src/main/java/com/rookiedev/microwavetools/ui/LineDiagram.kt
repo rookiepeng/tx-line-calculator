@@ -203,8 +203,9 @@ private fun LineType.scene(): Scene = when (this) {
 /** Which physical parts light up while a field is being edited. */
 private fun partsFor(field: FieldId?): Set<Part> = when (field) {
     FieldId.W, FieldId.L, FieldId.T, FieldId.A, FieldId.C,
-    FieldId.Z0, FieldId.K, FieldId.Z0O, FieldId.Z0E, FieldId.PHS -> setOf(Part.SIGNAL)
-    FieldId.H, FieldId.B, FieldId.ER -> setOf(Part.DIELECTRIC)
+    FieldId.Z0, FieldId.K, FieldId.Z0O, FieldId.Z0E, FieldId.PHS,
+    FieldId.SIGMA, FieldId.ROUGH -> setOf(Part.SIGNAL)
+    FieldId.H, FieldId.B, FieldId.ER, FieldId.TAND -> setOf(Part.DIELECTRIC)
     else -> emptySet()
 }
 

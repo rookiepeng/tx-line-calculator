@@ -17,6 +17,8 @@ The project has been kept alive and occasionally updated ever since.
 - **Analyze** mode: calculate electrical parameters from physical dimensions
 - **Synthesize** mode: calculate physical dimensions from electrical parameters, solving for the dimension you pick
 - **Interactive diagrams**: editing a field highlights the matching part of the line; tap a label on the diagram to jump to its field
+- **Loss**: effective dielectric constant, conductor loss (Wheeler's incremental inductance rule, with Hammerstad surface roughness) and dielectric loss, in dB per length and over the line
+- **Presets**: common substrates, metals and copper weights fill in εr, tanδ, H, σ and T
 - **Units**: mil, mm or cm for dimensions; MHz or GHz for frequency
 - **Coupled lines**: synthesize from Z0 and k, or from the even and odd mode impedances
 - Values are saved between sessions; Material 3 design with dark mode and dynamic color

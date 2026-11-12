@@ -22,6 +22,8 @@ ANALYZE AND SYNTHESIZE
 • Synthesize: from a target Z0 and electrical length, calculate the physical dimension you choose to solve for, such as trace width, gap or substrate height, plus the physical length.
 • Coupled lines: work from Z0 and the coupling coefficient (k), or directly from the even and odd mode impedances (Z0e, Z0o).
 • Coaxial lines: solve for the inner conductor radius, the dielectric radius or the core offset.
+• Loss: effective dielectric constant, conductor loss (with surface roughness) and dielectric loss, per unit length and over the line.
+• Presets: common substrates (FR-4, Rogers, Isola, alumina, PTFE), conductor metals and copper weights.
 
 INTERACTIVE DIAGRAMS
 Every line type has a clear 3D cross-section diagram. Edit a field and the matching part of the line lights up on the diagram, so you always know what W, G, H, T, a, b or c refers to. Tap a label on the diagram to jump straight to its field.

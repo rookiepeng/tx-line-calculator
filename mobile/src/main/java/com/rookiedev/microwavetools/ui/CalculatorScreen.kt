@@ -103,7 +103,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.SuggestionChip
 import com.rookiedev.microwavetools.R
+import com.rookiedev.microwavetools.libs.Constants
+import com.rookiedev.microwavetools.libs.Materials
+import com.rookiedev.microwavetools.libs.Substrate
+import java.math.BigDecimal
+import java.math.MathContext
+import kotlin.math.abs
 import com.rookiedev.microwavetools.ui.theme.LocalAccents
 
 /**
@@ -205,7 +216,13 @@ fun CalculatorScreen(
             val wide = maxWidth >= 720.dp
             val scroll = rememberScrollState()
             val dimensions = @Composable { DimensionsCard(vm, state, fieldFocus) }
-            val parameters = @Composable { ParametersCard(vm, state, fieldFocus) }
+            val parameters = @Composable {
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    ParametersCard(vm, state, fieldFocus)
+                    if (state.extras.isNotEmpty()) ResultsCard(state)
+                    MaterialsCard(vm, state, fieldFocus)
+                }
+            }
             Column(
                 Modifier
                     .verticalScroll(scroll)
@@ -392,6 +409,162 @@ private fun ParametersCard(vm: CalculatorViewModel, state: CalculatorState, focu
         }
     }
 }
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun MaterialsCard(vm: CalculatorViewModel, state: CalculatorState, focus: FieldFocus) {
+    val line = vm.line
+    var showSubstrates by rememberSaveable { mutableStateOf(false) }
+    SectionCard(
+        icon = R.drawable.vt_layers,
+        title = stringResource(R.string.materials_title),
+        subtitle = stringResource(R.string.materials_subtitle),
+        accent = MaterialTheme.colorScheme.tertiary,
+        reveal = Reveal(state.runId, active = false, fromBottomStart = false),
+    ) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            AssistChip(onClick = { showSubstrates = true }, label = { Text(stringResource(R.string.preset_substrate)) })
+            PresetMenu(
+                label = stringResource(R.string.preset_metal),
+                items = Metal.entries.map { m ->
+                    "${stringResource(m.label)} · ${presetNumber(m.msPerM)} MS/m" to { vm.applyMetal(m) }
+                },
+            )
+            if (FieldId.T in line.fields) {
+                PresetMenu(
+                    label = stringResource(R.string.preset_copper),
+                    items = Materials.copperWeights.map { (name, t) ->
+                        "$name · ${presetNumber(t * 1e6)} µm" to { vm.applyThickness(t) }
+                    },
+                )
+            }
+        }
+        for (id in MATERIAL_FIELDS) {
+            FieldRow(
+                vm = vm,
+                id = id,
+                fieldFocus = focus,
+                field = state.field(id),
+                solvedBy = null,
+                flash = false,
+                runId = state.runId,
+                leading = null,
+            )
+        }
+    }
+    if (showSubstrates) {
+        val hUnit = if (FieldId.H in line.fields) state.field(FieldId.H).unit else null
+        SubstrateDialog(
+            heightUnit = hUnit,
+            onPick = { sub, h -> vm.applySubstrate(sub.er, sub.lossTangent, h); showSubstrates = false },
+            onDismiss = { showSubstrates = false },
+        )
+    }
+}
+
+/** A chip that opens a menu of presets. */
+@Composable
+private fun PresetMenu(label: String, items: List<Pair<String, () -> Unit>>) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        AssistChip(onClick = { expanded = true }, label = { Text(label) })
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            for ((text, action) in items) {
+                DropdownMenuItem(text = { Text(text) }, onClick = { action(); expanded = false })
+            }
+        }
+    }
+}
+
+/** Lists substrate presets; tapping a thickness also sets H (shown in [heightUnit], or hidden when null). */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun SubstrateDialog(heightUnit: String?, onPick: (Substrate, Double?) -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.presets_title)) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                Text(
+                    stringResource(R.string.presets_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                for (sub in Materials.substrates) {
+                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(MaterialTheme.shapes.small)
+                            .clickable { onPick(sub, null) }
+                            .padding(vertical = 4.dp),
+                    ) {
+                        Text(sub.name, style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            stringResource(R.string.preset_values, presetNumber(sub.er), presetNumber(sub.lossTangent)),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    if (heightUnit != null && sub.thicknesses.isNotEmpty()) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            for (h in sub.thicknesses) {
+                                SuggestionChip(
+                                    onClick = { onPick(sub, h) },
+                                    label = { Text("${presetNumber(Constants.meter2others(h, heightUnit))} $heightUnit") },
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel_presets)) } },
+    )
+}
+
+/** εeff and losses from the last calculation; loss per length follows L's unit (dB/in for mil, else dB/cm). */
+@Composable
+private fun ResultsCard(state: CalculatorState) {
+    val inches = state.fields[FieldId.L]?.unit == "mil"
+    val perLength = if (inches) "dB/in" else "dB/cm"
+    val scale = if (inches) 0.0254 else 0.01
+    SectionCard(
+        icon = R.drawable.vt_chart,
+        title = stringResource(R.string.results_title),
+        subtitle = stringResource(R.string.results_subtitle),
+        accent = MaterialTheme.colorScheme.tertiary,
+        reveal = Reveal(state.runId, active = true, fromBottomStart = state.lastAction == Action.SYNTHESIZE),
+    ) {
+        for ((out, value) in state.extras.entries.sortedBy { it.key.ordinal }) {
+            val (shown, unit) = when (out.unit) {
+                OutputUnit.NONE -> value to ""
+                OutputUnit.DB_PER_LENGTH -> value * scale to perLength
+                OutputUnit.DB -> value to "dB"
+            }
+            Row(Modifier.fillMaxWidth().padding(vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(out.label),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.weight(1f),
+                )
+                Spacer(Modifier.width(12.dp))
+                Text("${resultNumber(shown)} $unit".trim(), style = MaterialTheme.typography.bodyLarge)
+            }
+        }
+    }
+}
+
+/** Four significant digits for read-only results. */
+private fun resultNumber(v: Double): String =
+    if (v == 0.0) "0" else BigDecimal(v).round(MathContext(4)).stripTrailingZeros().let {
+        if (abs(v) >= 1e-4 && abs(v) < 1e7) it.toPlainString() else it.toString()
+    }
+
+/** Up to six significant digits, as preset values are filled into fields. */
+private fun presetNumber(v: Double): String =
+    BigDecimal.valueOf(v).round(MathContext(6)).stripTrailingZeros().toPlainString()
 
 /** When and where a card plays its reveal animation. */
 private data class Reveal(val runId: Int, val active: Boolean, val fromBottomStart: Boolean)

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.rookiedev.microwavetools.R
 import com.rookiedev.microwavetools.libs.Constants
 import java.math.BigDecimal
+import java.math.MathContext
 import java.math.RoundingMode
 
 data class FieldState(val text: String, val unit: String, val error: Int? = null)
@@ -27,6 +28,8 @@ data class CalculatorState(
     val runId: Int = 0,
     /** The action behind [runId], so the UI knows which card plays its reveal. */
     val lastAction: Action? = null,
+    /** Read-only results (εeff, losses) of the last successful calculation. */
+    val extras: Map<Output, Double> = emptyMap(),
 ) {
     fun field(id: FieldId) = fields.getValue(id)
 }
@@ -59,6 +62,27 @@ class CalculatorViewModel(
 
     fun reset() = update { defaults() }
 
+    /** Fills εr and tanδ from a preset and, when given and the line has one, the substrate height (m). */
+    fun applySubstrate(er: Double, lossTangent: Double, height: Double?) = update {
+        var f = fields + (FieldId.ER to field(FieldId.ER).copy(text = presetText(er), error = null)) +
+            (FieldId.TAND to field(FieldId.TAND).copy(text = presetText(lossTangent), error = null))
+        if (height != null && FieldId.H in line.fields) {
+            val h = f.getValue(FieldId.H)
+            f = f + (FieldId.H to h.copy(text = presetText(fromSi(FieldId.H, height, h.unit)), error = null))
+        }
+        copy(fields = f)
+    }
+
+    fun applyMetal(metal: Metal) = update {
+        copy(fields = fields + (FieldId.SIGMA to field(FieldId.SIGMA).copy(text = presetText(metal.msPerM), error = null)))
+    }
+
+    /** Sets the metal thickness (m) in its current unit. */
+    fun applyThickness(thickness: Double) = update {
+        val t = field(FieldId.T)
+        copy(fields = fields + (FieldId.T to t.copy(text = presetText(fromSi(FieldId.T, thickness, t.unit)), error = null)))
+    }
+
     fun analyze() = run(Action.ANALYZE)
 
     fun synthesize() = run(Action.SYNTHESIZE)
@@ -71,8 +95,8 @@ class CalculatorViewModel(
 
     private fun run(action: Action) {
         val outputs = outputsOf(action)
-        // L is optional for analysis and phase is optional for synthesis.
-        val optional = if (action == Action.ANALYZE) setOf(FieldId.L) else setOf(FieldId.PHS)
+        // L is optional for analysis and phase is optional for synthesis; loss inputs are always optional.
+        val optional = MATERIAL_FIELDS.toSet() + if (action == Action.ANALYZE) FieldId.L else FieldId.PHS
         val inputs = line.fields.filter { it !in outputs }
 
         val errors = mutableMapOf<FieldId, Int>()
@@ -108,7 +132,8 @@ class CalculatorViewModel(
                 newFields[id] = f.copy(text = format(fromSi(id, value, f.unit)), error = null)
             }
             for ((id, msg) in result.errors) newFields[id] = newFields.getValue(id).copy(error = msg)
-            copy(fields = newFields, updated = result.values.keys, runId = runId + 1, lastAction = action)
+            val extras = if (result.errors.isEmpty()) lossOutputs(line, si + result.values) else emptyMap()
+            copy(fields = newFields, updated = result.values.keys, runId = runId + 1, lastAction = action, extras = extras)
         }
     }
 
@@ -116,25 +141,34 @@ class CalculatorViewModel(
         id == FieldId.ER -> if (value < 1) R.string.unreasonable_value else null
         id == FieldId.FREQ -> if (value <= 0.0) R.string.error_zero_frequency else null
         id == FieldId.K -> if (value <= 0.0) R.string.unreasonable_value else null
+        id == FieldId.TAND -> if (value < 0.0) R.string.unreasonable_value else null
+        id == FieldId.SIGMA -> if (value <= 0.0) R.string.unreasonable_value else null
         id.unitKind == UnitKind.IMPEDANCE -> if (value <= 0.0) R.string.unreasonable_value else null
         id.mustBePositive -> if (Constants.value2meter(value, unit) < Constants.MINI_LIMIT) R.string.unreasonable_value else null
-        id.unitKind == UnitKind.LENGTH -> if (value < 0.0) R.string.unreasonable_value else null
+        id.unitKind == UnitKind.LENGTH || id.unitKind == UnitKind.ROUGHNESS ->
+            if (value < 0.0) R.string.unreasonable_value else null
         else -> null
     }
 
     private fun toSi(id: FieldId, value: Double, unit: String): Double = when (id.unitKind) {
-        UnitKind.LENGTH -> Constants.value2meter(value, unit)
+        UnitKind.LENGTH, UnitKind.ROUGHNESS -> Constants.value2meter(value, unit)
         UnitKind.FREQUENCY -> Constants.value2Hz(value, unit)
+        UnitKind.CONDUCTIVITY -> value * 1e6
         else -> value
     }
 
     private fun fromSi(id: FieldId, value: Double, unit: String): Double = when (id.unitKind) {
-        UnitKind.LENGTH -> Constants.meter2others(value, unit)
+        UnitKind.LENGTH, UnitKind.ROUGHNESS -> Constants.meter2others(value, unit)
+        UnitKind.CONDUCTIVITY -> value / 1e6
         else -> value
     }
 
     private fun format(value: Double): String =
         BigDecimal.valueOf(value).setScale(Constants.DecimalLength, RoundingMode.HALF_UP).toDouble().toString()
+
+    /** Preset values keep up to six significant digits, so e.g. 17.5 µm in mm is not rounded away. */
+    private fun presetText(value: Double): String =
+        BigDecimal.valueOf(value).round(MathContext(6)).stripTrailingZeros().toPlainString()
 
     private inline fun update(change: CalculatorState.() -> CalculatorState) {
         state = state.change()
@@ -150,7 +184,7 @@ class CalculatorViewModel(
 
     private fun defaults() = CalculatorState(
         fields = line.fields.associateWith { id ->
-            val d = line.defaults.getValue(id)
+            val d = line.defaultOf(id)
             FieldState(d.text, d.unit)
         },
         target = line.defaultTarget,

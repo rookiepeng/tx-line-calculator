@@ -9,6 +9,8 @@ enum class UnitKind(val choices: List<String>, val suffix: String? = null) {
     FREQUENCY(listOf("MHz", "GHz")),
     IMPEDANCE(listOf("Ω"), suffix = "Ω"),
     PHASE(listOf("Deg"), suffix = "°"),
+    CONDUCTIVITY(listOf("MS/m"), suffix = "MS/m"),
+    ROUGHNESS(listOf("µm", "mil")),
     NONE(emptyList());
 
     /** True when the user can pick between several units. */
@@ -43,7 +45,21 @@ enum class FieldId(
     PHS(R.string.label_phs, UnitKind.PHASE, "PHS", 0),
     ER(R.string.label_er, UnitKind.NONE, "ER", R.string.error_er_empty),
     FREQ(R.string.label_freq, UnitKind.FREQUENCY, "FREQ", R.string.Error_Freq_empty),
+
+    // Material properties used only for loss; all optional.
+    TAND(R.string.label_tand, UnitKind.NONE, "TAND", 0),
+    SIGMA(R.string.label_sigma, UnitKind.CONDUCTIVITY, "SIGMA", 0),
+    ROUGH(R.string.label_rough, UnitKind.ROUGHNESS, "ROUGH", 0),
 }
+
+/** Loss inputs shown on every line type, in the Materials card. */
+val MATERIAL_FIELDS: List<FieldId> = listOf(FieldId.TAND, FieldId.SIGMA, FieldId.ROUGH)
+
+private val MATERIAL_DEFAULTS: Map<FieldId, Default> = mapOf(
+    FieldId.TAND to Default("0.02"),
+    FieldId.SIGMA to Default("58", "MS/m"),
+    FieldId.ROUGH to Default("0", "µm"),
+)
 
 /** Default value and unit for a field. */
 data class Default(val text: String, val unit: String = "")
@@ -141,7 +157,8 @@ enum class LineType(
     );
 
     val coupled: Boolean get() = targets.isEmpty()
-    val fields: List<FieldId> get() = dimensions + parameters
+    val fields: List<FieldId> get() = dimensions + parameters + MATERIAL_FIELDS
+    fun defaultOf(id: FieldId): Default = defaults[id] ?: MATERIAL_DEFAULTS.getValue(id)
     val defaultTarget: FieldId? get() = targets.firstOrNull { it == FieldId.W || it == FieldId.A }
 
     /** Fields Analyze fills in. */

@@ -59,6 +59,9 @@
     <string name="label_phs">(φ) Phase</string>
     <string name="label_er">(εr) Dielectric Constant</string>
     <string name="label_freq">(f) Frequency</string>
+    <string name="label_tand">(tanδ) Loss Tangent</string>
+    <string name="label_sigma">(σ) Conductivity</string>
+    <string name="label_rough">(Δ) Surface Roughness, RMS</string>
     <string name="unit">Unit</string>
 
     <!-- screen -->
@@ -70,6 +73,32 @@
     <string name="mode_z0eo">Z0e and Z0o</string>
     <string name="solve_for">Solve for %1$s</string>
     <string name="diagram_description">Cross-section of a %1$s</string>
+    <string name="materials_title">Materials &amp; Loss</string>
+    <string name="materials_subtitle">Optional, used for loss</string>
+    <string name="results_title">Results</string>
+    <string name="results_subtitle">From the last calculation</string>
+    <string name="preset_substrate">Substrate</string>
+    <string name="preset_metal">Metal</string>
+    <string name="preset_copper">Copper weight</string>
+    <string name="presets_title">Substrate presets</string>
+    <string name="presets_note">Typical design values near 10 GHz. Tap a material to set εr and tanδ, or a thickness to also set H. Check your laminate\'s datasheet.</string>
+    <string name="preset_values">εr %1$s · tanδ %2$s</string>
+    <string name="metal_copper">Copper</string>
+    <string name="metal_silver">Silver</string>
+    <string name="metal_gold">Gold</string>
+    <string name="metal_aluminum">Aluminum</string>
+    <string name="out_eeff">(εeff) Effective Dielectric Constant</string>
+    <string name="out_alpha_c">(αc) Conductor Loss</string>
+    <string name="out_alpha_d">(αd) Dielectric Loss</string>
+    <string name="out_alpha">(α) Total Loss</string>
+    <string name="out_loss">Insertion Loss over L</string>
+    <string name="out_eeff_e">(εeff,e) Even Mode εeff</string>
+    <string name="out_eeff_o">(εeff,o) Odd Mode εeff</string>
+    <string name="out_alpha_e">(αe) Even Mode Loss</string>
+    <string name="out_alpha_o">(αo) Odd Mode Loss</string>
+    <string name="out_loss_e">Even Mode Loss over L</string>
+    <string name="out_loss_o">Odd Mode Loss over L</string>
+    <string name="cancel_presets">Close</string>
     <string name="reset_title">Reset values?</string>
     <string name="reset_message">All values on this screen go back to their defaults.</string>
 
