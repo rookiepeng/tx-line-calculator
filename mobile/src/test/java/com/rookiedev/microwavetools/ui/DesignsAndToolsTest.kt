@@ -83,6 +83,14 @@ class DesignsAndToolsTest {
         assertEquals("0", tickLabel(1e-17, 0.1))
     }
 
+    /** The grouped drawer must list every line type exactly once. */
+    @Test
+    fun drawerListsEveryLineOnce() {
+        val listed = DRAWER_GROUPS.flatMap { it.second }
+        assertEquals(LineType.entries.size, listed.size)
+        assertEquals(LineType.entries.toSet(), listed.toSet())
+    }
+
     @Test
     fun sweepCsvFormat() {
         val pts = listOf(

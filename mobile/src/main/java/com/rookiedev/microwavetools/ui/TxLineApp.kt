@@ -177,16 +177,20 @@ private fun DrawerContent(
             Spacer(Modifier.width(16.dp))
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
         }
-        for (type in LineType.entries) {
-            NavigationDrawerItem(
-                label = { Text(stringResource(type.title)) },
-                icon = { Icon(painterResource(type.navIcon), contentDescription = null) },
-                selected = type == current,
-                onClick = { onSelect(type) },
-                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-            )
+        for ((header, types) in DRAWER_GROUPS) {
+            DrawerHeader(stringResource(header))
+            for (type in types) {
+                NavigationDrawerItem(
+                    label = { Text(stringResource(type.title)) },
+                    icon = { Icon(painterResource(type.navIcon), contentDescription = null) },
+                    selected = type == current,
+                    onClick = { onSelect(type) },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                )
+            }
         }
-        HorizontalDivider(Modifier.padding(vertical = 12.dp, horizontal = 16.dp))
+        HorizontalDivider(Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp))
+        DrawerHeader(stringResource(R.string.group_more))
         NavigationDrawerItem(
             label = { Text(stringResource(R.string.saved_title)) },
             icon = { Icon(painterResource(R.drawable.ic_bookmark), contentDescription = null) },
@@ -209,6 +213,28 @@ private fun DrawerContent(
             modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
         )
     }
+}
+
+/**
+ * Line types in the drawer, grouped by family. This order is for display only: the selected line
+ * is saved by [LineType] ordinal, so the enum itself keeps its original order.
+ */
+internal val DRAWER_GROUPS: List<Pair<Int, List<LineType>>> = listOf(
+    R.string.group_microstrip to listOf(LineType.MLIN, LineType.CMLIN),
+    R.string.group_stripline to listOf(LineType.SLIN, LineType.ASLIN, LineType.CSLIN),
+    R.string.group_coplanar to listOf(LineType.CPW, LineType.GCPW, LineType.ECPW),
+    R.string.group_other to listOf(LineType.COAX, LineType.TWP, LineType.WG),
+)
+
+/** A small section label lined up with the drawer items' icons. */
+@Composable
+private fun DrawerHeader(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 28.dp, end = 28.dp, top = 16.dp, bottom = 8.dp),
+    )
 }
 
 private fun sendFeedback(context: Context) {

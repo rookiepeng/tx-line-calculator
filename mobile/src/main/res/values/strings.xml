@@ -38,6 +38,12 @@
     <string name="full_name_aslin">Asymmetric Stripline</string>
     <string name="full_name_twp">Twisted Pair</string>
     <string name="full_name_ecpw">Coupled Coplanar Waveguide</string>
+    <!-- Drawer section headers -->
+    <string name="group_microstrip">Microstrip</string>
+    <string name="group_stripline">Stripline</string>
+    <string name="group_coplanar">Coplanar</string>
+    <string name="group_other">Coax, wire &amp; waveguide</string>
+    <string name="group_more">More</string>
 
     <!-- cards -->
     <string name="Dim">Dimensions</string>
