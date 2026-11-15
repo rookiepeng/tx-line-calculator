@@ -4,7 +4,7 @@ agp = "9.5.1"
 composeBom = "2026.09.00"
 gradle-toolchains-foojay-resolver-convention = "1.0.0"
 junit-version = "4.13.2"
-json = "20240303"
+json = "20260814"
 kotlin = "2.4.21"
 lifecycle = "2.10.0"
 
