@@ -1,6 +1,6 @@
 [versions]
 activity = "1.13.0"
-agp = "9.5.1"
+agp = "9.5.2"
 composeBom = "2026.09.00"
 gradle-toolchains-foojay-resolver-convention = "1.0.0"
 junit-version = "4.13.2"
